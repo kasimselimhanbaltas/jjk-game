@@ -1,30 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Player } from "../App";
+import { Rival } from "../App";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 
-const initialState: Player = {
-  x: 200,
+const initialState: Rival = {
+  x: 800,
   y: 200,
   health: 100,
-  direction: "right",
+  direction: "left",
   isAttacking: false,
 };
 
-const playerSlice = createSlice({
-  name: "player",
+const RivalSlice = createSlice({
+  name: "Rival",
   initialState: initialState,
   reducers: {
     move(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
       console.log("new position: ", inputX + state.x, inputY + state.y);
-      if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 120) {
+      if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 300) {
         state.x += inputX;
         if (inputX > 0) {
           state.direction = "right";
-        } else if (inputX < 0) state.direction = "left";
+        } else state.direction = "left";
       } else {
         console.log("limit reached in x direction");
       }
@@ -34,9 +34,12 @@ const playerSlice = createSlice({
         console.log("limit reached in y direction");
       }
     },
+    health(state, action) {
+      state.health += action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
-export const { move } = playerSlice.actions;
-export default playerSlice;
+export const { move, health } = RivalSlice.actions;
+export default RivalSlice;

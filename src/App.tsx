@@ -13,7 +13,22 @@ export interface Player {
   x: number;
   y: number;
   health: number;
-  isPunching: boolean;
+  direction: "left" | "right";
+  isAttacking: boolean;
+}
+export interface Rival {
+  x: number;
+  y: number;
+  health: number;
+  direction: "left" | "right";
+  isAttacking: boolean;
+}
+export interface Nue {
+  x: number;
+  y: number;
+  health: number;
+  direction: "left" | "right";
+  isAttacking: boolean;
 }
 
 function App() {
