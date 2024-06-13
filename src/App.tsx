@@ -1,23 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import C1 from './components/Player';
+import C2 from './components/Rival';
+import Player from './components/Player';
+import Rival from './components/Rival';
+import GameArea from './Pages/GameArea';
+
+export interface Character {
+  value: number
+}
+export interface Player {
+  x: number;
+  y: number;
+  health: number;
+  isPunching: boolean;
+}
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <GameArea></GameArea>
       </header>
     </div>
   );
