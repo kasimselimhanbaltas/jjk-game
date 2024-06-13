@@ -5,6 +5,7 @@ import { move } from "../store/PlayerSlice";
 
 const Player = () => {
     const { x, y, direction, health } = useSelector((state: any) => state.PlayerState);
+    const rival = useSelector((state: any) => state.RivalState);
     const dispatch = useDispatch();
     const keysPressed = useRef({ w: false, a: false, s: false, d: false });
 
@@ -47,12 +48,15 @@ const Player = () => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch]);
+    }, [dispatch, health]);
 
     return (
         <div
             className="player"
-            style={{ top: y, left: x, width: characterWidth, height: characterHeight }}
+            style={{
+                top: y, left: x, width: characterWidth, height: characterHeight,
+                display: health > 0 ? "block" : "none",
+            }}
         >
             {/* <h3>X: {x}</h3>
             <h3>Y: {y}</h3>
@@ -65,6 +69,8 @@ const Player = () => {
             <img src="megumi.png" alt="" style={{
                 transform: direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
             }} />
+            <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg" }} />
+            <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} />
             <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
                 <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -120%)", fontSize: "15px" }}>{health}</p>
             </div>

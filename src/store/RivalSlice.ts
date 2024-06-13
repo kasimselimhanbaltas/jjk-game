@@ -37,9 +37,12 @@ const RivalSlice = createSlice({
     health(state, action) {
       state.health += action.payload;
     },
+    rivalAttacking(state, action) {
+      state.isAttacking = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
-export const { move, health } = RivalSlice.actions;
+export const { move, health, rivalAttacking } = RivalSlice.actions;
 export default RivalSlice;

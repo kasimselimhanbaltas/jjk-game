@@ -34,9 +34,12 @@ const playerSlice = createSlice({
         console.log("limit reached in y direction");
       }
     },
+    healthReducer(state, action) {
+      state.health += action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
-export const { move } = playerSlice.actions;
+export const { move, healthReducer } = playerSlice.actions;
 export default playerSlice;
