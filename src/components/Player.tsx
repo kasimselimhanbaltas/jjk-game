@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PlayerState from "../store/GlobalStore"
 import { move } from '../store/PlayerSlice';
-import { deprecate } from 'util';
-import { start } from 'repl';
 
 const Player = () => {
     const { x, y } = useSelector((state: any) => state.PlayerState);
@@ -84,7 +82,7 @@ const Player = () => {
             <h3>X: {x}</h3>
             <h3>Y: {y}</h3>
             <h3>{wPressed ? "w" : ""}{aPressed ? "a" : ""}{sPressed ? "s" : ""}{dPressed ? "d" : ""} </h3>
-            {/* <img src="megumi.png" alt="" /> */}
+            <img src="megumi.png" alt="" />
 
         </div>
     );
