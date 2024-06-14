@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PlayerState from "../store/GlobalStore";
 import { move } from "../store/PlayerSlice";
-import { moveNue, nueAttacking } from "../store/NueSlice";
+import { moveNue, nueActivity, nueAttacking } from "../store/NueSlice";
 import { health } from "../store/RivalSlice";
 
 const Nue = () => {
@@ -10,12 +10,12 @@ const Nue = () => {
     const rival = useSelector((state: any) => state.RivalState);
     const nue = useSelector((state: any) => state.NueState);
     const dispatch = useDispatch();
-    const keysPressed = useRef({ w: false, a: false, s: false, d: false, j: false });
+    const keysPressed = useRef({ j: false, k: false });
 
     const gameAreaWidth = 1400;
     const gameAreaHeight = 600;
     const characterWidth = 50;
-    const characterHeight = 150;
+    const characterHeight = 120;
 
     function nueAttack() {
         dispatch(moveNue({ x: rival.x, y: rival.y - 100 }))
@@ -53,22 +53,19 @@ const Nue = () => {
         window.addEventListener("keyup", handleKeyUp);
 
         const intervalId = setInterval(() => {
-            if (keysPressed.current.w && player.y > 0) {
-                dispatch(move({ x: 0, y: -10 }));
-            }
-            if (keysPressed.current.a && player.x > 0) {
-                dispatch(move({ x: -10, y: 0 }));
-            }
-            if (keysPressed.current.s && player.y < gameAreaHeight - characterHeight) {
-                dispatch(move({ x: 0, y: 10 }));
-            }
-            if (keysPressed.current.d && player.x < gameAreaWidth - characterWidth) {
-                dispatch(move({ x: 10, y: 0 }));
-            }
+
             if (keysPressed.current.j && nue.isAttacking === false) {
-                nueAttack();
+                if (nue.isActive === true) {
+                    nueAttack();
+                }
             }
-        }, 50);
+            if (keysPressed.current.k) {
+                if (nue.isActive === true) {
+                    dispatch(nueActivity(false));
+                } else
+                    dispatch(nueActivity(true));
+            }
+        }, 100);
 
         return () => {
             clearInterval(intervalId);
@@ -81,6 +78,7 @@ const Nue = () => {
         <div
             className="nue"
             style={{
+                display: nue.isActive ? "block" : "none",
                 top: nue.isAttacking ? nue.y : player.y - 100,
                 left: nue.isAttacking ? nue.x : player.direction === "left" ? player.x + 100 : player.x - 100,
                 width: characterWidth,

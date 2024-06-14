@@ -19,7 +19,7 @@ const playerSlice = createSlice({
     move(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
-      console.log("new position: ", inputX + state.x, inputY + state.y);
+      // console.log("new position: ", inputX + state.x, inputY + state.y);
       if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 120) {
         state.x += inputX;
         if (inputX > 0) {

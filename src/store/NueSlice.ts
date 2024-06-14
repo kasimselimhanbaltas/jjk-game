@@ -10,6 +10,7 @@ const initialState: Nue = {
   health: 100,
   direction: "right",
   isAttacking: false,
+  isActive: false,
 };
 
 const nueSlice = createSlice({
@@ -30,9 +31,12 @@ const nueSlice = createSlice({
     nueAttacking(state, action) {
       state.isAttacking = action.payload;
     },
+    nueActivity(state, action) {
+      state.isActive = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
-export const { moveNue, nueAttacking } = nueSlice.actions;
+export const { moveNue, nueAttacking, nueActivity } = nueSlice.actions;
 export default nueSlice;

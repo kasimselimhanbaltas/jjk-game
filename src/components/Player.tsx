@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PlayerState from "../store/GlobalStore";
 import { move } from "../store/PlayerSlice";
+import { nueActivity } from "../store/NueSlice";
 
 const Player = () => {
     const { x, y, direction, health } = useSelector((state: any) => state.PlayerState);
@@ -12,7 +13,7 @@ const Player = () => {
     const gameAreaWidth = 1400;
     const gameAreaHeight = 600;
     const characterWidth = 50;
-    const characterHeight = 250;
+    const characterHeight = 180;
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -69,11 +70,15 @@ const Player = () => {
             <img src="megumi.png" alt="" style={{
                 transform: direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
             }} />
-            <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg" }} />
-            <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} />
-            <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
+            <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
+                <div style={{ position: "absolute", width: health * 150 / 100, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
+                </div>
                 <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -120%)", fontSize: "15px" }}>{health}</p>
             </div>
+
+            <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg" }} />
+            <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} />
+
         </div>
     );
 };

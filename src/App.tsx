@@ -1,7 +1,5 @@
 import React from 'react';
 import './App.css';
-import C1 from './components/Player';
-import C2 from './components/Rival';
 import Player from './components/Player';
 import Rival from './components/Rival';
 import GameArea from './Pages/GameArea';
@@ -24,6 +22,7 @@ export interface Rival {
   isAttacking: boolean;
 }
 export interface Nue {
+  isActive: boolean;
   x: number;
   y: number;
   health: number;
