@@ -8,6 +8,7 @@ const initialState: Rival = {
   x: 800,
   y: 200,
   health: 100,
+  cursedEnergy: 0,
   direction: "left",
   isAttacking: false,
   rivalDirection: "stop",
@@ -22,19 +23,18 @@ const RivalSlice = createSlice({
     moveRival(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
-      // console.log("new position: ", inputX + state.x, inputY + state.y);
       if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 300) {
         state.x += inputX;
         if (inputX > 0) {
           state.direction = "right";
         } else state.direction = "left";
       } else {
-        console.log("limit reached in x direction");
+        // console.log("limit reached in x direction");
       }
       if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 220) {
         state.y += inputY;
       } else {
-        console.log("limit reached in y direction");
+        // console.log("limit reached in y direction");
       }
     },
     updateRivalHealth(state, action) {

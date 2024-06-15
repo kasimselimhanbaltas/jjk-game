@@ -60,8 +60,8 @@ const Rival = ({ xDistance }) => {
                 display: rival.health > 0 ? "block" : "none",
             }}>
             {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
-            <img src="sukuna.png" alt="" style={{ height: characterHeight }} />
-            <img src="electricity.png" alt="" style={{ display: isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
+            <img src={require('../Assets/sukuna.png')} alt="" style={{ height: characterHeight }} />
+            <img src={require('../Assets/electricity.png')} alt="" style={{ display: isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
 
             <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
                 <div style={{ position: "absolute", width: rival.health * 150 / 100, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>

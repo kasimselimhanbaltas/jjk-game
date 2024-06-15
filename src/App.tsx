@@ -11,6 +11,7 @@ export interface Player {
   x: number;
   y: number;
   health: number;
+  cursedEnergy: number;
   direction: "left" | "right";
   isAttacking: boolean;
 }
@@ -18,6 +19,7 @@ export interface Rival {
   x: number;
   y: number;
   health: number;
+  cursedEnergy: number;
   direction: "left" | "right" | "stop";
   isAttacking: boolean;
   rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";

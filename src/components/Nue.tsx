@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking } from "../store/NueSlice";
 import { updateRivalHealth } from "../store/RivalSlice";
+import { changeCursedEnergy } from "../store/PlayerSlice";
 
 const Nue = () => {
     const player = useSelector((state: any) => state.PlayerState);
@@ -14,6 +15,37 @@ const Nue = () => {
     const gameAreaHeight = 600;
     const characterWidth = 50;
     const characterHeight = 120;
+
+    const nueIntervalRef = useRef(null);
+
+    const startNueInterval = () => {
+        // Interval zaten çalışıyorsa başlatma
+        if (nueIntervalRef.current !== null) return;
+
+        nueIntervalRef.current = setInterval(() => {
+            if (player.cursedEnergy >= 5) dispatch(changeCursedEnergy(-5));
+            else {
+                dispatch(nueActivity(false));
+                stopInterval(nueIntervalRef)
+            }
+        }, 1000);
+    };
+
+
+    const stopInterval = (ref) => {
+        // Interval çalışmıyorsa durdurma
+        if (ref.current === null) return;
+
+        clearInterval(ref.current);
+        ref.current = null;
+    };
+
+    useEffect(() => {
+        if (player.cursedEnergy === 0) {
+            stopInterval(nueIntervalRef);
+            dispatch(nueActivity(false));
+        }
+    }, [player.cursedEnergy]);
 
     function nueAttack() {
         dispatch(moveNue({ x: rival.x, y: rival.y - 100 }))
@@ -28,6 +60,7 @@ const Nue = () => {
         }, 250)
         dispatch(nueAttacking(true));
         if (nue.isAttacking) return;
+        dispatch(changeCursedEnergy(-75))
         setTimeout(() => {
             dispatch(updateRivalHealth(-50))
         }, 250)
@@ -58,10 +91,14 @@ const Nue = () => {
                 }
             }
             if (keysPressed.current.k) {
-                if (nue.isActive === true) {
-                    dispatch(nueActivity(false));
-                } else
+                if (nue.isActive === false && player.cursedEnergy >= 20) {
+                    dispatch(changeCursedEnergy(-20))
+                    startNueInterval();
                     dispatch(nueActivity(true));
+                } else {
+                    dispatch(nueActivity(false));
+                    stopInterval(nueIntervalRef);
+                }
             }
         }, 100);
 
@@ -83,7 +120,7 @@ const Nue = () => {
                 height: characterHeight,
             }}>
 
-            <img src="nue.png" alt="" style={{
+            <img src={require('../Assets/nue.png')} alt="" style={{
                 transform: player.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight // Direction'a göre resmi ters çevir
             }} />
 

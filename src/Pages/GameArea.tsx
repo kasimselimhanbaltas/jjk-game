@@ -3,7 +3,7 @@ import Player from "../components/Player";
 import Rival from "../components/Rival";
 import Nue from "../components/Nue";
 import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRivalCanMove } from "../store/RivalSlice";
-import { movePlayer } from "../store/PlayerSlice";
+import { changeCursedEnergy, movePlayer } from "../store/PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setRivalDirection } from "../store/RivalSlice";
 
@@ -22,7 +22,39 @@ const GameArea = () => {
   const yDistance = useMemo(() => (player.y - rival.y), [player.y, rival.y]);
   const keysPressed = useRef({ w: false, a: false, s: false, d: false, t: false });
   let intervalId = null;
+  const ceIncreaseIntervalRef = useRef(null);
 
+
+  const startCursedEnergyInterval = () => {
+    // Interval zaten çalışıyorsa başlatma
+    console.log("increase ce")
+
+    if (ceIncreaseIntervalRef.current !== null) return;
+
+    ceIncreaseIntervalRef.current = setInterval(() => {
+
+      if (player.cursedEnergy < 100) {
+        console.log("increase ce")
+        dispatch(changeCursedEnergy(+1));
+      }
+    }, 1000);
+  };
+
+  const stopInterval = (ref) => {
+    // Interval çalışmıyorsa durdurma
+    if (ref.current === null) return;
+
+    clearInterval(ref.current);
+    ref.current = null;
+  };
+
+
+  useEffect(() => {
+    startCursedEnergyInterval()
+    return () => {
+      stopInterval(ceIncreaseIntervalRef);
+    }
+  }, [player.cursedEnergy]);
   // Player movement control
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -76,7 +108,6 @@ const GameArea = () => {
 
         let stepX = 0;
         let stepY = 0;
-        console.log("interval processing", rival.rivalDirection);
         if (rival.rivalDirection === "R") [stepX, stepY] = [10, 0];
         else if (rival.rivalDirection === "L") [stepX, stepY] = [-10, 0];
         else if (rival.rivalDirection === "U") [stepX, stepY] = [0, -10];
@@ -87,7 +118,6 @@ const GameArea = () => {
         else if (rival.rivalDirection === "DR") [stepX, stepY] = [10, 10];
         else if (rival.rivalDirection === "stop") [stepX, stepY] = [0, 0];
         dispatch(moveRival({ x: stepX, y: stepY }));
-        // console.log("dispatched", rival.x, rival.y)
       }
     }, 100); // Update interval
 
@@ -129,8 +159,6 @@ const GameArea = () => {
         }
       }
       if (rival.rivalDirection !== direction) {
-        console.log("dispatch DIRECTION");
-
         dispatch(setRivalDirection(direction));
       }
     }, 100); // Update interval

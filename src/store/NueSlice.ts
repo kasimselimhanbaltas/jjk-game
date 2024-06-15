@@ -20,7 +20,6 @@ const nueSlice = createSlice({
     moveNue(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
-      console.log("sukuna's position: ", inputX, inputY);
 
       if (Math.sign(state.x - inputX) < 0) {
         state.direction = "right";
