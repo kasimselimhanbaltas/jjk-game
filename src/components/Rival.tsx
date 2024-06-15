@@ -16,23 +16,6 @@ const Rival = ({ xDistance }) => {
 
     const attackInterval = React.useRef(null);
 
-
-    // useEffect(() => {
-    //     console.log("RIVALDIRECTION IN EFFECT", rival.rivalDirection)
-    //     const intervalId = setInterval(() => {
-    //         if (rival.rivalDirection == "left") {
-    //             dispatch(moveRival({ x: -10, y: 0 }));
-    //         } else if (rival.rivalDirection == "right") {
-    //             dispatch(moveRival({ x: +10, y: 0 }));
-    //         }
-    //         if (rival.y - player.y > 50) {
-    //             dispatch(moveRival({ x: 0, y: -10 }));
-    //         } else if (rival.y - player.y < -50) {
-    //             dispatch(moveRival({ x: 0, y: +10 }));
-    //         }
-    //     }, 100);
-    // }, [rival.rivalDirection]);
-
     useEffect(() => {
         if (rival.health > 0 && player.health > 0) {
             startAttackInterval();
@@ -43,20 +26,14 @@ const Rival = ({ xDistance }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [dispatch, attackDamage, rival.direction]);
+    }, [dispatch, attackDamage, rival.direction, rival.canMove]);
 
-    // useEffect(() => {
-    //     if (xDistance > 200) {
-    //         dispatch(setRivalDirection(rival.direction));
-    //     }
-
-    // }, [xDistance]);
 
     const startAttackInterval = () => {
         const randomInterval = 2000; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
         attackInterval.current = setInterval(() => {
-            if (player.health > 0 && rival.health > 0) {
+            if (player.health > 0 && rival.health > 0 && rival.canMove) {
                 dispatch(rivalAttacking(true));
                 setTimeout(() => {
                     dispatch(rivalAttacking(false));
@@ -70,6 +47,7 @@ const Rival = ({ xDistance }) => {
     const stopAttackInterval = () => {
         clearInterval(attackInterval.current);
     };
+
     useEffect(() => {
         if (rival.health <= 0)
             stopAttackInterval();

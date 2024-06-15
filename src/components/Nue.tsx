@@ -53,7 +53,7 @@ const Nue = () => {
         const intervalId = setInterval(() => {
 
             if (keysPressed.current.j && nue.isAttacking === false) {
-                if (nue.isActive === true) {
+                if (nue.isActive === true && rival.health > 0) {
                     nueAttack();
                 }
             }
@@ -82,14 +82,7 @@ const Nue = () => {
                 width: characterWidth,
                 height: characterHeight,
             }}>
-            {/* <h3>X: {x}</h3>
-            <h3>Y: {y}</h3>
-            <h3>
-                {keysPressed.current.w ? "w" : ""}
-                {keysPressed.current.a ? "a" : ""}
-                {keysPressed.current.s ? "s" : ""}
-                {keysPressed.current.d ? "d" : ""}{direction}
-            </h3> */}
+
             <img src="nue.png" alt="" style={{
                 transform: player.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight // Direction'a göre resmi ters çevir
             }} />
