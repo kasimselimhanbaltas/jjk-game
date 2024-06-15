@@ -51,7 +51,7 @@
 }
 .nue {
   position: absolute;
-  transition: all .4s ease;
+  transition: all 1s ease;
 }
 .player img{
   position: absolute;

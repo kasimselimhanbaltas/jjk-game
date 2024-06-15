@@ -26,6 +26,7 @@ const GameArea = () => {
 
 
   const startCursedEnergyInterval = () => {
+
     // Interval zaten çalışıyorsa başlatma
     console.log("increase ce")
 
@@ -35,7 +36,7 @@ const GameArea = () => {
 
       if (player.cursedEnergy < 100) {
         console.log("increase ce")
-        dispatch(changeCursedEnergy(+1));
+        dispatch(changeCursedEnergy(+20));
       }
     }, 1000);
   };
