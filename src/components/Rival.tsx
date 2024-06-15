@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { moveRival, rivalAttacking, rivalDirection } from '../store/RivalSlice';
+import { moveRival, rivalAttacking, setRivalDirection } from '../store/RivalSlice';
 import { healthReducer } from '../store/PlayerSlice';
 
 
@@ -12,7 +12,7 @@ const Rival = ({ xDistance }) => {
     const { isAttacking } = useSelector((state: any) => state.NueState);
     const characterWidth = 50;
     const characterHeight = 150;
-    const attackDamage = rival.closeRange ? -500 : -10; // Saldırı hasarı
+    const attackDamage = rival.closeRange ? -100 : -10; // Saldırı hasarı
 
     const attackInterval = React.useRef(null);
 
@@ -43,20 +43,20 @@ const Rival = ({ xDistance }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [dispatch, attackDamage, rival.rivalDirection]);
+    }, [dispatch, attackDamage, rival.direction]);
 
-    useEffect(() => {
-        if (xDistance > 200) {
-            dispatch(rivalDirection(rival.rivalDirection));
-        }
+    // useEffect(() => {
+    //     if (xDistance > 200) {
+    //         dispatch(setRivalDirection(rival.direction));
+    //     }
 
-    }, [xDistance]);
+    // }, [xDistance]);
 
     const startAttackInterval = () => {
         const randomInterval = 2000; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
         attackInterval.current = setInterval(() => {
-            if (player.health > 0) {
+            if (player.health > 0 && rival.health > 0) {
                 dispatch(rivalAttacking(true));
                 setTimeout(() => {
                     dispatch(rivalAttacking(false));
@@ -70,6 +70,10 @@ const Rival = ({ xDistance }) => {
     const stopAttackInterval = () => {
         clearInterval(attackInterval.current);
     };
+    useEffect(() => {
+        if (rival.health <= 0)
+            stopAttackInterval();
+    }, [rival.health]);
 
     return (
         <div className="rival"
@@ -87,8 +91,9 @@ const Rival = ({ xDistance }) => {
                 <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -120%)", fontSize: "15px" }}>{rival.health}</p>
             </div>
             <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
-                Rival Direction: {rival.rivalDirection} <br /> Range: {rival.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
+                Rival Direction: {rival.direction} <br /> Range: {rival.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
             </p>
+            <p style={{ marginTop: 170, width: 250, marginLeft: -50 }}>Aysuliw's Nightmare</p>
         </div>
     );
 };

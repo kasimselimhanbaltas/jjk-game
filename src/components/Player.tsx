@@ -1,15 +1,13 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { movePlayer } from "../store/PlayerSlice";
-import { rivalDirection, setCloseRange } from "../store/RivalSlice";
+import { setRivalDirection, setCloseRange } from "../store/RivalSlice";
 
 const Player = ({ xDistance }) => {
     const player = useSelector((state: any) => state.PlayerState);
     const rival = useSelector((state: any) => state.RivalState);
     const dispatch = useDispatch();
 
-    const gameAreaWidth = 1400;
-    const gameAreaHeight = 600;
     const characterWidth = 50;
     const characterHeight = 180;
 

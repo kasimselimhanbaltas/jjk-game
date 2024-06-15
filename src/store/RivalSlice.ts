@@ -42,7 +42,7 @@ const RivalSlice = createSlice({
     rivalAttacking(state, action) {
       state.isAttacking = action.payload;
     },
-    rivalDirection(state, action) {
+    setRivalDirection(state, action) {
       state.rivalDirection = action.payload;
     },
     setCloseRange(state, action) {
@@ -60,7 +60,7 @@ export const {
   moveRival,
   updateRivalHealth,
   rivalAttacking,
-  rivalDirection,
+  setRivalDirection,
   setCloseRange,
   setRivalPosition,
 } = RivalSlice.actions;

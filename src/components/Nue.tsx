@@ -29,7 +29,7 @@ const Nue = () => {
         dispatch(nueAttacking(true));
         if (nue.isAttacking) return;
         setTimeout(() => {
-            dispatch(updateRivalHealth(-10))
+            dispatch(updateRivalHealth(-50))
         }, 250)
         setTimeout(() => {
             dispatch(nueAttacking(false));

@@ -18,9 +18,9 @@ export interface Rival {
   x: number;
   y: number;
   health: number;
-  direction: "left" | "right";
+  direction: "left" | "right" | "stop";
   isAttacking: boolean;
-  rivalDirection: "left" | "right" | "stop";
+  rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
   closeRange: boolean;
 }
 export interface Nue {

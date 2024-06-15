@@ -2,10 +2,10 @@ import { useEffect, useMemo, useRef } from "react";
 import Player from "../components/Player";
 import Rival from "../components/Rival";
 import Nue from "../components/Nue";
-import { setCloseRange, updateRivalHealth, setRivalPosition } from "../store/RivalSlice";
+import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival } from "../store/RivalSlice";
 import { movePlayer } from "../store/PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { rivalDirection } from "../store/RivalSlice";
+import { setRivalDirection } from "../store/RivalSlice";
 
 const playerWidth = 50;
 const playerHeight = 180;
@@ -38,7 +38,7 @@ const GameArea = () => {
 
     // ???
     dispatch(setCloseRange(Math.abs(xDistance) < 200));
-    dispatch(rivalDirection(xDistance < 0 ? "left" : "right"));
+    // dispatch(setRivalDirection(xDistance < 0 ? "left" : "right"));
 
     clearInterval(intervalId);
 
@@ -55,12 +55,12 @@ const GameArea = () => {
       if (keysPressed.current.d && player.x < gameAreaWidth - playerWidth) {
         dispatch(movePlayer({ x: 10, y: 0 }));
       }
-      console.log("check DIRECTION")
-      if (rival.x - player.x < 10) {
-        dispatch(rivalDirection("right"));
-      } else {
-        dispatch(rivalDirection("left"));
-      }
+      // console.log("check DIRECTION")
+      // if (rival.x - player.x < 10) {
+      //   dispatch(setRivalDirection("right"));
+      // } else {
+      //   dispatch(setRivalDirection("left"));
+      // }
     }, 50);
 
     return () => {
@@ -73,18 +73,69 @@ const GameArea = () => {
   // Rival movement
   useEffect(() => {
     const interval = setInterval(() => {
-      const deltaX = player.x - rival.x;
-      const deltaY = player.y - rival.y;
-      const stepX = deltaX !== 0 ? deltaX / Math.abs(deltaX) : 0;
-      const stepY = deltaY !== 0 ? deltaY / Math.abs(deltaY) : 0;
-      dispatch(setRivalPosition({ x: rival.x + stepX, y: rival.y + stepY }));
+      let stepX = 0;
+      let stepY = 0;
+      console.log("interval processing", rival.rivalDirection);
+      if (rival.rivalDirection === "R") [stepX, stepY] = [10, 0];
+      else if (rival.rivalDirection === "L") [stepX, stepY] = [-10, 0];
+      else if (rival.rivalDirection === "U") [stepX, stepY] = [0, -10];
+      else if (rival.rivalDirection === "D") [stepX, stepY] = [0, 10];
+      else if (rival.rivalDirection === "UL") [stepX, stepY] = [-10, -10];
+      else if (rival.rivalDirection === "UR") [stepX, stepY] = [10, -10];
+      else if (rival.rivalDirection === "DL") [stepX, stepY] = [-10, 10];
+      else if (rival.rivalDirection === "DR") [stepX, stepY] = [10, 10];
+      else if (rival.rivalDirection === "stop") [stepX, stepY] = [0, 0];
+      dispatch(moveRival({ x: stepX, y: stepY }));
+      // console.log("dispatched", rival.x, rival.y)
     }, 100); // Update interval
 
     return () => {
       clearInterval(interval);
     };
-  }, [player, rival, dispatch]);
+  }, [rival.rivalDirection]);
 
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+
+      let direction = "stop";
+      const deltaX = player.x - rival.x; // >0 is right, <0 is left
+      const deltaY = player.y - rival.y; // >0 is up, <0 is down
+      if (Math.abs(deltaX) <= 100 && Math.abs(deltaY) <= 10) {
+        direction = "stop";
+      } else {
+
+        if (deltaX <= -100) { // left
+          if (deltaY <= -10) { // up
+            direction = "UL";
+          } else if (deltaY >= 10) { // down
+            direction = "DL";
+          } else {
+            direction = "L";
+          }
+        }
+        else if (deltaX >= 100) { // right
+          if (deltaY <= -10) { // up
+            direction = "UR";
+          } else if (deltaY >= 10) { // down
+            direction = "DR";
+          } else {
+            direction = "R";
+          }
+        }
+        console.log("interval for direction", direction);
+
+        if (rival.rivalDirection !== direction) {
+          console.log("dispatch DIRECTION");
+
+          dispatch(setRivalDirection(direction));
+        }
+      }
+    }, 100); // Update interval
+    return () => {
+      clearInterval(interval);
+    };
+  }, [dispatch, player]);
 
   // useEffect(() => {
   //   if (xDistance < 0 && rival.rivalDirection !== "left") {
@@ -97,6 +148,7 @@ const GameArea = () => {
   return (
     <div className="game-area">
       <Player xDistance={xDistance} />
+      <h1>{rival.rivalDirection}</h1>
       <Nue />
       <Rival xDistance={xDistance} />
     </div>
