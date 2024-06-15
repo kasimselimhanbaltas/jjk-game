@@ -10,13 +10,15 @@ const initialState: Rival = {
   health: 100,
   direction: "left",
   isAttacking: false,
+  rivalDirection: "stop",
+  closeRange: false,
 };
 
 const RivalSlice = createSlice({
   name: "Rival",
   initialState: initialState,
   reducers: {
-    move(state, action) {
+    moveRival(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
       // console.log("new position: ", inputX + state.x, inputY + state.y);
@@ -34,15 +36,32 @@ const RivalSlice = createSlice({
         console.log("limit reached in y direction");
       }
     },
-    health(state, action) {
+    updateRivalHealth(state, action) {
       state.health += action.payload;
     },
     rivalAttacking(state, action) {
       state.isAttacking = action.payload;
     },
+    rivalDirection(state, action) {
+      state.rivalDirection = action.payload;
+    },
+    setCloseRange(state, action) {
+      state.closeRange = action.payload;
+    },
+    setRivalPosition(state, action) {
+      state.x = action.payload.x;
+      state.y = action.payload.y;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
-export const { move, health, rivalAttacking } = RivalSlice.actions;
+export const {
+  moveRival,
+  updateRivalHealth,
+  rivalAttacking,
+  rivalDirection,
+  setCloseRange,
+  setRivalPosition,
+} = RivalSlice.actions;
 export default RivalSlice;

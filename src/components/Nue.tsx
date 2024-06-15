@@ -1,9 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PlayerState from "../store/GlobalStore";
-import { move } from "../store/PlayerSlice";
 import { moveNue, nueActivity, nueAttacking } from "../store/NueSlice";
-import { health } from "../store/RivalSlice";
+import { updateRivalHealth } from "../store/RivalSlice";
 
 const Nue = () => {
     const player = useSelector((state: any) => state.PlayerState);
@@ -31,7 +29,7 @@ const Nue = () => {
         dispatch(nueAttacking(true));
         if (nue.isAttacking) return;
         setTimeout(() => {
-            dispatch(health(-10))
+            dispatch(updateRivalHealth(-10))
         }, 250)
         setTimeout(() => {
             dispatch(nueAttacking(false));

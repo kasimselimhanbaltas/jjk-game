@@ -41,8 +41,9 @@
   width: 1400px;
   height: 600px;
   margin: auto;
-  background-color: #001c24;
-  position: relative;
+  /* background-color: #001c24; */
+  background-color: #763e3e;
+    position: relative;
 }
 .player {
   position: absolute;

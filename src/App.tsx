@@ -20,6 +20,8 @@ export interface Rival {
   health: number;
   direction: "left" | "right";
   isAttacking: boolean;
+  rivalDirection: "left" | "right" | "stop";
+  closeRange: boolean;
 }
 export interface Nue {
   isActive: boolean;

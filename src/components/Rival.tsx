@@ -1,47 +1,37 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { move, rivalAttacking } from '../store/RivalSlice';
+import { moveRival, rivalAttacking, rivalDirection } from '../store/RivalSlice';
 import { healthReducer } from '../store/PlayerSlice';
 
 
-const Rival = () => {
+const Rival = ({ xDistance }) => {
 
-    const x = 2;
-    let y = 4;
-    function update(arg) {
-        const random = Math.random()
-        console.log(random, "+", y, "x", arg)
-        return random + y * arg;
-    }
-    y = 4;
-    y = (update(x) - 2) / 2;
-    console.log("newY:", y)
-    const result = update(x);
-    console.log(result)
-
+    const dispatch = useDispatch();
     const rival = useSelector((state: any) => state.RivalState);
     const player = useSelector((state: any) => state.PlayerState);
     const { isAttacking } = useSelector((state: any) => state.NueState);
-    const dispatch = useDispatch();
     const characterWidth = 50;
     const characterHeight = 150;
+    const attackDamage = rival.closeRange ? -500 : -10; // Saldırı hasarı
 
     const attackInterval = React.useRef(null);
 
-    useEffect(() => {
-        setInterval(() => {
-            if (rival.x - player.x > 200) {
-                dispatch(move({ x: -4, y: 0 }));
-            } else if (rival.x - player.x < -200) {
-                dispatch(move({ x: +4, y: 0 }));
-            }
-            if (rival.y - player.y > 50) {
-                dispatch(move({ x: 0, y: -4 }));
-            } else if (rival.y - player.y < -50) {
-                dispatch(move({ x: 0, y: +4 }));
-            }
-        }, 500);
-    }, [player.x]);
+
+    // useEffect(() => {
+    //     console.log("RIVALDIRECTION IN EFFECT", rival.rivalDirection)
+    //     const intervalId = setInterval(() => {
+    //         if (rival.rivalDirection == "left") {
+    //             dispatch(moveRival({ x: -10, y: 0 }));
+    //         } else if (rival.rivalDirection == "right") {
+    //             dispatch(moveRival({ x: +10, y: 0 }));
+    //         }
+    //         if (rival.y - player.y > 50) {
+    //             dispatch(moveRival({ x: 0, y: -10 }));
+    //         } else if (rival.y - player.y < -50) {
+    //             dispatch(moveRival({ x: 0, y: +10 }));
+    //         }
+    //     }, 100);
+    // }, [rival.rivalDirection]);
 
     useEffect(() => {
         if (rival.health > 0 && player.health > 0) {
@@ -49,23 +39,29 @@ const Rival = () => {
         } else {
             stopAttackInterval();
         }
-
         return () => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [rival.health]);
+    }, [dispatch, attackDamage, rival.rivalDirection]);
+
+    useEffect(() => {
+        if (xDistance > 200) {
+            dispatch(rivalDirection(rival.rivalDirection));
+        }
+
+    }, [xDistance]);
+
     const startAttackInterval = () => {
         const randomInterval = 2000; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
         attackInterval.current = setInterval(() => {
             if (player.health > 0) {
-                console.log("Rakip saldırıyor");
                 dispatch(rivalAttacking(true));
                 setTimeout(() => {
                     dispatch(rivalAttacking(false));
                 }, 1000)
-                dispatch(healthReducer(-10)); // Player'ın canını azalt
+                dispatch(healthReducer(attackDamage)); // Player'ın canını azalt
             } else {
                 stopAttackInterval(); // Player ölünce saldırıyı durdur
             }
@@ -90,6 +86,9 @@ const Rival = () => {
                 </div>
                 <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -120%)", fontSize: "15px" }}>{rival.health}</p>
             </div>
+            <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
+                Rival Direction: {rival.rivalDirection} <br /> Range: {rival.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
+            </p>
         </div>
     );
 };

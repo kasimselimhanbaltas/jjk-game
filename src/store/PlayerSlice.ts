@@ -7,7 +7,7 @@ const gameAreaHeight = 600;
 const initialState: Player = {
   x: 200,
   y: 200,
-  health: 100,
+  health: 1000,
   direction: "right",
   isAttacking: false,
 };
@@ -16,7 +16,7 @@ const playerSlice = createSlice({
   name: "player",
   initialState: initialState,
   reducers: {
-    move(state, action) {
+    movePlayer(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
       // console.log("new position: ", inputX + state.x, inputY + state.y);
@@ -41,5 +41,5 @@ const playerSlice = createSlice({
   },
 });
 
-export const { move, healthReducer } = playerSlice.actions;
+export const { movePlayer, healthReducer } = playerSlice.actions;
 export default playerSlice;
