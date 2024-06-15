@@ -1,16 +1,13 @@
 {
   "files": {
-    "main.css": "/jjk-game/static/css/main.f855e6bc.css",
-    "main.js": "/jjk-game/static/js/main.1487cb8e.js",
-    "static/js/453.26306d51.chunk.js": "/jjk-game/static/js/453.26306d51.chunk.js",
-    "static/media/logo.svg": "/jjk-game/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "main.css": "/jjk-game/static/css/main.1cf53aab.css",
+    "main.js": "/jjk-game/static/js/main.95b90ce7.js",
     "index.html": "/jjk-game/index.html",
-    "main.f855e6bc.css.map": "/jjk-game/static/css/main.f855e6bc.css.map",
-    "main.1487cb8e.js.map": "/jjk-game/static/js/main.1487cb8e.js.map",
-    "453.26306d51.chunk.js.map": "/jjk-game/static/js/453.26306d51.chunk.js.map"
+    "main.1cf53aab.css.map": "/jjk-game/static/css/main.1cf53aab.css.map",
+    "main.95b90ce7.js.map": "/jjk-game/static/js/main.95b90ce7.js.map"
   },
   "entrypoints": [
-    "static/css/main.f855e6bc.css",
-    "static/js/main.1487cb8e.js"
+    "static/css/main.1cf53aab.css",
+    "static/js/main.95b90ce7.js"
   ]
 }
