@@ -64,13 +64,13 @@ const Nue = () => {
 
         dispatch(nueAttacking(true));
         dispatch(changeCursedEnergy(-nueAttackCost));
-        dispatch(moveNue({ x: rival.x, y: rival.y - 100 }));
+        dispatch(moveNue({ x: rival.x, y: rival.y - 100 })); //move to rival
 
         setTimeout(() => {
             setImageSrc(require('../Assets/nue.png')); // nue arrives to rival
 
             setTimeout(() => { // electric attack
-                setImageSrc(require('../Assets/nue-side.png')); // nue arrives to rival
+                setImageSrc(require('../Assets/nue-side.png')); // nue move after electric attack
                 if (rival.x > player.x) {
                     dispatch(moveNue({ x: rival.x + 200, y: rival.y - 200 }));
                 } else {
