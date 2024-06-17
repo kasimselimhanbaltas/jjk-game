@@ -182,9 +182,9 @@ const GameArea = () => {
   return (
     <div className="game-area">
       <Player xDistance={xDistance} />
-      <h1>{rival.rivalDirection}
+      {/* <h1>{rival.rivalDirection}
         <br /> {yDistance}
-      </h1>
+      </h1> */}
       <Nue />
       <Rival xDistance={xDistance} />
     </div>

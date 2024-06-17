@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { moveRival, rivalAttacking, setRivalDirection } from '../store/RivalSlice';
+import { moveRival, rivalAttacking, setRapidAttack, setRivalDirection } from '../store/RivalSlice';
 import { healthReducer } from '../store/PlayerSlice';
 
 
@@ -15,6 +15,7 @@ const Rival = ({ xDistance }) => {
     const characterHeight = 150;
     const attackDamage = rival.closeRange ? -100 : -10; // Saldırı hasarı
     const [electricityEffect, setElectricityEffect] = React.useState(false);
+    const [rapidAttackCounter, setRapidAttackCounter] = React.useState(5);
 
     const attackInterval = React.useRef(null);
 
@@ -26,9 +27,10 @@ const Rival = ({ xDistance }) => {
             setTimeout(() => {
                 setElectricityEffect(false)
             }, 2000);
-        }, 1000);
+        }, 500);
     }, [nue.isAttacking]);
 
+    // Rival auto attack starter
     useEffect(() => {
         if (rival.health > 0 && player.health > 0) {
             startAttackInterval();
@@ -39,19 +41,29 @@ const Rival = ({ xDistance }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [dispatch, attackDamage, rival.direction, rival.canMove]);
+    }, [dispatch, attackDamage, rival.direction, rival.canMove, rapidAttackCounter]);
 
 
     const startAttackInterval = () => {
         const randomInterval = 2000; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
         attackInterval.current = setInterval(() => {
-            if (player.health > 0 && rival.health > 0 && rival.canMove) {
-                dispatch(rivalAttacking(true));
-                setTimeout(() => {
-                    dispatch(rivalAttacking(false));
-                }, 1000)
-                dispatch(healthReducer(attackDamage)); // Player'ın canını azalt
+            if (player.health > 0 && rival.health > 0) {
+                // if (player.health > 0 && rival.health > 0 && rival.canMove) {
+                if (rapidAttackCounter === 0) {
+                    setRapidAttackCounter(5);
+                    dispatch(setRapidAttack(true));
+                    setTimeout(() => {
+                        dispatch(setRapidAttack(false));
+                    }, 1000);
+                } else {
+                    setRapidAttackCounter(rapidAttackCounter - 1);
+                    dispatch(rivalAttacking(true));
+                    setTimeout(() => {
+                        dispatch(rivalAttacking(false));
+                    }, 1000)
+                    dispatch(healthReducer(attackDamage)); // Player'ın canını azalt
+                }
             } else {
                 stopAttackInterval(); // Player ölünce saldırıyı durdur
             }
@@ -81,10 +93,10 @@ const Rival = ({ xDistance }) => {
                 </div>
                 <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -120%)", fontSize: "15px" }}>{rival.health}</p>
             </div>
-            <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
+            {/* <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
                 Rival Direction: {rival.direction} <br /> Range: {rival.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
-            </p>
-            <p style={{ marginTop: 170, width: 250, marginLeft: -50 }}>Aysuliw's Nightmare</p>
+            </p> */}
+            <p style={{ marginTop: 170, width: 250, marginLeft: -55, color: "black" }}>Ryomen Sukuna</p>
         </div>
     );
 };

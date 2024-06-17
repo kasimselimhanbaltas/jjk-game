@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { updateRivalHealth } from "../store/RivalSlice";
+import { setRivalCanMove, updateRivalHealth } from "../store/RivalSlice";
 import { changeCursedEnergy } from "../store/PlayerSlice";
 
 
@@ -73,12 +73,13 @@ const Nue = () => {
 
         dispatch(nueAttacking(true));
         dispatch(changeCursedEnergy(-nueAttackCost));
-        setNueStyle({ ...nueStyle, transition: "all 1s ease" });
+        setNueStyle({ ...nueStyle, transition: "all .5s ease" });
         dispatch(setNueDirection(attackDirection));
         // setImageStyle({ ...imageStyle, transform: `scaleX(${attackDirection === "right" ? -1 : 1})` });
         dispatch(moveNue({ x: rival.x, y: rival.y - 100 })); //move to rival
 
         setTimeout(() => {
+            dispatch(setRivalCanMove(false)); // stun rival
             setImageSrc(require('../Assets/nue.png')); // nue arrives to rival
 
             setTimeout(() => { // electric attack
@@ -93,6 +94,7 @@ const Nue = () => {
                     dispatch(updateRivalHealth(-nueDamage))
                     setTimeout(() => {
                         dispatch(nueAttacking(false));
+                        dispatch(setRivalCanMove(true)); // cancel stun rival
                         dispatch(setNueDirection(attackDirection === "right" ? "left" : "right"));
                         setTimeout(() => {
                             setImageStyle({ ...imageStyle, transform: "" });
@@ -101,7 +103,7 @@ const Nue = () => {
                     }, 1000);
                 }, 250)
             }, 250)
-        }, 1000)
+        }, 500)
     }
 
     useEffect(() => {

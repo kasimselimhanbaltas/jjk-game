@@ -25,6 +25,7 @@ export interface Rival {
   rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
   closeRange: boolean;
   canMove: boolean;
+  rapidAttack: boolean;
 }
 export interface Nue {
   isActive: boolean;

@@ -14,6 +14,7 @@ const initialState: Rival = {
   rivalDirection: "stop",
   closeRange: false,
   canMove: false,
+  rapidAttack: false,
 };
 
 const RivalSlice = createSlice({
@@ -56,6 +57,10 @@ const RivalSlice = createSlice({
     setRivalCanMove(state, action) {
       state.canMove = action.payload;
     },
+    setRapidAttack(state, action) {
+      state.rapidAttack = action.payload;
+    },
+
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -68,5 +73,6 @@ export const {
   setCloseRange,
   setRivalPosition,
   setRivalCanMove,
+  setRapidAttack,
 } = RivalSlice.actions;
 export default RivalSlice;
