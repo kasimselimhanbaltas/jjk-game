@@ -1,29 +1,36 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { moveNue, nueActivity, nueAttacking } from "../store/NueSlice";
+import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
 import { updateRivalHealth } from "../store/RivalSlice";
 import { changeCursedEnergy } from "../store/PlayerSlice";
 
+
+const gameAreaWidth = 1400;
+const gameAreaHeight = 600;
+const characterWidth = 50;
+const characterHeight = 120;
+const callNueCost = 1;
+const nueAttackCost = 10;
+const nueDamage = 1;
+const shikigamiDrainingCost = 1;
+const defaultNueTransform = "all .4s ease";
+
+
 const Nue = () => {
+
     const player = useSelector((state: any) => state.PlayerState);
     const rival = useSelector((state: any) => state.RivalState);
     const nue = useSelector((state: any) => state.NueState);
     const dispatch = useDispatch();
     const keysPressed = useRef({ j: false, k: false });
-    const [imageSrc, setImageSrc] = useState(require('../Assets/nue.png'));
+    const [imageSrc, setImageSrc] = useState(require('../Assets/nue-side.png'));
     const [imageStyle, setImageStyle] = useState({
-        transition: "all .2s ease",
+        transition: "all .2s ease, transform 0s",
         transform: "",
     });
+    const [nueStyle, setNueStyle] = useState({ transition: defaultNueTransform });
 
-    const gameAreaWidth = 1400;
-    const gameAreaHeight = 600;
-    const characterWidth = 50;
-    const characterHeight = 120;
-    const callNueCost = 1;
-    const nueAttackCost = 10;
-    const nueDamage = 1;
-    const shikigamiDrainingCost = 1;
+
 
     const nueIntervalRef = useRef(null);
 
@@ -59,11 +66,16 @@ const Nue = () => {
     function nueAttack() {
         if (player.cursedEnergy < nueAttackCost) return;
 
+        let attackDirection = "";
+        attackDirection = player.x < rival.x ? "right" : "left";
+        console.log("nue direction: ", nue.direction, "attackDirection: ", attackDirection,)
         // nue updates
-        setImageSrc(require('../Assets/nue-side.png'))
 
         dispatch(nueAttacking(true));
         dispatch(changeCursedEnergy(-nueAttackCost));
+        setNueStyle({ ...nueStyle, transition: "all 1s ease" });
+        dispatch(setNueDirection(attackDirection));
+        // setImageStyle({ ...imageStyle, transform: `scaleX(${attackDirection === "right" ? -1 : 1})` });
         dispatch(moveNue({ x: rival.x, y: rival.y - 100 })); //move to rival
 
         setTimeout(() => {
@@ -81,9 +93,10 @@ const Nue = () => {
                     dispatch(updateRivalHealth(-nueDamage))
                     setTimeout(() => {
                         dispatch(nueAttacking(false));
-                        setImageStyle({ ...imageStyle, transform: "scaleX(1)" });
+                        dispatch(setNueDirection(attackDirection === "right" ? "left" : "right"));
                         setTimeout(() => {
                             setImageStyle({ ...imageStyle, transform: "" });
+                            setNueStyle({ ...nueStyle, transition: defaultNueTransform });
                         }, 1000);
                     }, 1000);
                 }, 250)
@@ -135,15 +148,16 @@ const Nue = () => {
         <div
             className="nue"
             style={{
-                display: nue.isActive ? "block" : "none",
+                opacity: nue.isActive ? "1" : "0",
                 top: nue.isAttacking ? nue.y : player.y - 100,
                 left: nue.isAttacking ? nue.x : player.direction === "left" ? player.x + 100 : player.x - 100,
                 width: characterWidth,
                 height: characterHeight,
+                ...nueStyle,
             }}>
 
             <img src={imageSrc} alt="" style={{
-                ...imageStyle, transform: player.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight // Direction'a göre resmi ters çevir
+                ...imageStyle, transform: nue.direction === "left" ? "scaleX(-1)" : "scaleX(1)", height: characterHeight // Direction'a göre resmi ters çevir
             }} />
 
         </div>

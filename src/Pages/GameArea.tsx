@@ -6,6 +6,7 @@ import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRival
 import { changeCursedEnergy, movePlayer } from "../store/PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setRivalDirection } from "../store/RivalSlice";
+import { setNueDirection } from "../store/NueSlice";
 
 const playerWidth = 50;
 const playerHeight = 180;
@@ -18,6 +19,7 @@ const GameArea = () => {
   const dispatch = useDispatch()
   const rival = useSelector((state: any) => state.RivalState);
   const player = useSelector((state: any) => state.PlayerState);
+  const nue = useSelector((state: any) => state.NueState);
   const xDistance = useMemo(() => (player.x - rival.x), [player.x, rival.x]);
   const yDistance = useMemo(() => (player.y - rival.y), [player.y, rival.y]);
   const keysPressed = useRef({ w: false, a: false, s: false, d: false, t: false });
@@ -94,6 +96,7 @@ const GameArea = () => {
         else dispatch(setRivalCanMove(true));
       }
     }, 75);
+    if (!nue.isAttacking) dispatch(setNueDirection(player.direction));
 
     return () => {
       clearInterval(intervalId);

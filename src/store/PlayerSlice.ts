@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Player } from "../App";
+import { useDispatch } from "react-redux";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
-
 const initialState: Player = {
   x: 200,
   y: 200,
