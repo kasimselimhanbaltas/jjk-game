@@ -22,9 +22,9 @@ const playerSlice = createSlice({
       let inputY = action.payload.y;
       if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 120) {
         state.x += inputX;
-        if (inputX > 0) {
-          state.direction = "right";
-        } else if (inputX < 0) state.direction = "left";
+        //   if (inputX > 0) {
+        //     state.direction = "right";
+        //   } else if (inputX < 0) state.direction = "left";
       } else {
         // console.log("limit reached in x direction");
       }
@@ -40,10 +40,17 @@ const playerSlice = createSlice({
     changeCursedEnergy(state, action) {
       state.cursedEnergy += action.payload;
     },
+    setPlayerDirection(state, action) {
+      state.direction = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
-export const { movePlayer, healthReducer, changeCursedEnergy } =
-  playerSlice.actions;
+export const {
+  movePlayer,
+  healthReducer,
+  changeCursedEnergy,
+  setPlayerDirection,
+} = playerSlice.actions;
 export default playerSlice;

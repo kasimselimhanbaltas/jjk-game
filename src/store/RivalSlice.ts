@@ -26,9 +26,9 @@ const RivalSlice = createSlice({
       let inputY = action.payload.y;
       if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 300) {
         state.x += inputX;
-        if (inputX > 0) {
-          state.direction = "right";
-        } else state.direction = "left";
+        // if (inputX > 0) {
+        //   state.direction = "right";
+        // } else state.direction = "left";
       } else {
         // console.log("limit reached in x direction");
       }

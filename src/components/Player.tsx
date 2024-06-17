@@ -30,11 +30,14 @@ const Player = ({ xDistance }) => {
     }, [rival.rapidAttack])
 
     const rapidAttack = () => {
+        const attackDirection = rival.x - player.x >= 0 ? "left" : "right";
+        const stepDistance = attackDirection === "left" ? -10 : 10;
         const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
         for (let i = 0; i < degrees.length; i++) {
             setTimeout(() => {
                 setSlashRotation({ rotate: degrees[i] + "deg" });
                 dispatch(healthReducer(-10));
+                dispatch(movePlayer({ x: stepDistance, y: 0 }));
             }, i * 100);
         }
     };
@@ -63,7 +66,7 @@ const Player = ({ xDistance }) => {
 
             <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
             {/* <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} /> */}
-            <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: rival.isAttacking && Math.abs(rival.x - player.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scale(0.5)" }} />
+            <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: rival.isAttacking && Math.abs(rival.x - player.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.5)" }} />
         </div>
     );
 };

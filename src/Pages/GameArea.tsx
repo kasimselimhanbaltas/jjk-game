@@ -3,7 +3,7 @@ import Player from "../components/Player";
 import Rival from "../components/Rival";
 import Nue from "../components/Nue";
 import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRivalCanMove } from "../store/RivalSlice";
-import { changeCursedEnergy, movePlayer } from "../store/PlayerSlice";
+import { changeCursedEnergy, movePlayer, setPlayerDirection } from "../store/PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setRivalDirection } from "../store/RivalSlice";
 import { setNueDirection } from "../store/NueSlice";
@@ -84,12 +84,14 @@ const GameArea = () => {
       }
       if (keysPressed.current.a && player.x > 0) {
         dispatch(movePlayer({ x: -playerSpeed, y: 0 }));
+        dispatch(setPlayerDirection("left"));
       }
       if (keysPressed.current.s && player.y < gameAreaHeight - playerHeight) {
         dispatch(movePlayer({ x: 0, y: playerSpeed }));
       }
       if (keysPressed.current.d && player.x < gameAreaWidth - playerWidth) {
         dispatch(movePlayer({ x: playerSpeed, y: 0 }));
+        dispatch(setPlayerDirection("right"));
       }
       if (keysPressed.current.t) {
         if (rival.canMove) dispatch(setRivalCanMove(false));
