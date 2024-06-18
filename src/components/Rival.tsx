@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { moveRival, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setRivalCursedEnergy, setRivalDirection } from '../store/RivalSlice';
+import { moveRival, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setRivalCanMove, setRivalCursedEnergy, setRivalDirection, setRivalDomainExpansion } from '../store/RivalSlice';
 import { healthReducer, movePlayer } from '../store/PlayerSlice';
 
 
@@ -48,9 +48,16 @@ const Rival = ({ xDistance }) => {
 
     }, [dispatch, attackDamage, rival.direction, rival.canMove, rapidAttackCounter]);
 
+    // Domain expansion Action
     const rivalDomainExpansion = () => {
         console.log("RIYOIKI TENKAI ")
+        dispatch(setRivalDomainExpansion(true));
+        dispatch(setRivalCanMove(false));
         dispatch(setRivalCursedEnergy(0));
+        setTimeout(() => {
+            dispatch(setRivalDomainExpansion(false));
+            dispatch(setRivalCanMove(true));
+        }, 5000);
     }
 
     const startAttackInterval = () => {
@@ -114,7 +121,7 @@ const Rival = ({ xDistance }) => {
                 <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{rival.health}</p>
             </div>
             <div className="player-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                <div style={{ position: "absolute", width: rival.cursedEnergy * 150 / 100, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
+                <div style={{ position: "absolute", width: rival.cursedEnergy * 150 / 200, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
                 </div>
                 <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{rival.cursedEnergy}</p>
             </div>

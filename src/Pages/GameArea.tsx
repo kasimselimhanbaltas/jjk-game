@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import Player from "../components/Player";
 import Rival from "../components/Rival";
 import Nue from "../components/Nue";
-import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRivalCanMove, setDashGauge, moveRivalTo } from "../store/RivalSlice";
+import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRivalCanMove, setDashGauge, moveRivalTo, setRivalCursedEnergy } from "../store/RivalSlice";
 import { changeCursedEnergy, movePlayer, setPlayerDirection } from "../store/PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setRivalDirection } from "../store/RivalSlice";
@@ -13,6 +13,7 @@ const playerHeight = 180;
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 const playerSpeed = 30;
+const shrineHeight = 250;
 
 const GameArea = () => {
 
@@ -24,25 +25,30 @@ const GameArea = () => {
   const yDistance = useMemo(() => (player.y - rival.y), [player.y, rival.y]);
   const keysPressed = useRef({ w: false, a: false, s: false, d: false, t: false, space: false });
   let intervalId = null;
-  const ceIncreaseIntervalRef = useRef(null);
+  const playerCEincreaseIntervalRef = useRef(null);
+  const rivalCEincreaseIntervalRef = useRef(null);
 
-
+  // Cursed energy interval functions
   const startCursedEnergyInterval = () => {
+    if (playerCEincreaseIntervalRef.current !== null) return;
 
-    // Interval zaten çalışıyorsa başlatma
-    console.log("increase ce")
-
-    if (ceIncreaseIntervalRef.current !== null) return;
-
-    ceIncreaseIntervalRef.current = setInterval(() => {
-
+    playerCEincreaseIntervalRef.current = setInterval(() => {
       if (player.cursedEnergy < 100) {
         console.log("increase ce")
         dispatch(changeCursedEnergy(+20));
       }
     }, 1000);
-  };
 
+    if (rivalCEincreaseIntervalRef.current !== null) return;
+
+    rivalCEincreaseIntervalRef.current = setInterval(() => {
+      if (rival.cursedEnergy < 200 && rival.rivalDomainExpansion === false) {
+        console.log("increase ce")
+        dispatch(setRivalCursedEnergy(rival.cursedEnergy + 20));
+      }
+    }, 1000);
+  };
+  // Cursed energy interval functions end
   const stopInterval = (ref) => {
     // Interval çalışmıyorsa durdurma
     if (ref.current === null) return;
@@ -51,13 +57,15 @@ const GameArea = () => {
     ref.current = null;
   };
 
-
+  // Cursed energy increase interval start and stop effect
   useEffect(() => {
     startCursedEnergyInterval()
     return () => {
-      stopInterval(ceIncreaseIntervalRef);
+      stopInterval(playerCEincreaseIntervalRef);
+      stopInterval(rivalCEincreaseIntervalRef);
     }
-  }, [player.cursedEnergy]);
+  }, [player.cursedEnergy, rival.cursedEnergy, rival.rivalDomainExpansion]);
+
   // Player movement control
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -76,7 +84,6 @@ const GameArea = () => {
     window.addEventListener("keyup", handleKeyUp);
 
     dispatch(setCloseRange(Math.abs(xDistance) < 200));
-    // dispatch(setRivalDirection(xDistance < 0 ? "left" : "right"));
 
     clearInterval(intervalId);
 
@@ -194,12 +201,19 @@ const GameArea = () => {
 
   return (
     <div className="game-area">
+      <div style={{
+        width: "100%", height: "100%",
+        backgroundImage: `url(${require("../Assets/domain-bg.png")})`, opacity: rival.rivalDomainExpansion ? 1 : 0,
+        backgroundSize: "contain", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
+      }}></div>
       <Player xDistance={xDistance} />
       {/* <h1>{rival.rivalDirection}
         <br /> {yDistance}
       </h1> */}
       <Nue />
       <Rival xDistance={xDistance} />
+      <img src={require('../Assets/malevolent_shrine.png')} alt="" style={{ position: "absolute", display: rival.rivalDomainExpansion ? "block" : "none", left: player.x < rival.x ? rival.x + 120 : rival.x - 150, top: rival.y - 50, height: shrineHeight, opacity: 0.8, scale: "1.2" }} />
+
     </div>
   );
 };

@@ -8,10 +8,11 @@ const initialState: Rival = {
   x: 800,
   y: 200,
   health: 100,
-  cursedEnergy: 200,
+  cursedEnergy: 100,
   direction: "left",
   cleaveAttack: false,
   dismantleAttack: false,
+  rivalDomainExpansion: false,
   rivalDirection: "stop",
   closeRange: false,
   canMove: false,
@@ -75,6 +76,9 @@ const RivalSlice = createSlice({
     setRivalCursedEnergy(state, action) {
       state.cursedEnergy = action.payload;
     },
+    setRivalDomainExpansion(state, action) {
+      state.rivalDomainExpansion = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -85,6 +89,7 @@ export const {
   updateRivalHealth,
   rivalCleaveAttack,
   rivalDismantleAttack,
+  setRivalDomainExpansion,
   setRivalDirection,
   setCloseRange,
   setRivalPosition,

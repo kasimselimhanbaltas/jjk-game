@@ -14,6 +14,7 @@ export interface Player {
   cursedEnergy: number;
   direction: "left" | "right";
   isAttacking: boolean;
+  canMove: boolean;
 }
 export interface Rival {
   x: number;
@@ -23,6 +24,7 @@ export interface Rival {
   direction: "left" | "right" | "stop";
   cleaveAttack: boolean,
   dismantleAttack: boolean,
+  rivalDomainExpansion: boolean,
   rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
   closeRange: boolean;
   canMove: boolean;

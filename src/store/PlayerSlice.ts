@@ -11,6 +11,7 @@ const initialState: Player = {
   cursedEnergy: 100,
   direction: "right",
   isAttacking: false,
+  canMove: true,
 };
 
 const playerSlice = createSlice({
@@ -43,6 +44,9 @@ const playerSlice = createSlice({
     setPlayerDirection(state, action) {
       state.direction = action.payload;
     },
+    setPlayerCanMove(state, action) {
+      state.canMove = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -52,5 +56,6 @@ export const {
   healthReducer,
   changeCursedEnergy,
   setPlayerDirection,
+  setPlayerCanMove,
 } = playerSlice.actions;
 export default playerSlice;
