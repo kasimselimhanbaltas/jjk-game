@@ -36,7 +36,6 @@ const nueSlice = createSlice({
       state.isActive = action.payload;
     },
     setNueDirection(state, action) {
-      console.log(action.payload);
       state.direction = action.payload;
     },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)

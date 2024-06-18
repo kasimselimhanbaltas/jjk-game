@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { moveRival, rivalAttacking, setRapidAttack, setRivalDirection } from '../store/RivalSlice';
-import { healthReducer } from '../store/PlayerSlice';
+import { moveRival, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setRivalCursedEnergy, setRivalDirection } from '../store/RivalSlice';
+import { healthReducer, movePlayer } from '../store/PlayerSlice';
 
 
 const Rival = ({ xDistance }) => {
@@ -10,7 +10,6 @@ const Rival = ({ xDistance }) => {
     const rival = useSelector((state: any) => state.RivalState);
     const player = useSelector((state: any) => state.PlayerState);
     const nue = useSelector((state: any) => state.NueState);
-    const { isAttacking } = useSelector((state: any) => state.NueState);
     const characterWidth = 50;
     const characterHeight = 150;
     const attackDamage = rival.closeRange ? -100 : -10; // Saldırı hasarı
@@ -33,7 +32,13 @@ const Rival = ({ xDistance }) => {
     // Rival auto attack starter
     useEffect(() => {
         if (rival.health > 0 && player.health > 0) {
-            startAttackInterval();
+            if (rival.cursedEnergy === 200) {
+                rivalDomainExpansion()
+            }
+            else {
+                if (rival.cursedEnergy >= 10)
+                    startAttackInterval();
+            }
         } else {
             stopAttackInterval();
         }
@@ -43,25 +48,40 @@ const Rival = ({ xDistance }) => {
 
     }, [dispatch, attackDamage, rival.direction, rival.canMove, rapidAttackCounter]);
 
+    const rivalDomainExpansion = () => {
+        console.log("RIYOIKI TENKAI ")
+        dispatch(setRivalCursedEnergy(0));
+    }
 
     const startAttackInterval = () => {
+        const attackDirection = rival.x - player.x >= 0 ? "left" : "right";
+        const stepDistance = attackDirection === "left" ? -100 : 100;
         const randomInterval = 2000; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
         attackInterval.current = setInterval(() => {
-            if (player.health > 0 && rival.health > 0) {
-                // if (player.health > 0 && rival.health > 0 && rival.canMove) {
-                if (rapidAttackCounter === 0) {
+            // if (player.health > 0 && rival.health > 0) {
+            if (player.health > 0 && rival.health > 0 && rival.canMove) {
+                if (rapidAttackCounter <= 0) {
                     setRapidAttackCounter(5);
                     dispatch(setRapidAttack(true));
                     setTimeout(() => {
                         dispatch(setRapidAttack(false));
                     }, 1000);
                 } else {
-                    setRapidAttackCounter(rapidAttackCounter - 1);
-                    dispatch(rivalAttacking(true));
-                    setTimeout(() => {
-                        dispatch(rivalAttacking(false));
-                    }, 1000)
+                    if (rival.closeRange) { // dismantle
+                        setRapidAttackCounter(rapidAttackCounter - 3);
+                        dispatch(rivalDismantleAttack(true));
+                        dispatch(movePlayer({ x: stepDistance, y: 0 }));
+                        setTimeout(() => {
+                            dispatch(rivalDismantleAttack(false));
+                        }, 1000);
+                    } else { // cleave
+                        setRapidAttackCounter(rapidAttackCounter - 1);
+                        dispatch(rivalCleaveAttack(true));
+                        setTimeout(() => {
+                            dispatch(rivalCleaveAttack(false));
+                        }, 1000)
+                    }
                     dispatch(healthReducer(attackDamage)); // Player'ın canını azalt
                 }
             } else {
@@ -89,9 +109,14 @@ const Rival = ({ xDistance }) => {
             <img src={require('../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
 
             <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                <div style={{ position: "absolute", width: rival.health * 150 / 100, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
+                <div style={{ position: "absolute", width: rival.health * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
                 </div>
-                <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -120%)", fontSize: "15px" }}>{rival.health}</p>
+                <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{rival.health}</p>
+            </div>
+            <div className="player-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
+                <div style={{ position: "absolute", width: rival.cursedEnergy * 150 / 100, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
+                </div>
+                <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{rival.cursedEnergy}</p>
             </div>
             {/* <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
                 Rival Direction: {rival.direction} <br /> Range: {rival.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}

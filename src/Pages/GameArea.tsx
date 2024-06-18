@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import Player from "../components/Player";
 import Rival from "../components/Rival";
 import Nue from "../components/Nue";
-import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRivalCanMove } from "../store/RivalSlice";
+import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRivalCanMove, setDashGauge, moveRivalTo } from "../store/RivalSlice";
 import { changeCursedEnergy, movePlayer, setPlayerDirection } from "../store/PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setRivalDirection } from "../store/RivalSlice";
@@ -22,7 +22,7 @@ const GameArea = () => {
   const nue = useSelector((state: any) => state.NueState);
   const xDistance = useMemo(() => (player.x - rival.x), [player.x, rival.x]);
   const yDistance = useMemo(() => (player.y - rival.y), [player.y, rival.y]);
-  const keysPressed = useRef({ w: false, a: false, s: false, d: false, t: false });
+  const keysPressed = useRef({ w: false, a: false, s: false, d: false, t: false, space: false });
   let intervalId = null;
   const ceIncreaseIntervalRef = useRef(null);
 
@@ -61,12 +61,14 @@ const GameArea = () => {
   // Player movement control
   useEffect(() => {
     const handleKeyDown = (event) => {
-      const key = event.key.toLowerCase();
+      let key = event.key.toLowerCase();
+      if (event.key === " ") key = "space";
       keysPressed.current[key] = true;
     };
 
     const handleKeyUp = (event) => {
-      const key = event.key.toLowerCase();
+      let key = event.key.toLowerCase();
+      if (event.key === " ") key = "space";
       keysPressed.current[key] = false;
     };
 
@@ -97,6 +99,9 @@ const GameArea = () => {
         if (rival.canMove) dispatch(setRivalCanMove(false));
         else dispatch(setRivalCanMove(true));
       }
+      console.log(keysPressed.current.space)
+      if (keysPressed.current.space)
+        dispatch(movePlayer({ x: player.direction === "right" ? 200 : -200, y: 0 }));
     }, 75);
     if (!nue.isAttacking) dispatch(setNueDirection(player.direction));
 
@@ -111,19 +116,25 @@ const GameArea = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (rival.canMove) {
-
-        let stepX = 0;
-        let stepY = 0;
-        if (rival.rivalDirection === "R") [stepX, stepY] = [10, 0];
-        else if (rival.rivalDirection === "L") [stepX, stepY] = [-10, 0];
-        else if (rival.rivalDirection === "U") [stepX, stepY] = [0, -10];
-        else if (rival.rivalDirection === "D") [stepX, stepY] = [0, 10];
-        else if (rival.rivalDirection === "UL") [stepX, stepY] = [-10, -10];
-        else if (rival.rivalDirection === "UR") [stepX, stepY] = [10, -10];
-        else if (rival.rivalDirection === "DL") [stepX, stepY] = [-10, 10];
-        else if (rival.rivalDirection === "DR") [stepX, stepY] = [10, 10];
-        else if (rival.rivalDirection === "stop") [stepX, stepY] = [0, 0];
-        dispatch(moveRival({ x: stepX, y: stepY }));
+        if (rival.dashGauge > 70) {
+          dispatch(moveRivalTo({ x: player.x, y: player.y }));
+          dispatch(setDashGauge(0))
+        }
+        else {
+          dispatch(setDashGauge(rival.dashGauge + 1))
+          let stepX = 0;
+          let stepY = 0;
+          if (rival.rivalDirection === "R") [stepX, stepY] = [10, 0];
+          else if (rival.rivalDirection === "L") [stepX, stepY] = [-10, 0];
+          else if (rival.rivalDirection === "U") [stepX, stepY] = [0, -10];
+          else if (rival.rivalDirection === "D") [stepX, stepY] = [0, 10];
+          else if (rival.rivalDirection === "UL") [stepX, stepY] = [-10, -10];
+          else if (rival.rivalDirection === "UR") [stepX, stepY] = [10, -10];
+          else if (rival.rivalDirection === "DL") [stepX, stepY] = [-10, 10];
+          else if (rival.rivalDirection === "DR") [stepX, stepY] = [10, 10];
+          else if (rival.rivalDirection === "stop") [stepX, stepY] = [0, 0];
+          dispatch(moveRival({ x: stepX, y: stepY }));
+        }
       }
     }, 100); // Update interval
 
@@ -131,7 +142,7 @@ const GameArea = () => {
       clearInterval(interval);
     };
 
-  }, [rival.rivalDirection, rival.canMove]);
+  }, [rival.rivalDirection, rival.canMove, rival.dashGauge]);
 
   // Rival Movement Control
   useEffect(() => {

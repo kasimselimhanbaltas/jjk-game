@@ -8,13 +8,15 @@ const initialState: Rival = {
   x: 800,
   y: 200,
   health: 100,
-  cursedEnergy: 0,
+  cursedEnergy: 200,
   direction: "left",
-  isAttacking: false,
+  cleaveAttack: false,
+  dismantleAttack: false,
   rivalDirection: "stop",
   closeRange: false,
   canMove: false,
   rapidAttack: false,
+  dashGauge: 0,
 };
 
 const RivalSlice = createSlice({
@@ -38,11 +40,18 @@ const RivalSlice = createSlice({
         // console.log("limit reached in y direction");
       }
     },
+    moveRivalTo(state, action) {
+      state.x = action.payload.x;
+      state.y = action.payload.y;
+    },
     updateRivalHealth(state, action) {
       state.health += action.payload;
     },
-    rivalAttacking(state, action) {
-      state.isAttacking = action.payload;
+    rivalCleaveAttack(state, action) {
+      state.cleaveAttack = action.payload;
+    },
+    rivalDismantleAttack(state, action) {
+      state.dismantleAttack = action.payload;
     },
     setRivalDirection(state, action) {
       state.rivalDirection = action.payload;
@@ -60,6 +69,12 @@ const RivalSlice = createSlice({
     setRapidAttack(state, action) {
       state.rapidAttack = action.payload;
     },
+    setDashGauge(state, action) {
+      state.dashGauge = action.payload;
+    },
+    setRivalCursedEnergy(state, action) {
+      state.cursedEnergy = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -68,11 +83,15 @@ const RivalSlice = createSlice({
 export const {
   moveRival,
   updateRivalHealth,
-  rivalAttacking,
+  rivalCleaveAttack,
+  rivalDismantleAttack,
   setRivalDirection,
   setCloseRange,
   setRivalPosition,
   setRivalCanMove,
   setRapidAttack,
+  setDashGauge,
+  moveRivalTo,
+  setRivalCursedEnergy,
 } = RivalSlice.actions;
 export default RivalSlice;

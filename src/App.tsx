@@ -21,11 +21,13 @@ export interface Rival {
   health: number;
   cursedEnergy: number;
   direction: "left" | "right" | "stop";
-  isAttacking: boolean;
+  cleaveAttack: boolean,
+  dismantleAttack: boolean,
   rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
   closeRange: boolean;
   canMove: boolean;
   rapidAttack: boolean;
+  dashGauge: number;
 }
 export interface Nue {
   isActive: boolean;
