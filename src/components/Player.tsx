@@ -5,6 +5,8 @@ import setDismantleAttack from "../store/RivalSlice";
 import { setNueDirection } from "../store/NueSlice";
 import React from "react";
 
+
+
 const Player = ({ xDistance }) => {
     const player = useSelector((state: any) => state.PlayerState);
     const rival = useSelector((state: any) => state.RivalState);
@@ -17,8 +19,20 @@ const Player = ({ xDistance }) => {
     const characterWidth = 50;
     const characterHeight = 180;
 
+    // Sound effects
+    let slashAudio = new Audio(require("../Assets/slash.mp3"))
+    let rapidSlashAudio = new Audio(require("../Assets/rapid-slash.mp3"))
+
+    const slashEffect = (audio) => {
+        audio.play()
+    }
+
+    // Slash style control
     useEffect(() => {
-        rival.cleaveAttack && Math.abs(rival.x - player.x) >= 200 ? setDisplaySlash("block") : setDisplaySlash("none")
+        if (rival.cleaveAttack && Math.abs(rival.x - player.x) >= 200) {
+            setDisplaySlash("block")
+            slashEffect(slashAudio)
+        } else setDisplaySlash("none")
     }, [rival.cleaveAttack]);
 
     useEffect(() => {
@@ -47,6 +61,7 @@ const Player = ({ xDistance }) => {
         const attackDirection = rival.x - player.x >= 0 ? "left" : "right";
         const stepDistance = attackDirection === "left" ? -10 : 10;
         const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
+        slashEffect(rapidSlashAudio)
         for (let i = 0; i < 50; i++) {
             setTimeout(() => {
                 setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
@@ -78,48 +93,51 @@ const Player = ({ xDistance }) => {
     };
 
     return (
-        <div
-            className="player"
-            style={{
-                top: player.y, left: player.x, width: characterWidth, height: characterHeight,
-                display: player.health > 0 ? "block" : "none",
-            }}
-        >
-            <img src={require('../Assets/megumi.png')} alt="" style={{
-                transform: player.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
-            }} />
-            <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
-                <div style={{ position: "absolute", width: player.health * 150 / 1000, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
-                </div>
-                <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{player.health}</p>
-            </div>
-            <div className="player-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
-                <div style={{ position: "absolute", width: player.cursedEnergy * 150 / 100, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
-                </div>
-                <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{player.cursedEnergy}</p>
-            </div>
+        <>
 
-            <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
-            <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />
-            {/* <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} /> */}
-            {/* <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: rival.isAttacking && Math.abs(rival.x - player.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.5)" }} /> */}
-            {/* DISMANTLE */}
-            <div style={{ display: rival.dismantleAttack ? "block" : "none" }}>
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-35px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-25px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-5px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "5px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+            <div
+                className="player"
+                style={{
+                    top: player.y, left: player.x, width: characterWidth, height: characterHeight,
+                    display: player.health > 0 ? "block" : "none",
+                }}
+            >
+                <img src={require('../Assets/megumi.png')} alt="" style={{
+                    transform: player.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
+                }} />
+                <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
+                    <div style={{ position: "absolute", width: player.health * 150 / 1000, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
+                    </div>
+                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{player.health}</p>
+                </div>
+                <div className="player-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
+                    <div style={{ position: "absolute", width: player.cursedEnergy * 150 / 100, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
+                    </div>
+                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{player.cursedEnergy}</p>
+                </div>
 
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-50px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-40px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-30px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-20px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-10px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "0px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
+                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />
+                {/* <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} /> */}
+                {/* <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: rival.isAttacking && Math.abs(rival.x - player.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.5)" }} /> */}
+                {/* DISMANTLE */}
+                <div style={{ display: rival.dismantleAttack ? "block" : "none" }}>
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-35px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-25px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-5px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "5px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-50px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-40px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-30px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-20px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-10px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "0px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

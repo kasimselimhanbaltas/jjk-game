@@ -16,6 +16,22 @@ export interface Player {
   isAttacking: boolean;
   canMove: boolean;
 }
+export interface Gojo {
+  x: number;
+  y: number;
+  health: number;
+  cursedEnergy: number;
+  direction: "left" | "right" | "stop";
+  cleaveAttack: boolean,
+  dismantleAttack: boolean,
+  gojoDomainExpansion: boolean,
+  gojoDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
+  closeRange: boolean;
+  canMove: boolean;
+  rapidAttack: boolean;
+  dashGauge: number;
+}
+
 export interface Rival {
   x: number;
   y: number;

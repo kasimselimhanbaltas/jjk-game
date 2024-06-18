@@ -18,6 +18,7 @@ const Rival = ({ xDistance }) => {
 
     const attackInterval = React.useRef(null);
 
+
     // Nue elecetric image animation
     useEffect(() => {
         if (!nue.isAttacking) return
