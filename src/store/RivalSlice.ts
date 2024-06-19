@@ -8,7 +8,7 @@ const initialState: Rival = {
   x: 800,
   y: 200,
   health: 100,
-  cursedEnergy: 190,
+  cursedEnergy: 170,
   direction: "left",
   cleaveAttack: false,
   dismantleAttack: false,

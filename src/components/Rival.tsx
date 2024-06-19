@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { moveRival, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setRivalCanMove, setRivalCursedEnergy, setRivalDirection, setRivalDomainExpansion } from '../store/RivalSlice';
-import { healthReducer, movePlayer } from '../store/PlayerSlice';
+import { moveRival, moveRivalTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setRivalCanMove, setRivalCursedEnergy, setRivalDirection, setRivalDomainExpansion } from '../store/RivalSlice';
+import { healthReducer, movePlayer, setPlayerCanMove } from '../store/PlayerSlice';
 import { Howl, Howler } from 'howler';
 import ReactHowler from 'react-howler';
 
@@ -16,30 +16,8 @@ const Rival = () => {
     const attackDamage = rival.closeRange ? -100 : -10; // Saldırı hasarı
     const [electricityEffect, setElectricityEffect] = React.useState(false);
     const [rapidAttackCounter, setRapidAttackCounter] = React.useState(5);
-    const slashRef = React.useRef(null);
-    const rapidSlashRef = React.useRef(null);
     const attackInterval = React.useRef(null);
-
-    // Sound effects3
-    const playMyAudio = (ref) => {
-        if (ref.current !== null)
-            ref.current.play()
-    }
-
-    const sound1 = new Howl({
-        src: ['../Assets/audios/slash.mp3'],
-    });
-
-
-    let slashAudio = new Audio(require("../Assets/audios/slash.mp3"))
-    let rapidSlashAudio = new Audio(require("../Assets/audios/rapid-slash.mp3"))
-
-    const slashSoundEffect = (audio) => {
-        audio.play()
-    }
-    const soundEffect = (audio) => {
-        audio.play()
-    }
+    const sukunaSoundEffectRef = React.useRef(null);
 
 
     // Nue elecetric image animation
@@ -77,13 +55,19 @@ const Rival = () => {
     // Domain expansion Action
     const rivalDomainExpansion = () => {
         console.log("RIYOIKI TENKAI ")
-        dispatch(setRivalDomainExpansion(true));
-        dispatch(setRivalCanMove(false));
+        dispatch(moveRivalTo({ x: 635, y: 240 }));
+        sukunaSoundEffectRef.current.play()
+        dispatch(setPlayerCanMove(false))
+        dispatch(setRivalCanMove(false))
         dispatch(setRivalCursedEnergy(0));
         setTimeout(() => {
+            dispatch(setRivalDomainExpansion(true));
+        }, 6000);
+        setTimeout(() => {
             dispatch(setRivalDomainExpansion(false));
+            dispatch(setPlayerCanMove(true))
             dispatch(setRivalCanMove(true));
-        }, 13000);
+        }, 12000);
     }
 
     // Rival attack interval - auto attack configuration
@@ -107,13 +91,13 @@ const Rival = () => {
                         setRapidAttackCounter(rapidAttackCounter - 3);
                         dispatch(rivalDismantleAttack(true));
                         dispatch(movePlayer({ x: stepDistance, y: 0 }));
-                        slashRef.current.play();
+                        // slashRef.current.play();
                         // slashSoundEffect(slashAudio);
                         setTimeout(() => {
                             dispatch(rivalDismantleAttack(false));
                         }, 1000);
                     } else { // cleave
-                        slashRef.current.play();
+                        // slashRef.current.play();
                         setRapidAttackCounter(rapidAttackCounter - 1);
                         dispatch(rivalCleaveAttack(true));
                         setTimeout(() => {
@@ -138,9 +122,7 @@ const Rival = () => {
 
     return (
         <>
-            <audio id="slash" ref={slashRef} src="../Assets/audios/slash.mp3"></audio>
-            <audio src={require("../Assets/audios/nue.mp3")} ref={slashRef}></audio>
-            <audio src={require("../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashRef}></audio>
+            <audio src={require("../Assets/audios/sukuna.mp3")} ref={sukunaSoundEffectRef}></audio>
             <div className="rival"
                 style={{
                     top: rival.y, left: rival.x, width: characterWidth, height: characterHeight,

@@ -6,7 +6,7 @@ import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRival
 import { changeCursedEnergy, movePlayer, setPlayerDirection } from "../store/PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setRivalDirection } from "../store/RivalSlice";
-import { setNueDirection } from "../store/NueSlice";
+import { nueActivity, setNueDirection } from "../store/NueSlice";
 
 const playerWidth = 50;
 const playerHeight = 180;
@@ -28,28 +28,25 @@ const GameArea = () => {
   const playerCEincreaseIntervalRef = useRef(null);
   const rivalCEincreaseIntervalRef = useRef(null);
 
-  const soundEffect = (audio) => {
-    audio.play()
-  }
-
   // Cursed energy interval functions
   const startCursedEnergyInterval = () => {
-    if (rivalCEincreaseIntervalRef.current === null) {
-      rivalCEincreaseIntervalRef.current = setInterval(() => {
-        if (rival.cursedEnergy < 200 && rival.rivalDomainExpansion === false) {
-          console.log("increase ce")
-          dispatch(setRivalCursedEnergy(rival.cursedEnergy + 50));
-        }
-      }, 1000);
-    }
     if (playerCEincreaseIntervalRef.current === null) {
       playerCEincreaseIntervalRef.current = setInterval(() => {
         if (player.cursedEnergy < 100) {
           console.log("increase ce")
-          dispatch(changeCursedEnergy(+20));
+          dispatch(changeCursedEnergy(+10));
         }
       }, 1000);
     }
+    if (rivalCEincreaseIntervalRef.current === null) {
+      rivalCEincreaseIntervalRef.current = setInterval(() => {
+        if (rival.cursedEnergy < 200 && rival.rivalDomainExpansion === false) {
+          console.log("increase ce")
+          dispatch(setRivalCursedEnergy(rival.cursedEnergy + 10));
+        }
+      }, 1000);
+    }
+
   };
   // Cursed energy interval functions end
   const stopInterval = (ref) => {
@@ -67,7 +64,7 @@ const GameArea = () => {
       stopInterval(playerCEincreaseIntervalRef);
       stopInterval(rivalCEincreaseIntervalRef);
     }
-  }, [player.cursedEnergy, rival.cursedEnergy, rival.rivalDomainExpansion]);
+  }, [player.cursedEnergy, rival.cursedEnergy, rival.rivalDomainExpansion, nueActivity]);
 
   // Player movement control
   useEffect(() => {
@@ -91,26 +88,28 @@ const GameArea = () => {
     clearInterval(intervalId);
 
     intervalId = setInterval(() => {
-      if (keysPressed.current.w && player.y > 0) {
-        dispatch(movePlayer({ x: 0, y: -playerSpeed }));
+      if (player.canMove) {
+        if (keysPressed.current.w && player.y > 0) {
+          dispatch(movePlayer({ x: 0, y: -playerSpeed }));
+        }
+        if (keysPressed.current.a && player.x > 0) {
+          dispatch(movePlayer({ x: -playerSpeed, y: 0 }));
+          dispatch(setPlayerDirection("left"));
+        }
+        if (keysPressed.current.s && player.y < gameAreaHeight - playerHeight) {
+          dispatch(movePlayer({ x: 0, y: playerSpeed }));
+        }
+        if (keysPressed.current.d && player.x < gameAreaWidth - playerWidth) {
+          dispatch(movePlayer({ x: playerSpeed, y: 0 }));
+          dispatch(setPlayerDirection("right"));
+        }
+        if (keysPressed.current.t) {
+          if (rival.canMove) dispatch(setRivalCanMove(false));
+          else dispatch(setRivalCanMove(true));
+        }
+        if (keysPressed.current.space)
+          dispatch(movePlayer({ x: player.direction === "right" ? 200 : -200, y: 0 }));
       }
-      if (keysPressed.current.a && player.x > 0) {
-        dispatch(movePlayer({ x: -playerSpeed, y: 0 }));
-        dispatch(setPlayerDirection("left"));
-      }
-      if (keysPressed.current.s && player.y < gameAreaHeight - playerHeight) {
-        dispatch(movePlayer({ x: 0, y: playerSpeed }));
-      }
-      if (keysPressed.current.d && player.x < gameAreaWidth - playerWidth) {
-        dispatch(movePlayer({ x: playerSpeed, y: 0 }));
-        dispatch(setPlayerDirection("right"));
-      }
-      if (keysPressed.current.t) {
-        if (rival.canMove) dispatch(setRivalCanMove(false));
-        else dispatch(setRivalCanMove(true));
-      }
-      if (keysPressed.current.space)
-        dispatch(movePlayer({ x: player.direction === "right" ? 200 : -200, y: 0 }));
     }, 75);
     if (!nue.isAttacking) dispatch(setNueDirection(player.direction));
 
@@ -119,7 +118,7 @@ const GameArea = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [dispatch, player.health, player.y, player.x, rival.x]);
+  }, [dispatch, player.health, player.y, player.x, rival.x, player.canMove]);
 
   // Rival movement
   useEffect(() => {

@@ -10,10 +10,10 @@ const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 const characterWidth = 50;
 const characterHeight = 120;
-const callNueCost = 1;
+const callNueCost = 40;
 const nueAttackCost = 10;
-const nueDamage = 1;
-const shikigamiDrainingCost = 1;
+const nueDamage = 10;
+const shikigamiDrainingCost = 4;
 const defaultNueTransform = "all .4s ease";
 
 
@@ -59,7 +59,7 @@ const Nue = () => {
     };
 
     useEffect(() => {
-        if (player.cursedEnergy === 0) {
+        if (player.cursedEnergy <= 0) {
             stopInterval(nueIntervalRef);
             dispatch(nueActivity(false));
         }
