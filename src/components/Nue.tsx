@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
 import { setRivalCanMove, updateRivalHealth } from "../store/RivalSlice";
 import { changeCursedEnergy } from "../store/PlayerSlice";
+import { playSoundEffect } from "../App";
 
 
 const gameAreaWidth = 1400;
@@ -30,6 +31,7 @@ const Nue = () => {
     });
     const [nueStyle, setNueStyle] = useState({ transition: defaultNueTransform });
 
+    const nueSound = new Audio(require("../Assets/audios/nue.mp3"))
 
 
     const nueIntervalRef = useRef(null);
@@ -131,6 +133,7 @@ const Nue = () => {
                 if (nue.isActive === false && player.cursedEnergy >= 20) {
                     dispatch(changeCursedEnergy(-callNueCost));
                     startNueInterval();
+                    playSoundEffect(nueSound);
                     dispatch(nueActivity(true));
                 } else {
                     dispatch(nueActivity(false));

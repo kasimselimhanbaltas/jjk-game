@@ -28,25 +28,28 @@ const GameArea = () => {
   const playerCEincreaseIntervalRef = useRef(null);
   const rivalCEincreaseIntervalRef = useRef(null);
 
+  const soundEffect = (audio) => {
+    audio.play()
+  }
+
   // Cursed energy interval functions
   const startCursedEnergyInterval = () => {
-    if (playerCEincreaseIntervalRef.current !== null) return;
-
-    playerCEincreaseIntervalRef.current = setInterval(() => {
-      if (player.cursedEnergy < 100) {
-        console.log("increase ce")
-        dispatch(changeCursedEnergy(+20));
-      }
-    }, 1000);
-
-    if (rivalCEincreaseIntervalRef.current !== null) return;
-
-    rivalCEincreaseIntervalRef.current = setInterval(() => {
-      if (rival.cursedEnergy < 200 && rival.rivalDomainExpansion === false) {
-        console.log("increase ce")
-        dispatch(setRivalCursedEnergy(rival.cursedEnergy + 20));
-      }
-    }, 1000);
+    if (rivalCEincreaseIntervalRef.current === null) {
+      rivalCEincreaseIntervalRef.current = setInterval(() => {
+        if (rival.cursedEnergy < 200 && rival.rivalDomainExpansion === false) {
+          console.log("increase ce")
+          dispatch(setRivalCursedEnergy(rival.cursedEnergy + 50));
+        }
+      }, 1000);
+    }
+    if (playerCEincreaseIntervalRef.current === null) {
+      playerCEincreaseIntervalRef.current = setInterval(() => {
+        if (player.cursedEnergy < 100) {
+          console.log("increase ce")
+          dispatch(changeCursedEnergy(+20));
+        }
+      }, 1000);
+    }
   };
   // Cursed energy interval functions end
   const stopInterval = (ref) => {
@@ -106,7 +109,6 @@ const GameArea = () => {
         if (rival.canMove) dispatch(setRivalCanMove(false));
         else dispatch(setRivalCanMove(true));
       }
-      console.log(keysPressed.current.space)
       if (keysPressed.current.space)
         dispatch(movePlayer({ x: player.direction === "right" ? 200 : -200, y: 0 }));
     }, 75);
@@ -203,16 +205,18 @@ const GameArea = () => {
     <div className="game-area">
       <div style={{
         width: "100%", height: "100%",
-        backgroundImage: `url(${require("../Assets/domain-bg.png")})`, opacity: rival.rivalDomainExpansion ? 1 : 0,
+        backgroundImage: `url(${require("../Assets/sukuna-domain.jpg")})`, opacity: rival.rivalDomainExpansion ? 1 : 0,
         backgroundSize: "contain", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
       }}></div>
-      <Player xDistance={xDistance} />
+      <Player />
       {/* <h1>{rival.rivalDirection}
         <br /> {yDistance}
       </h1> */}
       <Nue />
-      <Rival xDistance={xDistance} />
+      <Rival />
+      {/*
       <img src={require('../Assets/malevolent_shrine.png')} alt="" style={{ position: "absolute", display: rival.rivalDomainExpansion ? "block" : "none", left: player.x < rival.x ? rival.x + 120 : rival.x - 150, top: rival.y - 50, height: shrineHeight, opacity: 0.8, scale: "1.2" }} />
+      */}
 
     </div>
   );

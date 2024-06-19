@@ -7,7 +7,7 @@ const gameAreaHeight = 600;
 const initialState: Player = {
   x: 200,
   y: 200,
-  health: 1000,
+  health: 10000,
   cursedEnergy: 100,
   direction: "right",
   isAttacking: false,

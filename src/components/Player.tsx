@@ -4,10 +4,9 @@ import { healthReducer, movePlayer } from "../store/PlayerSlice";
 import setDismantleAttack from "../store/RivalSlice";
 import { setNueDirection } from "../store/NueSlice";
 import React from "react";
+import { playSoundEffect } from "../App";
 
-
-
-const Player = ({ xDistance }) => {
+const Player = () => {
     const player = useSelector((state: any) => state.PlayerState);
     const rival = useSelector((state: any) => state.RivalState);
     const [displaySlash, setDisplaySlash] = React.useState("none");
@@ -19,11 +18,20 @@ const Player = ({ xDistance }) => {
     const characterWidth = 50;
     const characterHeight = 180;
 
-    // Sound effects
-    let slashAudio = new Audio(require("../Assets/slash.mp3"))
-    let rapidSlashAudio = new Audio(require("../Assets/rapid-slash.mp3"))
 
-    const slashEffect = (audio) => {
+    // Sound effects
+    let slashAudio = new Audio(require("../Assets/audios/slash.mp3"))
+    let rapidSlashAudio = new Audio(require("../Assets/audios/rapid-slash-3.mp3"))
+    let domainSlashAudio = new Audio(require("../Assets/audios/rapid-slash.mp3"))
+    let sukunaDomainSoundEffect = new Audio(require("../Assets/audios/sukuna.mp3"))
+
+    const slashSoundEffect = () => {
+        slashAudio.play()
+    }
+    const domainSlashSoundEffect = () => {
+        domainSlashAudio.play()
+    }
+    const soundEffect = (audio) => {
         audio.play()
     }
 
@@ -31,7 +39,7 @@ const Player = ({ xDistance }) => {
     useEffect(() => {
         if (rival.cleaveAttack && Math.abs(rival.x - player.x) >= 200) {
             setDisplaySlash("block")
-            slashEffect(slashAudio)
+            slashSoundEffect()
         } else setDisplaySlash("none")
     }, [rival.cleaveAttack]);
 
@@ -49,37 +57,43 @@ const Player = ({ xDistance }) => {
     useEffect(() => {
         if (rival.rivalDomainExpansion) {
             domainAttack()
-            setDisplaySlash("block");
-            intervalRef.current = setTimeout(() => {
-                setDisplaySlash("none")
-            }, 5000);
         }
     }, [rival.rivalDomainExpansion])
 
     // Rival domain attack function
     const domainAttack = () => {
-        const attackDirection = rival.x - player.x >= 0 ? "left" : "right";
-        const stepDistance = attackDirection === "left" ? -10 : 10;
-        const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
-        slashEffect(rapidSlashAudio)
-        for (let i = 0; i < 50; i++) {
-            setTimeout(() => {
-                setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                setSlashRotation2({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                dispatch(movePlayer({ x: stepDistance, y: 0 }));
-                dispatch(healthReducer(-10));
-            }, i * 100);
-        }
+        soundEffect(sukunaDomainSoundEffect);
         setTimeout(() => {
-            setSlashRotation({ rotate: "270deg" });
-            setSlashRotation2({ rotate: "270deg" });
-        }, degrees.length * 100);
+            setDisplaySlash("block");
+            intervalRef.current = setTimeout(() => {
+                setDisplaySlash("none")
+            }, 5000);
+            const attackDirection = rival.x - player.x >= 0 ? "left" : "right";
+            const stepDistance = attackDirection === "left" ? -10 : 10;
+            const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
+            domainSlashSoundEffect()
+            for (let i = 0; i < 50; i++) { // 50 random slashes -> rotate slash images, push player back and reduce health
+                setTimeout(() => { // random slashes delay
+                    setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
+                    setSlashRotation2({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
+                    dispatch(movePlayer({ x: stepDistance, y: 0 }));
+                    dispatch(healthReducer(-10));
+                }, i * 100);
+            }
+            setTimeout(() => {
+                setSlashRotation({ rotate: "270deg" });
+                setSlashRotation2({ rotate: "270deg" });
+            }, degrees.length * 100);
+        }, 7000);
+
+
     }
 
     const rapidAttack = () => {
         const attackDirection = rival.x - player.x >= 0 ? "left" : "right";
         const stepDistance = attackDirection === "left" ? -10 : 10;
         const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
+        playSoundEffect(rapidSlashAudio)
         for (let i = 0; i < degrees.length; i++) {
             setTimeout(() => {
                 setSlashRotation({ rotate: degrees[i] + "deg" });

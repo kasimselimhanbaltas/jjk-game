@@ -4,6 +4,10 @@ import Player from './components/Player';
 import Rival from './components/Rival';
 import GameArea from './Pages/GameArea';
 
+export const playSoundEffect = (audio) => {
+  audio.play()
+}
+
 export interface Character {
   value: number
 }
