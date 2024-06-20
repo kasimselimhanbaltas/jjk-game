@@ -20,11 +20,6 @@ const divineDogsSlice = createSlice({
     moveDivineDogs(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
-      if (state.isAttacking === false) {
-        if (Math.sign(state.x - inputX) < 0) {
-          state.direction = "right";
-        } else if (Math.sign(state.x - inputX) > 0) state.direction = "left";
-      }
 
       state.x = inputX;
       state.y = inputY;

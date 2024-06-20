@@ -13,7 +13,7 @@ const characterHeight = 120;
 const callNueCost = 40;
 const nueAttackCost = 10;
 const nueDamage = 10;
-const shikigamiDrainingCost = 4;
+const shikigamiDrainingCost = 2;
 const defaultNueTransform = "all .4s ease";
 
 

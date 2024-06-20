@@ -131,7 +131,7 @@ const Player = () => {
                     transform: player.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
                 }} />
                 <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
-                    <div style={{ position: "absolute", width: player.health * 150 / 10000, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
+                    <div style={{ position: "absolute", width: player.health * 150 / 2000, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
                     </div>
                     <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{player.health}</p>
                 </div>

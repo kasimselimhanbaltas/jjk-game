@@ -11,6 +11,8 @@ const Rival = () => {
     const rival = useSelector((state: any) => state.RivalState);
     const player = useSelector((state: any) => state.PlayerState);
     const nue = useSelector((state: any) => state.NueState);
+    const divineDogs = useSelector((state: any) => state.DivineDogsState);
+
     const characterWidth = 50;
     const characterHeight = 150;
     const attackDamage = rival.closeRange ? -100 : -10; // Saldırı hasarı
@@ -131,6 +133,7 @@ const Rival = () => {
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
                 <img src={require('../Assets/sukuna.png')} alt="" style={{ height: characterHeight }} />
                 <img src={require('../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
+                <img src={require('../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
 
                 <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
                     <div style={{ position: "absolute", width: rival.health * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>

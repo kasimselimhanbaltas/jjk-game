@@ -3,6 +3,7 @@ import PlayerSlice from "./PlayerSlice";
 import RivalSlice from "./RivalSlice";
 import NueSlice from "./NueSlice";
 import divineDogsSlice from "./DivineDogsSlice";
+import gameSettingsSlice from "./GameSettingsSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     RivalState: RivalSlice.reducer,
     NueState: NueSlice.reducer,
     DivineDogsState: divineDogsSlice.reducer,
+    GameSettingsState: gameSettingsSlice.reducer,
   },
 });
 
