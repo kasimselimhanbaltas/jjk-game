@@ -1,9 +1,10 @@
 {
   "files": {
-    "main.css": "/jjk-game/static/css/main.08408629.css",
-    "main.js": "/jjk-game/static/js/main.de6480ad.js",
+    "main.css": "/jjk-game/static/css/main.4ee72605.css",
+    "main.js": "/jjk-game/static/js/main.458d6893.js",
     "static/media/sukuna-domain.jpg": "/jjk-game/static/media/sukuna-domain.076e08c1df0f83177161.jpg",
     "static/media/slash.png": "/jjk-game/static/media/slash.1b2fd6286c4980a13914.png",
+    "static/media/menu-bg.jpg": "/jjk-game/static/media/menu-bg.44e47deb6ad0426ab8e8.jpg",
     "static/media/electricity.png": "/jjk-game/static/media/electricity.372ed589e9b92dffd53b.png",
     "static/media/nue.png": "/jjk-game/static/media/nue.8a53fb45b9ddeae13336.png",
     "static/media/nue-side.png": "/jjk-game/static/media/nue-side.38fbe70fe216d2f2792c.png",
@@ -21,11 +22,11 @@
     "static/media/slash.mp3": "/jjk-game/static/media/slash.e893e2b8c9981a390af9.mp3",
     "static/media/claw.mp3": "/jjk-game/static/media/claw.1b2ea13a256b40a0f664.mp3",
     "index.html": "/jjk-game/index.html",
-    "main.08408629.css.map": "/jjk-game/static/css/main.08408629.css.map",
-    "main.de6480ad.js.map": "/jjk-game/static/js/main.de6480ad.js.map"
+    "main.4ee72605.css.map": "/jjk-game/static/css/main.4ee72605.css.map",
+    "main.458d6893.js.map": "/jjk-game/static/js/main.458d6893.js.map"
   },
   "entrypoints": [
-    "static/css/main.08408629.css",
-    "static/js/main.de6480ad.js"
+    "static/css/main.4ee72605.css",
+    "static/js/main.458d6893.js"
   ]
 }
