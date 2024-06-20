@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
 import { setRivalCanMove, updateRivalHealth } from "../store/SukunaSlice";
 import { changeCursedEnergy } from "../store/MegumiSlice";
-import { playSoundEffect } from "../App";
 
 
 const gameAreaWidth = 1400;
@@ -31,7 +30,7 @@ const Nue = () => {
     });
     const [nueStyle, setNueStyle] = useState({ transition: defaultNueTransform });
 
-    const nueSound = new Audio(require("../Assets/audios/nue.mp3"))
+    const nueSound = useRef(null);
 
 
     const nueIntervalRef = useRef(null);
@@ -133,7 +132,8 @@ const Nue = () => {
                 if (nue.isActive === false && megumi.cursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
                     dispatch(changeCursedEnergy(-callNueCost));
                     startNueInterval();
-                    playSoundEffect(nueSound);
+                    nueSound.current.volume = 0.5;
+                    nueSound.current.play();
                     dispatch(nueActivity(true));
                 } else {
                     dispatch(nueActivity(false));
@@ -164,7 +164,7 @@ const Nue = () => {
             <img src={imageSrc} alt="" style={{
                 ...imageStyle, transform: nue.direction === "left" ? "scaleX(-1)" : "scaleX(1)", height: characterHeight // Direction'a göre resmi ters çevir
             }} />
-
+            <audio src={require("../Assets/audios/nue.mp3")} ref={nueSound}></audio>
         </div>
     );
 };

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { GameSettings } from "../App";
 
 const initialState: GameSettings = {
-  selectedCharacter: "",
+  selectedCharacter: "megumi",
 };
 
 const gameSettingsSlice = createSlice({

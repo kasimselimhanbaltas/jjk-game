@@ -4,7 +4,6 @@ import { healthReducer, movePlayer } from "../store/MegumiSlice";
 import setDismantleAttack, { moveRival } from "../store/SukunaSlice";
 import { setNueDirection } from "../store/NueSlice";
 import React from "react";
-import { playSoundEffect } from "../App";
 
 const Megumi = () => {
     const megumi = useSelector((state: any) => state.MegumiState);

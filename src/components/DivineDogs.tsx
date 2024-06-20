@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
 import { setRivalCanMove, updateRivalHealth } from "../store/SukunaSlice";
 import { changeCursedEnergy } from "../store/MegumiSlice";
-import { playSoundEffect } from "../App";
 import { divineDogsActivity, divineDogsAttacking, moveDivineDogs, setDivineDogsDirection } from "../store/DivineDogsSlice";
 import React from "react";
 

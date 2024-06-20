@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import setDismantleAttack, { moveRival } from "../store/SukunaSlice";
 import { setNueDirection } from "../store/NueSlice";
 import React from "react";
-import { playSoundEffect } from "../App";
 
 const SatoruGojo = () => {
     const gojo = useSelector((state: any) => state.gojoState);

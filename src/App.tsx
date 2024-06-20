@@ -1,13 +1,9 @@
-import React from 'react';
 import './App.css';
 import Megumi from './components/Megumi';
 import Sukuna from './components/Sukuna';
 import GameArea from './Pages/GameArea';
 import Controls from './components/Controls';
 
-export const playSoundEffect = (audio) => {
-  audio.play()
-}
 
 export interface GameSettings {
   selectedCharacter: string
