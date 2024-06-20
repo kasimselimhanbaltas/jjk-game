@@ -130,7 +130,7 @@ const Nue = () => {
                 }
             }
             if (keysPressed.current.k) {
-                if (nue.isActive === false && player.cursedEnergy >= 20) {
+                if (nue.isActive === false && player.cursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
                     dispatch(changeCursedEnergy(-callNueCost));
                     startNueInterval();
                     playSoundEffect(nueSound);

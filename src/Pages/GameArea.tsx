@@ -7,6 +7,9 @@ import { changeCursedEnergy, movePlayer, setPlayerDirection } from "../store/Pla
 import { useDispatch, useSelector } from "react-redux";
 import { setRivalDirection } from "../store/RivalSlice";
 import { nueActivity, setNueDirection } from "../store/NueSlice";
+import DivineDogs from "../components/DivineDogs";
+import MainMenu from "../components/MainMenu";
+import React from "react";
 
 const playerWidth = 50;
 const playerHeight = 180;
@@ -192,6 +195,13 @@ const GameArea = () => {
     };
   }, [dispatch, player.x, player.y, rival.closeRange, rival.rivalDirection]);
 
+  // Main menu
+  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
+
+  const handleStartGame = () => {
+    setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
+  };
+
   // useEffect(() => {
   //   if (xDistance < 0 && rival.rivalDirection !== "left") {
   //     dispatch(rivalDirection("left"));
@@ -202,17 +212,29 @@ const GameArea = () => {
 
   return (
     <div className="game-area">
-      <div style={{
-        width: "100%", height: "100%",
-        backgroundImage: `url(${require("../Assets/sukuna-domain.jpg")})`, opacity: rival.rivalDomainExpansion ? 1 : 0,
-        backgroundSize: "contain", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
-      }}></div>
-      <Player />
-      {/* <h1>{rival.rivalDirection}
-        <br /> {yDistance}
-      </h1> */}
-      <Nue />
-      <Rival />
+      {showMenu ? ( // Menü gösteriliyor mu?
+        <MainMenu onStartGame={handleStartGame} /> // Evet ise menüyü göster
+      ) : (
+        <>
+          <div style={{
+            width: "100%", height: "100%", position: "absolute",
+            backgroundImage: `url(${require("../Assets/bg.jpg")})`, opacity: !rival.rivalDomainExpansion ? 0.7 : 0,
+            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
+          }}></div>
+          <div style={{
+            width: "100%", height: "100%", position: "absolute",
+            backgroundImage: `url(${require("../Assets/sukuna-domain.jpg")})`, opacity: rival.rivalDomainExpansion ? 1 : 0,
+            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
+          }}></div>
+          <Player />
+          <Nue />
+          <DivineDogs />
+          <Rival />
+        </>
+      )}
+
+
+
       {/*
       <img src={require('../Assets/malevolent_shrine.png')} alt="" style={{ position: "absolute", display: rival.rivalDomainExpansion ? "block" : "none", left: player.x < rival.x ? rival.x + 120 : rival.x - 150, top: rival.y - 50, height: shrineHeight, opacity: 0.8, scale: "1.2" }} />
       */}

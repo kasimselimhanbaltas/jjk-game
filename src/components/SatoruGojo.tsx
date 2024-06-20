@@ -1,13 +1,14 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { healthReducer, movePlayer } from "../store/PlayerSlice";
+// later
+// import { healthReducer, movegojo } from "../store/gojoSlice";
 import setDismantleAttack, { moveRival } from "../store/RivalSlice";
 import { setNueDirection } from "../store/NueSlice";
 import React from "react";
 import { playSoundEffect } from "../App";
 
-const Player = () => {
-    const player = useSelector((state: any) => state.PlayerState);
+const SatoruGojo = () => {
+    const gojo = useSelector((state: any) => state.gojoState);
     const rival = useSelector((state: any) => state.RivalState);
     const [displaySlash, setDisplaySlash] = React.useState("none");
     const [displaySlash2, setDisplaySlash2] = React.useState("none");
@@ -30,7 +31,7 @@ const Player = () => {
 
     // Slash style control
     useEffect(() => {
-        if (rival.cleaveAttack && Math.abs(rival.x - player.x) >= 200) {
+        if (rival.cleaveAttack && Math.abs(rival.x - gojo.x) >= 200) {
             setDisplaySlash("block")
             slashSoundEffectRef.current.volume = 0.1;
             slashSoundEffectRef.current.play()
@@ -38,7 +39,7 @@ const Player = () => {
     }, [rival.cleaveAttack]);
 
     useEffect(() => {
-        if (rival.dismantleAttack && Math.abs(rival.x - player.x) <= 200) {
+        if (rival.dismantleAttack && Math.abs(rival.x - gojo.x) <= 200) {
             // setDisplayDismantle("block")
             slashSoundEffectRef.current.volume = 0.1;
             slashSoundEffectRef.current.play()
@@ -69,18 +70,19 @@ const Player = () => {
             setDisplaySlash("block");
             setDisplaySlash2("block");
 
-            const attackDirection = rival.x - player.x >= 0 ? "left" : "right";
+            const attackDirection = rival.x - gojo.x >= 0 ? "left" : "right";
             const stepDistance = attackDirection === "left" ? -10 : 10;
             const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
             domainSoundEffectRef.current.volume = 0.3
             domainSoundEffectRef.current.play()
 
-            for (let i = 0; i < 50; i++) { // 50 random slashes -> rotate slash images, push player back and reduce health
+            for (let i = 0; i < 50; i++) { // 50 random slashes -> rotate slash images, push gojo back and reduce health
                 setTimeout(() => { // random slashes delay
                     setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
                     setSlashRotation2({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                    dispatch(movePlayer({ x: stepDistance, y: 0 }));
-                    dispatch(healthReducer(-25));
+                    // later
+                    // dispatch(movegojo({ x: stepDistance, y: 0 }));
+                    // dispatch(healthReducer(-25));
                 }, i * 100);
             }
             setTimeout(() => {
@@ -99,14 +101,15 @@ const Player = () => {
         rapidSlashSoundEffectRef.current.volume = 0.1;
 
         rapidSlashSoundEffectRef.current.play()
-        const attackDirection = rival.x - player.x >= 0 ? "left" : "right";
+        const attackDirection = rival.x - gojo.x >= 0 ? "left" : "right";
         const stepDistance = attackDirection === "left" ? -10 : 10;
         const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
         for (let i = 0; i < degrees.length * 3; i++) {
             setTimeout(() => {
                 setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                dispatch(healthReducer(-10));
-                dispatch(movePlayer({ x: stepDistance, y: 0 }));
+                // later
+                // dispatch(healthReducer(-10));
+                // dispatch(movegojo({ x: stepDistance, y: 0 }));
             }, i * 100);
         }
         setTimeout(() => {
@@ -121,30 +124,30 @@ const Player = () => {
             <audio src={require("../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/nue.mp3")} ref={nueSoundEffectRef}></audio>
             <div
-                className="player"
+                className="gojo"
                 style={{
-                    top: player.y, left: player.x, width: characterWidth, height: characterHeight,
-                    display: player.health > 0 ? "block" : "none",
+                    top: gojo.y, left: gojo.x, width: characterWidth, height: characterHeight,
+                    display: gojo.health > 0 ? "block" : "none",
                 }}
             >
                 <img src={require('../Assets/megumi.png')} alt="" style={{
-                    transform: player.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
+                    transform: gojo.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
                 }} />
-                <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
-                    <div style={{ position: "absolute", width: player.health * 150 / 10000, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
+                <div className="gojo-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
+                    <div style={{ position: "absolute", width: gojo.health * 150 / 10000, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
                     </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{player.health}</p>
+                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{gojo.health}</p>
                 </div>
-                <div className="player-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
-                    <div style={{ position: "absolute", width: player.cursedEnergy * 150 / 100, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
+                <div className="gojo-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
+                    <div style={{ position: "absolute", width: gojo.cursedEnergy * 150 / 100, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
                     </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{player.cursedEnergy}</p>
+                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{gojo.cursedEnergy}</p>
                 </div>
 
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />
                 {/* <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} /> */}
-                {/* <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: rival.isAttacking && Math.abs(rival.x - player.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.1)" }} /> */}
+                {/* <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: rival.isAttacking && Math.abs(rival.x - gojo.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.1)" }} /> */}
                 {/* DISMANTLE */}
                 <div style={{ display: rival.dismantleAttack ? "block" : "none" }}>
                     <img src={require('../Assets/slash.png')} alt="" style={{ top: "-35px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
@@ -166,4 +169,4 @@ const Player = () => {
     );
 };
 
-export default Player;
+export default SatoruGojo;

@@ -21,7 +21,7 @@ const playerSlice = createSlice({
     movePlayer(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
-      if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 120) {
+      if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 70) {
         state.x += inputX;
         //   if (inputX > 0) {
         //     state.direction = "right";
@@ -29,7 +29,7 @@ const playerSlice = createSlice({
       } else {
         // console.log("limit reached in x direction");
       }
-      if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 220) {
+      if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 150) {
         state.y += inputY;
       } else {
         // console.log("limit reached in y direction");

@@ -15,7 +15,7 @@ const initialState: Rival = {
   rivalDomainExpansion: false,
   rivalDirection: "stop",
   closeRange: false,
-  canMove: true,
+  canMove: false,
   rapidAttack: false,
   dashGauge: 0,
 };

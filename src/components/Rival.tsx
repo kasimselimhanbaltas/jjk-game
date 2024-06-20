@@ -33,7 +33,7 @@ const Rival = () => {
 
     // Rival auto attack starter
     useEffect(() => {
-        if (rival.health > 0 && player.health > 0, rival.canMove) {
+        if (rival.health > 0 && player.health > 0 && rival.canMove) {
             console.log("first")
             if (rival.cursedEnergy >= 200) {
                 rivalDomainExpansion()
@@ -50,7 +50,7 @@ const Rival = () => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [dispatch, attackDamage, rival.direction, rival.canMove, rapidAttackCounter]);
+    }, [dispatch, attackDamage, rival.direction, rival.canMove, rapidAttackCounter, rival.health]);
 
     // Domain expansion Action
     const rivalDomainExpansion = () => {
@@ -121,7 +121,7 @@ const Rival = () => {
     }, [rival.health]);
 
     return (
-        <>
+        <div>
             <audio src={require("../Assets/audios/sukuna.mp3")} ref={sukunaSoundEffectRef}></audio>
             <div className="rival"
                 style={{
@@ -147,7 +147,7 @@ const Rival = () => {
             </p> */}
                 <p style={{ marginTop: 170, width: 250, marginLeft: -55, color: "black" }}>Ryomen Sukuna</p>
             </div>
-        </>
+        </div>
     );
 };
 

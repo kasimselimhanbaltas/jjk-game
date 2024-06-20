@@ -59,6 +59,14 @@ export interface Nue {
   direction: "left" | "right";
   isAttacking: boolean;
 }
+export interface DivineDogs {
+  isActive: boolean;
+  x: number;
+  y: number;
+  health: number;
+  direction: "left" | "right";
+  isAttacking: boolean;
+}
 
 function App() {
   return (
