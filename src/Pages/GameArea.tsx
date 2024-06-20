@@ -200,7 +200,7 @@ const GameArea = () => {
   }, [dispatch, player.x, player.y, rival.closeRange, rival.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
 
   const handleStartGame = () => {
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle

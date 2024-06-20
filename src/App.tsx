@@ -3,6 +3,7 @@ import './App.css';
 import Player from './components/Player';
 import Rival from './components/Rival';
 import GameArea from './Pages/GameArea';
+import Controls from './components/Controls';
 
 export const playSoundEffect = (audio) => {
   audio.play()
@@ -72,7 +73,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <GameArea></GameArea>
+        <Controls />
+        <GameArea />
       </header>
     </div>
   );

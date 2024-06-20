@@ -75,17 +75,21 @@
 .main-menu {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   justify-content: center;
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  /* Arka planı hafifçe karart */
+  background-image: url('./Assets/menu-bg.jpg');
+  background-size: cover;
   z-index: 10;
-  /* Menüyü diğer elementlerin üzerine getir */
+}
+.main-menu button {
+  border: solid 2px transparent;
+  border-radius: 10px;
+  margin-left: 50px ;
+}.main-menu button:hover {
+  background-color: transparent;
+  border: solid 2px white;
 }
 
 .start-button {
@@ -136,4 +140,17 @@
   }
 
   /* 8 kare * 50px = 400px */
+}
+.controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.controls p {
+  margin: 0 0 10px 0;
+  padding: 10px ;
 }

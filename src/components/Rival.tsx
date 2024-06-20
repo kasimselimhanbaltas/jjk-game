@@ -134,7 +134,7 @@ const Rival = () => {
                 <img src={require('../Assets/sukuna.png')} alt="" style={{ height: characterHeight }} />
                 <img src={require('../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require('../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
-
+                <p style={{ marginTop: -80, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
                 <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
                     <div style={{ position: "absolute", width: rival.health * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
                     </div>
@@ -148,7 +148,6 @@ const Rival = () => {
                 {/* <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
                 Rival Direction: {rival.direction} <br /> Range: {rival.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
             </p> */}
-                <p style={{ marginTop: 170, width: 250, marginLeft: -55, color: "black" }}>Ryomen Sukuna</p>
             </div>
         </div>
     );
