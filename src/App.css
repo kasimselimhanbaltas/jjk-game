@@ -45,7 +45,7 @@
   background-color: #763e3e;
     position: relative;
 }
-.player {
+.megumi {
   position: absolute;
   transition: all .2s ease;
 }
@@ -53,17 +53,17 @@
   position: absolute;
   /* transition: all .4s ease; */
 }
-.player img{
+.megumi img{
   position: absolute;
   top: 0;
   left: 0;
 }
-.rival img {
+.sukuna img {
   position: absolute;
   top: 0;
   left: 0;
 }
-.rival {
+.sukuna {
   position: absolute;
   width: 100px;
   height: 50px;

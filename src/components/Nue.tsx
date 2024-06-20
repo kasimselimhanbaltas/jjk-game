@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { setRivalCanMove, updateRivalHealth } from "../store/RivalSlice";
-import { changeCursedEnergy } from "../store/PlayerSlice";
+import { setRivalCanMove, updateRivalHealth } from "../store/SukunaSlice";
+import { changeCursedEnergy } from "../store/MegumiSlice";
 import { playSoundEffect } from "../App";
 
 
@@ -19,8 +19,8 @@ const defaultNueTransform = "all .4s ease";
 
 const Nue = () => {
 
-    const player = useSelector((state: any) => state.PlayerState);
-    const rival = useSelector((state: any) => state.RivalState);
+    const megumi = useSelector((state: any) => state.MegumiState);
+    const sukuna = useSelector((state: any) => state.SukunaState);
     const nue = useSelector((state: any) => state.NueState);
     const dispatch = useDispatch();
     const keysPressed = useRef({ j: false, k: false });
@@ -41,7 +41,7 @@ const Nue = () => {
         if (nueIntervalRef.current !== null) return;
 
         nueIntervalRef.current = setInterval(() => {
-            if (player.cursedEnergy >= 5) dispatch(changeCursedEnergy(-shikigamiDrainingCost));
+            if (megumi.cursedEnergy >= 5) dispatch(changeCursedEnergy(-shikigamiDrainingCost));
             else {
                 dispatch(nueActivity(false));
                 stopInterval(nueIntervalRef)
@@ -59,17 +59,17 @@ const Nue = () => {
     };
 
     useEffect(() => {
-        if (player.cursedEnergy <= 0) {
+        if (megumi.cursedEnergy <= 0) {
             stopInterval(nueIntervalRef);
             dispatch(nueActivity(false));
         }
-    }, [player.cursedEnergy]);
+    }, [megumi.cursedEnergy]);
 
     function nueAttack() {
-        if (player.cursedEnergy < nueAttackCost) return;
+        if (megumi.cursedEnergy < nueAttackCost) return;
 
         let attackDirection = "";
-        attackDirection = player.x < rival.x ? "right" : "left";
+        attackDirection = megumi.x < sukuna.x ? "right" : "left";
         console.log("nue direction: ", nue.direction, "attackDirection: ", attackDirection,)
         // nue updates
 
@@ -78,25 +78,25 @@ const Nue = () => {
         setNueStyle({ ...nueStyle, transition: "all .5s ease" });
         dispatch(setNueDirection(attackDirection));
         // setImageStyle({ ...imageStyle, transform: `scaleX(${attackDirection === "right" ? -1 : 1})` });
-        dispatch(moveNue({ x: rival.x, y: rival.y - 100 })); //move to rival
+        dispatch(moveNue({ x: sukuna.x, y: sukuna.y - 100 })); //move to sukuna
 
         setTimeout(() => {
-            dispatch(setRivalCanMove(false)); // stun rival
-            setImageSrc(require('../Assets/nue.png')); // nue arrives to rival
+            dispatch(setRivalCanMove(false)); // stun sukuna
+            setImageSrc(require('../Assets/nue.png')); // nue arrives to sukuna
 
             setTimeout(() => { // electric attack
                 setImageSrc(require('../Assets/nue-side.png')); // nue move after electric attack
-                if (rival.x > player.x) {
-                    dispatch(moveNue({ x: rival.x + 200, y: rival.y - 200 }));
+                if (sukuna.x > megumi.x) {
+                    dispatch(moveNue({ x: sukuna.x + 200, y: sukuna.y - 200 }));
                 } else {
-                    dispatch(moveNue({ x: rival.x - 200, y: rival.y - 200 }));
+                    dispatch(moveNue({ x: sukuna.x - 200, y: sukuna.y - 200 }));
                 }
                 if (nue.isAttacking) return;
                 setTimeout(() => {
                     dispatch(updateRivalHealth(-nueDamage))
                     setTimeout(() => {
                         dispatch(nueAttacking(false));
-                        dispatch(setRivalCanMove(true)); // cancel stun rival
+                        dispatch(setRivalCanMove(true)); // cancel stun sukuna
                         dispatch(setNueDirection(attackDirection === "right" ? "left" : "right"));
                         setTimeout(() => {
                             setImageStyle({ ...imageStyle, transform: "" });
@@ -124,13 +124,13 @@ const Nue = () => {
 
         const intervalId = setInterval(() => {
 
-            if (keysPressed.current.j && nue.isAttacking === false && !rival.domainAttack) {
-                if (nue.isActive === true && rival.health > 0) {
+            if (keysPressed.current.j && nue.isAttacking === false && !sukuna.domainAttack) {
+                if (nue.isActive === true && sukuna.health > 0) {
                     nueAttack();
                 }
             }
             if (keysPressed.current.k) {
-                if (nue.isActive === false && player.cursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
+                if (nue.isActive === false && megumi.cursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
                     dispatch(changeCursedEnergy(-callNueCost));
                     startNueInterval();
                     playSoundEffect(nueSound);
@@ -147,15 +147,15 @@ const Nue = () => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue.isAttacking, nue, player.cursedEnergy]);
+    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy]);
 
     return (
         <div
             className="nue"
             style={{
                 opacity: nue.isActive ? "1" : "0",
-                top: nue.isAttacking ? nue.y : player.y - 100,
-                left: nue.isAttacking ? nue.x : player.direction === "left" ? player.x + 100 : player.x - 100,
+                top: nue.isAttacking ? nue.y : megumi.y - 100,
+                left: nue.isAttacking ? nue.x : megumi.direction === "left" ? megumi.x + 100 : megumi.x - 100,
                 width: characterWidth,
                 height: characterHeight,
                 ...nueStyle,

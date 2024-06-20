@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DivineDogs, Player } from "../App";
+import { DivineDogs, Megumi } from "../App";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;

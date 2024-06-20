@@ -2,14 +2,14 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // later
 // import { healthReducer, movegojo } from "../store/gojoSlice";
-import setDismantleAttack, { moveRival } from "../store/RivalSlice";
+import setDismantleAttack, { moveRival } from "../store/SukunaSlice";
 import { setNueDirection } from "../store/NueSlice";
 import React from "react";
 import { playSoundEffect } from "../App";
 
 const SatoruGojo = () => {
     const gojo = useSelector((state: any) => state.gojoState);
-    const rival = useSelector((state: any) => state.RivalState);
+    const sukuna = useSelector((state: any) => state.SukunaState);
     const [displaySlash, setDisplaySlash] = React.useState("none");
     const [displaySlash2, setDisplaySlash2] = React.useState("none");
     const [displayDismantle, setDisplayDismantle] = React.useState("block");
@@ -31,46 +31,46 @@ const SatoruGojo = () => {
 
     // Slash style control
     useEffect(() => {
-        if (rival.cleaveAttack && Math.abs(rival.x - gojo.x) >= 200) {
+        if (sukuna.cleaveAttack && Math.abs(sukuna.x - gojo.x) >= 200) {
             setDisplaySlash("block")
             slashSoundEffectRef.current.volume = 0.1;
             slashSoundEffectRef.current.play()
         } else setDisplaySlash("none")
-    }, [rival.cleaveAttack]);
+    }, [sukuna.cleaveAttack]);
 
     useEffect(() => {
-        if (rival.dismantleAttack && Math.abs(rival.x - gojo.x) <= 200) {
+        if (sukuna.dismantleAttack && Math.abs(sukuna.x - gojo.x) <= 200) {
             // setDisplayDismantle("block")
             slashSoundEffectRef.current.volume = 0.1;
             slashSoundEffectRef.current.play()
         }
         // else setDisplayDismantle("none")
-    }, [rival.dismantleAttack]);
+    }, [sukuna.dismantleAttack]);
 
     useEffect(() => {
-        if (rival.rapidAttack) {
+        if (sukuna.rapidAttack) {
             rapidAttack()
             setDisplaySlash("block");
             setTimeout(() => {
                 setDisplaySlash("none")
             }, 3000);
         }
-    }, [rival.rapidAttack])
+    }, [sukuna.rapidAttack])
 
 
     useEffect(() => {
-        if (rival.rivalDomainExpansion) {
+        if (sukuna.rivalDomainExpansion) {
             domainAttack()
         }
-    }, [rival.rivalDomainExpansion])
+    }, [sukuna.rivalDomainExpansion])
 
-    // Rival domain attack function
+    // Sukuna domain attack function
     const domainAttack = () => {
         setTimeout(() => {
             setDisplaySlash("block");
             setDisplaySlash2("block");
 
-            const attackDirection = rival.x - gojo.x >= 0 ? "left" : "right";
+            const attackDirection = sukuna.x - gojo.x >= 0 ? "left" : "right";
             const stepDistance = attackDirection === "left" ? -10 : 10;
             const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
             domainSoundEffectRef.current.volume = 0.3
@@ -101,7 +101,7 @@ const SatoruGojo = () => {
         rapidSlashSoundEffectRef.current.volume = 0.1;
 
         rapidSlashSoundEffectRef.current.play()
-        const attackDirection = rival.x - gojo.x >= 0 ? "left" : "right";
+        const attackDirection = sukuna.x - gojo.x >= 0 ? "left" : "right";
         const stepDistance = attackDirection === "left" ? -10 : 10;
         const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
         for (let i = 0; i < degrees.length * 3; i++) {
@@ -146,10 +146,10 @@ const SatoruGojo = () => {
 
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />
-                {/* <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: rival.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} /> */}
-                {/* <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: rival.isAttacking && Math.abs(rival.x - gojo.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.1)" }} /> */}
+                {/* <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: sukuna.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} /> */}
+                {/* <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: sukuna.isAttacking && Math.abs(sukuna.x - gojo.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.1)" }} /> */}
                 {/* DISMANTLE */}
-                <div style={{ display: rival.dismantleAttack ? "block" : "none" }}>
+                <div style={{ display: sukuna.dismantleAttack ? "block" : "none" }}>
                     <img src={require('../Assets/slash.png')} alt="" style={{ top: "-35px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
                     <img src={require('../Assets/slash.png')} alt="" style={{ top: "-25px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
                     <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />

@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { moveRival, moveRivalTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setRivalCanMove, setRivalCursedEnergy, setRivalDirection, setRivalDomainExpansion } from '../store/RivalSlice';
-import { healthReducer, movePlayer, setPlayerCanMove } from '../store/PlayerSlice';
+import { moveRival, moveRivalTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setRivalCanMove, setRivalCursedEnergy, setRivalDirection, setRivalDomainExpansion } from '../store/SukunaSlice';
+import { healthReducer, movePlayer, setPlayerCanMove } from '../store/MegumiSlice';
 import { Howl, Howler } from 'howler';
 import ReactHowler from 'react-howler';
 
-const Rival = () => {
+const Sukuna = () => {
 
     const dispatch = useDispatch();
-    const rival = useSelector((state: any) => state.RivalState);
-    const player = useSelector((state: any) => state.PlayerState);
+    const sukuna = useSelector((state: any) => state.SukunaState);
+    const megumi = useSelector((state: any) => state.MegumiState);
     const nue = useSelector((state: any) => state.NueState);
     const divineDogs = useSelector((state: any) => state.DivineDogsState);
 
     const characterWidth = 50;
     const characterHeight = 150;
-    const attackDamage = rival.closeRange ? -100 : -10; // Saldırı hasarı
+    const attackDamage = sukuna.closeRange ? -100 : -10; // Saldırı hasarı
     const [electricityEffect, setElectricityEffect] = React.useState(false);
     const [rapidAttackCounter, setRapidAttackCounter] = React.useState(5);
     const attackInterval = React.useRef(null);
@@ -33,15 +33,15 @@ const Rival = () => {
         }, 500);
     }, [nue.isAttacking]);
 
-    // Rival auto attack starter
+    // Sukuna auto attack starter
     useEffect(() => {
-        if (rival.health > 0 && player.health > 0 && rival.canMove) {
+        if (sukuna.health > 0 && megumi.health > 0 && sukuna.canMove) {
             console.log("first")
-            if (rival.cursedEnergy >= 200) {
+            if (sukuna.cursedEnergy >= 200) {
                 rivalDomainExpansion()
             }
             else {
-                if (rival.cursedEnergy >= 10) {
+                if (sukuna.cursedEnergy >= 10) {
                     startAttackInterval();
                 }
             }
@@ -52,7 +52,7 @@ const Rival = () => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [dispatch, attackDamage, rival.direction, rival.canMove, rapidAttackCounter, rival.health]);
+    }, [dispatch, attackDamage, sukuna.direction, sukuna.canMove, rapidAttackCounter, sukuna.health]);
 
     // Domain expansion Action
     const rivalDomainExpansion = () => {
@@ -72,16 +72,16 @@ const Rival = () => {
         }, 12000);
     }
 
-    // Rival attack interval - auto attack configuration
+    // Sukuna attack interval - auto attack configuration
     const startAttackInterval = () => {
-        const attackDirection = rival.x - player.x >= 0 ? "left" : "right";
+        const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
         const stepDistance = attackDirection === "left" ? -100 : 100;
         const randomInterval = 2000; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
         attackInterval.current = setInterval(() => {
-            // if (player.health > 0 && rival.health > 0) {
+            // if (megumi.health > 0 && sukuna.health > 0) {
             console.log("ai")
-            if (player.health > 0 && rival.health > 0 && rival.canMove) {
+            if (megumi.health > 0 && sukuna.health > 0 && sukuna.canMove) {
                 if (rapidAttackCounter <= 0) {
                     setRapidAttackCounter(5);
                     dispatch(setRapidAttack(true));
@@ -89,7 +89,7 @@ const Rival = () => {
                         dispatch(setRapidAttack(false));
                     }, 1000);
                 } else {
-                    if (rival.closeRange) { // dismantle
+                    if (sukuna.closeRange) { // dismantle
                         setRapidAttackCounter(rapidAttackCounter - 3);
                         dispatch(rivalDismantleAttack(true));
                         dispatch(movePlayer({ x: stepDistance, y: 0 }));
@@ -106,10 +106,10 @@ const Rival = () => {
                             dispatch(rivalCleaveAttack(false));
                         }, 1000)
                     }
-                    dispatch(healthReducer(attackDamage)); // Player'ın canını azalt
+                    dispatch(healthReducer(attackDamage)); // Megumi'ın canını azalt
                 }
             } else {
-                stopAttackInterval(); // Player ölünce saldırıyı durdur
+                stopAttackInterval(); // Megumi ölünce saldırıyı durdur
             }
         }, randomInterval);
     };
@@ -118,39 +118,39 @@ const Rival = () => {
     };
 
     useEffect(() => {
-        if (rival.health <= 0)
+        if (sukuna.health <= 0)
             stopAttackInterval();
-    }, [rival.health]);
+    }, [sukuna.health]);
 
     return (
         <div>
             <audio src={require("../Assets/audios/sukuna.mp3")} ref={sukunaSoundEffectRef}></audio>
-            <div className="rival"
+            <div className="sukuna"
                 style={{
-                    top: rival.y, left: rival.x, width: characterWidth, height: characterHeight,
-                    display: rival.health > 0 ? "block" : "none",
+                    top: sukuna.y, left: sukuna.x, width: characterWidth, height: characterHeight,
+                    display: sukuna.health > 0 ? "block" : "none",
                 }}>
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
                 <img src={require('../Assets/sukuna.png')} alt="" style={{ height: characterHeight }} />
                 <img src={require('../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require('../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <p style={{ marginTop: -80, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
-                <div className="player-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                    <div style={{ position: "absolute", width: rival.health * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
+                <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
+                    <div style={{ position: "absolute", width: sukuna.health * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
                     </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{rival.health}</p>
+                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{sukuna.health}</p>
                 </div>
-                <div className="player-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                    <div style={{ position: "absolute", width: rival.cursedEnergy * 150 / 200, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
+                <div className="megumi-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
+                    <div style={{ position: "absolute", width: sukuna.cursedEnergy * 150 / 200, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
                     </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{rival.cursedEnergy}</p>
+                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{sukuna.cursedEnergy}</p>
                 </div>
                 {/* <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
-                Rival Direction: {rival.direction} <br /> Range: {rival.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
+                Sukuna Direction: {sukuna.direction} <br /> Range: {sukuna.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
             </p> */}
             </div>
         </div>
     );
 };
 
-export default Rival;
+export default Sukuna;

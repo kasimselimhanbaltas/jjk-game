@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Rival } from "../App";
+import { Sukuna } from "../App";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 
-const initialState: Rival = {
+const initialState: Sukuna = {
   x: 800,
   y: 200,
   health: 100,
@@ -21,7 +21,7 @@ const initialState: Rival = {
 };
 
 const RivalSlice = createSlice({
-  name: "Rival",
+  name: "Sukuna",
   initialState: initialState,
   reducers: {
     moveRival(state, action) {

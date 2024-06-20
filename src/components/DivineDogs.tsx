@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { setRivalCanMove, updateRivalHealth } from "../store/RivalSlice";
-import { changeCursedEnergy } from "../store/PlayerSlice";
+import { setRivalCanMove, updateRivalHealth } from "../store/SukunaSlice";
+import { changeCursedEnergy } from "../store/MegumiSlice";
 import { playSoundEffect } from "../App";
 import { divineDogsActivity, divineDogsAttacking, moveDivineDogs, setDivineDogsDirection } from "../store/DivineDogsSlice";
 import React from "react";
@@ -21,8 +21,8 @@ const defaultNueTransform = "all .5s ease-in, transform 0s";
 
 const DivineDogs = () => {
 
-    const player = useSelector((state: any) => state.PlayerState);
-    const rival = useSelector((state: any) => state.RivalState);
+    const megumi = useSelector((state: any) => state.MegumiState);
+    const sukuna = useSelector((state: any) => state.SukunaState);
     const nue = useSelector((state: any) => state.NueState);
     const divineDogs = useSelector((state: any) => state.DivineDogsState);
 
@@ -36,10 +36,10 @@ const DivineDogs = () => {
     const [wolfStyle, setWolfStyle] = useState({ transition: defaultNueTransform });
     const [wolf2Style, setWolf2Style] = useState({ transition: defaultNueTransform });
     const [whiteDivineDogPosition, setWhiteDivineDogPosition] = useState({ x: 200, y: 300 });
-    const [blackDivineDogSidePosition, setBlackDivineDogSidePosition] = useState("stop"); // right, left, rival, stop
-    const [whiteDivineDogSidePosition, setWhiteDivineDogSidePosition] = useState("stop"); // right, left, rival, stop
-    const [whiteDogDirection, setWhiteDogDirection] = useState("right"); // right, left, rival, stop
-    const [blackDogDirection, setBlackDogDirection] = useState("right"); // right, left, rival, stop
+    const [blackDivineDogSidePosition, setBlackDivineDogSidePosition] = useState("stop"); // right, left, sukuna, stop
+    const [whiteDivineDogSidePosition, setWhiteDivineDogSidePosition] = useState("stop"); // right, left, sukuna, stop
+    const [whiteDogDirection, setWhiteDogDirection] = useState("right"); // right, left, sukuna, stop
+    const [blackDogDirection, setBlackDogDirection] = useState("right"); // right, left, sukuna, stop
     const slashSoundEffectRef = React.useRef(null);
     const wolfSoundEffectRef = React.useRef(null);
 
@@ -56,7 +56,7 @@ const DivineDogs = () => {
     //     if (nueIntervalRef.current !== null) return;
 
     //     nueIntervalRef.current = setInterval(() => {
-    //         if (player.cursedEnergy >= 5) dispatch(changeCursedEnergy(-shikigamiDrainingCost));
+    //         if (megumi.cursedEnergy >= 5) dispatch(changeCursedEnergy(-shikigamiDrainingCost));
     //         else {
     //             dispatch(nueActivity(false));
     //             stopInterval(nueIntervalRef)
@@ -74,15 +74,15 @@ const DivineDogs = () => {
     };
 
     useEffect(() => {
-        if (player.cursedEnergy <= 0) {
+        if (megumi.cursedEnergy <= 0) {
             stopInterval(nueIntervalRef);
             dispatch(nueActivity(false));
         }
-    }, [player.cursedEnergy]);
+    }, [megumi.cursedEnergy]);
 
     const moveDivineDogsToRival = () => {
-        setBlackDivineDogSidePosition("rival");
-        setWhiteDivineDogSidePosition("rival");
+        setBlackDivineDogSidePosition("sukuna");
+        setWhiteDivineDogSidePosition("sukuna");
     };
     const divineDogsAttackEffects = () => {
         slashSoundEffectRef.current.volume = 0.5;
@@ -94,17 +94,17 @@ const DivineDogs = () => {
     };
 
     function divineDogsAttack() {
-        // if (player.cursedEnergy < callDivineDogsCost) return;
+        // if (megumi.cursedEnergy < callDivineDogsCost) return;
         dispatch(changeCursedEnergy(-callDivineDogsCost)); // reduce cursed energy by cost
         wolfSoundEffectRef.current.volume = 0.5
         wolfSoundEffectRef.current.play()
-        dispatch(moveDivineDogs({ x: player.x - 100, y: player.y + 50 })); // shikigami appears at player's position
-        setWhiteDivineDogPosition({ x: player.x + 100, y: player.y + 50 });
+        dispatch(moveDivineDogs({ x: megumi.x - 100, y: megumi.y + 50 })); // shikigami appears at megumi's position
+        setWhiteDivineDogPosition({ x: megumi.x + 100, y: megumi.y + 50 });
         setTimeout(() => {
             dispatch(divineDogsActivity(true)); // shikigami activate
         }, 1000);
         let attackDirection = "";
-        attackDirection = player.x < rival.x ? "right" : "left"; // direction of attack
+        attackDirection = megumi.x < sukuna.x ? "right" : "left"; // direction of attack
         setWhiteDogDirection(attackDirection);
         setBlackDogDirection(attackDirection);
 
@@ -176,7 +176,7 @@ const DivineDogs = () => {
         const intervalId = setInterval(() => {
 
             if (keysPressed.current.l) {
-                if (divineDogs.isActive === false && player.cursedEnergy >= callDivineDogsCost && !rival.domainAttack) {
+                if (divineDogs.isActive === false && megumi.cursedEnergy >= callDivineDogsCost && !sukuna.domainAttack) {
                     divineDogsAttack();
                 }
             }
@@ -187,7 +187,7 @@ const DivineDogs = () => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue.isAttacking, nue, player.cursedEnergy]);
+    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy]);
 
     return (
         <div>
@@ -201,11 +201,11 @@ const DivineDogs = () => {
                     position: "absolute",
                     opacity: divineDogs.isActive ? "1" : "0",
                     top: blackDivineDogSidePosition === "stop" ? divineDogs.y :
-                        (blackDivineDogSidePosition === "rival" ? rival.y : rival.y + 50),
+                        (blackDivineDogSidePosition === "sukuna" ? sukuna.y : sukuna.y + 50),
                     left: blackDivineDogSidePosition === "stop" ? divineDogs.x :
-                        (blackDivineDogSidePosition === "left" ? rival.x - 200 :
-                            (blackDivineDogSidePosition === "right" ? rival.x + 200 :
-                                (blackDivineDogSidePosition === "rival" ? rival.x : 0))),
+                        (blackDivineDogSidePosition === "left" ? sukuna.x - 200 :
+                            (blackDivineDogSidePosition === "right" ? sukuna.x + 200 :
+                                (blackDivineDogSidePosition === "sukuna" ? sukuna.x : 0))),
                     transform: blackDogDirection === "right" ? "scaleX(1)" : "scaleX(-1)",
                     ...wolfStyle,
                 }}>
@@ -214,13 +214,13 @@ const DivineDogs = () => {
                 className="wolf2"
                 style={{
                     position: "absolute",
-                    opacity: divineDogs.isActive ? "1" : "0",// right, left, rival, stop
+                    opacity: divineDogs.isActive ? "1" : "0",// right, left, sukuna, stop
                     top: whiteDivineDogSidePosition === "stop" ? whiteDivineDogPosition.y :
-                        (whiteDivineDogSidePosition === "rival" ? rival.y : rival.y + 50),
+                        (whiteDivineDogSidePosition === "sukuna" ? sukuna.y : sukuna.y + 50),
                     left: whiteDivineDogSidePosition === "stop" ? whiteDivineDogPosition.x :
-                        (whiteDivineDogSidePosition === "left" ? rival.x - 200 :
-                            (whiteDivineDogSidePosition === "right" ? rival.x + 200 :
-                                (whiteDivineDogSidePosition === "rival" ? rival.x : 0))),
+                        (whiteDivineDogSidePosition === "left" ? sukuna.x - 200 :
+                            (whiteDivineDogSidePosition === "right" ? sukuna.x + 200 :
+                                (whiteDivineDogSidePosition === "sukuna" ? sukuna.x : 0))),
                     transform: whiteDogDirection === "right" ? "scaleX(1)" : "scaleX(-1)",
                     ...wolf2Style,
                 }}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import Player from './components/Player';
-import Rival from './components/Rival';
+import Megumi from './components/Megumi';
+import Sukuna from './components/Sukuna';
 import GameArea from './Pages/GameArea';
 import Controls from './components/Controls';
 
@@ -12,7 +12,7 @@ export const playSoundEffect = (audio) => {
 export interface Character {
   value: number
 }
-export interface Player {
+export interface Megumi {
   x: number;
   y: number;
   health: number;
@@ -37,7 +37,7 @@ export interface Gojo {
   dashGauge: number;
 }
 
-export interface Rival {
+export interface Sukuna {
   x: number;
   y: number;
   health: number;

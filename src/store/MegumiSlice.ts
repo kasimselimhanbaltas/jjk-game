@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Player } from "../App";
+import { Megumi } from "../App";
 import { useDispatch } from "react-redux";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
-const initialState: Player = {
+const initialState: Megumi = {
   x: 200,
   y: 200,
   health: 2000,
@@ -14,8 +14,8 @@ const initialState: Player = {
   canMove: true,
 };
 
-const playerSlice = createSlice({
-  name: "player",
+const megumiSlice = createSlice({
+  name: "megumi",
   initialState: initialState,
   reducers: {
     movePlayer(state, action) {
@@ -57,5 +57,5 @@ export const {
   changeCursedEnergy,
   setPlayerDirection,
   setPlayerCanMove,
-} = playerSlice.actions;
-export default playerSlice;
+} = megumiSlice.actions;
+export default megumiSlice;

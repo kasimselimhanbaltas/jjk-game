@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Nue, Player } from "../App";
+import { Nue, Megumi } from "../App";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;

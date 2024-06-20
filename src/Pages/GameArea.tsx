@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef } from "react";
-import Player from "../components/Player";
-import Rival from "../components/Rival";
+import Megumi from "../components/Megumi";
+import Sukuna from "../components/Sukuna";
 import Nue from "../components/Nue";
-import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRivalCanMove, setDashGauge, moveRivalTo, setRivalCursedEnergy } from "../store/RivalSlice";
-import { changeCursedEnergy, movePlayer, setPlayerDirection } from "../store/PlayerSlice";
+import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRivalCanMove, setDashGauge, moveRivalTo, setRivalCursedEnergy } from "../store/SukunaSlice";
+import { changeCursedEnergy, movePlayer, setPlayerDirection } from "../store/MegumiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { setRivalDirection } from "../store/RivalSlice";
+import { setRivalDirection } from "../store/SukunaSlice";
 import { nueActivity, setNueDirection } from "../store/NueSlice";
 import DivineDogs from "../components/DivineDogs";
 import MainMenu from "../components/MainMenu";
@@ -21,12 +21,12 @@ const shrineHeight = 250;
 const GameArea = () => {
 
   const dispatch = useDispatch()
-  const rival = useSelector((state: any) => state.RivalState);
-  const player = useSelector((state: any) => state.PlayerState);
+  const sukuna = useSelector((state: any) => state.SukunaState);
+  const megumi = useSelector((state: any) => state.MegumiState);
   const nue = useSelector((state: any) => state.NueState);
   const divineDogs = useSelector((state: any) => state.DivineDogsState);
-  const xDistance = useMemo(() => (player.x - rival.x), [player.x, rival.x]);
-  const yDistance = useMemo(() => (player.y - rival.y), [player.y, rival.y]);
+  const xDistance = useMemo(() => (megumi.x - sukuna.x), [megumi.x, sukuna.x]);
+  const yDistance = useMemo(() => (megumi.y - sukuna.y), [megumi.y, sukuna.y]);
   const keysPressed = useRef({ w: false, a: false, s: false, d: false, t: false, space: false });
   let intervalId = null;
   const playerCEincreaseIntervalRef = useRef(null);
@@ -36,7 +36,7 @@ const GameArea = () => {
   const startPlayerCursedEnergyInterval = () => {
     if (playerCEincreaseIntervalRef.current !== null) return;
     playerCEincreaseIntervalRef.current = setInterval(() => {
-      if (player.cursedEnergy < 100) {
+      if (megumi.cursedEnergy < 100) {
         dispatch(changeCursedEnergy(+10));
       }
     }, 1000);
@@ -44,8 +44,8 @@ const GameArea = () => {
   const startRivalCursedEnergyInterval = () => {
     if (rivalCEincreaseIntervalRef.current !== null) return;
     rivalCEincreaseIntervalRef.current = setInterval(() => {
-      if (rival.cursedEnergy < 200 && rival.rivalDomainExpansion === false) {
-        dispatch(setRivalCursedEnergy(rival.cursedEnergy + 10));
+      if (sukuna.cursedEnergy < 200 && sukuna.rivalDomainExpansion === false) {
+        dispatch(setRivalCursedEnergy(sukuna.cursedEnergy + 10));
       }
     }, 1000);
   };
@@ -64,16 +64,16 @@ const GameArea = () => {
     return () => {
       stopInterval(playerCEincreaseIntervalRef);
     }
-  }, [player.cursedEnergy, nueActivity]);
+  }, [megumi.cursedEnergy, nueActivity]);
 
   useEffect(() => {
     startRivalCursedEnergyInterval()
     return () => {
       stopInterval(rivalCEincreaseIntervalRef);
     }
-  }, [rival.cursedEnergy, rival.rivalDomainExpansion]);
+  }, [sukuna.cursedEnergy, sukuna.rivalDomainExpansion]);
 
-  // Player movement control
+  // Megumi movement control
   useEffect(() => {
     const handleKeyDown = (event) => {
       let key = event.key.toLowerCase();
@@ -95,59 +95,59 @@ const GameArea = () => {
     clearInterval(intervalId);
 
     intervalId = setInterval(() => {
-      if (player.canMove) {
-        if (keysPressed.current.w && player.y > 0) {
+      if (megumi.canMove) {
+        if (keysPressed.current.w && megumi.y > 0) {
           dispatch(movePlayer({ x: 0, y: -playerSpeed }));
         }
-        if (keysPressed.current.a && player.x > 0) {
+        if (keysPressed.current.a && megumi.x > 0) {
           dispatch(movePlayer({ x: -playerSpeed, y: 0 }));
           dispatch(setPlayerDirection("left"));
         }
-        if (keysPressed.current.s && player.y < gameAreaHeight - playerHeight) {
+        if (keysPressed.current.s && megumi.y < gameAreaHeight - playerHeight) {
           dispatch(movePlayer({ x: 0, y: playerSpeed }));
         }
-        if (keysPressed.current.d && player.x < gameAreaWidth - playerWidth) {
+        if (keysPressed.current.d && megumi.x < gameAreaWidth - playerWidth) {
           dispatch(movePlayer({ x: playerSpeed, y: 0 }));
           dispatch(setPlayerDirection("right"));
         }
         if (keysPressed.current.t) {
-          if (rival.canMove) dispatch(setRivalCanMove(false));
+          if (sukuna.canMove) dispatch(setRivalCanMove(false));
           else dispatch(setRivalCanMove(true));
         }
         if (keysPressed.current.space)
-          dispatch(movePlayer({ x: player.direction === "right" ? 200 : -200, y: 0 }));
+          dispatch(movePlayer({ x: megumi.direction === "right" ? 200 : -200, y: 0 }));
       }
     }, 75);
-    if (!nue.isAttacking) dispatch(setNueDirection(player.direction));
+    if (!nue.isAttacking) dispatch(setNueDirection(megumi.direction));
 
     return () => {
       clearInterval(intervalId);
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [dispatch, player.health, player.y, player.x, rival.x, player.canMove]);
+  }, [dispatch, megumi.health, megumi.y, megumi.x, sukuna.x, megumi.canMove]);
 
-  // Rival movement
+  // Sukuna movement
   useEffect(() => {
     const interval = setInterval(() => {
-      if (rival.canMove) {
-        if (rival.dashGauge > 70) {
-          dispatch(moveRivalTo({ x: player.x, y: player.y }));
+      if (sukuna.canMove) {
+        if (sukuna.dashGauge > 70) {
+          dispatch(moveRivalTo({ x: megumi.x, y: megumi.y }));
           dispatch(setDashGauge(0))
         }
         else {
-          dispatch(setDashGauge(rival.dashGauge + 1))
+          dispatch(setDashGauge(sukuna.dashGauge + 1))
           let stepX = 0;
           let stepY = 0;
-          if (rival.rivalDirection === "R") [stepX, stepY] = [10, 0];
-          else if (rival.rivalDirection === "L") [stepX, stepY] = [-10, 0];
-          else if (rival.rivalDirection === "U") [stepX, stepY] = [0, -10];
-          else if (rival.rivalDirection === "D") [stepX, stepY] = [0, 10];
-          else if (rival.rivalDirection === "UL") [stepX, stepY] = [-10, -10];
-          else if (rival.rivalDirection === "UR") [stepX, stepY] = [10, -10];
-          else if (rival.rivalDirection === "DL") [stepX, stepY] = [-10, 10];
-          else if (rival.rivalDirection === "DR") [stepX, stepY] = [10, 10];
-          else if (rival.rivalDirection === "stop") [stepX, stepY] = [0, 0];
+          if (sukuna.rivalDirection === "R") [stepX, stepY] = [10, 0];
+          else if (sukuna.rivalDirection === "L") [stepX, stepY] = [-10, 0];
+          else if (sukuna.rivalDirection === "U") [stepX, stepY] = [0, -10];
+          else if (sukuna.rivalDirection === "D") [stepX, stepY] = [0, 10];
+          else if (sukuna.rivalDirection === "UL") [stepX, stepY] = [-10, -10];
+          else if (sukuna.rivalDirection === "UR") [stepX, stepY] = [10, -10];
+          else if (sukuna.rivalDirection === "DL") [stepX, stepY] = [-10, 10];
+          else if (sukuna.rivalDirection === "DR") [stepX, stepY] = [10, 10];
+          else if (sukuna.rivalDirection === "stop") [stepX, stepY] = [0, 0];
           dispatch(moveRival({ x: stepX, y: stepY }));
         }
       }
@@ -157,15 +157,15 @@ const GameArea = () => {
       clearInterval(interval);
     };
 
-  }, [rival.rivalDirection, rival.canMove, rival.dashGauge]);
+  }, [sukuna.rivalDirection, sukuna.canMove, sukuna.dashGauge]);
 
-  // Rival Movement Control
+  // Sukuna Movement Control
   useEffect(() => {
     const interval = setInterval(() => {
       let direction = "";
-      const deltaX = player.x - rival.x; // >0 is right, <0 is left
-      const deltaY = player.y - rival.y; // >0 is up, <0 is down
-      if (Math.abs(deltaX) <= 200 && Math.abs(deltaY) <= 80) { // Decide which direction rival should head to
+      const deltaX = megumi.x - sukuna.x; // >0 is right, <0 is left
+      const deltaY = megumi.y - sukuna.y; // >0 is up, <0 is down
+      if (Math.abs(deltaX) <= 200 && Math.abs(deltaY) <= 80) { // Decide which direction sukuna should head to
         direction = "stop";
       } else {
         if (deltaX <= -100) { // left
@@ -190,14 +190,14 @@ const GameArea = () => {
           else direction = "U"
         }
       }
-      if (rival.rivalDirection !== direction) {
+      if (sukuna.rivalDirection !== direction) {
         dispatch(setRivalDirection(direction));
       }
     }, 100); // Update interval
     return () => {
       clearInterval(interval);
     };
-  }, [dispatch, player.x, player.y, rival.closeRange, rival.rivalDirection]);
+  }, [dispatch, megumi.x, megumi.y, sukuna.closeRange, sukuna.rivalDirection]);
 
   // Main menu
   const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
@@ -207,9 +207,9 @@ const GameArea = () => {
   };
 
   // useEffect(() => {
-  //   if (xDistance < 0 && rival.rivalDirection !== "left") {
+  //   if (xDistance < 0 && sukuna.rivalDirection !== "left") {
   //     dispatch(rivalDirection("left"));
-  //   } else if (xDistance > 0 && rival.rivalDirection !== "right") {
+  //   } else if (xDistance > 0 && sukuna.rivalDirection !== "right") {
   //     dispatch(rivalDirection("right"));
   //   }
   // }, [xDistance]);
@@ -222,18 +222,18 @@ const GameArea = () => {
         <>
           <div style={{
             width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/bg.jpg")})`, opacity: !rival.rivalDomainExpansion ? 0.7 : 0,
+            backgroundImage: `url(${require("../Assets/bg.jpg")})`, opacity: !sukuna.rivalDomainExpansion ? 0.7 : 0,
             backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
           }}></div>
           <div style={{
             width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/sukuna-domain.jpg")})`, opacity: rival.rivalDomainExpansion ? 1 : 0,
+            backgroundImage: `url(${require("../Assets/sukuna-domain.jpg")})`, opacity: sukuna.rivalDomainExpansion ? 1 : 0,
             backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
           }}></div>
-          <Player />
+          <Megumi />
           <Nue />
           <DivineDogs />
-          <Rival />
+          <Sukuna />
 
         </>
       )}
@@ -241,7 +241,7 @@ const GameArea = () => {
 
 
       {/*
-      <img src={require('../Assets/malevolent_shrine.png')} alt="" style={{ position: "absolute", display: rival.rivalDomainExpansion ? "block" : "none", left: player.x < rival.x ? rival.x + 120 : rival.x - 150, top: rival.y - 50, height: shrineHeight, opacity: 0.8, scale: "1.2" }} />
+      <img src={require('../Assets/malevolent_shrine.png')} alt="" style={{ position: "absolute", display: sukuna.rivalDomainExpansion ? "block" : "none", left: megumi.x < sukuna.x ? sukuna.x + 120 : sukuna.x - 150, top: sukuna.y - 50, height: shrineHeight, opacity: 0.8, scale: "1.2" }} />
       */}
 
     </div>
