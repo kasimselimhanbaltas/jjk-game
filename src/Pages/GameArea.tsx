@@ -24,6 +24,7 @@ const GameArea = () => {
   const rival = useSelector((state: any) => state.RivalState);
   const player = useSelector((state: any) => state.PlayerState);
   const nue = useSelector((state: any) => state.NueState);
+  const divineDogs = useSelector((state: any) => state.DivineDogsState);
   const xDistance = useMemo(() => (player.x - rival.x), [player.x, rival.x]);
   const yDistance = useMemo(() => (player.y - rival.y), [player.y, rival.y]);
   const keysPressed = useRef({ w: false, a: false, s: false, d: false, t: false, space: false });
@@ -230,6 +231,7 @@ const GameArea = () => {
           <Nue />
           <DivineDogs />
           <Rival />
+
         </>
       )}
 

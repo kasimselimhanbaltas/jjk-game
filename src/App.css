@@ -117,7 +117,15 @@
   /* animation: wolfRun 1s steps(5) infinite; */
   /* 8 kareli sprite sheet için */
 }
-
+.wolf2 {
+  width: 145px;
+  height: 85px;
+  background-image: url('./Assets/white-wolf.png');
+  background-size: cover;
+  /* Sprite sheet kullanımı */
+  /* animation: wolfRun 1s steps(5) infinite; */
+  /* 8 kareli sprite sheet için */
+}
 @keyframes wolfRun {
   from {
     background-position: 0 350px;
