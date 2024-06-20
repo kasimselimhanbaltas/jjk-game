@@ -33,24 +33,21 @@ const GameArea = () => {
   const rivalCEincreaseIntervalRef = useRef(null);
 
   // Cursed energy interval functions
-  const startCursedEnergyInterval = () => {
-    if (playerCEincreaseIntervalRef.current === null) {
-      playerCEincreaseIntervalRef.current = setInterval(() => {
-        if (player.cursedEnergy < 100) {
-          console.log("increase ce")
-          dispatch(changeCursedEnergy(+10));
-        }
-      }, 1000);
-    }
-    if (rivalCEincreaseIntervalRef.current === null) {
-      rivalCEincreaseIntervalRef.current = setInterval(() => {
-        if (rival.cursedEnergy < 200 && rival.rivalDomainExpansion === false) {
-          console.log("increase ce")
-          dispatch(setRivalCursedEnergy(rival.cursedEnergy + 10));
-        }
-      }, 1000);
-    }
-
+  const startPlayerCursedEnergyInterval = () => {
+    if (playerCEincreaseIntervalRef.current !== null) return;
+    playerCEincreaseIntervalRef.current = setInterval(() => {
+      if (player.cursedEnergy < 100) {
+        dispatch(changeCursedEnergy(+10));
+      }
+    }, 1000);
+  };
+  const startRivalCursedEnergyInterval = () => {
+    if (rivalCEincreaseIntervalRef.current !== null) return;
+    rivalCEincreaseIntervalRef.current = setInterval(() => {
+      if (rival.cursedEnergy < 200 && rival.rivalDomainExpansion === false) {
+        dispatch(setRivalCursedEnergy(rival.cursedEnergy + 10));
+      }
+    }, 1000);
   };
   // Cursed energy interval functions end
   const stopInterval = (ref) => {
@@ -63,12 +60,18 @@ const GameArea = () => {
 
   // Cursed energy increase interval start and stop effect
   useEffect(() => {
-    startCursedEnergyInterval()
+    startPlayerCursedEnergyInterval()
     return () => {
       stopInterval(playerCEincreaseIntervalRef);
+    }
+  }, [player.cursedEnergy, nueActivity]);
+
+  useEffect(() => {
+    startRivalCursedEnergyInterval()
+    return () => {
       stopInterval(rivalCEincreaseIntervalRef);
     }
-  }, [player.cursedEnergy, rival.cursedEnergy, rival.rivalDomainExpansion, nueActivity]);
+  }, [rival.cursedEnergy, rival.rivalDomainExpansion]);
 
   // Player movement control
   useEffect(() => {

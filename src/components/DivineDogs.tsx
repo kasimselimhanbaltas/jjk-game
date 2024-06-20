@@ -176,7 +176,7 @@ const DivineDogs = () => {
         const intervalId = setInterval(() => {
 
             if (keysPressed.current.l) {
-                if (divineDogs.isActive === false && player.cursedEnergy >= callDivineDogsCost) {
+                if (divineDogs.isActive === false && player.cursedEnergy >= callDivineDogsCost && !rival.domainAttack) {
                     divineDogsAttack();
                 }
             }

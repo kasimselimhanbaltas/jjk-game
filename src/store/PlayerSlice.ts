@@ -8,7 +8,7 @@ const initialState: Player = {
   x: 200,
   y: 200,
   health: 2000,
-  cursedEnergy: 100,
+  cursedEnergy: 200,
   direction: "right",
   isAttacking: false,
   canMove: true,

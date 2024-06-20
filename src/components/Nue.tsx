@@ -124,7 +124,7 @@ const Nue = () => {
 
         const intervalId = setInterval(() => {
 
-            if (keysPressed.current.j && nue.isAttacking === false) {
+            if (keysPressed.current.j && nue.isAttacking === false && !rival.domainAttack) {
                 if (nue.isActive === true && rival.health > 0) {
                     nueAttack();
                 }
