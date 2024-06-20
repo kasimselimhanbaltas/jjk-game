@@ -9,6 +9,9 @@ export const playSoundEffect = (audio) => {
   audio.play()
 }
 
+export interface GameSettings {
+  selectedCharacter: string
+}
 export interface Character {
   value: number
 }

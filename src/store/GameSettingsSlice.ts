@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { GameSettings } from "../App";
 
-const initialState = {
+const initialState: GameSettings = {
   selectedCharacter: "",
 };
 
