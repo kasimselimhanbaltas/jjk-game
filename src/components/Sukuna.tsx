@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { moveRival, moveRivalTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setRivalCanMove, setRivalCursedEnergy, setRivalDirection, setRivalDomainExpansion } from '../store/SukunaSlice';
-import { healthReducer, movePlayer, setPlayerCanMove } from '../store/MegumiSlice';
+import { moveCharacter, moveCharacterTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setCanMove, setCursedEnergy, setDirection, setRivalDomainExpansion } from '../store/SukunaSlice';
+import megumiSlice from '../store/MegumiSlice';
 import { Howl, Howler } from 'howler';
 import ReactHowler from 'react-howler';
 
@@ -10,6 +10,7 @@ const Sukuna = () => {
     const dispatch = useDispatch();
     const sukuna = useSelector((state: any) => state.SukunaState);
     const megumi = useSelector((state: any) => state.MegumiState);
+    const gameSettings = useSelector((state: any) => state.GameSettingsState);
     const nue = useSelector((state: any) => state.NueState);
     const divineDogs = useSelector((state: any) => state.DivineDogsState);
 
@@ -20,6 +21,7 @@ const Sukuna = () => {
     const [rapidAttackCounter, setRapidAttackCounter] = React.useState(5);
     const attackInterval = React.useRef(null);
     const sukunaSoundEffectRef = React.useRef(null);
+    const keysPressed = useRef({ j: false, k: false, l: false });
 
 
     // Nue elecetric image animation
@@ -35,7 +37,7 @@ const Sukuna = () => {
 
     // Sukuna auto attack starter
     useEffect(() => {
-        if (sukuna.health > 0 && megumi.health > 0 && sukuna.canMove) {
+        if (sukuna.health > 0 && megumi.health > 0 && sukuna.canMove && gameSettings.selectedCharacter === "megumi") {
             console.log("first")
             if (sukuna.cursedEnergy >= 200) {
                 rivalDomainExpansion()
@@ -57,23 +59,51 @@ const Sukuna = () => {
     // Domain expansion Action
     const rivalDomainExpansion = () => {
         console.log("RIYOIKI TENKAI ")
-        dispatch(moveRivalTo({ x: 635, y: 240 }));
+        dispatch(moveCharacterTo({ x: 635, y: 240 }));
         sukunaSoundEffectRef.current.play()
-        dispatch(setPlayerCanMove(false))
-        dispatch(setRivalCanMove(false))
-        dispatch(setRivalCursedEnergy(0));
+        dispatch(megumiSlice.actions.setCanMove(false))
+        dispatch(setCanMove(false))
+        dispatch(setCursedEnergy(0));
         setTimeout(() => {
             dispatch(setRivalDomainExpansion(true));
         }, 6000);
         setTimeout(() => {
             dispatch(setRivalDomainExpansion(false));
-            dispatch(setPlayerCanMove(true))
-            dispatch(setRivalCanMove(true));
+            dispatch(megumiSlice.actions.setCanMove(true))
+            dispatch(setCanMove(true));
         }, 12000);
+    }
+
+
+    const localRapidAttack = () => {
+        console.log("local")
+        setRapidAttackCounter(5);
+        dispatch(setRapidAttack(true));
+        setTimeout(() => {
+            dispatch(setRapidAttack(false));
+        }, 1000);
+    }
+    const localDismantleAttack = (stepDistance) => {
+        setRapidAttackCounter(rapidAttackCounter - 3);
+        dispatch(rivalDismantleAttack(true));
+        dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
+        // slashRef.current.play();
+        // slashSoundEffect(slashAudio);
+        setTimeout(() => {
+            dispatch(rivalDismantleAttack(false));
+        }, 1000);
+    }
+    const localCleaveAttack = () => {
+        setRapidAttackCounter(rapidAttackCounter - 1);
+        dispatch(rivalCleaveAttack(true));
+        setTimeout(() => {
+            dispatch(rivalCleaveAttack(false));
+        }, 1000)
     }
 
     // Sukuna attack interval - auto attack configuration
     const startAttackInterval = () => {
+        // if (gameSettings.selectedCharacter === "sukuna") return;
         const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
         const stepDistance = attackDirection === "left" ? -100 : 100;
         const randomInterval = 2000; // 3-10 saniye arasında rastgele bir değer
@@ -83,30 +113,14 @@ const Sukuna = () => {
             console.log("ai")
             if (megumi.health > 0 && sukuna.health > 0 && sukuna.canMove) {
                 if (rapidAttackCounter <= 0) {
-                    setRapidAttackCounter(5);
-                    dispatch(setRapidAttack(true));
-                    setTimeout(() => {
-                        dispatch(setRapidAttack(false));
-                    }, 1000);
+                    localRapidAttack();
                 } else {
                     if (sukuna.closeRange) { // dismantle
-                        setRapidAttackCounter(rapidAttackCounter - 3);
-                        dispatch(rivalDismantleAttack(true));
-                        dispatch(movePlayer({ x: stepDistance, y: 0 }));
-                        // slashRef.current.play();
-                        // slashSoundEffect(slashAudio);
-                        setTimeout(() => {
-                            dispatch(rivalDismantleAttack(false));
-                        }, 1000);
+                        localDismantleAttack(stepDistance)
                     } else { // cleave
-                        // slashRef.current.play();
-                        setRapidAttackCounter(rapidAttackCounter - 1);
-                        dispatch(rivalCleaveAttack(true));
-                        setTimeout(() => {
-                            dispatch(rivalCleaveAttack(false));
-                        }, 1000)
+                        localCleaveAttack();
                     }
-                    dispatch(healthReducer(attackDamage)); // Megumi'ın canını azalt
+                    dispatch(megumiSlice.actions.healthReducer(attackDamage)); // Megumi'ın canını azalt
                 }
             } else {
                 stopAttackInterval(); // Megumi ölünce saldırıyı durdur
@@ -118,9 +132,56 @@ const Sukuna = () => {
     };
 
     useEffect(() => {
-        if (sukuna.health <= 0)
+        if (sukuna.health <= 0 && gameSettings.selectedCharacter !== "sukuna")
             stopAttackInterval();
     }, [sukuna.health]);
+
+
+
+    // Sukuna control
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            const key = event.key.toLowerCase();
+            keysPressed.current[key] = true;
+        };
+
+        const handleKeyUp = (event) => {
+            const key = event.key.toLowerCase();
+            keysPressed.current[key] = false;
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
+
+        const intervalId = setInterval(() => {
+            if (gameSettings.selectedCharacter !== "sukuna") return;
+
+            if (megumi.health > 0) {
+                if (keysPressed.current.j) {
+                    if (rapidAttackCounter <= 0)
+                        localRapidAttack();
+                    else localCleaveAttack();
+                }
+                if (keysPressed.current.k) {
+                    const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
+                    const stepDistance = attackDirection === "left" ? -100 : 100;
+                    localDismantleAttack(-100);
+                }
+                if (keysPressed.current.l) {
+                    if (sukuna.cursedEnergy >= 200) {
+                        rivalDomainExpansion()
+                    }
+                }
+            }
+
+        }, 100);
+
+        return () => {
+            clearInterval(intervalId);
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keyup", handleKeyUp);
+        };
+    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy]);
 
     return (
         <div>

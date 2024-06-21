@@ -2,25 +2,25 @@ import { useEffect, useMemo, useRef } from "react";
 import Megumi from "../components/Megumi";
 import Sukuna from "../components/Sukuna";
 import Nue from "../components/Nue";
-import { setCloseRange, updateRivalHealth, setRivalPosition, moveRival, setRivalCanMove, setDashGauge, moveRivalTo, setRivalCursedEnergy } from "../store/SukunaSlice";
-import { changeCursedEnergy, movePlayer, setPlayerDirection } from "../store/MegumiSlice";
+import sukunaSlice from "../store/SukunaSlice";
+import megumiSlice from "../store/MegumiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { setRivalDirection } from "../store/SukunaSlice";
 import { nueActivity, setNueDirection } from "../store/NueSlice";
 import DivineDogs from "../components/DivineDogs";
 import MainMenu from "../components/MainMenu";
 import React from "react";
 
-const playerWidth = 50;
-const playerHeight = 180;
+const megumiWidth = 50;
+const megumiHeight = 180;
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
-const playerSpeed = 30;
+const megumiSpeed = 30;
 const shrineHeight = 250;
 
 const GameArea = () => {
 
   const dispatch = useDispatch()
+  const gameSettings = useSelector((state: any) => state.GameSettingsState);
   const sukuna = useSelector((state: any) => state.SukunaState);
   const megumi = useSelector((state: any) => state.MegumiState);
   const nue = useSelector((state: any) => state.NueState);
@@ -32,20 +32,51 @@ const GameArea = () => {
   const playerCEincreaseIntervalRef = useRef(null);
   const rivalCEincreaseIntervalRef = useRef(null);
 
+
+  const selectedState = useSelector((state: any) => {
+    if (gameSettings.selectedCharacter === "sukuna") {
+      return { player: state.SukunaState, rival: state.MegumiState };
+    } else {
+      return { player: state.MegumiState, rival: state.SukunaState };
+    }
+  });
+  const selectedSlice = useSelector((state: any) => {
+    if (gameSettings.selectedCharacter === "sukuna") {
+      return { player: sukunaSlice, rival: megumiSlice };
+    } else {
+      return { player: megumiSlice, rival: sukunaSlice };
+    }
+  });
+  // for reducer methods
+  const playerSlice = selectedSlice.player;
+  const rivalSlice = selectedSlice.rival;
+
+  // for reading
+  const playerCharacter = selectedState.player;
+  const rivalCharacter = selectedState.rival;
+
+
+  // place characters
+  useEffect(() => {
+    playerSlice.actions.moveCharacter({ x: 200, y: 200 });
+    rivalSlice.actions.moveCharacter({ x: 800, y: 200 });
+  })
+
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
     if (playerCEincreaseIntervalRef.current !== null) return;
     playerCEincreaseIntervalRef.current = setInterval(() => {
-      if (megumi.cursedEnergy < 100) {
-        dispatch(changeCursedEnergy(+10));
+      if (playerCharacter.cursedEnergy < playerCharacter.maxCursedEnergy) {
+        dispatch(playerSlice.actions.changeCursedEnergy(+10));
       }
     }, 1000);
   };
   const startRivalCursedEnergyInterval = () => {
     if (rivalCEincreaseIntervalRef.current !== null) return;
     rivalCEincreaseIntervalRef.current = setInterval(() => {
-      if (sukuna.cursedEnergy < 200 && sukuna.rivalDomainExpansion === false) {
-        dispatch(setRivalCursedEnergy(sukuna.cursedEnergy + 10));
+      // && sukuna.rivalDomainExpansion === false
+      if (rivalCharacter.cursedEnergy < rivalCharacter.maxCursedEnergy) {
+        dispatch(rivalSlice.actions.changeCursedEnergy(+10));
       }
     }, 1000);
   };
@@ -64,14 +95,14 @@ const GameArea = () => {
     return () => {
       stopInterval(playerCEincreaseIntervalRef);
     }
-  }, [megumi.cursedEnergy, nueActivity]);
+  }, [playerCharacter.cursedEnergy, nueActivity]);
 
   useEffect(() => {
     startRivalCursedEnergyInterval()
     return () => {
       stopInterval(rivalCEincreaseIntervalRef);
     }
-  }, [sukuna.cursedEnergy, sukuna.rivalDomainExpansion]);
+  }, [rivalCharacter.cursedEnergy, sukuna.rivalDomainExpansion]);
 
   // Megumi movement control
   useEffect(() => {
@@ -90,34 +121,35 @@ const GameArea = () => {
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
 
-    dispatch(setCloseRange(Math.abs(xDistance) < 200));
+    dispatch(sukunaSlice.actions.setCloseRange(Math.abs(xDistance) < 200));
 
     clearInterval(intervalId);
-
     intervalId = setInterval(() => {
-      if (megumi.canMove) {
-        if (keysPressed.current.w && megumi.y > 0) {
-          dispatch(movePlayer({ x: 0, y: -playerSpeed }));
+      if (playerCharacter.canMove) {
+        if (keysPressed.current.w && playerCharacter.y > 0) {
+          dispatch(playerSlice.actions.moveCharacter({ x: 0, y: -megumiSpeed }));
         }
-        if (keysPressed.current.a && megumi.x > 0) {
-          dispatch(movePlayer({ x: -playerSpeed, y: 0 }));
-          dispatch(setPlayerDirection("left"));
+        if (keysPressed.current.a && playerCharacter.x > 0) {
+          dispatch(playerSlice.actions.moveCharacter({ x: -megumiSpeed, y: 0 }));
+          dispatch(playerSlice.actions.setDirection("left"));
         }
-        if (keysPressed.current.s && megumi.y < gameAreaHeight - playerHeight) {
-          dispatch(movePlayer({ x: 0, y: playerSpeed }));
+        if (keysPressed.current.s && playerCharacter.y < gameAreaHeight - megumiHeight) {
+          dispatch(playerSlice.actions.moveCharacter({ x: 0, y: megumiSpeed }));
         }
-        if (keysPressed.current.d && megumi.x < gameAreaWidth - playerWidth) {
-          dispatch(movePlayer({ x: playerSpeed, y: 0 }));
-          dispatch(setPlayerDirection("right"));
+        if (keysPressed.current.d && playerCharacter.x < gameAreaWidth - megumiWidth) {
+          dispatch(playerSlice.actions.moveCharacter({ x: megumiSpeed, y: 0 }));
+          dispatch(playerSlice.actions.setDirection("right"));
         }
         if (keysPressed.current.t) {
-          if (sukuna.canMove) dispatch(setRivalCanMove(false));
-          else dispatch(setRivalCanMove(true));
+          if (rivalCharacter.canMove) dispatch(rivalSlice.actions.setCanMove(false));
+          else dispatch(rivalSlice.actions.setCanMove(true));
         }
         if (keysPressed.current.space)
-          dispatch(movePlayer({ x: megumi.direction === "right" ? 200 : -200, y: 0 }));
+          dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.direction === "right" ? 200 : -200, y: 0 }));
       }
     }, 75);
+
+
     if (!nue.isAttacking) dispatch(setNueDirection(megumi.direction));
 
     return () => {
@@ -129,26 +161,27 @@ const GameArea = () => {
 
   // Sukuna movement
   useEffect(() => {
+    if (gameSettings.selectedCharacter === "sukuna") return;
     const interval = setInterval(() => {
-      if (sukuna.canMove) {
-        if (sukuna.dashGauge > 70) {
-          dispatch(moveRivalTo({ x: megumi.x, y: megumi.y }));
-          dispatch(setDashGauge(0))
+      if (rivalCharacter.canMove) {
+        if (rivalCharacter.dashGauge > 70) {
+          dispatch(rivalSlice.actions.moveCharacterTo({ x: playerCharacter.x, y: playerCharacter.y }));
+          dispatch(rivalSlice.actions.setDashGauge(0))
         }
         else {
-          dispatch(setDashGauge(sukuna.dashGauge + 1))
+          dispatch(sukunaSlice.actions.setDashGauge(rivalCharacter.dashGauge + 1))
           let stepX = 0;
           let stepY = 0;
-          if (sukuna.rivalDirection === "R") [stepX, stepY] = [10, 0];
-          else if (sukuna.rivalDirection === "L") [stepX, stepY] = [-10, 0];
-          else if (sukuna.rivalDirection === "U") [stepX, stepY] = [0, -10];
-          else if (sukuna.rivalDirection === "D") [stepX, stepY] = [0, 10];
-          else if (sukuna.rivalDirection === "UL") [stepX, stepY] = [-10, -10];
-          else if (sukuna.rivalDirection === "UR") [stepX, stepY] = [10, -10];
-          else if (sukuna.rivalDirection === "DL") [stepX, stepY] = [-10, 10];
-          else if (sukuna.rivalDirection === "DR") [stepX, stepY] = [10, 10];
-          else if (sukuna.rivalDirection === "stop") [stepX, stepY] = [0, 0];
-          dispatch(moveRival({ x: stepX, y: stepY }));
+          if (rivalCharacter.rivalDirection === "R") [stepX, stepY] = [10, 0];
+          else if (rivalCharacter.rivalDirection === "L") [stepX, stepY] = [-10, 0];
+          else if (rivalCharacter.rivalDirection === "U") [stepX, stepY] = [0, -10];
+          else if (rivalCharacter.rivalDirection === "D") [stepX, stepY] = [0, 10];
+          else if (rivalCharacter.rivalDirection === "UL") [stepX, stepY] = [-10, -10];
+          else if (rivalCharacter.rivalDirection === "UR") [stepX, stepY] = [10, -10];
+          else if (rivalCharacter.rivalDirection === "DL") [stepX, stepY] = [-10, 10];
+          else if (rivalCharacter.rivalDirection === "DR") [stepX, stepY] = [10, 10];
+          else if (rivalCharacter.rivalDirection === "stop") [stepX, stepY] = [0, 0];
+          dispatch(rivalSlice.actions.moveCharacter({ x: stepX, y: stepY }));
         }
       }
     }, 100); // Update interval
@@ -157,14 +190,14 @@ const GameArea = () => {
       clearInterval(interval);
     };
 
-  }, [sukuna.rivalDirection, sukuna.canMove, sukuna.dashGauge]);
+  }, [rivalCharacter.rivalDirection, rivalCharacter.canMove, rivalCharacter.dashGauge]);
 
   // Sukuna Movement Control
   useEffect(() => {
     const interval = setInterval(() => {
       let direction = "";
-      const deltaX = megumi.x - sukuna.x; // >0 is right, <0 is left
-      const deltaY = megumi.y - sukuna.y; // >0 is up, <0 is down
+      const deltaX = playerCharacter.x - rivalCharacter.x; // >0 is right, <0 is left
+      const deltaY = playerCharacter.y - rivalCharacter.y; // >0 is up, <0 is down
       if (Math.abs(deltaX) <= 200 && Math.abs(deltaY) <= 80) { // Decide which direction sukuna should head to
         direction = "stop";
       } else {
@@ -190,14 +223,14 @@ const GameArea = () => {
           else direction = "U"
         }
       }
-      if (sukuna.rivalDirection !== direction) {
-        dispatch(setRivalDirection(direction));
+      if (rivalCharacter.rivalDirection !== direction) {
+        dispatch(rivalSlice.actions.setDirection(direction));
       }
     }, 100); // Update interval
     return () => {
       clearInterval(interval);
     };
-  }, [dispatch, megumi.x, megumi.y, sukuna.closeRange, sukuna.rivalDirection]);
+  }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
   const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state

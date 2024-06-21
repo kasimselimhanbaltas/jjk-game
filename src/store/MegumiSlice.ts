@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Megumi } from "../App";
-import { useDispatch } from "react-redux";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
@@ -9,16 +8,19 @@ const initialState: Megumi = {
   y: 200,
   health: 2000,
   cursedEnergy: 200,
+  maxCursedEnergy: 200,
   direction: "right",
   isAttacking: false,
   canMove: true,
+  dashGauge: 0,
+  rivalDirection: "stop",
 };
 
 const megumiSlice = createSlice({
   name: "megumi",
   initialState: initialState,
   reducers: {
-    movePlayer(state, action) {
+    moveCharacter(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
       if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 70) {
@@ -35,27 +37,43 @@ const megumiSlice = createSlice({
         // console.log("limit reached in y direction");
       }
     },
+    moveCharacterTo(state, action) {
+      state.x = action.payload.x;
+      state.y = action.payload.y;
+    },
     healthReducer(state, action) {
       state.health += action.payload;
     },
     changeCursedEnergy(state, action) {
       state.cursedEnergy += action.payload;
     },
-    setPlayerDirection(state, action) {
+    setCursedEnergy(state, action) {
+      state.cursedEnergy = action.payload;
+    },
+    setDirection(state, action) {
       state.direction = action.payload;
     },
-    setPlayerCanMove(state, action) {
+    setCanMove(state, action) {
       state.canMove = action.payload;
+    },
+    setDashGauge(state, action) {
+      state.dashGauge = action.payload;
+    },
+    setRivalDirection(state, action) {
+      state.rivalDirection = action.payload;
     },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
 export const {
-  movePlayer,
+  moveCharacter,
   healthReducer,
   changeCursedEnergy,
-  setPlayerDirection,
-  setPlayerCanMove,
+  setDirection,
+  setCanMove,
+  setCursedEnergy,
+  moveCharacterTo,
+  setDashGauge,
 } = megumiSlice.actions;
 export default megumiSlice;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { setRivalCanMove, updateRivalHealth } from "../store/SukunaSlice";
+import { setCanMove, updateRivalHealth } from "../store/SukunaSlice";
 import { changeCursedEnergy } from "../store/MegumiSlice";
 
 
@@ -21,6 +21,8 @@ const Nue = () => {
     const megumi = useSelector((state: any) => state.MegumiState);
     const sukuna = useSelector((state: any) => state.SukunaState);
     const nue = useSelector((state: any) => state.NueState);
+    const gameSettings = useSelector((state: any) => state.GameSettingsState);
+
     const dispatch = useDispatch();
     const keysPressed = useRef({ j: false, k: false });
     const [imageSrc, setImageSrc] = useState(require('../Assets/nue-side.png'));
@@ -80,7 +82,7 @@ const Nue = () => {
         dispatch(moveNue({ x: sukuna.x, y: sukuna.y - 100 })); //move to sukuna
 
         setTimeout(() => {
-            dispatch(setRivalCanMove(false)); // stun sukuna
+            dispatch(setCanMove(false)); // stun sukuna
             setImageSrc(require('../Assets/nue.png')); // nue arrives to sukuna
 
             setTimeout(() => { // electric attack
@@ -95,7 +97,7 @@ const Nue = () => {
                     dispatch(updateRivalHealth(-nueDamage))
                     setTimeout(() => {
                         dispatch(nueAttacking(false));
-                        dispatch(setRivalCanMove(true)); // cancel stun sukuna
+                        dispatch(setCanMove(true)); // cancel stun sukuna
                         dispatch(setNueDirection(attackDirection === "right" ? "left" : "right"));
                         setTimeout(() => {
                             setImageStyle({ ...imageStyle, transform: "" });
@@ -122,6 +124,7 @@ const Nue = () => {
         window.addEventListener("keyup", handleKeyUp);
 
         const intervalId = setInterval(() => {
+            if (gameSettings.selectedCharacter !== "megumi") return;
 
             if (keysPressed.current.j && nue.isAttacking === false && !sukuna.domainAttack) {
                 if (nue.isActive === true && sukuna.health > 0) {

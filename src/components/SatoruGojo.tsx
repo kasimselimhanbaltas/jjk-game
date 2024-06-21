@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // later
 // import { healthReducer, movegojo } from "../store/gojoSlice";
-import setDismantleAttack, { moveRival } from "../store/SukunaSlice";
 import { setNueDirection } from "../store/NueSlice";
 import React from "react";
 

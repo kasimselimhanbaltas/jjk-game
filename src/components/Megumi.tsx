@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { healthReducer, movePlayer } from "../store/MegumiSlice";
-import setDismantleAttack, { moveRival } from "../store/SukunaSlice";
+import megumiSlice from "../store/MegumiSlice";
+import sukunaSlice from "../store/SukunaSlice";
 import { setNueDirection } from "../store/NueSlice";
 import React from "react";
 
@@ -79,8 +79,8 @@ const Megumi = () => {
                 setTimeout(() => { // random slashes delay
                     setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
                     setSlashRotation2({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                    dispatch(movePlayer({ x: stepDistance, y: 0 }));
-                    dispatch(healthReducer(-25));
+                    dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
+                    dispatch(megumiSlice.actions.healthReducer(-25));
                 }, i * 100);
             }
             setTimeout(() => {
@@ -105,8 +105,8 @@ const Megumi = () => {
         for (let i = 0; i < degrees.length * 3; i++) {
             setTimeout(() => {
                 setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                dispatch(healthReducer(-10));
-                dispatch(movePlayer({ x: stepDistance, y: 0 }));
+                dispatch(megumiSlice.actions.healthReducer(-10));
+                dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
             }, i * 100);
         }
         setTimeout(() => {

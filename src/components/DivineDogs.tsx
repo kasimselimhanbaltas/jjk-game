@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { setRivalCanMove, updateRivalHealth } from "../store/SukunaSlice";
+import { setCanMove, updateRivalHealth } from "../store/SukunaSlice";
 import { changeCursedEnergy } from "../store/MegumiSlice";
 import { divineDogsActivity, divineDogsAttacking, moveDivineDogs, setDivineDogsDirection } from "../store/DivineDogsSlice";
 import React from "react";
+import gameSettingsSlice from "../store/GameSettingsSlice";
 
 
 const gameAreaWidth = 1400;
@@ -24,6 +25,7 @@ const DivineDogs = () => {
     const sukuna = useSelector((state: any) => state.SukunaState);
     const nue = useSelector((state: any) => state.NueState);
     const divineDogs = useSelector((state: any) => state.DivineDogsState);
+    const gameSettings = useSelector((state: any) => state.GameSettingsState);
 
     const dispatch = useDispatch();
     const keysPressed = useRef({ l: false });
@@ -113,7 +115,7 @@ const DivineDogs = () => {
         // setImageStyle({ ...imageStyle, transform: `scaleX(${attackDirection === "right" ? -1 : 1})` });
 
         setTimeout(() => { // **5 seconds of sleep for divine dogs sound effect
-            dispatch(setRivalCanMove(false)) // FIRST ATTACK
+            dispatch(setCanMove(false)) // FIRST ATTACK
             moveDivineDogsToRival();
 
             setTimeout(() => { // 250 ms sleep for attack
@@ -146,7 +148,7 @@ const DivineDogs = () => {
                                 setTimeout(() => {
                                     dispatch(divineDogsActivity(false));
                                     setWolfStyle({ ...wolfStyle, transition: defaultNueTransform });
-                                    dispatch(setRivalCanMove(true))
+                                    dispatch(setCanMove(true))
                                     setBlackDivineDogSidePosition("stop")
                                     setWhiteDivineDogSidePosition("stop")
                                 }, 250);
@@ -173,7 +175,7 @@ const DivineDogs = () => {
         window.addEventListener("keyup", handleKeyUp);
 
         const intervalId = setInterval(() => {
-
+            if (gameSettings.selectedCharacter !== "megumi") return;
             if (keysPressed.current.l) {
                 if (divineDogs.isActive === false && megumi.cursedEnergy >= callDivineDogsCost && !sukuna.domainAttack) {
                     divineDogsAttack();

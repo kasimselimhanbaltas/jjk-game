@@ -16,9 +16,13 @@ export interface Megumi {
   y: number;
   health: number;
   cursedEnergy: number;
+  maxCursedEnergy: number;
   direction: "left" | "right";
+  rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
   isAttacking: boolean;
   canMove: boolean;
+  dashGauge: number,
+
 }
 export interface Gojo {
   x: number;
@@ -41,6 +45,7 @@ export interface Sukuna {
   y: number;
   health: number;
   cursedEnergy: number;
+  maxCursedEnergy: number,
   direction: "left" | "right" | "stop";
   cleaveAttack: boolean,
   dismantleAttack: boolean,
