@@ -126,6 +126,8 @@ const GameArea = () => {
     clearInterval(intervalId);
     intervalId = setInterval(() => {
       if (playerCharacter.canMove) {
+        dispatch(sukunaSlice.actions.setCloseRange(Math.abs(xDistance) < 200));
+
         if (keysPressed.current.w && playerCharacter.y > 0) {
           dispatch(playerSlice.actions.moveCharacter({ x: 0, y: -megumiSpeed }));
         }
@@ -157,7 +159,7 @@ const GameArea = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [dispatch, megumi.health, megumi.y, megumi.x, sukuna.x, megumi.canMove]);
+  }, [dispatch, playerCharacter.health, playerCharacter.y, playerCharacter.x, rivalCharacter.x, rivalCharacter.canMove]);
 
   // Sukuna movement
   useEffect(() => {
@@ -169,7 +171,7 @@ const GameArea = () => {
           dispatch(rivalSlice.actions.setDashGauge(0))
         }
         else {
-          dispatch(sukunaSlice.actions.setDashGauge(rivalCharacter.dashGauge + 1))
+          dispatch(rivalSlice.actions.setDashGauge(rivalCharacter.dashGauge + 1))
           let stepX = 0;
           let stepY = 0;
           if (rivalCharacter.rivalDirection === "R") [stepX, stepY] = [10, 0];
@@ -224,7 +226,7 @@ const GameArea = () => {
         }
       }
       if (rivalCharacter.rivalDirection !== direction) {
-        dispatch(rivalSlice.actions.setDirection(direction));
+        dispatch(rivalSlice.actions.setRivalDirection(direction));
       }
     }, 100); // Update interval
     return () => {
@@ -233,7 +235,7 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
@@ -266,7 +268,7 @@ const GameArea = () => {
           <Megumi />
           <Nue />
           <DivineDogs />
-          <Sukuna />
+          <Sukuna xDistance={xDistance} />
 
         </>
       )}

@@ -8,7 +8,7 @@ const initialState: Sukuna = {
   x: 800,
   y: 200,
   health: 100,
-  cursedEnergy: 100,
+  cursedEnergy: 0,
   maxCursedEnergy: 200,
   direction: "left",
   cleaveAttack: false,
@@ -83,6 +83,9 @@ const RivalSlice = createSlice({
     setRivalDomainExpansion(state, action) {
       state.rivalDomainExpansion = action.payload;
     },
+    setRivalDirection(state, action) {
+      state.rivalDirection = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -103,5 +106,6 @@ export const {
   moveCharacterTo,
   setCursedEnergy,
   changeCursedEnergy,
+  setRivalDirection,
 } = RivalSlice.actions;
 export default RivalSlice;

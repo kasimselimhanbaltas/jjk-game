@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { moveCharacter, moveCharacterTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setCanMove, setCursedEnergy, setDirection, setRivalDomainExpansion } from '../store/SukunaSlice';
 import megumiSlice from '../store/MegumiSlice';
 import { Howl, Howler } from 'howler';
 import ReactHowler from 'react-howler';
+import useCooldown from '../hooks/useCoolDown';
 
-const Sukuna = () => {
+const Sukuna = ({ xDistance }) => {
 
     const dispatch = useDispatch();
     const sukuna = useSelector((state: any) => state.SukunaState);
@@ -24,6 +25,13 @@ const Sukuna = () => {
     const keysPressed = useRef({ j: false, k: false, l: false });
 
 
+    // Cooldowns
+    const [cleaveReady, setCleaveReady] = useState({ ready: true, coolDown: 0 });
+    const [dismantleReady, setDismantleReady] = React.useState({ ready: true, coolDown: 0 });
+    const [domainReady, setDomainReady] = React.useState({ ready: true, coolDown: 0 });
+
+
+
     // Nue elecetric image animation
     useEffect(() => {
         if (!nue.isAttacking) return
@@ -38,12 +46,11 @@ const Sukuna = () => {
     // Sukuna auto attack starter
     useEffect(() => {
         if (sukuna.health > 0 && megumi.health > 0 && sukuna.canMove && gameSettings.selectedCharacter === "megumi") {
-            console.log("first")
             if (sukuna.cursedEnergy >= 200) {
                 rivalDomainExpansion()
             }
             else {
-                if (sukuna.cursedEnergy >= 10) {
+                if (sukuna.cursedEnergy >= 0) {
                     startAttackInterval();
                 }
             }
@@ -73,7 +80,7 @@ const Sukuna = () => {
             dispatch(setCanMove(true));
         }, 12000);
     }
-
+    const { remainingTime, startCooldown } = useCooldown(5)
 
     const localRapidAttack = () => {
         console.log("local")
@@ -84,6 +91,8 @@ const Sukuna = () => {
         }, 1000);
     }
     const localDismantleAttack = (stepDistance) => {
+        if (!sukuna.closeRange) return;
+        dispatch(megumiSlice.actions.healthReducer(attackDamage)); // Megumi'ın canını azalt
         setRapidAttackCounter(rapidAttackCounter - 3);
         dispatch(rivalDismantleAttack(true));
         dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
@@ -93,10 +102,18 @@ const Sukuna = () => {
             dispatch(rivalDismantleAttack(false));
         }, 1000);
     }
+
     const localCleaveAttack = () => {
+        console.log(cleaveReady.ready, cleaveReady.coolDown)
         setRapidAttackCounter(rapidAttackCounter - 1);
+        setCleaveReady({ ready: false, coolDown: 5 });
+        console.log(cleaveReady.ready, cleaveReady.coolDown)
         dispatch(rivalCleaveAttack(true));
-        setTimeout(() => {
+        dispatch(megumiSlice.actions.healthReducer(attackDamage)); // Megumi'ın canını azalt
+        setTimeout(() => { // cooldown
+            setCleaveReady({ ready: true, coolDown: 5 });
+        }, cleaveReady.coolDown * 1000);
+        setTimeout(() => { // attack finish
             dispatch(rivalCleaveAttack(false));
         }, 1000)
     }
@@ -106,11 +123,11 @@ const Sukuna = () => {
         // if (gameSettings.selectedCharacter === "sukuna") return;
         const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
         const stepDistance = attackDirection === "left" ? -100 : 100;
-        const randomInterval = 2000; // 3-10 saniye arasında rastgele bir değer
+        const randomInterval = 1500; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
         attackInterval.current = setInterval(() => {
+            console.log("attack interval")
             // if (megumi.health > 0 && sukuna.health > 0) {
-            console.log("ai")
             if (megumi.health > 0 && sukuna.health > 0 && sukuna.canMove) {
                 if (rapidAttackCounter <= 0) {
                     localRapidAttack();
@@ -138,7 +155,7 @@ const Sukuna = () => {
 
 
 
-    // Sukuna control
+    // Sukuna keyboard control
     useEffect(() => {
         const handleKeyDown = (event) => {
             const key = event.key.toLowerCase();
@@ -157,15 +174,22 @@ const Sukuna = () => {
             if (gameSettings.selectedCharacter !== "sukuna") return;
 
             if (megumi.health > 0) {
-                if (keysPressed.current.j) {
+                if (keysPressed.current.j && sukuna.canMove && !sukuna.cleaveAttack && cleaveReady.ready) {
+                    console.log("j")
                     if (rapidAttackCounter <= 0)
                         localRapidAttack();
-                    else localCleaveAttack();
+                    else {
+                        if (cleaveReady.ready) {
+                            setCleaveReady({ ready: false, coolDown: 5 });
+                            localCleaveAttack();
+                        }
+                    }
                 }
                 if (keysPressed.current.k) {
                     const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
                     const stepDistance = attackDirection === "left" ? -100 : 100;
-                    localDismantleAttack(-100);
+                    if (sukuna.closeRange)
+                        localDismantleAttack(-100);
                 }
                 if (keysPressed.current.l) {
                     if (sukuna.cursedEnergy >= 200) {
