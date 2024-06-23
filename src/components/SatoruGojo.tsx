@@ -125,14 +125,14 @@ const SatoruGojo = () => {
                 className="gojo"
                 style={{
                     top: gojo.y, left: gojo.x, width: characterWidth, height: characterHeight,
-                    display: gojo.health > 0 ? "block" : "none",
+                    display: gojo.health.currentHealth > 0 ? "block" : "none",
                 }}
             >
                 <img src={require('../Assets/megumi.png')} alt="" style={{
                     transform: gojo.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
                 }} />
                 <div className="gojo-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
-                    <div style={{ position: "absolute", width: gojo.health * 150 / 10000, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
+                    <div style={{ position: "absolute", width: gojo.health.currentHealth * 150 / 10000, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
                     </div>
                     <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{gojo.health}</p>
                 </div>

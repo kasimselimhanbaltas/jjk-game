@@ -127,7 +127,7 @@ const Nue = () => {
             if (gameSettings.selectedCharacter !== "megumi") return;
 
             if (keysPressed.current.j && nue.isAttacking === false && !sukuna.domainAttack) {
-                if (nue.isActive === true && sukuna.health > 0) {
+                if (nue.isActive === true && sukuna.health.currentHealth > 0) {
                     nueAttack();
                 }
             }

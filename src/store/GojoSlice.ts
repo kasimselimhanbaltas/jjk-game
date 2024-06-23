@@ -7,7 +7,10 @@ const gameAreaHeight = 600;
 const initialState: Gojo = {
   x: 800,
   y: 200,
-  health: 100,
+  health: {
+    currentHealth: 100,
+    maxHealth: 100,
+  },
   cursedEnergy: 100,
   direction: "left",
   cleaveAttack: false,
@@ -46,7 +49,7 @@ const gojoSlice = createSlice({
       state.y = action.payload.y;
     },
     updategojoHealth(state, action) {
-      state.health += action.payload;
+      state.health.currentHealth += action.payload;
     },
     gojoCleaveAttack(state, action) {
       state.cleaveAttack = action.payload;

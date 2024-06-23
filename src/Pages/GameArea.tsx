@@ -10,6 +10,8 @@ import DivineDogs from "../components/DivineDogs";
 import MainMenu from "../components/MainMenu";
 import React from "react";
 
+const characterHeight = 50;
+
 const megumiWidth = 50;
 const megumiHeight = 180;
 const gameAreaWidth = 1400;
@@ -66,7 +68,7 @@ const GameArea = () => {
   const startPlayerCursedEnergyInterval = () => {
     if (playerCEincreaseIntervalRef.current !== null) return;
     playerCEincreaseIntervalRef.current = setInterval(() => {
-      if (playerCharacter.cursedEnergy < playerCharacter.maxCursedEnergy) {
+      if (playerCharacter.cursedEnergy.currentCursedEnergy < playerCharacter.cursedEnergy.maxCursedEnergy) {
         dispatch(playerSlice.actions.changeCursedEnergy(+10));
       }
     }, 1000);
@@ -75,7 +77,7 @@ const GameArea = () => {
     if (rivalCEincreaseIntervalRef.current !== null) return;
     rivalCEincreaseIntervalRef.current = setInterval(() => {
       // && sukuna.rivalDomainExpansion === false
-      if (rivalCharacter.cursedEnergy < rivalCharacter.maxCursedEnergy) {
+      if (rivalCharacter.cursedEnergy.currentCursedEnergy < rivalCharacter.cursedEnergy.maxCursedEnergy) {
         dispatch(rivalSlice.actions.changeCursedEnergy(+10));
       }
     }, 1000);
@@ -269,7 +271,57 @@ const GameArea = () => {
           <Nue />
           <DivineDogs />
           <Sukuna xDistance={xDistance} />
+          {!sukuna.cleaveCD.isReady ? "ready" : "wait"}
+          {/* PLAYER INTERFACE COMPONENT */}
+          <div className="player-interface">
+            <div className="health-and-ce-bars">
 
+              <div className="megumi-health" style={{ position: "absolute", width: "250px", height: "25px", top: "30%", }}>
+                <div style={{
+                  position: "absolute", width: playerCharacter.health.currentHealth * 250 / playerCharacter.health.maxHealth, maxWidth: "250px", height: "25px",
+                  top: "-120%", backgroundColor: "red", borderRadius: "10px"
+                }}>
+                </div>
+                <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -280%)", fontSize: "15px" }}>{playerCharacter.health.currentHealth}</p>
+              </div>
+              <div className="megumi-cursed-energy" style={{ position: "absolute", width: "250px", height: "25px", top: "30%" }}>
+                <div style={{
+                  position: "absolute", width: playerCharacter.cursedEnergy.currentCursedEnergy * 250 / playerCharacter.cursedEnergy.maxCursedEnergy,
+                  maxWidth: "250px", height: "25px", top: "-2%", backgroundColor: "purple", borderRadius: "10px"
+                }}>
+                </div>
+                <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{playerCharacter.cursedEnergy.currentCursedEnergy}</p>
+              </div>
+            </div>
+            <div className="skills-container">
+
+              <div className="skill">
+                <img src={require("../Assets/slash.png")} alt="" />
+                <p>{playerCharacter.cleaveCD.isReady ? "true" : "false"} {playerCharacter.cleaveCD.cooldown} {playerCharacter.cleaveCD.remainingTime}</p>
+              </div>
+
+              <div className="skill" >
+                <div style={{ display: "block", position: "relative", top: "10px", left: "0px", height: "50px" }}>
+                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "5px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "15px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "25px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "35px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+
+                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "15px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "25px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "35px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "45px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                </div>
+                <p>skill</p>
+              </div>
+
+              <div className="skill">
+                <img src={require("../Assets/malevolent_shrine.png")} alt="" style={{}} />
+                <p>skill</p>
+              </div>
+            </div>
+
+          </div>
         </>
       )}
 

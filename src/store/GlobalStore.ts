@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import MegumiSlice from "./MegumiSlice";
 import SukunaSlice from "./SukunaSlice";
 import NueSlice from "./NueSlice";
@@ -14,5 +14,14 @@ const store = configureStore({
     GameSettingsState: gameSettingsSlice.reducer,
   },
 });
+
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
 
 export default store;

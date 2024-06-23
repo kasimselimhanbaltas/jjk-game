@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Sukuna } from "../App";
+import { AppThunk } from "./GlobalStore";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
@@ -7,9 +8,14 @@ const gameAreaHeight = 600;
 const initialState: Sukuna = {
   x: 800,
   y: 200,
-  health: 100,
-  cursedEnergy: 0,
-  maxCursedEnergy: 200,
+  health: {
+    currentHealth: 100,
+    maxHealth: 100,
+  },
+  cursedEnergy: {
+    currentCursedEnergy: 0,
+    maxCursedEnergy: 200,
+  },
   direction: "left",
   cleaveAttack: false,
   dismantleAttack: false,
@@ -19,6 +25,21 @@ const initialState: Sukuna = {
   canMove: true,
   rapidAttack: false,
   dashGauge: 0,
+  cleaveCD: {
+    isReady: true,
+    cooldown: 3,
+    remainingTime: 0,
+  },
+  dismantleCD: {
+    isReady: true,
+    cooldown: 10,
+    remainingTime: 0,
+  },
+  domainCD: {
+    isReady: false,
+    cooldown: 15,
+    remainingTime: 15,
+  },
 };
 
 const RivalSlice = createSlice({
@@ -47,7 +68,7 @@ const RivalSlice = createSlice({
       state.y = action.payload.y;
     },
     updateRivalHealth(state, action) {
-      state.health += action.payload;
+      state.health.currentHealth += action.payload;
     },
     rivalCleaveAttack(state, action) {
       state.cleaveAttack = action.payload;
@@ -75,16 +96,23 @@ const RivalSlice = createSlice({
       state.dashGauge = action.payload;
     },
     setCursedEnergy(state, action) {
-      state.cursedEnergy = action.payload;
+      state.cursedEnergy.currentCursedEnergy = action.payload;
     },
     changeCursedEnergy(state, action) {
-      state.cursedEnergy += action.payload;
+      state.cursedEnergy.currentCursedEnergy += action.payload;
     },
     setRivalDomainExpansion(state, action) {
       state.rivalDomainExpansion = action.payload;
     },
     setRivalDirection(state, action) {
       state.rivalDirection = action.payload;
+    },
+    setCleaveCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.cleaveCD.isReady = action.payload.isReady;
+      state.cleaveCD.remainingTime = action.payload.remainingTime;
     },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
@@ -107,5 +135,40 @@ export const {
   setCursedEnergy,
   changeCursedEnergy,
   setRivalDirection,
+  setCleaveCD,
 } = RivalSlice.actions;
 export default RivalSlice;
+
+export const toggleCleaveCD = (): AppThunk => (dispatch, getState) => {
+  console.log("cleave attack true, cd: ");
+  const state = getState();
+  if (!state.SukunaState.cleaveCD.isReady) return;
+  const cooldown = state.SukunaState.cleaveCD.cooldown;
+  dispatch(
+    setCleaveCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.SukunaState.cleaveCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setCleaveCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setCleaveCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};

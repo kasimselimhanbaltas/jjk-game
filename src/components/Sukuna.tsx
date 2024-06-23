@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { moveCharacter, moveCharacterTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setCanMove, setCursedEnergy, setDirection, setRivalDomainExpansion } from '../store/SukunaSlice';
+import { moveCharacter, moveCharacterTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setCanMove, setCursedEnergy, setDirection, setRivalDomainExpansion, toggleCleaveCD } from '../store/SukunaSlice';
 import megumiSlice from '../store/MegumiSlice';
 import { Howl, Howler } from 'howler';
 import ReactHowler from 'react-howler';
 import useCooldown from '../hooks/useCoolDown';
+import { AppDispatch, RootState } from '../store/GlobalStore';
 
 const Sukuna = ({ xDistance }) => {
 
@@ -45,7 +46,7 @@ const Sukuna = ({ xDistance }) => {
 
     // Sukuna auto attack starter
     useEffect(() => {
-        if (sukuna.health > 0 && megumi.health > 0 && sukuna.canMove && gameSettings.selectedCharacter === "megumi") {
+        if (sukuna.health.currentHealth > 0 && megumi.health.currentHealth > 0 && sukuna.canMove && gameSettings.selectedCharacter === "megumi") {
             if (sukuna.cursedEnergy >= 200) {
                 rivalDomainExpansion()
             }
@@ -61,7 +62,7 @@ const Sukuna = ({ xDistance }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [dispatch, attackDamage, sukuna.direction, sukuna.canMove, rapidAttackCounter, sukuna.health]);
+    }, [dispatch, attackDamage, sukuna.direction, sukuna.canMove, rapidAttackCounter, sukuna.health.currentHealth]);
 
     // Domain expansion Action
     const rivalDomainExpansion = () => {
@@ -127,8 +128,8 @@ const Sukuna = ({ xDistance }) => {
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
         attackInterval.current = setInterval(() => {
             console.log("attack interval")
-            // if (megumi.health > 0 && sukuna.health > 0) {
-            if (megumi.health > 0 && sukuna.health > 0 && sukuna.canMove) {
+            // if (megumi.health.currentHealth > 0 && sukuna.health.currentHealth > 0) {
+            if (megumi.health.currentHealth > 0 && sukuna.health.currentHealth > 0 && sukuna.canMove) {
                 if (rapidAttackCounter <= 0) {
                     localRapidAttack();
                 } else {
@@ -149,9 +150,9 @@ const Sukuna = ({ xDistance }) => {
     };
 
     useEffect(() => {
-        if (sukuna.health <= 0 && gameSettings.selectedCharacter !== "sukuna")
+        if (sukuna.health.currentHealth <= 0 && gameSettings.selectedCharacter !== "sukuna")
             stopAttackInterval();
-    }, [sukuna.health]);
+    }, [sukuna.health.currentHealth]);
 
 
 
@@ -172,15 +173,15 @@ const Sukuna = ({ xDistance }) => {
 
         const intervalId = setInterval(() => {
             if (gameSettings.selectedCharacter !== "sukuna") return;
-
-            if (megumi.health > 0) {
-                if (keysPressed.current.j && sukuna.canMove && !sukuna.cleaveAttack && cleaveReady.ready) {
-                    console.log("j")
+            if (megumi.health.currentHealth > 0) {
+                // !sukuna.cleaveAttack && cleaveReady.ready &&
+                if (keysPressed.current.j && sukuna.canMove) {
+                    console.log("j", sukuna.cleaveCD.isReady)
+                    handleCleaveAttack()
                     if (rapidAttackCounter <= 0)
                         localRapidAttack();
                     else {
-                        if (cleaveReady.ready) {
-                            setCleaveReady({ ready: false, coolDown: 5 });
+                        if (!sukuna.cleaveCD.isReady) {
                             localCleaveAttack();
                         }
                     }
@@ -205,31 +206,35 @@ const Sukuna = ({ xDistance }) => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy]);
+    }, [dispatch, nue, sukuna.cleaveCD]);
 
+    const dispatch2 = useDispatch<AppDispatch>();
+    const handleCleaveAttack = () => {
+        dispatch2(toggleCleaveCD());
+    };
     return (
         <div>
             <audio src={require("../Assets/audios/sukuna.mp3")} ref={sukunaSoundEffectRef}></audio>
             <div className="sukuna"
                 style={{
                     top: sukuna.y, left: sukuna.x, width: characterWidth, height: characterHeight,
-                    display: sukuna.health > 0 ? "block" : "none",
+                    display: sukuna.health.currentHealth > 0 ? "block" : "none",
                 }}>
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
                 <img src={require('../Assets/sukuna.png')} alt="" style={{ height: characterHeight }} />
                 <img src={require('../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require('../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <p style={{ marginTop: -80, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
-                <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                    <div style={{ position: "absolute", width: sukuna.health * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
+                {/* <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
+                    <div style={{ position: "absolute", width: sukuna.health.currentHealth * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
                     </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{sukuna.health}</p>
+                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{sukuna.health.currentHealth}</p>
                 </div>
                 <div className="megumi-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
                     <div style={{ position: "absolute", width: sukuna.cursedEnergy * 150 / 200, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
                     </div>
                     <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{sukuna.cursedEnergy}</p>
-                </div>
+                </div> */}
                 {/* <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
                 Sukuna Direction: {sukuna.direction} <br /> Range: {sukuna.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
             </p> */}

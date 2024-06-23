@@ -6,7 +6,10 @@ const gameAreaHeight = 600;
 const initialState: Megumi = {
   x: 200,
   y: 200,
-  health: 2000,
+  health: {
+    currentHealth: 2000,
+    maxHealth: 2000,
+  },
   cursedEnergy: 200,
   maxCursedEnergy: 200,
   direction: "right",
@@ -42,7 +45,7 @@ const megumiSlice = createSlice({
       state.y = action.payload.y;
     },
     healthReducer(state, action) {
-      state.health += action.payload;
+      state.health.currentHealth += action.payload;
     },
     changeCursedEnergy(state, action) {
       state.cursedEnergy += action.payload;

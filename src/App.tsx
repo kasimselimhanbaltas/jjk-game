@@ -8,13 +8,18 @@ import Controls from './components/Controls';
 export interface GameSettings {
   selectedCharacter: string
 }
-export interface Character {
-  value: number
+export interface Skill {
+  isReady: boolean,
+  cooldown: number,
+  remainingTime: number
 }
 export interface Megumi {
   x: number;
   y: number;
-  health: number;
+  health: {
+    currentHealth: number,
+    maxHealth: number,
+  };
   cursedEnergy: number;
   maxCursedEnergy: number;
   direction: "left" | "right";
@@ -27,7 +32,10 @@ export interface Megumi {
 export interface Gojo {
   x: number;
   y: number;
-  health: number;
+  health: {
+    currentHealth: number,
+    maxHealth: number,
+  };
   cursedEnergy: number;
   direction: "left" | "right" | "stop";
   cleaveAttack: boolean,
@@ -43,9 +51,14 @@ export interface Gojo {
 export interface Sukuna {
   x: number;
   y: number;
-  health: number;
-  cursedEnergy: number;
-  maxCursedEnergy: number,
+  health: {
+    currentHealth: number,
+    maxHealth: number,
+  };
+  cursedEnergy: {
+    currentCursedEnergy: number,
+    maxCursedEnergy: number,
+  },
   direction: "left" | "right" | "stop";
   cleaveAttack: boolean,
   dismantleAttack: boolean,
@@ -55,6 +68,9 @@ export interface Sukuna {
   canMove: boolean;
   rapidAttack: boolean;
   dashGauge: number;
+  cleaveCD: Skill,
+  dismantleCD: Skill,
+  domainCD: Skill,
 }
 export interface Nue {
   isActive: boolean;

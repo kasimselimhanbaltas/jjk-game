@@ -57,14 +57,14 @@ const Megumi = () => {
 
 
     useEffect(() => {
-        if (sukuna.rivalDomainExpansion && sukuna.health > 0) {
+        if (sukuna.rivalDomainExpansion && sukuna.health.currentHealth > 0) {
             domainAttack()
         }
     }, [sukuna.rivalDomainExpansion])
 
     // Sukuna domain attack function
     const domainAttack = () => {
-        if (sukuna.health <= 0) return;
+        if (sukuna.health.currentHealth <= 0) return;
         setTimeout(() => {
             setDisplaySlash("block");
             setDisplaySlash2("block");
@@ -124,16 +124,16 @@ const Megumi = () => {
                 className="megumi"
                 style={{
                     top: megumi.y, left: megumi.x, width: characterWidth, height: characterHeight,
-                    display: megumi.health > 0 ? "block" : "none",
+                    display: megumi.health.currentHealth > 0 ? "block" : "none",
                 }}
             >
                 <img src={require('../Assets/megumi.png')} alt="" style={{
                     transform: megumi.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
                 }} />
                 <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
-                    <div style={{ position: "absolute", width: megumi.health * 150 / 2000, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
+                    <div style={{ position: "absolute", width: megumi.health.currentHealth * 150 / megumi.health.maxHealth, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
                     </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{megumi.health}</p>
+                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{megumi.health.currentHealth}</p>
                 </div>
                 <div className="megumi-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
                     <div style={{ position: "absolute", width: megumi.cursedEnergy * 150 / 200, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
@@ -147,7 +147,7 @@ const Megumi = () => {
                 {/* <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: sukuna.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} /> */}
                 {/* <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: sukuna.isAttacking && Math.abs(sukuna.x - megumi.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.1)" }} /> */}
                 {/* DISMANTLE */}
-                <div style={{ display: sukuna.dismantleAttack ? "block" : "none" }}>
+                <div className="dismantle" style={{ display: sukuna.dismantleAttack ? "block" : "none" }}>
                     <img src={require('../Assets/slash.png')} alt="" style={{ top: "-35px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
                     <img src={require('../Assets/slash.png')} alt="" style={{ top: "-25px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
                     <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
