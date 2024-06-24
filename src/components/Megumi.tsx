@@ -8,6 +8,8 @@ import React from "react";
 const Megumi = () => {
     const megumi = useSelector((state: any) => state.MegumiState);
     const sukuna = useSelector((state: any) => state.SukunaState);
+    const gameSettings = useSelector((state: any) => state.GameSettingsState);
+
     const [displaySlash, setDisplaySlash] = React.useState("none");
     const [displaySlash2, setDisplaySlash2] = React.useState("none");
     const [displayDismantle, setDisplayDismantle] = React.useState("block");
@@ -130,17 +132,21 @@ const Megumi = () => {
                 <img src={require('../Assets/megumi.png')} alt="" style={{
                     transform: megumi.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
                 }} />
-                <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
-                    <div style={{ position: "absolute", width: megumi.health.currentHealth * 150 / megumi.health.maxHealth, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
-                    </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{megumi.health.currentHealth}</p>
-                </div>
-                <div className="megumi-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
-                    <div style={{ position: "absolute", width: megumi.cursedEnergy.currentCursedEnergy * 150 / megumi.cursedEnergy.maxCursedEnergy, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
-                    </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{megumi.cursedEnergy.currentCursedEnergy}</p>
-                </div>
-                <p style={{ marginTop: -60, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Fushiguro Megumi</p>
+                {gameSettings.selectedCharacter !== "megumi" && (
+                    <>
+                        <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
+                            <div style={{ position: "absolute", width: megumi.health.currentHealth * 150 / megumi.health.maxHealth, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
+                            </div>
+                            <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{megumi.health.currentHealth}</p>
+                        </div>
+                        <div className="megumi-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
+                            <div style={{ position: "absolute", width: megumi.cursedEnergy.currentCursedEnergy * 150 / megumi.cursedEnergy.maxCursedEnergy, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
+                            </div>
+                            <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{megumi.cursedEnergy.currentCursedEnergy}</p>
+                        </div>
+                    </>
+                )}
+                <p style={{ marginTop: gameSettings.selectCharacter === "megumi" ? -60 : -20, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Fushiguro Megumi</p>
 
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />
