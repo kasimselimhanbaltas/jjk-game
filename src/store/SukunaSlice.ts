@@ -13,7 +13,7 @@ const initialState: Sukuna = {
     maxHealth: 100,
   },
   cursedEnergy: {
-    currentCursedEnergy: 0,
+    currentCursedEnergy: 200,
     maxCursedEnergy: 200,
   },
   direction: "left",
@@ -32,13 +32,17 @@ const initialState: Sukuna = {
   },
   dismantleCD: {
     isReady: true,
-    cooldown: 10,
+    cooldown: 6,
     remainingTime: 0,
   },
   domainCD: {
-    isReady: false,
-    cooldown: 15,
-    remainingTime: 15,
+    isReady: true,
+    cooldown: 30,
+    remainingTime: 0,
+  },
+  rapidAttackCounter: {
+    maxCount: 10,
+    currentCount: 0,
   },
 };
 
@@ -114,6 +118,23 @@ const RivalSlice = createSlice({
       state.cleaveCD.isReady = action.payload.isReady;
       state.cleaveCD.remainingTime = action.payload.remainingTime;
     },
+    setDismantleCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.dismantleCD.isReady = action.payload.isReady;
+      state.dismantleCD.remainingTime = action.payload.remainingTime;
+    },
+    setDomainCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.domainCD.isReady = action.payload.isReady;
+      state.domainCD.remainingTime = action.payload.remainingTime;
+    },
+    setRapidAttackCounter(state, action) {
+      state.rapidAttackCounter.currentCount = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -136,11 +157,13 @@ export const {
   changeCursedEnergy,
   setRivalDirection,
   setCleaveCD,
+  setDismantleCD,
+  setDomainCD,
+  setRapidAttackCounter,
 } = RivalSlice.actions;
 export default RivalSlice;
 
 export const toggleCleaveCD = (): AppThunk => (dispatch, getState) => {
-  console.log("cleave attack true, cd: ");
   const state = getState();
   if (!state.SukunaState.cleaveCD.isReady) return;
   const cooldown = state.SukunaState.cleaveCD.cooldown;
@@ -172,3 +195,70 @@ export const toggleCleaveCD = (): AppThunk => (dispatch, getState) => {
     }
   }, 1000); // her saniye güncelle
 };
+
+export const toggleDismantleCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.SukunaState.dismantleCD.isReady) return;
+  const cooldown = state.SukunaState.dismantleCD.cooldown;
+  dispatch(
+    setDismantleCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.SukunaState.dismantleCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setDismantleCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setDismantleCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
+
+export const toggleDomainCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.SukunaState.domainCD.isReady) return;
+  const cooldown = state.SukunaState.domainCD.cooldown;
+  dispatch(
+    setDomainCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.SukunaState.domainCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setDomainCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setDomainCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
+toggleDomainCD();

@@ -9,6 +9,8 @@ import { nueActivity, setNueDirection } from "../store/NueSlice";
 import DivineDogs from "../components/DivineDogs";
 import MainMenu from "../components/MainMenu";
 import React from "react";
+import CircularProgressBar from "../components/CircularProgressBar";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 const characterHeight = 50;
 
@@ -60,9 +62,10 @@ const GameArea = () => {
 
   // place characters
   useEffect(() => {
-    playerSlice.actions.moveCharacter({ x: 200, y: 200 });
-    rivalSlice.actions.moveCharacter({ x: 800, y: 200 });
-  })
+    playerSlice.actions.moveCharacterTo({ x: 200, y: 200 });
+    rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 });
+
+  }, []);
 
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
@@ -161,7 +164,7 @@ const GameArea = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [dispatch, playerCharacter.health, playerCharacter.y, playerCharacter.x, rivalCharacter.x, rivalCharacter.canMove]);
+  }, [dispatch, playerCharacter.health, playerCharacter.y, playerCharacter.x, rivalCharacter.x, rivalCharacter.canMove, xDistance]);
 
   // Sukuna movement
   useEffect(() => {
@@ -271,57 +274,97 @@ const GameArea = () => {
           <Nue />
           <DivineDogs />
           <Sukuna xDistance={xDistance} />
-          {!sukuna.cleaveCD.isReady ? "ready" : "wait"}
           {/* PLAYER INTERFACE COMPONENT */}
-          <div className="player-interface">
-            <div className="health-and-ce-bars">
+          {gameSettings.selectedCharacter === "sukuna" && (
 
-              <div className="megumi-health" style={{ position: "absolute", width: "250px", height: "25px", top: "30%", }}>
-                <div style={{
-                  position: "absolute", width: playerCharacter.health.currentHealth * 250 / playerCharacter.health.maxHealth, maxWidth: "250px", height: "25px",
-                  top: "-120%", backgroundColor: "red", borderRadius: "10px"
-                }}>
-                </div>
-                <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -280%)", fontSize: "15px" }}>{playerCharacter.health.currentHealth}</p>
-              </div>
-              <div className="megumi-cursed-energy" style={{ position: "absolute", width: "250px", height: "25px", top: "30%" }}>
-                <div style={{
-                  position: "absolute", width: playerCharacter.cursedEnergy.currentCursedEnergy * 250 / playerCharacter.cursedEnergy.maxCursedEnergy,
-                  maxWidth: "250px", height: "25px", top: "-2%", backgroundColor: "purple", borderRadius: "10px"
-                }}>
-                </div>
-                <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{playerCharacter.cursedEnergy.currentCursedEnergy}</p>
-              </div>
-            </div>
-            <div className="skills-container">
+            <div className="player-interface">
+              <div className="health-and-ce-bars">
 
+                <div className="megumi-health" style={{ position: "absolute", width: "250px", height: "25px", top: "30%", }}>
+                  <div style={{
+                    position: "absolute", width: playerCharacter.health.currentHealth * 250 / playerCharacter.health.maxHealth, maxWidth: "250px", height: "25px",
+                    top: "-120%", backgroundColor: "red", borderRadius: "10px"
+                  }}>
+                  </div>
+                  <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -280%)", fontSize: "15px" }}>{playerCharacter.health.currentHealth}</p>
+                </div>
+                <div className="megumi-cursed-energy" style={{ position: "absolute", width: "250px", height: "25px", top: "30%" }}>
+                  <div style={{
+                    position: "absolute", width: playerCharacter.cursedEnergy.currentCursedEnergy * 250 / playerCharacter.cursedEnergy.maxCursedEnergy,
+                    maxWidth: "250px", height: "25px", top: "-2%", backgroundColor: "purple", borderRadius: "10px"
+                  }}>
+                  </div>
+                  <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{playerCharacter.cursedEnergy.currentCursedEnergy}</p>
+                </div>
+              </div>
+              <div className="skills-container">
+
+                {/* Cleave Attack */}
+                <div className="skill">
+                  <CircularProgressBar skillCD={playerCharacter.cleaveCD} />
+                  <img src={require("../Assets/slash.png")} alt="" />
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Dismantle:</p>
+                  <p style={{ marginTop: "-10px" }}>
+                    {playerCharacter.cleaveCD.isReady ? "Ready - J" :
+                      (playerCharacter.cleaveCD.remainingTime + "sec")}</p>
+                </div>
+
+                {/* Dismantle Attack */}
+                <div className="skill" >
+                  <CircularProgressBar skillCD={playerCharacter.dismantleCD} />
+                  <div style={{ display: "block", position: "relative", top: "-40px", left: "0px", height: "50px" }}>
+                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "5px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "15px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "25px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "35px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+
+                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "15px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "25px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "35px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "45px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
+                  </div>
+                  <p style={{ marginTop: "-40px", lineBreak: "loose" }}>Dismantle:</p>
+                  <p style={{ marginTop: "-10px" }}>
+                    {playerCharacter.dismantleCD.isReady ?
+                      (playerCharacter.closeRange ? "Ready - K" : "Get Closer") :
+                      (playerCharacter.dismantleCD.remainingTime + "sec")}</p>
+                  {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
+                </div>
+
+                {/* Domain Attack */}
+                <div className="skill">
+                  <CircularProgressBar skillCD={playerCharacter.domainCD} />
+                  <img src={require("../Assets/malevolent_shrine.png")} alt="" style={{}} />
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Domain:</p>
+                  <p style={{ marginTop: "-10px" }}>{playerCharacter.domainCD.isReady ?
+                    (playerCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
+                    (playerCharacter.domainCD.remainingTime + "sec")}</p>
+                </div>
+              </div>
+              {/* Rapid Slash */}
               <div className="skill">
                 <img src={require("../Assets/slash.png")} alt="" />
-                <p>{playerCharacter.cleaveCD.isReady ? "true" : "false"} {playerCharacter.cleaveCD.cooldown} {playerCharacter.cleaveCD.remainingTime}</p>
+                <CircularProgressbar
+                  value={playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}
+                  text={`${playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}%`}
+                  className="circular-skill-progress-bar"
+                  styles={buildStyles({
+                    // Text size
+                    textSize: '16px',
+                    // Colors
+                    pathColor: (playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
+                    textColor: 'transparent',
+                    trailColor: '#d6d6d6',
+                    backgroundColor: '#3e98c7',
+                  })}
+                />
+                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
+                <p style={{ marginTop: "-10px" }}> {playerCharacter.rapidAttackCounter.currentCount >= playerCharacter.rapidAttackCounter.maxCount ? "Ready - J" : playerCharacter.rapidAttackCounter.currentCount + "/" + playerCharacter.rapidAttackCounter.maxCount} </p>
               </div>
 
-              <div className="skill" >
-                <div style={{ display: "block", position: "relative", top: "10px", left: "0px", height: "50px" }}>
-                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "5px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "15px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "25px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "35px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-
-                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "15px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "25px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "35px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                  <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "45px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                </div>
-                <p>skill</p>
-              </div>
-
-              <div className="skill">
-                <img src={require("../Assets/malevolent_shrine.png")} alt="" style={{}} />
-                <p>skill</p>
-              </div>
             </div>
+          )}
 
-          </div>
         </>
       )}
 

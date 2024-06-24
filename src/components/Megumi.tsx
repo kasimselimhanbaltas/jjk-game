@@ -29,7 +29,7 @@ const Megumi = () => {
 
     // Slash style control
     useEffect(() => {
-        if (sukuna.cleaveAttack && Math.abs(sukuna.x - megumi.x) >= 200) {
+        if (sukuna.cleaveAttack) {
             setDisplaySlash("block")
             slashSoundEffectRef.current.volume = 0.1;
             slashSoundEffectRef.current.play()
@@ -37,7 +37,7 @@ const Megumi = () => {
     }, [sukuna.cleaveAttack]);
 
     useEffect(() => {
-        if (sukuna.dismantleAttack && Math.abs(sukuna.x - megumi.x) <= 200) {
+        if (sukuna.dismantleAttack) {
             // setDisplayDismantle("block")
             slashSoundEffectRef.current.volume = 0.1;
             slashSoundEffectRef.current.play()

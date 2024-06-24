@@ -71,6 +71,10 @@ export interface Sukuna {
   cleaveCD: Skill,
   dismantleCD: Skill,
   domainCD: Skill,
+  rapidAttackCounter: {
+    maxCount: number,
+    currentCount: number,
+  }
 }
 export interface Nue {
   isActive: boolean;

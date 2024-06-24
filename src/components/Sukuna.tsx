@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { moveCharacter, moveCharacterTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack, setCanMove, setCursedEnergy, setDirection, setRivalDomainExpansion, toggleCleaveCD } from '../store/SukunaSlice';
-import megumiSlice from '../store/MegumiSlice';
+import sukunaSlice, {
+    moveCharacter, moveCharacterTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack,
+    setCanMove, setCursedEnergy, setDirection, setRivalDomainExpansion,
+    toggleCleaveCD, toggleDismantleCD, toggleDomainCD, setRapidAttackCounter
+} from '../store/SukunaSlice';
+import megumiSlice, { changeCursedEnergy } from '../store/MegumiSlice';
 import { Howl, Howler } from 'howler';
 import ReactHowler from 'react-howler';
 import useCooldown from '../hooks/useCoolDown';
@@ -18,9 +22,12 @@ const Sukuna = ({ xDistance }) => {
 
     const characterWidth = 50;
     const characterHeight = 150;
-    const attackDamage = sukuna.closeRange ? -100 : -10; // Saldırı hasarı
+    const cleaveCost = -10;
+    const dismantleCost = -50;
+    const cleaveAttackDamage = -10; // Saldırı hasarı
+    const dismantleAttackDamage = -100; // Saldırı hasarı
     const [electricityEffect, setElectricityEffect] = React.useState(false);
-    const [rapidAttackCounter, setRapidAttackCounter] = React.useState(5);
+    // const [rapidAttackCounter, setRapidAttackCounter] = React.useState(5);
     const attackInterval = React.useRef(null);
     const sukunaSoundEffectRef = React.useRef(null);
     const keysPressed = useRef({ j: false, k: false, l: false });
@@ -30,6 +37,7 @@ const Sukuna = ({ xDistance }) => {
     const [cleaveReady, setCleaveReady] = useState({ ready: true, coolDown: 0 });
     const [dismantleReady, setDismantleReady] = React.useState({ ready: true, coolDown: 0 });
     const [domainReady, setDomainReady] = React.useState({ ready: true, coolDown: 0 });
+    const [sukunaImage, setSukunaImage] = React.useState({ src: require('../Assets/sukuna.png'), scale: 1 });
 
 
 
@@ -43,6 +51,8 @@ const Sukuna = ({ xDistance }) => {
             }, 2000);
         }, 500);
     }, [nue.isAttacking]);
+
+
 
     // Sukuna auto attack starter
     useEffect(() => {
@@ -62,20 +72,25 @@ const Sukuna = ({ xDistance }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [dispatch, attackDamage, sukuna.direction, sukuna.canMove, rapidAttackCounter, sukuna.health.currentHealth]);
+    }, [dispatch, sukuna.closeRange, sukuna.direction, sukuna.canMove, sukuna.rapidAttackCounter, sukuna.health.currentHealth]);
 
     // Domain expansion Action
     const rivalDomainExpansion = () => {
         console.log("RIYOIKI TENKAI ")
-        dispatch(moveCharacterTo({ x: 635, y: 240 }));
+        dispatch(moveCharacterTo({ x: 650, y: 150 }));
         sukunaSoundEffectRef.current.play()
+        setSukunaImage({ src: require('../Assets/domainpose.png'), scale: 3 });
+        setTimeout(() => {
+            setSukunaImage({ src: require('../Assets/domainpose.png'), scale: 5 });
+        }, 100);
         dispatch(megumiSlice.actions.setCanMove(false))
         dispatch(setCanMove(false))
-        dispatch(setCursedEnergy(0));
+        dispatch(sukunaSlice.actions.changeCursedEnergy(-200));
         setTimeout(() => {
             dispatch(setRivalDomainExpansion(true));
         }, 6000);
         setTimeout(() => {
+            setSukunaImage({ src: require('../Assets/sukuna.png'), scale: 1 });
             dispatch(setRivalDomainExpansion(false));
             dispatch(megumiSlice.actions.setCanMove(true))
             dispatch(setCanMove(true));
@@ -84,8 +99,8 @@ const Sukuna = ({ xDistance }) => {
     const { remainingTime, startCooldown } = useCooldown(5)
 
     const localRapidAttack = () => {
-        console.log("local")
-        setRapidAttackCounter(5);
+        dispatch(sukunaSlice.actions.changeCursedEnergy(-20));
+        dispatch(setRapidAttackCounter(0));
         dispatch(setRapidAttack(true));
         setTimeout(() => {
             dispatch(setRapidAttack(false));
@@ -93,8 +108,9 @@ const Sukuna = ({ xDistance }) => {
     }
     const localDismantleAttack = (stepDistance) => {
         if (!sukuna.closeRange) return;
-        dispatch(megumiSlice.actions.healthReducer(attackDamage)); // Megumi'ın canını azalt
-        setRapidAttackCounter(rapidAttackCounter - 3);
+        dispatch(megumiSlice.actions.healthReducer(dismantleAttackDamage)); // Megumi'ın canını azalt
+        dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 3));
+        dispatch(sukunaSlice.actions.changeCursedEnergy(dismantleCost));
         dispatch(rivalDismantleAttack(true));
         dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
         // slashRef.current.play();
@@ -105,12 +121,12 @@ const Sukuna = ({ xDistance }) => {
     }
 
     const localCleaveAttack = () => {
-        console.log(cleaveReady.ready, cleaveReady.coolDown)
-        setRapidAttackCounter(rapidAttackCounter - 1);
+        dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 1));
+        dispatch(sukunaSlice.actions.changeCursedEnergy(cleaveCost));
+
         setCleaveReady({ ready: false, coolDown: 5 });
-        console.log(cleaveReady.ready, cleaveReady.coolDown)
         dispatch(rivalCleaveAttack(true));
-        dispatch(megumiSlice.actions.healthReducer(attackDamage)); // Megumi'ın canını azalt
+        dispatch(megumiSlice.actions.healthReducer(cleaveAttackDamage)); // Megumi'ın canını azalt
         setTimeout(() => { // cooldown
             setCleaveReady({ ready: true, coolDown: 5 });
         }, cleaveReady.coolDown * 1000);
@@ -130,7 +146,7 @@ const Sukuna = ({ xDistance }) => {
             console.log("attack interval")
             // if (megumi.health.currentHealth > 0 && sukuna.health.currentHealth > 0) {
             if (megumi.health.currentHealth > 0 && sukuna.health.currentHealth > 0 && sukuna.canMove) {
-                if (rapidAttackCounter <= 0) {
+                if (sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount) {
                     localRapidAttack();
                 } else {
                     if (sukuna.closeRange) { // dismantle
@@ -138,7 +154,6 @@ const Sukuna = ({ xDistance }) => {
                     } else { // cleave
                         localCleaveAttack();
                     }
-                    dispatch(megumiSlice.actions.healthReducer(attackDamage)); // Megumi'ın canını azalt
                 }
             } else {
                 stopAttackInterval(); // Megumi ölünce saldırıyı durdur
@@ -176,25 +191,23 @@ const Sukuna = ({ xDistance }) => {
             if (megumi.health.currentHealth > 0) {
                 // !sukuna.cleaveAttack && cleaveReady.ready &&
                 if (keysPressed.current.j && sukuna.canMove) {
-                    console.log("j", sukuna.cleaveCD.isReady)
-                    handleCleaveAttack()
-                    if (rapidAttackCounter <= 0)
+                    if (sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount)
                         localRapidAttack();
                     else {
-                        if (!sukuna.cleaveCD.isReady) {
-                            localCleaveAttack();
+                        if (sukuna.cleaveCD.isReady) {
+                            handleCleaveAttack()
                         }
                     }
                 }
                 if (keysPressed.current.k) {
                     const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
                     const stepDistance = attackDirection === "left" ? -100 : 100;
-                    if (sukuna.closeRange)
-                        localDismantleAttack(-100);
+                    if (sukuna.closeRange && sukuna.dismantleCD.isReady)
+                        handleDismantleAttack()
                 }
                 if (keysPressed.current.l) {
-                    if (sukuna.cursedEnergy >= 200) {
-                        rivalDomainExpansion()
+                    if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady) {
+                        handleDomainAttack()
                     }
                 }
             }
@@ -206,11 +219,21 @@ const Sukuna = ({ xDistance }) => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue, sukuna.cleaveCD]);
+    }, [dispatch, nue, sukuna.cleaveCD, sukuna.dismantleCD, sukuna.closeRange, sukuna.domainCD, sukuna.cursedEnergy]);
 
     const dispatch2 = useDispatch<AppDispatch>();
     const handleCleaveAttack = () => {
-        dispatch2(toggleCleaveCD());
+        dispatch2(toggleCleaveCD()); // cooldown control
+        localCleaveAttack(); // attack
+    };
+    const handleDismantleAttack = () => {
+        dispatch2(toggleDismantleCD()); // cooldown control
+        localDismantleAttack(-100); // attack
+    };
+
+    const handleDomainAttack = () => {
+        dispatch2(toggleDomainCD()); // cooldown control
+        rivalDomainExpansion(); // attack
     };
     return (
         <div>
@@ -221,10 +244,10 @@ const Sukuna = ({ xDistance }) => {
                     display: sukuna.health.currentHealth > 0 ? "block" : "none",
                 }}>
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
-                <img src={require('../Assets/sukuna.png')} alt="" style={{ height: characterHeight }} />
+                <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} />
                 <img src={require('../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require('../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
-                <p style={{ marginTop: -80, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
+                <p style={{ marginTop: -30, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
                 {/* <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
                     <div style={{ position: "absolute", width: sukuna.health.currentHealth * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
                     </div>
