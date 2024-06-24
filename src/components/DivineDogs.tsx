@@ -177,7 +177,7 @@ const DivineDogs = () => {
         const intervalId = setInterval(() => {
             if (gameSettings.selectedCharacter !== "megumi") return;
             if (keysPressed.current.l) {
-                if (divineDogs.isActive === false && megumi.cursedEnergy >= callDivineDogsCost && !sukuna.domainAttack) {
+                if (divineDogs.isActive === false && megumi.cursedEnergy.currentCursedEnergy >= callDivineDogsCost && !sukuna.domainAttack) {
                     divineDogsAttack();
                 }
             }

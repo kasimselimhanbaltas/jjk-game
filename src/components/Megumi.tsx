@@ -136,9 +136,9 @@ const Megumi = () => {
                     <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{megumi.health.currentHealth}</p>
                 </div>
                 <div className="megumi-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
-                    <div style={{ position: "absolute", width: megumi.cursedEnergy * 150 / 200, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
+                    <div style={{ position: "absolute", width: megumi.cursedEnergy.currentCursedEnergy * 150 / megumi.cursedEnergy.maxCursedEnergy, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
                     </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{megumi.cursedEnergy}</p>
+                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{megumi.cursedEnergy.currentCursedEnergy}</p>
                 </div>
                 <p style={{ marginTop: -60, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Fushiguro Megumi</p>
 

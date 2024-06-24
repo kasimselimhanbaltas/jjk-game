@@ -13,7 +13,7 @@ const initialState: Sukuna = {
     maxHealth: 100,
   },
   cursedEnergy: {
-    currentCursedEnergy: 200,
+    currentCursedEnergy: 100,
     maxCursedEnergy: 200,
   },
   direction: "left",

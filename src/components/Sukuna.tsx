@@ -57,13 +57,11 @@ const Sukuna = ({ xDistance }) => {
     // Sukuna auto attack starter
     useEffect(() => {
         if (sukuna.health.currentHealth > 0 && megumi.health.currentHealth > 0 && sukuna.canMove && gameSettings.selectedCharacter === "megumi") {
-            if (sukuna.cursedEnergy >= 200) {
-                rivalDomainExpansion()
-            }
-            else {
-                if (sukuna.cursedEnergy >= 0) {
-                    startAttackInterval();
-                }
+            console.log("attack interval before 1")
+
+            if (sukuna.cursedEnergy.currentCursedEnergy >= 0) {
+                console.log("attack interval before 2")
+                startAttackInterval();
             }
         } else {
             stopAttackInterval();
@@ -72,7 +70,8 @@ const Sukuna = ({ xDistance }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [dispatch, sukuna.closeRange, sukuna.direction, sukuna.canMove, sukuna.rapidAttackCounter, sukuna.health.currentHealth]);
+    }, [dispatch, sukuna.closeRange, sukuna.direction, sukuna.canMove, sukuna.rapidAttackCounter,
+        sukuna.health.currentHealth, sukuna.cleaveCD.isReady, sukuna.dismantleCD.isReady, sukuna.domainCD.isReady]);
 
     // Domain expansion Action
     const rivalDomainExpansion = () => {
@@ -142,19 +141,29 @@ const Sukuna = ({ xDistance }) => {
         const stepDistance = attackDirection === "left" ? -100 : 100;
         const randomInterval = 1500; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
+        console.log("attack interval before")
         attackInterval.current = setInterval(() => {
             console.log("attack interval")
             // if (megumi.health.currentHealth > 0 && sukuna.health.currentHealth > 0) {
             if (megumi.health.currentHealth > 0 && sukuna.health.currentHealth > 0 && sukuna.canMove) {
-                if (sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount) {
+                const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
+                // const stepDistance = attackDirection === "left" ? -100 : 100;
+                console.log(sukuna.cursedEnergy.currentCursedEnergy)
+                if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady)
+                    handleDomainAttack()
+
+                if (sukuna.closeRange && sukuna.dismantleCD.isReady)
+                    handleDismantleAttack()
+
+                if (sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount)
                     localRapidAttack();
-                } else {
-                    if (sukuna.closeRange) { // dismantle
-                        localDismantleAttack(stepDistance)
-                    } else { // cleave
-                        localCleaveAttack();
+                else {
+                    if (sukuna.cleaveCD.isReady) {
+                        handleCleaveAttack()
                     }
                 }
+
+
             } else {
                 stopAttackInterval(); // Megumi ölünce saldırıyı durdur
             }
@@ -247,17 +256,21 @@ const Sukuna = ({ xDistance }) => {
                 <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} />
                 <img src={require('../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require('../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
-                <p style={{ marginTop: -30, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
-                {/* <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                    <div style={{ position: "absolute", width: sukuna.health.currentHealth * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
-                    </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{sukuna.health.currentHealth}</p>
-                </div>
-                <div className="megumi-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                    <div style={{ position: "absolute", width: sukuna.cursedEnergy * 150 / 200, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
-                    </div>
-                    <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{sukuna.cursedEnergy}</p>
-                </div> */}
+                <p style={{ marginTop: gameSettings.selectedCharacter !== "sukuna" ? -80 : -30, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
+                {gameSettings.selectedCharacter !== "sukuna" && (
+                    <>
+                        <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
+                            <div style={{ position: "absolute", width: sukuna.health.currentHealth * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
+                            </div>
+                            <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{sukuna.health.currentHealth}</p>
+                        </div>
+                        <div className="megumi-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
+                            <div style={{ position: "absolute", width: sukuna.cursedEnergy.currentCursedEnergy * 150 / sukuna.cursedEnergy.maxCursedEnergy, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
+                            </div>
+                            <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{sukuna.cursedEnergy.currentCursedEnergy}</p>
+                        </div>
+                    </>
+                )}
                 {/* <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
                 Sukuna Direction: {sukuna.direction} <br /> Range: {sukuna.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
             </p> */}

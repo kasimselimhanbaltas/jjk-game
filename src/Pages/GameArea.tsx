@@ -69,9 +69,14 @@ const GameArea = () => {
 
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
-    if (playerCEincreaseIntervalRef.current !== null) return;
+    console.log("inc1", playerCEincreaseIntervalRef.current)
+    if (playerCEincreaseIntervalRef.current != null) return;
+    console.log("inc2")
     playerCEincreaseIntervalRef.current = setInterval(() => {
+      console.log("inc3", playerCharacter.cursedEnergy.currentCursedEnergy, playerCharacter.cursedEnergy.maxCursedEnergy)
+
       if (playerCharacter.cursedEnergy.currentCursedEnergy < playerCharacter.cursedEnergy.maxCursedEnergy) {
+        console.log("inc4")
         dispatch(playerSlice.actions.changeCursedEnergy(+10));
       }
     }, 1000);
@@ -100,14 +105,14 @@ const GameArea = () => {
     return () => {
       stopInterval(playerCEincreaseIntervalRef);
     }
-  }, [playerCharacter.cursedEnergy, nueActivity]);
+  }, [playerCharacter.cursedEnergy, nue.isActive]);
 
   useEffect(() => {
     startRivalCursedEnergyInterval()
     return () => {
       stopInterval(rivalCEincreaseIntervalRef);
     }
-  }, [rivalCharacter.cursedEnergy, sukuna.rivalDomainExpansion]);
+  }, [rivalCharacter.cursedEnergy, sukuna.rivalDomainExpansion, nue.isActive]);
 
   // Megumi movement control
   useEffect(() => {
@@ -173,6 +178,7 @@ const GameArea = () => {
       if (rivalCharacter.canMove) {
         if (rivalCharacter.dashGauge > 70) {
           dispatch(rivalSlice.actions.moveCharacterTo({ x: playerCharacter.x, y: playerCharacter.y }));
+
           dispatch(rivalSlice.actions.setDashGauge(0))
         }
         else {
@@ -303,7 +309,7 @@ const GameArea = () => {
                 <div className="skill">
                   <CircularProgressBar skillCD={playerCharacter.cleaveCD} />
                   <img src={require("../Assets/slash.png")} alt="" />
-                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Dismantle:</p>
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Cleave:</p>
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.cleaveCD.isReady ? "Ready - J" :
                       (playerCharacter.cleaveCD.remainingTime + "sec")}</p>

@@ -10,8 +10,10 @@ const initialState: Megumi = {
     currentHealth: 2000,
     maxHealth: 2000,
   },
-  cursedEnergy: 200,
-  maxCursedEnergy: 200,
+  cursedEnergy: {
+    currentCursedEnergy: 200,
+    maxCursedEnergy: 200,
+  },
   direction: "right",
   isAttacking: false,
   canMove: true,
@@ -48,10 +50,10 @@ const megumiSlice = createSlice({
       state.health.currentHealth += action.payload;
     },
     changeCursedEnergy(state, action) {
-      state.cursedEnergy += action.payload;
+      state.cursedEnergy.currentCursedEnergy += action.payload;
     },
     setCursedEnergy(state, action) {
-      state.cursedEnergy = action.payload;
+      state.cursedEnergy.currentCursedEnergy = action.payload;
     },
     setDirection(state, action) {
       state.direction = action.payload;

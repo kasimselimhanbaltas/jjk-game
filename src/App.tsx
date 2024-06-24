@@ -20,8 +20,10 @@ export interface Megumi {
     currentHealth: number,
     maxHealth: number,
   };
-  cursedEnergy: number;
-  maxCursedEnergy: number;
+  cursedEnergy: {
+    currentCursedEnergy: number,
+    maxCursedEnergy: number,
+  },
   direction: "left" | "right";
   rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
   isAttacking: boolean;
