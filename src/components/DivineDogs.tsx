@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
 import { setCanMove, updateRivalHealth } from "../store/SukunaSlice";
-import { changeCursedEnergy } from "../store/MegumiSlice";
+import { changeCursedEnergy, toggleDivineDogsAttackCD } from "../store/MegumiSlice";
 import { divineDogsActivity, divineDogsAttacking, moveDivineDogs, setDivineDogsDirection } from "../store/DivineDogsSlice";
 import React from "react";
 import gameSettingsSlice from "../store/GameSettingsSlice";
+import { AppDispatch } from "../store/GlobalStore";
 
 
 const gameAreaWidth = 1400;
@@ -28,6 +29,7 @@ const DivineDogs = () => {
     const gameSettings = useSelector((state: any) => state.GameSettingsState);
 
     const dispatch = useDispatch();
+    const dispatch2 = useDispatch<AppDispatch>();
     const keysPressed = useRef({ l: false });
     // const [imageSrc, setImageSrc] = useState(require('../Assets/nue-side.png'));
     // const [imageStyle, setImageStyle] = useState({
@@ -177,7 +179,10 @@ const DivineDogs = () => {
         const intervalId = setInterval(() => {
             if (gameSettings.selectedCharacter !== "megumi") return;
             if (keysPressed.current.l) {
-                if (divineDogs.isActive === false && megumi.cursedEnergy.currentCursedEnergy >= callDivineDogsCost && !sukuna.domainAttack) {
+                if (divineDogs.isActive === false && megumi.cursedEnergy.currentCursedEnergy >= callDivineDogsCost && !sukuna.domainAttack
+                    && megumi.divineDogsCD.isReady
+                ) {
+                    dispatch2(toggleDivineDogsAttackCD());
                     divineDogsAttack();
                 }
             }

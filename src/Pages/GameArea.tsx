@@ -280,7 +280,7 @@ const GameArea = () => {
           <Nue />
           <DivineDogs />
           <Sukuna xDistance={xDistance} />
-          {/* PLAYER INTERFACE COMPONENT */}
+          {/* PLAYER INTERFACE COMPONENT FOR SUKUNA */}
           {gameSettings.selectedCharacter === "sukuna" && (
 
             <div className="player-interface">
@@ -367,6 +367,90 @@ const GameArea = () => {
                 <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
                 <p style={{ marginTop: "-10px" }}> {playerCharacter.rapidAttackCounter.currentCount >= playerCharacter.rapidAttackCounter.maxCount ? "Ready - J" : playerCharacter.rapidAttackCounter.currentCount + "/" + playerCharacter.rapidAttackCounter.maxCount} </p>
               </div>
+
+            </div>
+          )}
+
+          {/* PLAYER INTERFACE COMPONENT FOR MEGUMI */}
+          {gameSettings.selectedCharacter === "megumi" && (
+
+            <div className="player-interface">
+              <div className="health-and-ce-bars">
+
+                <div className="megumi-health" style={{ position: "absolute", width: "250px", height: "25px", top: "30%", }}>
+                  <div style={{
+                    position: "absolute", width: playerCharacter.health.currentHealth * 250 / playerCharacter.health.maxHealth, maxWidth: "250px", height: "25px",
+                    top: "-120%", backgroundColor: "red", borderRadius: "10px"
+                  }}>
+                  </div>
+                  <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -280%)", fontSize: "15px" }}>{playerCharacter.health.currentHealth}</p>
+                </div>
+                <div className="megumi-cursed-energy" style={{ position: "absolute", width: "250px", height: "25px", top: "30%" }}>
+                  <div style={{
+                    position: "absolute", width: playerCharacter.cursedEnergy.currentCursedEnergy * 250 / playerCharacter.cursedEnergy.maxCursedEnergy,
+                    maxWidth: "250px", height: "25px", top: "-2%", backgroundColor: "purple", borderRadius: "10px"
+                  }}>
+                  </div>
+                  <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{playerCharacter.cursedEnergy.currentCursedEnergy}</p>
+                </div>
+              </div>
+              <div className="skills-container">
+
+                {/* Nue Attack */}
+                <div className="skill" >
+                  <CircularProgressBar skillCD={playerCharacter.nueAttackCD} />
+                  <img src={require('../Assets/nue-side.png')} alt="" style={{ scale: "0.8" }} />
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Nue Attack:</p>
+                  <p style={{ marginTop: "-10px" }}>
+                    {playerCharacter.nueAttackCD.isReady ?
+                      (playerCharacter.nueAttackCD.isReady ? "Ready - j" : "Get Closer") :
+                      (playerCharacter.nueAttackCD.remainingTime + "sec")}</p>
+                  {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
+                </div>
+
+                {/* Call Nue */}
+                <div className="skill">
+                  <CircularProgressBar skillCD={playerCharacter.callNueCD} />
+                  <img src={require("../Assets/nue.png")} alt="" style={{ scale: "0.8", marginTop: "5px" }} />
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>
+                    {playerCharacter.nueActive ? "Cancel Nue:" : "Call Nue:"}</p>
+                  <p style={{ marginTop: "-10px" }}>
+                    {playerCharacter.callNueCD.isReady ? "Ready - K" :
+                      (playerCharacter.callNueCD.remainingTime + "sec")}</p>
+                </div>
+
+
+                {/* Domain Attack */}
+                <div className="skill">
+                  <CircularProgressBar skillCD={playerCharacter.divineDogsCD} />
+                  <img src={require("../Assets/white-wolf.png")} alt="" style={{ scale: "0.8", marginTop: "10px" }} />
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Call Wolves:</p>
+                  <p style={{ marginTop: "-10px" }}>
+                    {playerCharacter.divineDogsCD.isReady ?
+                      (playerCharacter.divineDogsCD.isReady ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
+                      (playerCharacter.divineDogsCD.remainingTime + "sec")}</p>
+                </div>
+              </div>
+              {/* Rapid Slash
+              <div className="skill">
+                <img src={require("../Assets/slash.png")} alt="" />
+                <CircularProgressbar
+                  value={playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}
+                  text={`${playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}%`}
+                  className="circular-skill-progress-bar"
+                  styles={buildStyles({
+                    // Text size
+                    textSize: '16px',
+                    // Colors
+                    pathColor: (playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
+                    textColor: 'transparent',
+                    trailColor: '#d6d6d6',
+                    backgroundColor: '#3e98c7',
+                  })}
+                />
+                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
+                <p style={{ marginTop: "-10px" }}> {playerCharacter.rapidAttackCounter.currentCount >= playerCharacter.rapidAttackCounter.maxCount ? "Ready - J" : playerCharacter.rapidAttackCounter.currentCount + "/" + playerCharacter.rapidAttackCounter.maxCount} </p>
+              </div> */}
 
             </div>
           )}

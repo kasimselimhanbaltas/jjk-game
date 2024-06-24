@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
 import { setCanMove, updateRivalHealth } from "../store/SukunaSlice";
-import { changeCursedEnergy } from "../store/MegumiSlice";
+import { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../store/MegumiSlice";
+import { AppDispatch } from "../store/GlobalStore";
 
 
 const gameAreaWidth = 1400;
@@ -24,6 +25,7 @@ const Nue = () => {
     const gameSettings = useSelector((state: any) => state.GameSettingsState);
 
     const dispatch = useDispatch();
+    const dispatch2 = useDispatch<AppDispatch>();
     const keysPressed = useRef({ j: false, k: false });
     const [imageSrc, setImageSrc] = useState(require('../Assets/nue-side.png'));
     const [imageStyle, setImageStyle] = useState({
@@ -42,7 +44,7 @@ const Nue = () => {
         if (nueIntervalRef.current !== null) return;
 
         nueIntervalRef.current = setInterval(() => {
-            if (megumi.cursedEnergy >= 5) dispatch(changeCursedEnergy(-shikigamiDrainingCost));
+            if (megumi.cursedEnergy.currentCursedEnergy >= 5) dispatch(changeCursedEnergy(-shikigamiDrainingCost));
             else {
                 dispatch(nueActivity(false));
                 stopInterval(nueIntervalRef)
@@ -67,7 +69,7 @@ const Nue = () => {
     }, [megumi.cursedEnergy]);
 
     function nueAttack() {
-        if (megumi.cursedEnergy < nueAttackCost) return;
+        if (megumi.cursedEnergy.currentCursedEnergy < nueAttackCost) return;
 
         let attackDirection = "";
         attackDirection = megumi.x < sukuna.x ? "right" : "left";
@@ -123,17 +125,20 @@ const Nue = () => {
         window.addEventListener("keydown", handleKeyDown);
         window.addEventListener("keyup", handleKeyUp);
 
+
         const intervalId = setInterval(() => {
             if (gameSettings.selectedCharacter !== "megumi") return;
 
             if (keysPressed.current.j && nue.isAttacking === false && !sukuna.domainAttack) {
-                if (nue.isActive === true && sukuna.health.currentHealth > 0) {
+                if (nue.isActive === true && sukuna.health.currentHealth > 0 && megumi.nueAttackCD.isReady) {
+                    dispatch2(toggleNueAttackCD());
                     nueAttack();
                 }
             }
             if (keysPressed.current.k) {
-                if (nue.isActive === false && megumi.cursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
+                if (nue.isActive === false && megumi.cursedEnergy.currentCursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
                     dispatch(changeCursedEnergy(-callNueCost));
+                    dispatch2(toggleCallNueCD());
                     startNueInterval();
                     nueSound.current.volume = 0.5;
                     nueSound.current.play();

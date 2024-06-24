@@ -29,6 +29,9 @@ export interface Megumi {
   isAttacking: boolean;
   canMove: boolean;
   dashGauge: number,
+  callNueCD: Skill,
+  nueAttackCD: Skill,
+  divineDogsCD: Skill,
 
 }
 export interface Gojo {

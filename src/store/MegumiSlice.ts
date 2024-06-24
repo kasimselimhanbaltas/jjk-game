@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Megumi } from "../App";
+import { AppThunk } from "./GlobalStore";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
@@ -19,6 +20,21 @@ const initialState: Megumi = {
   canMove: true,
   dashGauge: 0,
   rivalDirection: "stop",
+  callNueCD: {
+    isReady: true,
+    cooldown: 5,
+    remainingTime: 0,
+  },
+  nueAttackCD: {
+    isReady: true,
+    cooldown: 2,
+    remainingTime: 0,
+  },
+  divineDogsCD: {
+    isReady: true,
+    cooldown: 10,
+    remainingTime: 0,
+  },
 };
 
 const megumiSlice = createSlice({
@@ -67,6 +83,27 @@ const megumiSlice = createSlice({
     setRivalDirection(state, action) {
       state.rivalDirection = action.payload;
     },
+    setCallNueCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.callNueCD.isReady = action.payload.isReady;
+      state.callNueCD.remainingTime = action.payload.remainingTime;
+    },
+    setNueAttackCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.nueAttackCD.isReady = action.payload.isReady;
+      state.nueAttackCD.remainingTime = action.payload.remainingTime;
+    },
+    setDivineDogsCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.divineDogsCD.isReady = action.payload.isReady;
+      state.divineDogsCD.remainingTime = action.payload.remainingTime;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -80,5 +117,106 @@ export const {
   setCursedEnergy,
   moveCharacterTo,
   setDashGauge,
+  setCallNueCD,
+  setNueAttackCD,
+  setDivineDogsCD,
 } = megumiSlice.actions;
 export default megumiSlice;
+
+export const toggleCallNueCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.MegumiState.callNueCD.isReady) return;
+  const cooldown = state.MegumiState.callNueCD.cooldown;
+  dispatch(
+    setCallNueCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.MegumiState.callNueCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setCallNueCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setCallNueCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
+export const toggleNueAttackCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.MegumiState.nueAttackCD.isReady) return;
+  const cooldown = state.MegumiState.nueAttackCD.cooldown;
+  dispatch(
+    setNueAttackCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.MegumiState.nueAttackCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setNueAttackCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setNueAttackCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
+export const toggleDivineDogsAttackCD =
+  (): AppThunk => (dispatch, getState) => {
+    const state = getState();
+    if (!state.MegumiState.divineDogsCD.isReady) return;
+    const cooldown = state.MegumiState.divineDogsCD.cooldown;
+    dispatch(
+      setDivineDogsCD({
+        isReady: false,
+        remainingTime: cooldown,
+      })
+    );
+
+    const interval = setInterval(() => {
+      const currentState = getState();
+      const remainingTime = currentState.MegumiState.divineDogsCD.remainingTime;
+      if (remainingTime > 1) {
+        dispatch(
+          setDivineDogsCD({
+            isReady: false,
+            remainingTime: remainingTime - 1,
+          })
+        );
+      } else {
+        clearInterval(interval);
+        dispatch(
+          setDivineDogsCD({
+            isReady: true,
+            remainingTime: 0,
+          })
+        );
+      }
+    }, 1000); // her saniye güncelle
+  };
