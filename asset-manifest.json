@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/jjk-game/static/css/main.169b9e29.css",
-    "main.js": "/jjk-game/static/js/main.3adc2419.js",
+    "main.js": "/jjk-game/static/js/main.bdd81ff7.js",
     "static/media/sukuna-domain.jpg": "/jjk-game/static/media/sukuna-domain.076e08c1df0f83177161.jpg",
     "static/media/slash.png": "/jjk-game/static/media/slash.1b2fd6286c4980a13914.png",
     "static/media/menu-bg.jpg": "/jjk-game/static/media/menu-bg.44e47deb6ad0426ab8e8.jpg",
@@ -36,10 +36,10 @@
     "static/media/red.png": "/jjk-game/static/media/red.b2303ff8b0957bf5792f.png",
     "index.html": "/jjk-game/index.html",
     "main.169b9e29.css.map": "/jjk-game/static/css/main.169b9e29.css.map",
-    "main.3adc2419.js.map": "/jjk-game/static/js/main.3adc2419.js.map"
+    "main.bdd81ff7.js.map": "/jjk-game/static/js/main.bdd81ff7.js.map"
   },
   "entrypoints": [
     "static/css/main.169b9e29.css",
-    "static/js/main.3adc2419.js"
+    "static/js/main.bdd81ff7.js"
   ]
 }
