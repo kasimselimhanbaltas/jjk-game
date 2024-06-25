@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { setCanMove, updateRivalHealth } from "../store/SukunaSlice";
+import { setCanMove, updateHealth } from "../store/SukunaSlice";
 import { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../store/MegumiSlice";
 import { AppDispatch } from "../store/GlobalStore";
 
@@ -97,7 +97,7 @@ const Nue = () => {
                 }
                 if (nue.isAttacking) return;
                 setTimeout(() => {
-                    dispatch(updateRivalHealth(-nueDamage))
+                    dispatch(updateHealth(-nueDamage))
                     setTimeout(() => {
                         dispatch(nueAttacking(false));
                         dispatch(setCanMove(true)); // cancel stun sukuna

@@ -28,15 +28,15 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const redCost = -100;
     const purpleCost = -150;
     const domainCost = -200;
-    const blueDamage = -20;
-    const redDamage = -40;
-    const purpleDamage = -90;
+    const blueDamage = -40;
+    const redDamage = -60;
+    const purpleDamage = -100;
     const domainDamage = -200;
     // Sound effects
     const slashSoundEffectRef = React.useRef(null);
     const rapidSlashSoundEffectRef = React.useRef(null);
     const domainSoundEffectRef = React.useRef(null);
-    const nueSoundEffectRef = React.useRef(null);
+    const yowaimoSoundEffectRef = React.useRef(null);
     // domainSoundEffectRef.current.volume = 0.1;
     // nueSoundEffectRef.current.volume = 0.1;
 
@@ -160,7 +160,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 dispatch(rivalSlice.actions.moveCharacterTo({ x: gojo.x + ballPosition().x, y: gojo.y + ballPosition().y }))
                 setTimeout(() => {
                     const damageInterval = setInterval(() => {
-                        dispatch(rivalSlice.actions.updateRivalHealth(blueDamage / 4))
+                        dispatch(rivalSlice.actions.updateHealth(blueDamage / 4))
                     }, 100)
                     setTimeout(() => {
                         dispatch(rivalSlice.actions.setCanMove(true))
@@ -229,7 +229,6 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             <audio src={require("../Assets/audios/slash.mp3")} ref={slashSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
-            <audio src={require("../Assets/audios/nue.mp3")} ref={nueSoundEffectRef}></audio>
             <div className="blue" style={{
                 visibility: bluePositionState.visibility as "visible" | "hidden",
                 top: bluePositionState.attacking ? bluePositionState.y : gojo.y,

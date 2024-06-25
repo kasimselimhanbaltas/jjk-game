@@ -85,7 +85,7 @@ const Megumi = () => {
                     setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
                     setSlashRotation2({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
                     dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
-                    dispatch(megumiSlice.actions.healthReducer(slashDamage));
+                    dispatch(megumiSlice.actions.updateHealth(slashDamage));
                     if (i >= maxSlashCount - 1) {
                         domainSoundEffectRef.current.pause()
                         domainSoundEffectRef.current.currentTime = 0; // İsterseniz başa sarabilirsiniz
@@ -115,7 +115,7 @@ const Megumi = () => {
         for (let i = 0; i < degrees.length * 3; i++) {
             setTimeout(() => {
                 setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                dispatch(megumiSlice.actions.healthReducer(-10));
+                dispatch(megumiSlice.actions.updateHealth(-10));
                 dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
             }, i * 100);
         }

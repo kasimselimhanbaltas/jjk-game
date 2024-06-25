@@ -104,6 +104,37 @@
   height: 100%;
   z-index: 10;
 }
+.finish-screen {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+.finish-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-image: url('./Assets/bg.jpg');
+  background-size: cover;
+  z-index: 10;
+}
+.finish-menu button:hover {
+  background-color: transparent;
+  border: solid 2px white;
+}
+
+.finish-menu button {
+  border: solid 2px transparent;
+  border-radius: 10px;
+  margin-left: 50px;
+}
+
 .main-menu {
   display: flex;
   flex-direction: column;
@@ -144,7 +175,9 @@
   border: solid 2px transparent;
   border-radius: 10px;
   margin-left: 50px ;
-}.main-menu button:hover {
+}
+
+.main-menu button:hover {
   background-color: transparent;
   border: solid 2px white;
 }

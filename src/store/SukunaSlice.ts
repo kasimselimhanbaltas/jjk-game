@@ -6,6 +6,7 @@ const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 
 const initialState: Sukuna = {
+  characterName: "sukuna",
   x: 800,
   y: 200,
   health: {
@@ -22,7 +23,7 @@ const initialState: Sukuna = {
   rivalDomainExpansion: false,
   rivalDirection: "stop",
   closeRange: false,
-  canMove: true,
+  canMove: false,
   rapidAttack: false,
   dashGauge: 0,
   cleaveCD: {
@@ -68,11 +69,15 @@ const RivalSlice = createSlice({
       }
     },
     moveCharacterTo(state, action) {
+      if (state.rivalDomainExpansion) return;
       state.x = action.payload.x;
       state.y = action.payload.y;
     },
-    updateRivalHealth(state, action) {
+    updateHealth(state, action) {
       state.health.currentHealth += action.payload;
+    },
+    setHealth(state, action) {
+      state.health.currentHealth = action.payload;
     },
     rivalCleaveAttack(state, action) {
       state.cleaveAttack = action.payload;
@@ -135,6 +140,7 @@ const RivalSlice = createSlice({
     setRapidAttackCounter(state, action) {
       state.rapidAttackCounter.currentCount = action.payload;
     },
+    resetState: () => initialState,
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -142,7 +148,8 @@ const RivalSlice = createSlice({
 
 export const {
   moveCharacter,
-  updateRivalHealth,
+  updateHealth,
+  setHealth,
   rivalCleaveAttack,
   rivalDismantleAttack,
   setRivalDomainExpansion,
@@ -160,6 +167,7 @@ export const {
   setDismantleCD,
   setDomainCD,
   setRapidAttackCounter,
+  resetState,
 } = RivalSlice.actions;
 export default RivalSlice;
 

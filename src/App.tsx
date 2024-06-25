@@ -6,7 +6,9 @@ import Controls from './components/Controls';
 
 
 export interface GameSettings {
-  selectedCharacter: string
+  selectedCharacter: string,
+  winner: string,
+  loser: string
 }
 export interface Skill {
   isReady: boolean,
@@ -14,6 +16,7 @@ export interface Skill {
   remainingTime: number
 }
 export interface Megumi {
+  characterName: string,
   x: number;
   y: number;
   health: {
@@ -34,6 +37,7 @@ export interface Megumi {
   divineDogsCD: Skill,
 }
 export interface Gojo {
+  characterName: string,
   x: number;
   y: number;
   health: {
@@ -57,6 +61,7 @@ export interface Gojo {
 }
 
 export interface Sukuna {
+  characterName: string,
   x: number;
   y: number;
   health: {

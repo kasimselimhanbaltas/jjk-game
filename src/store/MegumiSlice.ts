@@ -5,6 +5,7 @@ import { AppThunk } from "./GlobalStore";
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 const initialState: Megumi = {
+  characterName: "megumi",
   x: 200,
   y: 200,
   health: {
@@ -62,8 +63,11 @@ const megumiSlice = createSlice({
       state.x = action.payload.x;
       state.y = action.payload.y;
     },
-    healthReducer(state, action) {
+    updateHealth(state, action) {
       state.health.currentHealth += action.payload;
+    },
+    setHealth(state, action) {
+      state.health.currentHealth = action.payload;
     },
     changeCursedEnergy(state, action) {
       state.cursedEnergy.currentCursedEnergy += action.payload;
@@ -104,13 +108,16 @@ const megumiSlice = createSlice({
       state.divineDogsCD.isReady = action.payload.isReady;
       state.divineDogsCD.remainingTime = action.payload.remainingTime;
     },
+    resetState: () => initialState,
+
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
 export const {
   moveCharacter,
-  healthReducer,
+  updateHealth,
+  setHealth,
   changeCursedEnergy,
   setDirection,
   setCanMove,
@@ -120,6 +127,7 @@ export const {
   setCallNueCD,
   setNueAttackCD,
   setDivineDogsCD,
+  resetState,
 } = megumiSlice.actions;
 export default megumiSlice;
 

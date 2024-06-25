@@ -13,6 +13,8 @@ import React from "react";
 import CircularProgressBar from "../components/CircularProgressBar";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import SatoruGojo from "../components/SatoruGojo";
+import FinishMenu from "../components/FinishMenu";
+import { setWinner } from "../store/GameSettingsSlice";
 
 const characterHeight = 50;
 
@@ -38,6 +40,10 @@ const GameArea = () => {
   let intervalId = null;
   const playerCEincreaseIntervalRef = useRef(null);
   const rivalCEincreaseIntervalRef = useRef(null);
+
+  // Sound Effects
+  const yowaimoSoundEffectRef = useRef<HTMLAudioElement>(null);
+
 
 
   const selectedState = useSelector((state: any) => {
@@ -254,10 +260,33 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
+  const [showFinishMenu, setShowFinishMenu] = React.useState(true); // Menü durumunu tutan state
 
   const handleStartGame = () => {
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
+    if (gameSettings.selectedCharacter === "gojo") {
+      yowaimoSoundEffectRef.current.volume = 0.2;
+      yowaimoSoundEffectRef.current.play();
+    }
+  };
+  const handleRestart = () => {
+    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 200 }));
+    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
+    dispatch(rivalSlice.actions.setHealth(rivalCharacter.health.maxHealth));
+    dispatch(playerSlice.actions.setHealth(playerCharacter.health.maxHealth));
+    console.log("restart", rivalCharacter.health.currentHealth, rivalCharacter.health.maxHealth);
+    dispatch(playerSlice.actions.resetState())
+    dispatch(rivalSlice.actions.resetState())
+    setShowFinishMenu(false);
+    if (gameSettings.selectedCharacter === "gojo") {
+      yowaimoSoundEffectRef.current.volume = 0.2;
+      yowaimoSoundEffectRef.current.play();
+    }
+  };
+  const handleReturnToMainMenu = () => {
+    setShowMenu(true)
+    setShowFinishMenu(false)
   };
 
   // useEffect(() => {
@@ -268,10 +297,29 @@ const GameArea = () => {
   //   }
   // }, [xDistance]);
 
+  useEffect(() => {
+    if (playerCharacter.health.currentHealth <= 0) {
+      setTimeout(() => {
+        setShowFinishMenu(true);
+        dispatch(setWinner(rivalCharacter.characterName));
+      }, 2000);
+    } else if (rivalCharacter.health.currentHealth <= 0) {
+      setTimeout(() => {
+        setShowFinishMenu(true);
+        dispatch(setWinner(playerCharacter.characterName));
+      }, 2000);
+    }
+  }, [playerCharacter.health.currentHealth, rivalCharacter.health]);
+
+
   return (
     <div className="game-area">
+      <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
+
       {showMenu ? ( // Menü gösteriliyor mu?
         <MainMenu onStartGame={handleStartGame} /> // Evet ise menüyü göster
+      ) : showFinishMenu ? (
+        <FinishMenu onRestart={handleRestart} onReturnToMainMenu={() => handleReturnToMainMenu()} />
       ) : (
         <>
           <div style={{

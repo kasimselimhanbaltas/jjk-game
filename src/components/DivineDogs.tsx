@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { setCanMove, updateRivalHealth } from "../store/SukunaSlice";
+import { setCanMove, updateHealth } from "../store/SukunaSlice";
 import { changeCursedEnergy, toggleDivineDogsAttackCD } from "../store/MegumiSlice";
 import { divineDogsActivity, divineDogsAttacking, moveDivineDogs, setDivineDogsDirection } from "../store/DivineDogsSlice";
 import React from "react";
@@ -129,7 +129,7 @@ const DivineDogs = () => {
                 setWhiteDogDirection("left");
                 setWhiteDivineDogSidePosition("left");
 
-                dispatch(updateRivalHealth(-divineDogsDamage))
+                dispatch(updateHealth(-divineDogsDamage))
 
                 setTimeout(() => { // 250 ms sleep for attack / SECOND ATTACK
                     setBlackDogDirection("left");
@@ -144,7 +144,7 @@ const DivineDogs = () => {
                         setWhiteDogDirection("right");
                         setWhiteDivineDogSidePosition("right");
 
-                        dispatch(updateRivalHealth(-divineDogsDamage))
+                        dispatch(updateHealth(-divineDogsDamage))
                         setTimeout(() => {
                             setTimeout(() => {
                                 setTimeout(() => {

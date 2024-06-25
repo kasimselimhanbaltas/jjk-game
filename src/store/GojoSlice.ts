@@ -6,6 +6,7 @@ const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 
 const initialState: Gojo = {
+  characterName: "gojo",
   x: 200,
   y: 200,
   health: {
@@ -71,6 +72,9 @@ const gojoSlice = createSlice({
     healthReducer(state, action) {
       state.health.currentHealth += action.payload;
     },
+    setHealth(state, action) {
+      state.health.currentHealth = action.payload;
+    },
     changeCursedEnergy(state, action) {
       state.cursedEnergy.currentCursedEnergy += action.payload;
     },
@@ -117,6 +121,8 @@ const gojoSlice = createSlice({
       state.domainCD.isReady = action.payload.isReady;
       state.domainCD.remainingTime = action.payload.remainingTime;
     },
+    resetState: () => initialState,
+
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -124,6 +130,7 @@ const gojoSlice = createSlice({
 export const {
   moveCharacter,
   healthReducer,
+  setHealth,
   changeCursedEnergy,
   setDirection,
   setCanMove,
@@ -134,6 +141,7 @@ export const {
   setRedCD,
   setPurpleCD,
   setDomainCD,
+  resetState,
 } = gojoSlice.actions;
 export default gojoSlice;
 
