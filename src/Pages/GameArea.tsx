@@ -260,13 +260,13 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
-  const [showFinishMenu, setShowFinishMenu] = React.useState(true); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
+  const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
     if (gameSettings.selectedCharacter === "gojo") {
-      yowaimoSoundEffectRef.current.volume = 0.2;
+      yowaimoSoundEffectRef.current.volume = 0.5;
       yowaimoSoundEffectRef.current.play();
     }
   };

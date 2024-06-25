@@ -36,7 +36,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const slashSoundEffectRef = React.useRef(null);
     const rapidSlashSoundEffectRef = React.useRef(null);
     const domainSoundEffectRef = React.useRef(null);
-    const yowaimoSoundEffectRef = React.useRef(null);
+    const blueSoundEffectRef = React.useRef(null);
     // domainSoundEffectRef.current.volume = 0.1;
     // nueSoundEffectRef.current.volume = 0.1;
 
@@ -140,11 +140,13 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const [angle, setAngle] = useState(0);
 
     const blueAttack = useCallback(() => {
+        blueSoundEffectRef.current.volume = 0.5;
+        blueSoundEffectRef.current.play();
         setBluePositionState(prevState => ({
             ...prevState, scale: 0.3,
             x: gojo.x, y: gojo.y, visibility: "visible", attacking: true, transition: "all .2s ease, transform 4s, top 2s ease, left 2s ease"
         }))
-        let inc = 1;
+        let inc = 5;
         const interval = setInterval(() => { // start rotating
             setAngle(prevAngle => prevAngle + inc);
             inc++;
@@ -229,6 +231,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             <audio src={require("../Assets/audios/slash.mp3")} ref={slashSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
+            <audio src={require("../Assets/audios/blue.mp3")} ref={blueSoundEffectRef}></audio>
             <div className="blue" style={{
                 visibility: bluePositionState.visibility as "visible" | "hidden",
                 top: bluePositionState.attacking ? bluePositionState.y : gojo.y,
