@@ -1,105 +1,267 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Gojo } from "../App";
+import { AppThunk } from "./GlobalStore";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 
 const initialState: Gojo = {
-  x: 800,
+  x: 200,
   y: 200,
   health: {
-    currentHealth: 100,
-    maxHealth: 100,
+    currentHealth: 2000,
+    maxHealth: 2000,
   },
-  cursedEnergy: 100,
-  direction: "left",
-  cleaveAttack: false,
-  dismantleAttack: false,
-  gojoDomainExpansion: false,
-  gojoDirection: "stop",
-  closeRange: false,
-  canMove: false,
-  rapidAttack: false,
+  cursedEnergy: {
+    currentCursedEnergy: 200,
+    maxCursedEnergy: 200,
+  },
+  direction: "right",
+  isAttacking: false,
+  canMove: true,
   dashGauge: 0,
+  rivalDirection: "stop",
+  blueCD: {
+    isReady: true,
+    cooldown: 5,
+    remainingTime: 0,
+  },
+  redCD: {
+    isReady: true,
+    cooldown: 2,
+    remainingTime: 0,
+  },
+  purpleCD: {
+    isReady: true,
+    cooldown: 10,
+    remainingTime: 0,
+  },
+  domainCD: {
+    isReady: true,
+    cooldown: 30,
+    remainingTime: 0,
+  },
 };
 
 const gojoSlice = createSlice({
   name: "gojo",
   initialState: initialState,
   reducers: {
-    movegojo(state, action) {
+    moveCharacter(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
-      if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 300) {
+      if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 70) {
         state.x += inputX;
-        // if (inputX > 0) {
-        //   state.direction = "right";
-        // } else state.direction = "left";
+        //   if (inputX > 0) {
+        //     state.direction = "right";
+        //   } else if (inputX < 0) state.direction = "left";
       } else {
         // console.log("limit reached in x direction");
       }
-      if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 220) {
+      if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 150) {
         state.y += inputY;
       } else {
         // console.log("limit reached in y direction");
       }
     },
-    movegojoTo(state, action) {
+    moveCharacterTo(state, action) {
       state.x = action.payload.x;
       state.y = action.payload.y;
     },
-    updategojoHealth(state, action) {
+    healthReducer(state, action) {
       state.health.currentHealth += action.payload;
     },
-    gojoCleaveAttack(state, action) {
-      state.cleaveAttack = action.payload;
+    changeCursedEnergy(state, action) {
+      state.cursedEnergy.currentCursedEnergy += action.payload;
     },
-    gojoDismantleAttack(state, action) {
-      state.dismantleAttack = action.payload;
+    setCursedEnergy(state, action) {
+      state.cursedEnergy.currentCursedEnergy = action.payload;
     },
-    setgojoDirection(state, action) {
-      state.gojoDirection = action.payload;
+    setDirection(state, action) {
+      state.direction = action.payload;
     },
-    setCloseRange(state, action) {
-      state.closeRange = action.payload;
-    },
-    setgojoPosition(state, action) {
-      state.x = action.payload.x;
-      state.y = action.payload.y;
-    },
-    setgojoCanMove(state, action) {
+    setCanMove(state, action) {
       state.canMove = action.payload;
-    },
-    setRapidAttack(state, action) {
-      state.rapidAttack = action.payload;
     },
     setDashGauge(state, action) {
       state.dashGauge = action.payload;
     },
-    setgojoCursedEnergy(state, action) {
-      state.cursedEnergy = action.payload;
+    setRivalDirection(state, action) {
+      state.rivalDirection = action.payload;
     },
-    setgojoDomainExpansion(state, action) {
-      state.gojoDomainExpansion = action.payload;
+    setBlueCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.blueCD.isReady = action.payload.isReady;
+      state.blueCD.remainingTime = action.payload.remainingTime;
     },
-
+    setRedCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.redCD.isReady = action.payload.isReady;
+      state.redCD.remainingTime = action.payload.remainingTime;
+    },
+    setPurpleCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.purpleCD.isReady = action.payload.isReady;
+      state.purpleCD.remainingTime = action.payload.remainingTime;
+    },
+    setDomainCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.domainCD.isReady = action.payload.isReady;
+      state.domainCD.remainingTime = action.payload.remainingTime;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
 export const {
-  movegojo,
-  updategojoHealth,
-  gojoCleaveAttack,
-  gojoDismantleAttack,
-  setgojoDomainExpansion,
-  setgojoDirection,
-  setCloseRange,
-  setgojoPosition,
-  setgojoCanMove,
-  setRapidAttack,
+  moveCharacter,
+  healthReducer,
+  changeCursedEnergy,
+  setDirection,
+  setCanMove,
+  setCursedEnergy,
+  moveCharacterTo,
   setDashGauge,
-  movegojoTo,
-  setgojoCursedEnergy,
+  setBlueCD,
+  setRedCD,
+  setPurpleCD,
+  setDomainCD,
 } = gojoSlice.actions;
 export default gojoSlice;
+
+export const toggleBlueCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.GojoState.blueCD.isReady) return;
+  const cooldown = state.GojoState.blueCD.cooldown;
+  dispatch(
+    setBlueCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.GojoState.blueCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setBlueCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setBlueCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
+export const toggleRedCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.GojoState.redCD.isReady) return;
+  const cooldown = state.GojoState.redCD.cooldown;
+  dispatch(
+    setRedCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.GojoState.redCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setRedCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setRedCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
+export const togglePurpleCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.GojoState.purpleCD.isReady) return;
+  const cooldown = state.GojoState.purpleCD.cooldown;
+  dispatch(
+    setPurpleCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.GojoState.purpleCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setPurpleCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setPurpleCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
+export const toggleDomainCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.GojoState.domainCD.isReady) return;
+  const cooldown = state.GojoState.domainCD.cooldown;
+  dispatch(
+    setDomainCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.GojoState.domainCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setDomainCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setDomainCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};

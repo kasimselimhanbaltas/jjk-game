@@ -4,6 +4,7 @@ import Sukuna from "../components/Sukuna";
 import Nue from "../components/Nue";
 import sukunaSlice from "../store/SukunaSlice";
 import megumiSlice from "../store/MegumiSlice";
+import gojoSlice from "../store/GojoSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { nueActivity, setNueDirection } from "../store/NueSlice";
 import DivineDogs from "../components/DivineDogs";
@@ -11,6 +12,7 @@ import MainMenu from "../components/MainMenu";
 import React from "react";
 import CircularProgressBar from "../components/CircularProgressBar";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import SatoruGojo from "../components/SatoruGojo";
 
 const characterHeight = 50;
 
@@ -27,6 +29,7 @@ const GameArea = () => {
   const gameSettings = useSelector((state: any) => state.GameSettingsState);
   const sukuna = useSelector((state: any) => state.SukunaState);
   const megumi = useSelector((state: any) => state.MegumiState);
+  const gojo = useSelector((state: any) => state.GojoState);
   const nue = useSelector((state: any) => state.NueState);
   const divineDogs = useSelector((state: any) => state.DivineDogsState);
   const xDistance = useMemo(() => (megumi.x - sukuna.x), [megumi.x, sukuna.x]);
@@ -40,16 +43,21 @@ const GameArea = () => {
   const selectedState = useSelector((state: any) => {
     if (gameSettings.selectedCharacter === "sukuna") {
       return { player: state.SukunaState, rival: state.MegumiState };
-    } else {
+    } else if (gameSettings.selectedCharacter === "megumi") {
       return { player: state.MegumiState, rival: state.SukunaState };
+    } else if (gameSettings.selectedCharacter === "gojo") {
+      return { player: state.GojoState, rival: state.SukunaState };
     }
   });
   const selectedSlice = useSelector((state: any) => {
     if (gameSettings.selectedCharacter === "sukuna") {
       return { player: sukunaSlice, rival: megumiSlice };
-    } else {
+    } else if (gameSettings.selectedCharacter === "megumi") {
       return { player: megumiSlice, rival: sukunaSlice };
+    } else if (gameSettings.selectedCharacter === "gojo") {
+      return { player: gojoSlice, rival: sukunaSlice };
     }
+
   });
   // for reducer methods
   const playerSlice = selectedSlice.player;
@@ -246,7 +254,7 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
@@ -276,10 +284,26 @@ const GameArea = () => {
             backgroundImage: `url(${require("../Assets/sukuna-domain.jpg")})`, opacity: sukuna.rivalDomainExpansion ? 1 : 0,
             backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
           }}></div>
-          <Megumi />
+          {gameSettings.selectedCharacter === "sukuna" && (
+            <>
+              <Megumi />
+              <Sukuna xDistance={xDistance} rivalSlice={rivalSlice} rivalState={megumi} />
+            </>
+          )}
+          {gameSettings.selectedCharacter === "megumi" && (
+            <>
+              <Megumi />
+              <Sukuna xDistance={xDistance} rivalSlice={megumiSlice} rivalState={megumi} />
+            </>
+          )}
+          {gameSettings.selectedCharacter === "gojo" && (
+            <>
+              <SatoruGojo rivalSlice={sukunaSlice} rivalState={sukuna} />
+              <Sukuna xDistance={xDistance} rivalSlice={gojoSlice} rivalState={gojo} />
+            </>
+          )}
           <Nue />
           <DivineDogs />
-          <Sukuna xDistance={xDistance} />
           {/* PLAYER INTERFACE COMPONENT FOR SUKUNA */}
           {gameSettings.selectedCharacter === "sukuna" && (
 
@@ -454,6 +478,102 @@ const GameArea = () => {
 
             </div>
           )}
+
+          {/* PLAYER INTERFACE COMPONENT FOR GOJO */}
+          {gameSettings.selectedCharacter === "gojo" && (
+
+            <div className="player-interface">
+              <div className="health-and-ce-bars">
+
+                <div className="megumi-health" style={{ position: "absolute", width: "250px", height: "25px", top: "30%", }}>
+                  <div style={{
+                    position: "absolute", width: playerCharacter.health.currentHealth * 250 / playerCharacter.health.maxHealth, maxWidth: "250px", height: "25px",
+                    top: "-120%", backgroundColor: "red", borderRadius: "10px"
+                  }}>
+                  </div>
+                  <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -280%)", fontSize: "15px" }}>{playerCharacter.health.currentHealth}</p>
+                </div>
+                <div className="megumi-cursed-energy" style={{ position: "absolute", width: "250px", height: "25px", top: "30%" }}>
+                  <div style={{
+                    position: "absolute", width: playerCharacter.cursedEnergy.currentCursedEnergy * 250 / playerCharacter.cursedEnergy.maxCursedEnergy,
+                    maxWidth: "250px", height: "25px", top: "-2%", backgroundColor: "purple", borderRadius: "10px"
+                  }}>
+                  </div>
+                  <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{playerCharacter.cursedEnergy.currentCursedEnergy}</p>
+                </div>
+              </div>
+              <div className="skills-container">
+
+                {/* Blue Attack */}
+                <div className="skill" >
+                  <CircularProgressBar skillCD={playerCharacter.blueCD} />
+                  <img src={require('../Assets/blue.png')} alt="" style={{ scale: "0.8" }} />
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Blue Attack:</p>
+                  <p style={{ marginTop: "-10px" }}>
+                    {playerCharacter.blueCD.isReady ?
+                      (nue.isActive ? "Ready - j" : "Call Nue First") :
+                      (playerCharacter.blueCD.remainingTime + "sec")}</p>
+                  {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
+                </div>
+
+                {/* Red Nue */}
+                <div className="skill">
+                  <CircularProgressBar skillCD={playerCharacter.redCD} />
+                  <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>
+                    "Red Attack:"</p>
+                  <p style={{ marginTop: "-10px" }}>
+                    {playerCharacter.redCD.isReady ? "Ready - K" :
+                      (playerCharacter.redCD.remainingTime + "sec")}</p>
+                </div>
+
+
+                {/* Purple Attack */}
+                <div className="skill">
+                  <CircularProgressBar skillCD={playerCharacter.purpleCD} />
+                  <img src={require("../Assets/purple.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
+                  <p style={{ marginTop: "-10px" }}>
+                    {playerCharacter.purpleCD.isReady ?
+                      (playerCharacter.purpleCD.isReady ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
+                      (playerCharacter.purpleCD.remainingTime + "sec")}</p>
+                </div>
+
+                {/* Domain Attack */}
+                <div className="skill">
+                  <CircularProgressBar skillCD={playerCharacter.purpleCD} />
+                  <img src={require("../Assets/domain-hand.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Infinite Void:</p>
+                  <p style={{ marginTop: "-10px" }}>
+                    {playerCharacter.purpleCD.isReady ?
+                      (playerCharacter.purpleCD.isReady ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
+                      (playerCharacter.purpleCD.remainingTime + "sec")}</p>
+                </div>
+              </div>
+              {/* Rapid Slash
+              <div className="skill">
+                <img src={require("../Assets/slash.png")} alt="" />
+                <CircularProgressbar
+                  value={playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}
+                  text={`${playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}%`}
+                  className="circular-skill-progress-bar"
+                  styles={buildStyles({
+                    // Text size
+                    textSize: '16px',
+                    // Colors
+                    pathColor: (playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
+                    textColor: 'transparent',
+                    trailColor: '#d6d6d6',
+                    backgroundColor: '#3e98c7',
+                  })}
+                />
+                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
+                <p style={{ marginTop: "-10px" }}> {playerCharacter.rapidAttackCounter.currentCount >= playerCharacter.rapidAttackCounter.maxCount ? "Ready - J" : playerCharacter.rapidAttackCounter.currentCount + "/" + playerCharacter.rapidAttackCounter.maxCount} </p>
+              </div> */}
+
+            </div>
+          )}
+
 
         </>
       )}

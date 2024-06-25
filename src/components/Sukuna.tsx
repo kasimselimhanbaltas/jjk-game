@@ -11,7 +11,7 @@ import ReactHowler from 'react-howler';
 import useCooldown from '../hooks/useCoolDown';
 import { AppDispatch, RootState } from '../store/GlobalStore';
 
-const Sukuna = ({ xDistance }) => {
+const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     const dispatch = useDispatch();
     const sukuna = useSelector((state: any) => state.SukunaState);
@@ -56,7 +56,7 @@ const Sukuna = ({ xDistance }) => {
 
     // Sukuna auto attack starter
     useEffect(() => {
-        if (sukuna.health.currentHealth > 0 && megumi.health.currentHealth > 0 && sukuna.canMove && gameSettings.selectedCharacter === "megumi") {
+        if (sukuna.health.currentHealth > 0 && rivalState.health.currentHealth > 0 && sukuna.canMove && gameSettings.selectedCharacter !== "sukuna") {
             console.log("attack interval before 1")
 
             if (sukuna.cursedEnergy.currentCursedEnergy >= 0) {
@@ -82,16 +82,19 @@ const Sukuna = ({ xDistance }) => {
         setTimeout(() => {
             setSukunaImage({ src: require('../Assets/domainpose.png'), scale: 5 });
         }, 100);
-        dispatch(megumiSlice.actions.setCanMove(false))
+        dispatch(rivalSlice.actions.setCanMove(false))
         dispatch(setCanMove(false))
         dispatch(sukunaSlice.actions.changeCursedEnergy(-200));
         setTimeout(() => {
             dispatch(setRivalDomainExpansion(true));
         }, 6000);
         setTimeout(() => {
-            setSukunaImage({ src: require('../Assets/sukuna.png'), scale: 1 });
+            setSukunaImage({ src: require('../Assets/domainpose.png'), scale: 2 });
+            setTimeout(() => {
+                setSukunaImage({ src: require('../Assets/sukuna.png'), scale: 1 });
+            }, 100);
             dispatch(setRivalDomainExpansion(false));
-            dispatch(megumiSlice.actions.setCanMove(true))
+            dispatch(rivalSlice.actions.setCanMove(true))
             dispatch(setCanMove(true));
         }, 12000);
     }
@@ -107,11 +110,11 @@ const Sukuna = ({ xDistance }) => {
     }
     const localDismantleAttack = (stepDistance) => {
         if (!sukuna.closeRange) return;
-        dispatch(megumiSlice.actions.healthReducer(dismantleAttackDamage)); // Megumi'ın canını azalt
+        dispatch(rivalSlice.actions.healthReducer(dismantleAttackDamage)); // Megumi'ın canını azalt
         dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 3));
         dispatch(sukunaSlice.actions.changeCursedEnergy(dismantleCost));
         dispatch(rivalDismantleAttack(true));
-        dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
+        dispatch(rivalSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
         // slashRef.current.play();
         // slashSoundEffect(slashAudio);
         setTimeout(() => {
@@ -125,7 +128,7 @@ const Sukuna = ({ xDistance }) => {
 
         setCleaveReady({ ready: false, coolDown: 5 });
         dispatch(rivalCleaveAttack(true));
-        dispatch(megumiSlice.actions.healthReducer(cleaveAttackDamage)); // Megumi'ın canını azalt
+        dispatch(rivalSlice.actions.healthReducer(cleaveAttackDamage)); // Megumi'ın canını azalt
         setTimeout(() => { // cooldown
             setCleaveReady({ ready: true, coolDown: 5 });
         }, cleaveReady.coolDown * 1000);
@@ -137,7 +140,7 @@ const Sukuna = ({ xDistance }) => {
     // Sukuna attack interval - auto attack configuration
     const startAttackInterval = () => {
         // if (gameSettings.selectedCharacter === "sukuna") return;
-        const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
+        const attackDirection = sukuna.x - rivalState.x >= 0 ? "left" : "right";
         const stepDistance = attackDirection === "left" ? -100 : 100;
         const randomInterval = 1500; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
@@ -145,8 +148,8 @@ const Sukuna = ({ xDistance }) => {
         attackInterval.current = setInterval(() => {
             console.log("attack interval")
             // if (megumi.health.currentHealth > 0 && sukuna.health.currentHealth > 0) {
-            if (megumi.health.currentHealth > 0 && sukuna.health.currentHealth > 0 && sukuna.canMove) {
-                const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
+            if (rivalState.health.currentHealth > 0 && sukuna.health.currentHealth > 0 && sukuna.canMove) {
+                const attackDirection = sukuna.x - rivalState.x >= 0 ? "left" : "right";
                 // const stepDistance = attackDirection === "left" ? -100 : 100;
                 console.log(sukuna.cursedEnergy.currentCursedEnergy)
                 if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady)
@@ -197,7 +200,7 @@ const Sukuna = ({ xDistance }) => {
 
         const intervalId = setInterval(() => {
             if (gameSettings.selectedCharacter !== "sukuna") return;
-            if (megumi.health.currentHealth > 0) {
+            if (rivalState.health.currentHealth > 0) {
                 // !sukuna.cleaveAttack && cleaveReady.ready &&
                 if (keysPressed.current.j && sukuna.canMove) {
                     if (sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount)
@@ -209,7 +212,7 @@ const Sukuna = ({ xDistance }) => {
                     }
                 }
                 if (keysPressed.current.k) {
-                    const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
+                    const attackDirection = sukuna.x - rivalState.x >= 0 ? "left" : "right";
                     const stepDistance = attackDirection === "left" ? -100 : 100;
                     if (sukuna.closeRange && sukuna.dismantleCD.isReady)
                         handleDismantleAttack()

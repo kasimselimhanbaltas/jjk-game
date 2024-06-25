@@ -36,7 +36,11 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
         <div className="character-menu">
           <button className="character-button" onClick={() => saveCharacter('megumi')}>
             <img src={require("../Assets/megumi.png")} alt="" />
-            <h2 style={{ marginTop: "-40px" }}>Fushiguro Megumi</h2>
+            <h2 style={{}}>Fushiguro Megumi</h2>
+          </button>
+          <button className="character-button" onClick={() => saveCharacter('gojo')}>
+            <img src={require("../Assets/kitkat.png")} alt="" />
+            <h2 style={{}}>Satoru Gojo</h2>
           </button>
           <button className="character-button" onClick={() => saveCharacter('sukuna')}>
             <img src={require("../Assets/sukuna.png")} alt="" />

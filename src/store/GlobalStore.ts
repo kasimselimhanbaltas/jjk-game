@@ -4,11 +4,13 @@ import SukunaSlice from "./SukunaSlice";
 import NueSlice from "./NueSlice";
 import divineDogsSlice from "./DivineDogsSlice";
 import gameSettingsSlice from "./GameSettingsSlice";
+import GojoSlice from "./GojoSlice";
 
 const store = configureStore({
   reducer: {
     MegumiState: MegumiSlice.reducer,
     SukunaState: SukunaSlice.reducer,
+    GojoState: GojoSlice.reducer,
     NueState: NueSlice.reducer,
     DivineDogsState: divineDogsSlice.reducer,
     GameSettingsState: gameSettingsSlice.reducer,

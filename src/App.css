@@ -58,6 +58,15 @@
   top: 0;
   left: 0;
 }
+.gojo {
+  position: absolute;
+  transition: all .2s ease;
+}
+.gojo img {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .sukuna img {
   position: absolute;
   top: 0;
@@ -94,7 +103,7 @@
 }
 .selected-character-image{
   height: 150px;
-  margin-left: 50px;
+  margin-left: 80px;
 }
 .character-menu {
   display: flex;
@@ -115,8 +124,7 @@
   cursor:  pointer;
 }
 .character-button img{
-  width: 100%;
-  height: auto
+  max-height: 300px;
 }
 .main-menu button {
   border: solid 2px transparent;

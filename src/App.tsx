@@ -32,7 +32,6 @@ export interface Megumi {
   callNueCD: Skill,
   nueAttackCD: Skill,
   divineDogsCD: Skill,
-
 }
 export interface Gojo {
   x: number;
@@ -41,16 +40,20 @@ export interface Gojo {
     currentHealth: number,
     maxHealth: number,
   };
-  cursedEnergy: number;
-  direction: "left" | "right" | "stop";
-  cleaveAttack: boolean,
-  dismantleAttack: boolean,
-  gojoDomainExpansion: boolean,
-  gojoDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
-  closeRange: boolean;
+  cursedEnergy: {
+    currentCursedEnergy: number,
+    maxCursedEnergy: number,
+  },
+  direction: "left" | "right";
+  rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
+  isAttacking: boolean;
   canMove: boolean;
-  rapidAttack: boolean;
-  dashGauge: number;
+  dashGauge: number,
+  blueCD: Skill,
+  redCD: Skill,
+  purpleCD: Skill,
+  domainCD: Skill,
+
 }
 
 export interface Sukuna {
