@@ -20,7 +20,7 @@ const Sukuna = ({ xDistance }) => {
     const nue = useSelector((state: any) => state.NueState);
     const divineDogs = useSelector((state: any) => state.DivineDogsState);
 
-    const characterWidth = 50;
+    const characterWidth = 130;
     const characterHeight = 150;
     const cleaveCost = -10;
     const dismantleCost = -50;

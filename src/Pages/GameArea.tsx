@@ -246,7 +246,7 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
 
   const handleStartGame = () => {
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
@@ -403,7 +403,7 @@ const GameArea = () => {
                   <p style={{ marginTop: "10px", lineBreak: "loose" }}>Nue Attack:</p>
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.nueAttackCD.isReady ?
-                      (playerCharacter.nueAttackCD.isReady ? "Ready - j" : "Get Closer") :
+                      (nue.isActive ? "Ready - j" : "Call Nue First") :
                       (playerCharacter.nueAttackCD.remainingTime + "sec")}</p>
                   {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
                 </div>
@@ -413,7 +413,7 @@ const GameArea = () => {
                   <CircularProgressBar skillCD={playerCharacter.callNueCD} />
                   <img src={require("../Assets/nue.png")} alt="" style={{ scale: "0.8", marginTop: "5px" }} />
                   <p style={{ marginTop: "10px", lineBreak: "loose" }}>
-                    {playerCharacter.nueActive ? "Cancel Nue:" : "Call Nue:"}</p>
+                    {nue.isActive ? "Cancel Nue:" : "Call Nue:"}</p>
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.callNueCD.isReady ? "Ready - K" :
                       (playerCharacter.callNueCD.remainingTime + "sec")}</p>
@@ -424,7 +424,7 @@ const GameArea = () => {
                 <div className="skill">
                   <CircularProgressBar skillCD={playerCharacter.divineDogsCD} />
                   <img src={require("../Assets/white-wolf.png")} alt="" style={{ scale: "0.8", marginTop: "10px" }} />
-                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Call Wolves:</p>
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Wolf Attack:</p>
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.divineDogsCD.isReady ?
                       (playerCharacter.divineDogsCD.isReady ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :

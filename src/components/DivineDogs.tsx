@@ -193,7 +193,7 @@ const DivineDogs = () => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy]);
+    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy, sukuna.domainAttack]);
 
     return (
         <div>

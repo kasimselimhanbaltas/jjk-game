@@ -10,8 +10,8 @@ const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 const characterWidth = 50;
 const characterHeight = 120;
-const callNueCost = 40;
-const nueAttackCost = 10;
+const callNueCost = 50;
+const nueAttackCost = 20;
 const nueDamage = 10;
 const shikigamiDrainingCost = 2;
 const defaultNueTransform = "all .4s ease";
@@ -44,6 +44,7 @@ const Nue = () => {
         if (nueIntervalRef.current !== null) return;
 
         nueIntervalRef.current = setInterval(() => {
+            console.log("int: ", megumi.cursedEnergy.currentCursedEnergy)
             if (megumi.cursedEnergy.currentCursedEnergy >= 5) dispatch(changeCursedEnergy(-shikigamiDrainingCost));
             else {
                 dispatch(nueActivity(false));
@@ -62,7 +63,7 @@ const Nue = () => {
     };
 
     useEffect(() => {
-        if (megumi.cursedEnergy <= 0) {
+        if (megumi.cursedEnergy.currentCursedEnergy <= 0) {
             stopInterval(nueIntervalRef);
             dispatch(nueActivity(false));
         }
@@ -155,7 +156,7 @@ const Nue = () => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy]);
+    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy, sukuna.domainAttack]);
 
     return (
         <div

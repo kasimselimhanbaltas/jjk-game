@@ -22,7 +22,7 @@ const initialState: Sukuna = {
   rivalDomainExpansion: false,
   rivalDirection: "stop",
   closeRange: false,
-  canMove: false,
+  canMove: true,
   rapidAttack: false,
   dashGauge: 0,
   cleaveCD: {
@@ -37,7 +37,7 @@ const initialState: Sukuna = {
   },
   domainCD: {
     isReady: true,
-    cooldown: 30,
+    cooldown: 10,
     remainingTime: 0,
   },
   rapidAttackCounter: {

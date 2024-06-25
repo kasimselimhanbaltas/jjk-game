@@ -17,7 +17,7 @@ const Megumi = () => {
     const [slashRotation, setSlashRotation] = React.useState({ rotate: "270deg" });
     const [slashRotation2, setSlashRotation2] = React.useState({ rotate: "270deg" });
     const intervalRef = useRef(null);
-    const characterWidth = 50;
+    const characterWidth = 120;
     const characterHeight = 180;
 
 
@@ -70,19 +70,27 @@ const Megumi = () => {
         setTimeout(() => {
             setDisplaySlash("block");
             setDisplaySlash2("block");
-
+            let slashDamage = -25;
+            let maxSlashCount = (megumi.health.currentHealth / Math.abs(slashDamage)) >= 50 ? 50 : (megumi.health.currentHealth / Math.abs(slashDamage));
+            console.log("maxslash", maxSlashCount)
             const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
             const stepDistance = attackDirection === "left" ? -10 : 10;
             const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
             domainSoundEffectRef.current.volume = 0.3
             domainSoundEffectRef.current.play()
 
+
             for (let i = 0; i < 50; i++) { // 50 random slashes -> rotate slash images, push megumi back and reduce health
                 setTimeout(() => { // random slashes delay
                     setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
                     setSlashRotation2({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
                     dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
-                    dispatch(megumiSlice.actions.healthReducer(-25));
+                    dispatch(megumiSlice.actions.healthReducer(slashDamage));
+                    if (i >= maxSlashCount - 1) {
+                        domainSoundEffectRef.current.pause()
+                        domainSoundEffectRef.current.currentTime = 0; // İsterseniz başa sarabilirsiniz
+                    }
+
                 }, i * 100);
             }
             setTimeout(() => {
