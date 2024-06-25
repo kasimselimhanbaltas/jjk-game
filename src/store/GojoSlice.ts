@@ -28,12 +28,12 @@ const initialState: Gojo = {
   },
   redCD: {
     isReady: true,
-    cooldown: 2,
+    cooldown: 20,
     remainingTime: 0,
   },
   purpleCD: {
     isReady: true,
-    cooldown: 10,
+    cooldown: 30,
     remainingTime: 0,
   },
   domainCD: {

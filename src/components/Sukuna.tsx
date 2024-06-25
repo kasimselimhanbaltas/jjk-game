@@ -71,7 +71,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         };
 
     }, [dispatch, sukuna.closeRange, sukuna.direction, sukuna.canMove, sukuna.rapidAttackCounter,
-        sukuna.health.currentHealth, sukuna.cleaveCD.isReady, sukuna.dismantleCD.isReady, sukuna.domainCD.isReady]);
+        sukuna.health.currentHealth, sukuna.cleaveCD.isReady, sukuna.dismantleCD.isReady, sukuna.domainCD.isReady, rivalState.health.currentHealth]);
 
     // Domain expansion Action
     const rivalDomainExpansion = () => {

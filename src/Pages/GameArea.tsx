@@ -254,7 +254,7 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
 
   const handleStartGame = () => {
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
@@ -511,7 +511,7 @@ const GameArea = () => {
                   <p style={{ marginTop: "10px", lineBreak: "loose" }}>Blue Attack:</p>
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.blueCD.isReady ?
-                      (nue.isActive ? "Ready - j" : "Call Nue First") :
+                      "Ready - J" :
                       (playerCharacter.blueCD.remainingTime + "sec")}</p>
                   {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
                 </div>
@@ -520,11 +520,12 @@ const GameArea = () => {
                 <div className="skill">
                   <CircularProgressBar skillCD={playerCharacter.redCD} />
                   <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
-                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>
+                  <p>coming soon...</p>
+                  {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>
                     "Red Attack:"</p>
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.redCD.isReady ? "Ready - K" :
-                      (playerCharacter.redCD.remainingTime + "sec")}</p>
+                      (playerCharacter.redCD.remainingTime + "sec")}</p> */}
                 </div>
 
 
@@ -532,22 +533,25 @@ const GameArea = () => {
                 <div className="skill">
                   <CircularProgressBar skillCD={playerCharacter.purpleCD} />
                   <img src={require("../Assets/purple.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
-                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
+                  <p>coming soon...</p>
+                  {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.purpleCD.isReady ?
                       (playerCharacter.purpleCD.isReady ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
-                      (playerCharacter.purpleCD.remainingTime + "sec")}</p>
+                      (playerCharacter.purpleCD.remainingTime + "sec")}</p> */}
                 </div>
 
                 {/* Domain Attack */}
                 <div className="skill">
                   <CircularProgressBar skillCD={playerCharacter.purpleCD} />
                   <img src={require("../Assets/domain-hand.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
-                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Infinite Void:</p>
+                  <p>coming soon...</p>
+                  {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Infinite Void:</p>
+                    
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.purpleCD.isReady ?
                       (playerCharacter.purpleCD.isReady ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
-                      (playerCharacter.purpleCD.remainingTime + "sec")}</p>
+                      (playerCharacter.purpleCD.remainingTime + "sec")}</p> */}
                 </div>
               </div>
               {/* Rapid Slash

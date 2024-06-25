@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import gojoSlice, { toggleBlueCD } from "../store/GojoSlice";
 import sukunaSlice from "../store/SukunaSlice";
@@ -28,7 +28,10 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const redCost = -100;
     const purpleCost = -150;
     const domainCost = -200;
-
+    const blueDamage = -20;
+    const redDamage = -40;
+    const purpleDamage = -90;
+    const domainDamage = -200;
     // Sound effects
     const slashSoundEffectRef = React.useRef(null);
     const rapidSlashSoundEffectRef = React.useRef(null);
@@ -130,10 +133,60 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             setSlashRotation({ rotate: "270deg" });
         }, degrees.length * 3 * 100);
     };
+    const [bluePositionState, setBluePositionState] = useState({
+        x: 0, y: 0, scale: 0.3, visibility: "hidden", attacking: false,
+        transition: "all .2s ease, transform 4s, top 0s ease, left 0s ease"
+    });
+    const [angle, setAngle] = useState(0);
 
-    const blueAttack = () => {
+    const blueAttack = useCallback(() => {
+        setBluePositionState(prevState => ({
+            ...prevState, scale: 0.3,
+            x: gojo.x, y: gojo.y, visibility: "visible", attacking: true, transition: "all .2s ease, transform 4s, top 2s ease, left 2s ease"
+        }))
+        let inc = 1;
+        const interval = setInterval(() => { // start rotating
+            setAngle(prevAngle => prevAngle + inc);
+            inc++;
+        }, 35);
+        setBluePositionState(prevState => ({ ...prevState, scale: 1 }))
+        setTimeout(() => {
+            setBluePositionState(prevState => ({ ...prevState, x: gojo.x + ballPosition().x, y: gojo.y + ballPosition().y, scale: 1 }))
+            setTimeout(() => {
+                dispatch(rivalSlice.actions.setCanMove(false))
+                setTimeout(() => {
 
-    }
+                }, 1000);
+                dispatch(rivalSlice.actions.moveCharacterTo({ x: gojo.x + ballPosition().x, y: gojo.y + ballPosition().y }))
+                setTimeout(() => {
+                    const damageInterval = setInterval(() => {
+                        dispatch(rivalSlice.actions.updateRivalHealth(blueDamage / 4))
+                    }, 100)
+                    setTimeout(() => {
+                        dispatch(rivalSlice.actions.setCanMove(true))
+                        clearInterval(damageInterval);
+                    }, 400);
+                    setTimeout(() => {
+                        setBluePositionState(prevState => ({
+                            ...prevState, visibility: "hidden"
+                        }))
+                        setTimeout(() => {
+                            setBluePositionState({
+                                x: gojo.x, y: gojo.y, scale: 0.3, visibility: "hidden", attacking: false,
+                                transition: "all .2s ease, transform 4s, top 0s, left 0s"
+                            })
+                        }, 400);
+                        clearInterval(interval); // Temizleme
+                    }, 600);
+                }, 500);
+            }, 3000);
+        }, 1000)
+    }, [gojo.x, gojo.y])
+
+    const ballPosition = useCallback(() => {
+        console.log("blue attack", gojo.x, gojo.y)
+        return { x: gojo.direction === "right" ? 250 : -200, y: 0 }
+    }, [gojo.x, gojo.y])
 
 
     // GOJO KEYBOARD CONTROL
@@ -153,7 +206,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
 
         const intervalId = setInterval(() => {
             if (gameSettings.selectedCharacter !== "gojo") return;
-            if (keysPressed.current.j) {
+            if (keysPressed.current.j && !sukuna.domainAttack && gojo.blueCD.isReady) {
                 if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= blueCost && !sukuna.domainAttack
                 ) {
                     dispatch2(toggleBlueCD());
@@ -167,7 +220,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, gojo.canmove, gojo.cursedEnergy, sukuna.domainAttack]);
+    }, [dispatch, gojo.canmove, gojo.cursedEnergy, sukuna.domainAttack, gojo.x, gojo.blueCD, gojo.redCD, gojo.purpleCD, gojo.domainCD]);
 
 
 
@@ -177,6 +230,15 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             <audio src={require("../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/nue.mp3")} ref={nueSoundEffectRef}></audio>
+            <div className="blue" style={{
+                visibility: bluePositionState.visibility as "visible" | "hidden",
+                top: bluePositionState.attacking ? bluePositionState.y : gojo.y,
+                left: bluePositionState.attacking ? bluePositionState.x : gojo.x,
+                transform: "scale(" + bluePositionState.scale + ")",
+                transition: bluePositionState.transition
+            }}>
+                <img src={require('../Assets/blue.png')} style={{ transform: `rotate(${angle}deg)` }} />
+            </div>
             <div
                 className="gojo"
                 style={{
@@ -184,6 +246,8 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                     display: gojo.health.currentHealth > 0 ? "block" : "none",
                 }}
             >
+                {/* <div className="blue" style={{ top: 0, left: gojo.direction === "left" ? -200 : 200, }}> */}
+
                 <img src={require('../Assets/gojo.png')} alt="" style={{
                     transform: gojo.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
                 }} />
@@ -201,7 +265,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                         </div>
                     </>
                 )}
-                <p style={{ marginTop: gameSettings.selectCharacter === "gojo" ? -60 : -20, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Satoru Gojo</p>
+                <p style={{ marginTop: gameSettings.selectedCharacter === "gojo" ? -30 : -20, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Satoru Gojo</p>
 
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />

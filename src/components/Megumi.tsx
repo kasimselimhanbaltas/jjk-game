@@ -154,7 +154,7 @@ const Megumi = () => {
                         </div>
                     </>
                 )}
-                <p style={{ marginTop: gameSettings.selectCharacter === "megumi" ? -60 : -20, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Fushiguro Megumi</p>
+                <p style={{ marginTop: gameSettings.selectedCharacter === "megumi" ? -20 : -60, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Megumi Fushiguro</p>
 
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
                 <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />

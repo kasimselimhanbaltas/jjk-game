@@ -49,6 +49,20 @@
   position: absolute;
   transition: all .2s ease;
 }
+.blue {
+  position: absolute;
+  transition: all .2s ease, transform 4s, top 0s ease, left 0s ease;
+  width: 150px;
+  height: 150px;
+  z-index: 9;
+}
+.blue img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  z-index: 9;}
 .nue {
   position: absolute;
   /* transition: all .4s ease; */
