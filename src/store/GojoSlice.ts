@@ -29,7 +29,7 @@ const initialState: Gojo = {
   },
   redCD: {
     isReady: true,
-    cooldown: 20,
+    cooldown: 5,
     remainingTime: 0,
   },
   purpleCD: {
@@ -69,7 +69,7 @@ const gojoSlice = createSlice({
       state.x = action.payload.x;
       state.y = action.payload.y;
     },
-    healthReducer(state, action) {
+    updateHealth(state, action) {
       state.health.currentHealth += action.payload;
     },
     setHealth(state, action) {
@@ -129,7 +129,7 @@ const gojoSlice = createSlice({
 
 export const {
   moveCharacter,
-  healthReducer,
+  updateHealth,
   setHealth,
   changeCursedEnergy,
   setDirection,

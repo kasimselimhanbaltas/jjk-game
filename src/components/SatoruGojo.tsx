@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import gojoSlice, { toggleBlueCD } from "../store/GojoSlice";
+import gojoSlice, { toggleBlueCD, toggleRedCD } from "../store/GojoSlice";
 import sukunaSlice from "../store/SukunaSlice";
 import { setNueDirection } from "../store/NueSlice";
 import React from "react";
@@ -28,7 +28,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const redCost = -100;
     const purpleCost = -150;
     const domainCost = -200;
-    const blueDamage = -40;
+    const blueDamage = -50;
     const redDamage = -60;
     const purpleDamage = -100;
     const domainDamage = -200;
@@ -37,6 +37,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const rapidSlashSoundEffectRef = React.useRef(null);
     const domainSoundEffectRef = React.useRef(null);
     const blueSoundEffectRef = React.useRef(null);
+    const redSoundEffectRef = React.useRef(null);
     // domainSoundEffectRef.current.volume = 0.1;
     // nueSoundEffectRef.current.volume = 0.1;
 
@@ -95,7 +96,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                     setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
                     setSlashRotation2({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
                     dispatch(gojoSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
-                    dispatch(gojoSlice.actions.healthReducer(slashDamage));
+                    dispatch(gojoSlice.actions.updateHealth(slashDamage));
                     if (i >= maxSlashCount - 1) {
                         domainSoundEffectRef.current.pause()
                         domainSoundEffectRef.current.currentTime = 0; // İsterseniz başa sarabilirsiniz
@@ -125,7 +126,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         for (let i = 0; i < degrees.length * 3; i++) {
             setTimeout(() => {
                 setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                dispatch(gojoSlice.actions.healthReducer(-10));
+                dispatch(gojoSlice.actions.updateHealth(-10));
                 dispatch(gojoSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
             }, i * 100);
         }
@@ -133,11 +134,17 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             setSlashRotation({ rotate: "270deg" });
         }, degrees.length * 3 * 100);
     };
+
     const [bluePositionState, setBluePositionState] = useState({
         x: 0, y: 0, scale: 0.3, visibility: "hidden", attacking: false,
         transition: "all .2s ease, transform 4s, top 0s ease, left 0s ease"
     });
-    const [angle, setAngle] = useState(0);
+    const [redPositionState, setRedPositionState] = useState({
+        x: 0, scale: 0.2, visibility: "visible", attacking: false,
+        transition: "all .2s ease, transform 4s, top 0s ease, left 0s ease"
+    });
+    const [blueAngle, setBlueAngle] = useState(0);
+    const [redAngle, setRedAngle] = useState(0);
 
     const blueAttack = useCallback(() => {
         blueSoundEffectRef.current.volume = 0.5;
@@ -148,18 +155,18 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         }))
         let inc = 5;
         const interval = setInterval(() => { // start rotating
-            setAngle(prevAngle => prevAngle + inc);
+            setBlueAngle(prevAngle => prevAngle + inc);
             inc++;
         }, 35);
         setBluePositionState(prevState => ({ ...prevState, scale: 1 }))
         setTimeout(() => {
-            setBluePositionState(prevState => ({ ...prevState, x: gojo.x + ballPosition().x, y: gojo.y + ballPosition().y, scale: 1 }))
+            setBluePositionState(prevState => ({ ...prevState, x: gojo.x + bluePosition().x, y: gojo.y + bluePosition().y, scale: 1 }))
             setTimeout(() => {
                 dispatch(rivalSlice.actions.setCanMove(false))
                 setTimeout(() => {
 
                 }, 1000);
-                dispatch(rivalSlice.actions.moveCharacterTo({ x: gojo.x + ballPosition().x, y: gojo.y + ballPosition().y }))
+                dispatch(rivalSlice.actions.moveCharacterTo({ x: gojo.x + bluePosition().x, y: gojo.y + bluePosition().y }))
                 setTimeout(() => {
                     const damageInterval = setInterval(() => {
                         dispatch(rivalSlice.actions.updateHealth(blueDamage / 4))
@@ -185,11 +192,69 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         }, 1000)
     }, [gojo.x, gojo.y])
 
-    const ballPosition = useCallback(() => {
-        console.log("blue attack", gojo.x, gojo.y)
+
+    // const [redPosition, setRedPosition] = useState({ x: 0, y: 0 });
+    // const [isRedAttacking, setIsRedAttacking] = useState(false);
+    // const [isRedGonnaHit, setIsRedGonnaHit] = useState(false);
+
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         if (isRedAttacking) {
+    //             setRedPosition(prev => ({
+    //                 ...prev,
+    //                 x: gojo.direction === "right" ? gojo.x + 250 : gojo.x - 200,
+    //                 y: gojo.y
+    //             }));
+    //         }
+
+    //         setIsRedGonnaHit(gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalState.x) <= 200 ? true : false) :
+    //             (Math.abs(gojo.x - 200 - rivalState.x) <= 200 ? true : false));
+    //     }, 100); // Her 100ms'de bir kırmızının konumunu güncelle
+
+    //     return () => clearInterval(interval); // cleanup
+    // }, [isRedAttacking, gojo.x, gojo.y, gojo.direction]);
+
+
+    const redAttack = () => {
+        redSoundEffectRef.current.volume = 0.5;
+        redSoundEffectRef.current.play();
+        setRedPositionState(prevState => ({
+            ...prevState,
+            // x: gojo.direction === "left" ? gojo.x - 100 : gojo.x + 100, y: gojo.y, visibility: "visible", attacking: true, transition: "all .2s ease, transform 4s, top 1s ease, left 1s ease"
+            x: gojo.direction === "left" ? gojo.x - 100 : gojo.x + 100, y: gojo.y, visibility: "visible", attacking: false, transition: "all .2s ease, transform 4s, top .1s ease-in, left .1s ease-in"
+        }))
+        let inc = 5;
+        const interval = setInterval(() => { // start rotating
+            setRedAngle(prevAngle => prevAngle + inc);
+            inc++;
+        }, 35);
+        // setRedPositionState(prevState => ({ ...prevState, }))
+        setTimeout(() => { // 4sec
+            setRedPositionState(prevState => ({ ...prevState, x: gojo.x, attacking: true }))
+            setTimeout(() => {
+                dispatch(rivalSlice.actions.updateHealth(redDamage))
+                setRedPositionState(prevState => ({
+                    ...prevState, visibility: "hidden"
+                }))
+                setTimeout(() => {
+                    setRedPositionState(prevState => ({
+                        ...prevState, x: gojo.x, attacking: false,
+                        transition: "all .2s ease, transform 4s, top 0s, left 0s"
+                    }))
+                }, 300);
+                clearInterval(interval); // Dönme intervali temizleme
+            }, 100);
+        }, 4000)
+    }
+
+
+    const bluePosition = useCallback(() => {
         return { x: gojo.direction === "right" ? 250 : -200, y: 0 }
     }, [gojo.x, gojo.y])
 
+    // const redPosition = useCallback(() => {
+    //     return { x: gojo.direction === "right" ? gojo.x + 250 : gojo.x - 200, y: gojo.y }
+    // }, [gojo.x, gojo.y])
 
     // GOJO KEYBOARD CONTROL
     useEffect(() => {
@@ -215,6 +280,13 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                     blueAttack();
                 }
             }
+            if (keysPressed.current.k && !sukuna.domainAttack && gojo.redCD.isReady) {
+                if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= redCost && !sukuna.domainAttack
+                ) {
+                    dispatch2(toggleRedCD());
+                    redAttack();
+                }
+            }
         }, 100);
 
         return () => {
@@ -224,14 +296,18 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         };
     }, [dispatch, gojo.canmove, gojo.cursedEnergy, sukuna.domainAttack, gojo.x, gojo.blueCD, gojo.redCD, gojo.purpleCD, gojo.domainCD]);
 
-
-
     return (
         <>
             <audio src={require("../Assets/audios/slash.mp3")} ref={slashSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
             <audio src={require("../Assets/audios/blue.mp3")} ref={blueSoundEffectRef}></audio>
+            <audio src={require("../Assets/audios/red.mp3")} ref={redSoundEffectRef}></audio>
+            <div>
+                {gojo.direction === "right" ? gojo.x + 250 : gojo.x - 200}
+                {gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalState.x) <= 200 ? "close range" : "far") :
+                    (Math.abs(gojo.x - 200 - rivalState.x) <= 200 ? "close range" : "far")}
+            </div>
             <div className="blue" style={{
                 visibility: bluePositionState.visibility as "visible" | "hidden",
                 top: bluePositionState.attacking ? bluePositionState.y : gojo.y,
@@ -239,7 +315,17 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 transform: "scale(" + bluePositionState.scale + ")",
                 transition: bluePositionState.transition
             }}>
-                <img src={require('../Assets/blue.png')} style={{ transform: `rotate(${angle}deg)` }} />
+                <img src={require('../Assets/blue.png')} style={{ transform: `rotate(${blueAngle}deg)` }} />
+            </div>
+            <div className="red" style={{
+                visibility: redPositionState.visibility as "visible" | "hidden",
+                top: gojo.y,
+                // left: !isRedAttacking ? redSecond.x : redPosition.x,
+                left: redPositionState.attacking ? redPositionState.x + gojo.x : gojo.x,
+                transform: "scale(" + redPositionState.scale + ")",
+                transition: redPositionState.transition
+            }}>
+                <img src={require('../Assets/red.png')} style={{ transform: `rotate(${redAngle}deg)` }} />
             </div>
             <div
                 className="gojo"

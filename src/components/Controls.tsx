@@ -27,6 +27,15 @@ const Controls = () => {
                     {/* <p>{sukuna.closeRange ? "Close Range" : "Far Range"}</p> */}
                 </div>
             )}
+            {gameSettings.selectedCharacter === "gojo" && (
+                <div className="controls">
+                    <p>Controls: </p>
+                    <p>W-A-S-D: Movement</p>
+                    <p>Space: Dash</p>
+                    <p> J - Blue Attack</p> <p>More coming soon...</p>
+                    {/* <p>{sukuna.closeRange ? "Close Range" : "Far Range"}</p> */}
+                </div>
+            )}
         </>
     )
 }

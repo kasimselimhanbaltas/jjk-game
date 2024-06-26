@@ -110,7 +110,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     }
     const localDismantleAttack = (stepDistance) => {
         if (!sukuna.closeRange) return;
-        dispatch(rivalSlice.actions.healthReducer(dismantleAttackDamage)); // Megumi'ın canını azalt
+        dispatch(rivalSlice.actions.updateHealth(dismantleAttackDamage)); // Megumi'ın canını azalt
         dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 3));
         dispatch(sukunaSlice.actions.changeCursedEnergy(dismantleCost));
         dispatch(rivalDismantleAttack(true));
@@ -128,7 +128,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
         setCleaveReady({ ready: false, coolDown: 5 });
         dispatch(rivalCleaveAttack(true));
-        dispatch(rivalSlice.actions.healthReducer(cleaveAttackDamage)); // Megumi'ın canını azalt
+        dispatch(rivalSlice.actions.updateHealth(cleaveAttackDamage)); // Megumi'ın canını azalt
         setTimeout(() => { // cooldown
             setCleaveReady({ ready: true, coolDown: 5 });
         }, cleaveReady.coolDown * 1000);

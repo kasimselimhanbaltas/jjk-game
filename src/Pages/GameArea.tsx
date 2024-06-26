@@ -76,21 +76,16 @@ const GameArea = () => {
 
   // place characters
   useEffect(() => {
-    playerSlice.actions.moveCharacterTo({ x: 200, y: 200 });
-    rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 });
+    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 200 }));
+    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
 
   }, []);
 
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
-    console.log("inc1", playerCEincreaseIntervalRef.current)
     if (playerCEincreaseIntervalRef.current != null) return;
-    console.log("inc2")
     playerCEincreaseIntervalRef.current = setInterval(() => {
-      console.log("inc3", playerCharacter.cursedEnergy.currentCursedEnergy, playerCharacter.cursedEnergy.maxCursedEnergy)
-
       if (playerCharacter.cursedEnergy.currentCursedEnergy < playerCharacter.cursedEnergy.maxCursedEnergy) {
-        console.log("inc4")
         dispatch(playerSlice.actions.changeCursedEnergy(+10));
       }
     }, 1000);
@@ -260,10 +255,15 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
+    dispatch(playerSlice.actions.resetState())
+    dispatch(rivalSlice.actions.resetState())
+    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 200 }));
+    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
+    setShowFinishMenu(false)
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
     if (gameSettings.selectedCharacter === "gojo") {
       yowaimoSoundEffectRef.current.volume = 0.5;
@@ -271,13 +271,10 @@ const GameArea = () => {
     }
   };
   const handleRestart = () => {
-    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 200 }));
-    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
-    dispatch(rivalSlice.actions.setHealth(rivalCharacter.health.maxHealth));
-    dispatch(playerSlice.actions.setHealth(playerCharacter.health.maxHealth));
-    console.log("restart", rivalCharacter.health.currentHealth, rivalCharacter.health.maxHealth);
     dispatch(playerSlice.actions.resetState())
     dispatch(rivalSlice.actions.resetState())
+    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 200 }));
+    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
     setShowFinishMenu(false);
     if (gameSettings.selectedCharacter === "gojo") {
       yowaimoSoundEffectRef.current.volume = 0.2;
@@ -302,14 +299,18 @@ const GameArea = () => {
       setTimeout(() => {
         setShowFinishMenu(true);
         dispatch(setWinner(rivalCharacter.characterName));
+        dispatch(rivalSlice.actions.resetState())
+        dispatch(playerSlice.actions.resetState())
       }, 2000);
     } else if (rivalCharacter.health.currentHealth <= 0) {
       setTimeout(() => {
         setShowFinishMenu(true);
         dispatch(setWinner(playerCharacter.characterName));
+        dispatch(rivalSlice.actions.resetState())
+        dispatch(playerSlice.actions.resetState())
       }, 2000);
     }
-  }, [playerCharacter.health.currentHealth, rivalCharacter.health]);
+  }, [playerCharacter.health.currentHealth, rivalCharacter.health.currentHealth]);
 
 
   return (
@@ -555,7 +556,7 @@ const GameArea = () => {
                 {/* Blue Attack */}
                 <div className="skill" >
                   <CircularProgressBar skillCD={playerCharacter.blueCD} />
-                  <img src={require('../Assets/blue.png')} alt="" style={{ scale: "0.8" }} />
+                  <img src={require('../Assets/blue.png')} alt="" style={{ scale: "0.6" }} />
                   <p style={{ marginTop: "10px", lineBreak: "loose" }}>Blue Attack:</p>
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.blueCD.isReady ?
@@ -567,7 +568,7 @@ const GameArea = () => {
                 {/* Red Nue */}
                 <div className="skill">
                   <CircularProgressBar skillCD={playerCharacter.redCD} />
-                  <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
+                  <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} />
                   <p>coming soon...</p>
                   {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>
                     "Red Attack:"</p>
