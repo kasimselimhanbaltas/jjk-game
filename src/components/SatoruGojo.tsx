@@ -29,7 +29,6 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const purpleCost = -150;
     const domainCost = -200;
     const blueDamage = -50;
-    const redDamage = -60;
     const purpleDamage = -100;
     const domainDamage = -200;
     // Sound effects
@@ -214,13 +213,11 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     //     return () => clearInterval(interval); // cleanup
     // }, [isRedAttacking, gojo.x, gojo.y, gojo.direction]);
 
-
     const redAttack = () => {
         redSoundEffectRef.current.volume = 0.5;
         redSoundEffectRef.current.play();
         setRedPositionState(prevState => ({
             ...prevState,
-            // x: gojo.direction === "left" ? gojo.x - 100 : gojo.x + 100, y: gojo.y, visibility: "visible", attacking: true, transition: "all .2s ease, transform 4s, top 1s ease, left 1s ease"
             x: gojo.direction === "left" ? gojo.x - 100 : gojo.x + 100, y: gojo.y, visibility: "visible", attacking: false, transition: "all .2s ease, transform 4s, top .1s ease-in, left .1s ease-in"
         }))
         let inc = 5;
@@ -230,9 +227,12 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         }, 35);
         // setRedPositionState(prevState => ({ ...prevState, }))
         setTimeout(() => { // 4sec
-            setRedPositionState(prevState => ({ ...prevState, x: gojo.x, attacking: true }))
+            setRedPositionState(prevState => ({
+                ...prevState, x: gojo.direction === "left" ? gojo.x - 200 : gojo.x + 250,
+                y: rivalState.y, attacking: true
+            }))
             setTimeout(() => {
-                dispatch(rivalSlice.actions.updateHealth(redDamage))
+                dispatch(gojoSlice.actions.setRedAttackMoment(true)) // handle skillshot damage in gamearea
                 setRedPositionState(prevState => ({
                     ...prevState, visibility: "hidden"
                 }))
@@ -241,6 +241,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                         ...prevState, x: gojo.x, attacking: false,
                         transition: "all .2s ease, transform 4s, top 0s, left 0s"
                     }))
+                    dispatch(gojoSlice.actions.setRedAttackMoment(false))
                 }, 300);
                 clearInterval(interval); // Dönme intervali temizleme
             }, 100);
@@ -251,10 +252,6 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const bluePosition = useCallback(() => {
         return { x: gojo.direction === "right" ? 250 : -200, y: 0 }
     }, [gojo.x, gojo.y])
-
-    // const redPosition = useCallback(() => {
-    //     return { x: gojo.direction === "right" ? gojo.x + 250 : gojo.x - 200, y: gojo.y }
-    // }, [gojo.x, gojo.y])
 
     // GOJO KEYBOARD CONTROL
     useEffect(() => {
@@ -307,6 +304,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 {gojo.direction === "right" ? gojo.x + 250 : gojo.x - 200}
                 {gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalState.x) <= 200 ? "close range" : "far") :
                     (Math.abs(gojo.x - 200 - rivalState.x) <= 200 ? "close range" : "far")}
+                <br />
             </div>
             <div className="blue" style={{
                 visibility: bluePositionState.visibility as "visible" | "hidden",
@@ -320,8 +318,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             <div className="red" style={{
                 visibility: redPositionState.visibility as "visible" | "hidden",
                 top: gojo.y,
-                // left: !isRedAttacking ? redSecond.x : redPosition.x,
-                left: redPositionState.attacking ? redPositionState.x + gojo.x : gojo.x,
+                left: redPositionState.attacking ? redPositionState.x + gojo.x : gojo.direction === "left" ? gojo.x - 70 : gojo.x + 50,
                 transform: "scale(" + redPositionState.scale + ")",
                 transition: redPositionState.transition
             }}>
@@ -381,3 +378,4 @@ const Gojo = ({ rivalState, rivalSlice }) => {
 };
 
 export default Gojo;
+

@@ -73,13 +73,25 @@ const GameArea = () => {
   const playerCharacter = selectedState.player;
   const rivalCharacter = selectedState.rival;
 
+  const redDamage = -60;
 
   // place characters
   useEffect(() => {
     dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 200 }));
     dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
-
   }, []);
+
+  //check red damage
+  useEffect(() => {
+    if (!playerCharacter.redAttackMoment) {
+
+      let distance =
+        gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalCharacter.x) <= 200 ? "close range" : "far") :
+          (Math.abs(gojo.x - 200 - rivalCharacter.x) <= 200 ? "close range" : "far")
+      console.log("gamearea red: ", distance)
+      if (distance === "close range") dispatch(rivalSlice.actions.updateHealth(redDamage))
+    }
+  }, [playerCharacter.redAttackMoment])
 
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
@@ -107,6 +119,8 @@ const GameArea = () => {
     clearInterval(ref.current);
     ref.current = null;
   };
+
+
 
   // Cursed energy increase interval start and stop effect
   useEffect(() => {

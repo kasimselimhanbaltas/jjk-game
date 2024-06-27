@@ -42,6 +42,7 @@ const initialState: Gojo = {
     cooldown: 30,
     remainingTime: 0,
   },
+  redAttackMoment: false,
 };
 
 const gojoSlice = createSlice({
@@ -122,6 +123,9 @@ const gojoSlice = createSlice({
       state.domainCD.remainingTime = action.payload.remainingTime;
     },
     resetState: () => initialState,
+    setRedAttackMoment(state, action) {
+      state.redAttackMoment = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -142,6 +146,7 @@ export const {
   setPurpleCD,
   setDomainCD,
   resetState,
+  setRedAttackMoment,
 } = gojoSlice.actions;
 export default gojoSlice;
 

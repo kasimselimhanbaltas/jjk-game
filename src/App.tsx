@@ -57,7 +57,7 @@ export interface Gojo {
   redCD: Skill,
   purpleCD: Skill,
   domainCD: Skill,
-
+  redAttackMoment: boolean,
 }
 
 export interface Sukuna {
