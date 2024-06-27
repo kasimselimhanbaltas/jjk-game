@@ -324,7 +324,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         const intervalId = setInterval(() => {
             if (gameSettings.selectedCharacter !== "gojo") return;
             if (keysPressed.current.j && !sukuna.domainAttack && gojo.blueCD.isReady) {
-                if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= blueCost && !sukuna.domainAttack
+                if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= -blueCost && !sukuna.domainAttack
                 ) {
                     dispatch(gojoSlice.actions.changeCursedEnergy(blueCost));
                     dispatch2(toggleBlueCD());
@@ -332,7 +332,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 }
             }
             if (keysPressed.current.k && !sukuna.domainAttack && gojo.redCD.isReady) {
-                if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= redCost && !sukuna.domainAttack
+                if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= -redCost && !sukuna.domainAttack
                 ) {
                     dispatch(gojoSlice.actions.changeCursedEnergy(redCost));
                     dispatch2(toggleRedCD());
@@ -340,7 +340,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 }
             }
             if (keysPressed.current.l && !sukuna.domainAttack && gojo.purpleCD.isReady) {
-                if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= purpleCost && !sukuna.domainAttack
+                if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= -purpleCost && !sukuna.domainAttack
                 ) {
                     dispatch(gojoSlice.actions.changeCursedEnergy(purpleCost));
                     dispatch2(togglePurpleCD());

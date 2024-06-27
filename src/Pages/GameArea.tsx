@@ -591,12 +591,12 @@ const GameArea = () => {
                 <div className="skill">
                   <CircularProgressBar skillCD={playerCharacter.redCD} />
                   <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} />
-                  <p>coming soon...</p>
-                  {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>
-                    "Red Attack:"</p>
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>
+                    Red Attack:</p>
                   <p style={{ marginTop: "-10px" }}>
-                    {playerCharacter.redCD.isReady ? "Ready - K" :
-                      (playerCharacter.redCD.remainingTime + "sec")}</p> */}
+                    {playerCharacter.redCD.isReady ?
+                      (playerCharacter.cursedEnergy.currentCursedEnergy >= 100 ? "Ready - K" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/100") :
+                      (playerCharacter.redCD.remainingTime + "sec")}</p>
                 </div>
 
 
@@ -604,17 +604,16 @@ const GameArea = () => {
                 <div className="skill">
                   <CircularProgressBar skillCD={playerCharacter.purpleCD} />
                   <img src={require("../Assets/purple.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
-                  <p>coming soon...</p>
-                  {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
+                  <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
                   <p style={{ marginTop: "-10px" }}>
                     {playerCharacter.purpleCD.isReady ?
-                      (playerCharacter.purpleCD.isReady ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
-                      (playerCharacter.purpleCD.remainingTime + "sec")}</p> */}
+                      (playerCharacter.cursedEnergy.currentCursedEnergy >= 150 ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/150") :
+                      (playerCharacter.purpleCD.remainingTime + "sec")}</p>
                 </div>
 
                 {/* Domain Attack */}
                 <div className="skill">
-                  <CircularProgressBar skillCD={playerCharacter.purpleCD} />
+                  <CircularProgressBar skillCD={playerCharacter.domainCD} />
                   <img src={require("../Assets/domain-hand.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
                   <p>coming soon...</p>
                   {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Infinite Void:</p>

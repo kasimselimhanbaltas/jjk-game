@@ -32,7 +32,10 @@ const Controls = () => {
                     <p>Controls: </p>
                     <p>W-A-S-D: Movement</p>
                     <p>Space: Dash</p>
-                    <p> J - Blue Attack</p> <p>More coming soon...</p>
+                    <p> J - Blue Attack</p>
+                    <p> K - Red Attack</p>
+                    <p> L - Purple Attack</p>
+                    <p>More coming soon...</p>
                     {/* <p>{sukuna.closeRange ? "Close Range" : "Far Range"}</p> */}
                 </div>
             )}
