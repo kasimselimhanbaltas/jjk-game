@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef } from "react";
-import Megumi from "../components/Megumi";
-import Sukuna from "../components/Sukuna";
+import Megumi from "../components/characters/Megumi";
+import Sukuna from "../components/characters/Sukuna";
 import Nue from "../components/Nue";
-import sukunaSlice from "../store/SukunaSlice";
-import megumiSlice from "../store/MegumiSlice";
-import gojoSlice from "../store/GojoSlice";
+import sukunaSlice from "../store/character-slices/SukunaSlice";
+import megumiSlice from "../store/character-slices/MegumiSlice";
+import gojoSlice from "../store/character-slices/GojoSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { nueActivity, setNueDirection } from "../store/NueSlice";
 import DivineDogs from "../components/DivineDogs";
@@ -12,7 +12,7 @@ import MainMenu from "../components/MainMenu";
 import React from "react";
 import CircularProgressBar from "../components/CircularProgressBar";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import SatoruGojo from "../components/SatoruGojo";
+import SatoruGojo from "../components/characters/SatoruGojo";
 import FinishMenu from "../components/FinishMenu";
 import { setWinner } from "../store/GameSettingsSlice";
 
@@ -24,6 +24,8 @@ const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 const megumiSpeed = 30;
 const shrineHeight = 250;
+const redDamage = -60;
+const purpleDamage = -150;
 
 const GameArea = () => {
 
@@ -73,7 +75,7 @@ const GameArea = () => {
   const playerCharacter = selectedState.player;
   const rivalCharacter = selectedState.rival;
 
-  const redDamage = -60;
+
 
   // place characters
   useEffect(() => {
@@ -81,17 +83,24 @@ const GameArea = () => {
     dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
   }, []);
 
-  //check red damage
+  //check red damage, purple damage
   useEffect(() => {
-    if (!playerCharacter.redAttackMoment) {
-
+    if (playerCharacter.redAttackMoment) {
       let distance =
         gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalCharacter.x) <= 200 ? "close range" : "far") :
           (Math.abs(gojo.x - 200 - rivalCharacter.x) <= 200 ? "close range" : "far")
       console.log("gamearea red: ", distance)
       if (distance === "close range") dispatch(rivalSlice.actions.updateHealth(redDamage))
     }
-  }, [playerCharacter.redAttackMoment])
+    if (playerCharacter.purpleAttackMoment) {
+      let distance =
+        gojo.y - rivalCharacter.y >= -150 && gojo.y - rivalCharacter.y <= 100 ?
+          gojo.direction === "right" ? (gojo.x - rivalCharacter.x <= 0 ? "hit" : "miss") :
+            (gojo.x - rivalCharacter.x > 0 ? "hit" : "miss") : "miss"
+      console.log("gamearea red: ", distance)
+      if (distance === "hit") dispatch(rivalSlice.actions.updateHealth(purpleDamage))
+    }
+  }, [playerCharacter.redAttackMoment, playerCharacter.purpleAttackMoment])
 
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
@@ -269,7 +278,7 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
@@ -330,7 +339,6 @@ const GameArea = () => {
   return (
     <div className="game-area">
       <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
-
       {showMenu ? ( // Menü gösteriliyor mu?
         <MainMenu onStartGame={handleStartGame} /> // Evet ise menüyü göster
       ) : showFinishMenu ? (

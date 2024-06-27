@@ -4,12 +4,12 @@ import sukunaSlice, {
     moveCharacter, moveCharacterTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack,
     setCanMove, setCursedEnergy, setDirection, setRivalDomainExpansion,
     toggleCleaveCD, toggleDismantleCD, toggleDomainCD, setRapidAttackCounter
-} from '../store/SukunaSlice';
-import megumiSlice, { changeCursedEnergy } from '../store/MegumiSlice';
+} from '../../store/character-slices/SukunaSlice';
+import megumiSlice, { changeCursedEnergy } from '../../store/character-slices/MegumiSlice';
 import { Howl, Howler } from 'howler';
 import ReactHowler from 'react-howler';
-import useCooldown from '../hooks/useCoolDown';
-import { AppDispatch, RootState } from '../store/GlobalStore';
+import useCooldown from '../../hooks/useCoolDown';
+import { AppDispatch, RootState } from '../../store/GlobalStore';
 
 const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
@@ -37,7 +37,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const [cleaveReady, setCleaveReady] = useState({ ready: true, coolDown: 0 });
     const [dismantleReady, setDismantleReady] = React.useState({ ready: true, coolDown: 0 });
     const [domainReady, setDomainReady] = React.useState({ ready: true, coolDown: 0 });
-    const [sukunaImage, setSukunaImage] = React.useState({ src: require('../Assets/sukuna.png'), scale: 1 });
+    const [sukunaImage, setSukunaImage] = React.useState({ src: require('../../Assets/sukuna.png'), scale: 1 });
 
 
 
@@ -78,9 +78,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         console.log("RIYOIKI TENKAI ")
         dispatch(moveCharacterTo({ x: 650, y: 150 }));
         sukunaSoundEffectRef.current.play()
-        setSukunaImage({ src: require('../Assets/domainpose.png'), scale: 3 });
+        setSukunaImage({ src: require('../../Assets/domainpose.png'), scale: 3 });
         setTimeout(() => {
-            setSukunaImage({ src: require('../Assets/domainpose.png'), scale: 5 });
+            setSukunaImage({ src: require('../../Assets/domainpose.png'), scale: 5 });
         }, 100);
         dispatch(rivalSlice.actions.setCanMove(false))
         dispatch(setCanMove(false))
@@ -89,9 +89,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             dispatch(setRivalDomainExpansion(true));
         }, 6000);
         setTimeout(() => {
-            setSukunaImage({ src: require('../Assets/domainpose.png'), scale: 2 });
+            setSukunaImage({ src: require('../../Assets/domainpose.png'), scale: 2 });
             setTimeout(() => {
-                setSukunaImage({ src: require('../Assets/sukuna.png'), scale: 1 });
+                setSukunaImage({ src: require('../../Assets/sukuna.png'), scale: 1 });
             }, 100);
             dispatch(setRivalDomainExpansion(false));
             dispatch(rivalSlice.actions.setCanMove(true))
@@ -249,7 +249,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     };
     return (
         <div>
-            <audio src={require("../Assets/audios/sukuna.mp3")} ref={sukunaSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/sukuna.mp3")} ref={sukunaSoundEffectRef}></audio>
             <div className="sukuna"
                 style={{
                     top: sukuna.y, left: sukuna.x, width: characterWidth, height: characterHeight,
@@ -257,8 +257,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 }}>
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
                 <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} />
-                <img src={require('../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
-                <img src={require('../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
+                <img src={require('../../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
+                <img src={require('../../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <p style={{ marginTop: gameSettings.selectedCharacter !== "sukuna" ? -80 : -30, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
                 {gameSettings.selectedCharacter !== "sukuna" && (
                     <>

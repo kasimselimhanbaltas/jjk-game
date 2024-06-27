@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import gojoSlice, { toggleBlueCD, toggleRedCD } from "../store/GojoSlice";
-import sukunaSlice from "../store/SukunaSlice";
-import { setNueDirection } from "../store/NueSlice";
+import gojoSlice, { toggleBlueCD, togglePurpleCD, toggleRedCD } from "../../store/character-slices/GojoSlice";
+import sukunaSlice from "../../store/character-slices/SukunaSlice";
+import { setNueDirection } from "../../store/NueSlice";
 import React from "react";
-import { AppDispatch } from "../store/GlobalStore";
+import { AppDispatch } from "../../store/GlobalStore";
 
 const Gojo = ({ rivalState, rivalSlice }) => {
 
@@ -29,7 +29,6 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const purpleCost = -150;
     const domainCost = -200;
     const blueDamage = -50;
-    const purpleDamage = -100;
     const domainDamage = -200;
     // Sound effects
     const slashSoundEffectRef = React.useRef(null);
@@ -37,6 +36,8 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const domainSoundEffectRef = React.useRef(null);
     const blueSoundEffectRef = React.useRef(null);
     const redSoundEffectRef = React.useRef(null);
+    const purpleSoundEffectRef = React.useRef(null);
+
     // domainSoundEffectRef.current.volume = 0.1;
     // nueSoundEffectRef.current.volume = 0.1;
 
@@ -134,14 +135,21 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         }, degrees.length * 3 * 100);
     };
 
+    const [gojoImage, setGojoImage] = useState(require("../../Assets/gojo.png"));
     const [bluePositionState, setBluePositionState] = useState({
         x: 0, y: 0, scale: 0.3, visibility: "hidden", attacking: false,
         transition: "all .2s ease, transform 4s, top 0s ease, left 0s ease"
     });
     const [redPositionState, setRedPositionState] = useState({
-        x: 0, scale: 0.2, visibility: "visible", attacking: false,
+        x: 0, scale: 0.2, visibility: "hidden", attacking: false,
         transition: "all .2s ease, transform 4s, top 0s ease, left 0s ease"
     });
+    const [purplePositionState, setPurplePositionState] = useState({
+        x: 0, scale: 0.2, visibility: "visible", visibilityP: "hidden", scaleR: 0, scaleB: 0, scaleP: 8,
+        attacking: false, redY: 350, blueY: -350,
+        transition: "all .2s ease, transform 4s, top 0s ease, left 0s ease"
+    });
+
     const [blueAngle, setBlueAngle] = useState(0);
     const [redAngle, setRedAngle] = useState(0);
 
@@ -149,7 +157,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         blueSoundEffectRef.current.volume = 0.5;
         blueSoundEffectRef.current.play();
         setBluePositionState(prevState => ({
-            ...prevState, scale: 0.3,
+            ...prevState,
             x: gojo.x, y: gojo.y, visibility: "visible", attacking: true, transition: "all .2s ease, transform 4s, top 2s ease, left 2s ease"
         }))
         let inc = 5;
@@ -159,7 +167,11 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         }, 35);
         setBluePositionState(prevState => ({ ...prevState, scale: 1 }))
         setTimeout(() => {
+            setGojoImage(require("../../Assets/gojo-attack.png"));
             setBluePositionState(prevState => ({ ...prevState, x: gojo.x + bluePosition().x, y: gojo.y + bluePosition().y, scale: 1 }))
+            setTimeout(() => {
+                setGojoImage(require("../../Assets/gojo.png"));
+            }, 1000);
             setTimeout(() => {
                 dispatch(rivalSlice.actions.setCanMove(false))
                 setTimeout(() => {
@@ -187,38 +199,16 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                         clearInterval(interval); // Temizleme
                     }, 600);
                 }, 500);
-            }, 3000);
+            }, 1000);
         }, 1000)
     }, [gojo.x, gojo.y])
-
-
-    // const [redPosition, setRedPosition] = useState({ x: 0, y: 0 });
-    // const [isRedAttacking, setIsRedAttacking] = useState(false);
-    // const [isRedGonnaHit, setIsRedGonnaHit] = useState(false);
-
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         if (isRedAttacking) {
-    //             setRedPosition(prev => ({
-    //                 ...prev,
-    //                 x: gojo.direction === "right" ? gojo.x + 250 : gojo.x - 200,
-    //                 y: gojo.y
-    //             }));
-    //         }
-
-    //         setIsRedGonnaHit(gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalState.x) <= 200 ? true : false) :
-    //             (Math.abs(gojo.x - 200 - rivalState.x) <= 200 ? true : false));
-    //     }, 100); // Her 100ms'de bir kırmızının konumunu güncelle
-
-    //     return () => clearInterval(interval); // cleanup
-    // }, [isRedAttacking, gojo.x, gojo.y, gojo.direction]);
 
     const redAttack = () => {
         redSoundEffectRef.current.volume = 0.5;
         redSoundEffectRef.current.play();
         setRedPositionState(prevState => ({
             ...prevState,
-            x: gojo.direction === "left" ? gojo.x - 100 : gojo.x + 100, y: gojo.y, visibility: "visible", attacking: false, transition: "all .2s ease, transform 4s, top .1s ease-in, left .1s ease-in"
+            visibility: "visible", transition: "all .2s ease, transform 4s, top .1s ease-in, left .1s ease-in"
         }))
         let inc = 5;
         const interval = setInterval(() => { // start rotating
@@ -227,6 +217,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
         }, 35);
         // setRedPositionState(prevState => ({ ...prevState, }))
         setTimeout(() => { // 4sec
+            setGojoImage(require("../../Assets/gojo-attack.png"));
             setRedPositionState(prevState => ({
                 ...prevState, x: gojo.direction === "left" ? gojo.x - 200 : gojo.x + 250,
                 y: rivalState.y, attacking: true
@@ -239,15 +230,77 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 setTimeout(() => {
                     setRedPositionState(prevState => ({
                         ...prevState, x: gojo.x, attacking: false,
-                        transition: "all .2s ease, transform 4s, top 0s, left 0s"
+                        transition: "all .2s ease, transform 4s, top 0s, left 0s",
                     }))
                     dispatch(gojoSlice.actions.setRedAttackMoment(false))
+                    setGojoImage(require("../../Assets/gojo.png"));
                 }, 300);
                 clearInterval(interval); // Dönme intervali temizleme
             }, 100);
-        }, 4000)
+        }, 2300)
     }
 
+    const purpleAttack = () => {
+        purpleSoundEffectRef.current.volume = 0.5;
+        purpleSoundEffectRef.current.play();
+        dispatch(rivalSlice.actions.setCanMove(false))
+        setTimeout(() => {
+            setPurplePositionState(prevState => ({
+                ...prevState, scaleB: 3, transition: "left .1s ease-in, top .1s ease-in"
+            }))
+            setTimeout(() => {
+                setPurplePositionState(prevState => ({
+                    ...prevState, scaleR: 3,
+                }))
+                setTimeout(() => {
+                    let inc = 20;
+                    const interval1 = setInterval(() => { // start rotating
+                        setRedAngle(prevAngle => prevAngle + inc);
+                        inc++;
+                    }, 10);
+                    const interval2 = setInterval(() => { // start rotating
+                        setBlueAngle(prevAngle => prevAngle - inc);
+                        inc--;
+                    }, 35);
+                    setPurplePositionState(prevState => ({
+                        ...prevState, redY: 150, blueY: -150
+                    }))
+                    setTimeout(() => {
+                        setPurplePositionState(prevState => ({
+                            ...prevState, visibilityP: "visible", scaleP: 12
+                        }))
+                        setTimeout(() => {
+                            setPurplePositionState(prevState => ({
+                                ...prevState, scaleR: 0, scaleB: 0
+                            }))
+                            clearInterval(interval1); // Dönme intervali temizleme
+                            clearInterval(interval2); // Dönme intervali temizleme
+                        }, 1000);
+                        setTimeout(() => {
+                            setGojoImage(require("../../Assets/gojo-attack.png"));
+                            setPurplePositionState(prevState => ({
+                                ...prevState, attacking: true, transition: "left 1s ease-in, top .1s ease-in"
+                            }))
+                            setTimeout(() => {
+                                dispatch(gojoSlice.actions.setPurpleAttackMoment(true)) // handle skillshot damage in gamearea
+                                setTimeout(() => {
+                                    setGojoImage(require("../../Assets/gojo.png"));
+                                    dispatch(gojoSlice.actions.setPurpleAttackMoment(false))
+                                    setPurplePositionState({
+                                        x: 0, scale: 0.2, visibility: "visible", visibilityP: "hidden", scaleR: 0, scaleB: 0, scaleP: 8,
+                                        attacking: false, redY: 350, blueY: -350,
+                                        transition: "all .2s ease, transform 4s, top 0s ease, left 0s ease"
+                                    })
+                                    dispatch(rivalSlice.actions.setCanMove(true))
+                                }, 2000);
+                            }, 500);
+                        }, 4200);
+                    }, 4000);
+                }, 1000);
+            }, 2500);
+        }, 2100);
+
+    }
 
     const bluePosition = useCallback(() => {
         return { x: gojo.direction === "right" ? 250 : -200, y: 0 }
@@ -273,6 +326,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             if (keysPressed.current.j && !sukuna.domainAttack && gojo.blueCD.isReady) {
                 if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= blueCost && !sukuna.domainAttack
                 ) {
+                    dispatch(gojoSlice.actions.changeCursedEnergy(blueCost));
                     dispatch2(toggleBlueCD());
                     blueAttack();
                 }
@@ -280,8 +334,17 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             if (keysPressed.current.k && !sukuna.domainAttack && gojo.redCD.isReady) {
                 if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= redCost && !sukuna.domainAttack
                 ) {
+                    dispatch(gojoSlice.actions.changeCursedEnergy(redCost));
                     dispatch2(toggleRedCD());
                     redAttack();
+                }
+            }
+            if (keysPressed.current.l && !sukuna.domainAttack && gojo.purpleCD.isReady) {
+                if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= purpleCost && !sukuna.domainAttack
+                ) {
+                    dispatch(gojoSlice.actions.changeCursedEnergy(purpleCost));
+                    dispatch2(togglePurpleCD());
+                    purpleAttack();
                 }
             }
         }, 100);
@@ -295,17 +358,19 @@ const Gojo = ({ rivalState, rivalSlice }) => {
 
     return (
         <>
-            <audio src={require("../Assets/audios/slash.mp3")} ref={slashSoundEffectRef}></audio>
-            <audio src={require("../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
-            <audio src={require("../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
-            <audio src={require("../Assets/audios/blue.mp3")} ref={blueSoundEffectRef}></audio>
-            <audio src={require("../Assets/audios/red.mp3")} ref={redSoundEffectRef}></audio>
-            <div>
+            <audio src={require("../../Assets/audios/slash.mp3")} ref={slashSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/blue.mp3")} ref={blueSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/red-short.mp3")} ref={redSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/purple.mp3")} ref={purpleSoundEffectRef}></audio>
+
+            {/* <div>
                 {gojo.direction === "right" ? gojo.x + 250 : gojo.x - 200}
                 {gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalState.x) <= 200 ? "close range" : "far") :
                     (Math.abs(gojo.x - 200 - rivalState.x) <= 200 ? "close range" : "far")}
                 <br />
-            </div>
+            </div> */}
             <div className="blue" style={{
                 visibility: bluePositionState.visibility as "visible" | "hidden",
                 top: bluePositionState.attacking ? bluePositionState.y : gojo.y,
@@ -313,17 +378,40 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 transform: "scale(" + bluePositionState.scale + ")",
                 transition: bluePositionState.transition
             }}>
-                <img src={require('../Assets/blue.png')} style={{ transform: `rotate(${blueAngle}deg)` }} />
+                <img src={require('../../Assets/blue.png')} style={{ transform: `rotate(${blueAngle}deg)` }} />
             </div>
             <div className="red" style={{
                 visibility: redPositionState.visibility as "visible" | "hidden",
                 top: gojo.y,
-                left: redPositionState.attacking ? redPositionState.x + gojo.x : gojo.direction === "left" ? gojo.x - 70 : gojo.x + 50,
+                left: redPositionState.attacking ? gojo.direction === "left" ? gojo.x - 200 : gojo.x + 250 : gojo.direction === "left" ? gojo.x - 70 : gojo.x + 50,
                 transform: "scale(" + redPositionState.scale + ")",
                 transition: redPositionState.transition
             }}>
-                <img src={require('../Assets/red.png')} style={{ transform: `rotate(${redAngle}deg)` }} />
+                <img src={require('../../Assets/red.png')} style={{ transform: `rotate(${redAngle}deg)` }} />
             </div>
+
+            <div className="purple" style={{
+                visibility: purplePositionState.visibility as "visible" | "hidden",
+                top: gojo.y,
+                left: purplePositionState.attacking ? gojo.direction === "left" ? gojo.x - 2500 : gojo.x + 2500 : gojo.direction === "left" ? gojo.x - 150 : gojo.x + 100,
+                transform: "scale(" + redPositionState.scale + ")",
+                transition: purplePositionState.transition
+            }}>
+                <img src={require('../../Assets/blue.png')} style={{
+                    top: purplePositionState.blueY,
+                    transform: "scale(" + purplePositionState.scaleB + ")" + ` rotate(${blueAngle}deg)`,
+
+                }} />
+                <img src={require('../../Assets/red.png')} style={{
+                    transform: "scale(" + purplePositionState.scaleR + ")" + ` rotate(${redAngle}deg)`,
+                    top: purplePositionState.redY,
+                }} />
+                <img src={require('../../Assets/purple.png')} style={{
+                    visibility: purplePositionState.visibilityP as "visible" | "hidden",
+                    transform: "scale(" + purplePositionState.scaleP + ")",
+                }} />
+            </div>
+
             <div
                 className="gojo"
                 style={{
@@ -333,7 +421,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
             >
                 {/* <div className="blue" style={{ top: 0, left: gojo.direction === "left" ? -200 : 200, }}> */}
 
-                <img src={require('../Assets/gojo.png')} alt="" style={{
+                <img src={gojoImage} alt="" style={{
                     transform: gojo.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
                 }} />
                 {gameSettings.selectedCharacter !== "gojo" && (
@@ -352,25 +440,25 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 )}
                 <p style={{ marginTop: gameSettings.selectedCharacter === "gojo" ? -30 : -20, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Satoru Gojo</p>
 
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
-                <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />
+                <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
+                <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />
                 {/* <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: sukuna.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} /> */}
-                {/* <img src={require('../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: sukuna.isAttacking && Math.abs(sukuna.x - gojo.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.1)" }} /> */}
+                {/* <img src={require('../../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: sukuna.isAttacking && Math.abs(sukuna.x - gojo.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.1)" }} /> */}
                 {/* DISMANTLE */}
                 <div className="dismantle" style={{ display: sukuna.dismantleAttack ? "block" : "none" }}>
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-35px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-25px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-5px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "5px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-35px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-25px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-5px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "5px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "15px", left: "-30px", height: characterHeight, width: "200px", rotate: "45deg", transform: "scale(0.4)" }} />
 
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-50px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-40px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-30px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-20px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-10px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
-                    <img src={require('../Assets/slash.png')} alt="" style={{ top: "-10px", left: "0px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-50px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-40px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-30px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-20px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-10px", left: "-10px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
+                    <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-10px", left: "0px", height: characterHeight, width: "200px", rotate: "-45deg", transform: "scale(0.4)" }} />
                 </div>
             </div>
         </>

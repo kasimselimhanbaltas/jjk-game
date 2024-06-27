@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { setCanMove, updateHealth } from "../store/SukunaSlice";
-import { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../store/MegumiSlice";
+import { setCanMove, updateHealth } from "../store/character-slices/SukunaSlice";
+import { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../store/character-slices/MegumiSlice";
 import { AppDispatch } from "../store/GlobalStore";
 
 

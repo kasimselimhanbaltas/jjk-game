@@ -1,10 +1,10 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import MegumiSlice from "./MegumiSlice";
-import SukunaSlice from "./SukunaSlice";
+import MegumiSlice from "./character-slices/MegumiSlice";
+import SukunaSlice from "./character-slices/SukunaSlice";
 import NueSlice from "./NueSlice";
 import divineDogsSlice from "./DivineDogsSlice";
 import gameSettingsSlice from "./GameSettingsSlice";
-import GojoSlice from "./GojoSlice";
+import GojoSlice from "./character-slices/GojoSlice";
 
 const store = configureStore({
   reducer: {

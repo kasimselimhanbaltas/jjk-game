@@ -1,6 +1,6 @@
 import './App.css';
-import Megumi from './components/Megumi';
-import Sukuna from './components/Sukuna';
+import Megumi from './components/characters/Megumi';
+import Sukuna from './components/characters/Sukuna';
 import GameArea from './Pages/GameArea';
 import Controls from './components/Controls';
 
@@ -58,6 +58,8 @@ export interface Gojo {
   purpleCD: Skill,
   domainCD: Skill,
   redAttackMoment: boolean,
+  purpleAttackMoment: boolean,
+
 }
 
 export interface Sukuna {

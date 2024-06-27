@@ -1,11 +1,12 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Megumi } from "../App";
-import { AppThunk } from "./GlobalStore";
+import { Gojo } from "../../App";
+import { AppThunk } from "../GlobalStore";
 
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
-const initialState: Megumi = {
-  characterName: "megumi",
+
+const initialState: Gojo = {
+  characterName: "gojo",
   x: 200,
   y: 200,
   health: {
@@ -21,25 +22,32 @@ const initialState: Megumi = {
   canMove: true,
   dashGauge: 0,
   rivalDirection: "stop",
-  callNueCD: {
+  blueCD: {
     isReady: true,
     cooldown: 5,
     remainingTime: 0,
   },
-  nueAttackCD: {
+  redCD: {
     isReady: true,
-    cooldown: 2,
+    cooldown: 5,
     remainingTime: 0,
   },
-  divineDogsCD: {
+  purpleCD: {
     isReady: true,
-    cooldown: 10,
+    cooldown: 30,
     remainingTime: 0,
   },
+  domainCD: {
+    isReady: true,
+    cooldown: 30,
+    remainingTime: 0,
+  },
+  redAttackMoment: false,
+  purpleAttackMoment: false,
 };
 
-const megumiSlice = createSlice({
-  name: "megumi",
+const gojoSlice = createSlice({
+  name: "gojo",
   initialState: initialState,
   reducers: {
     moveCharacter(state, action) {
@@ -87,28 +95,41 @@ const megumiSlice = createSlice({
     setRivalDirection(state, action) {
       state.rivalDirection = action.payload;
     },
-    setCallNueCD(
+    setBlueCD(
       state,
       action: PayloadAction<{ isReady: boolean; remainingTime: number }>
     ) {
-      state.callNueCD.isReady = action.payload.isReady;
-      state.callNueCD.remainingTime = action.payload.remainingTime;
+      state.blueCD.isReady = action.payload.isReady;
+      state.blueCD.remainingTime = action.payload.remainingTime;
     },
-    setNueAttackCD(
+    setRedCD(
       state,
       action: PayloadAction<{ isReady: boolean; remainingTime: number }>
     ) {
-      state.nueAttackCD.isReady = action.payload.isReady;
-      state.nueAttackCD.remainingTime = action.payload.remainingTime;
+      state.redCD.isReady = action.payload.isReady;
+      state.redCD.remainingTime = action.payload.remainingTime;
     },
-    setDivineDogsCD(
+    setPurpleCD(
       state,
       action: PayloadAction<{ isReady: boolean; remainingTime: number }>
     ) {
-      state.divineDogsCD.isReady = action.payload.isReady;
-      state.divineDogsCD.remainingTime = action.payload.remainingTime;
+      state.purpleCD.isReady = action.payload.isReady;
+      state.purpleCD.remainingTime = action.payload.remainingTime;
+    },
+    setDomainCD(
+      state,
+      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
+    ) {
+      state.domainCD.isReady = action.payload.isReady;
+      state.domainCD.remainingTime = action.payload.remainingTime;
     },
     resetState: () => initialState,
+    setRedAttackMoment(state, action) {
+      state.redAttackMoment = action.payload;
+    },
+    setPurpleAttackMoment(state, action) {
+      state.purpleAttackMoment = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -124,19 +145,22 @@ export const {
   setCursedEnergy,
   moveCharacterTo,
   setDashGauge,
-  setCallNueCD,
-  setNueAttackCD,
-  setDivineDogsCD,
+  setBlueCD,
+  setRedCD,
+  setPurpleCD,
+  setDomainCD,
   resetState,
-} = megumiSlice.actions;
-export default megumiSlice;
+  setRedAttackMoment,
+  setPurpleAttackMoment,
+} = gojoSlice.actions;
+export default gojoSlice;
 
-export const toggleCallNueCD = (): AppThunk => (dispatch, getState) => {
+export const toggleBlueCD = (): AppThunk => (dispatch, getState) => {
   const state = getState();
-  if (!state.MegumiState.callNueCD.isReady) return;
-  const cooldown = state.MegumiState.callNueCD.cooldown;
+  if (!state.GojoState.blueCD.isReady) return;
+  const cooldown = state.GojoState.blueCD.cooldown;
   dispatch(
-    setCallNueCD({
+    setBlueCD({
       isReady: false,
       remainingTime: cooldown,
     })
@@ -144,10 +168,10 @@ export const toggleCallNueCD = (): AppThunk => (dispatch, getState) => {
 
   const interval = setInterval(() => {
     const currentState = getState();
-    const remainingTime = currentState.MegumiState.callNueCD.remainingTime;
+    const remainingTime = currentState.GojoState.blueCD.remainingTime;
     if (remainingTime > 1) {
       dispatch(
-        setCallNueCD({
+        setBlueCD({
           isReady: false,
           remainingTime: remainingTime - 1,
         })
@@ -155,7 +179,7 @@ export const toggleCallNueCD = (): AppThunk => (dispatch, getState) => {
     } else {
       clearInterval(interval);
       dispatch(
-        setCallNueCD({
+        setBlueCD({
           isReady: true,
           remainingTime: 0,
         })
@@ -163,12 +187,12 @@ export const toggleCallNueCD = (): AppThunk => (dispatch, getState) => {
     }
   }, 1000); // her saniye güncelle
 };
-export const toggleNueAttackCD = (): AppThunk => (dispatch, getState) => {
+export const toggleRedCD = (): AppThunk => (dispatch, getState) => {
   const state = getState();
-  if (!state.MegumiState.nueAttackCD.isReady) return;
-  const cooldown = state.MegumiState.nueAttackCD.cooldown;
+  if (!state.GojoState.redCD.isReady) return;
+  const cooldown = state.GojoState.redCD.cooldown;
   dispatch(
-    setNueAttackCD({
+    setRedCD({
       isReady: false,
       remainingTime: cooldown,
     })
@@ -176,10 +200,10 @@ export const toggleNueAttackCD = (): AppThunk => (dispatch, getState) => {
 
   const interval = setInterval(() => {
     const currentState = getState();
-    const remainingTime = currentState.MegumiState.nueAttackCD.remainingTime;
+    const remainingTime = currentState.GojoState.redCD.remainingTime;
     if (remainingTime > 1) {
       dispatch(
-        setNueAttackCD({
+        setRedCD({
           isReady: false,
           remainingTime: remainingTime - 1,
         })
@@ -187,7 +211,7 @@ export const toggleNueAttackCD = (): AppThunk => (dispatch, getState) => {
     } else {
       clearInterval(interval);
       dispatch(
-        setNueAttackCD({
+        setRedCD({
           isReady: true,
           remainingTime: 0,
         })
@@ -195,36 +219,67 @@ export const toggleNueAttackCD = (): AppThunk => (dispatch, getState) => {
     }
   }, 1000); // her saniye güncelle
 };
-export const toggleDivineDogsAttackCD =
-  (): AppThunk => (dispatch, getState) => {
-    const state = getState();
-    if (!state.MegumiState.divineDogsCD.isReady) return;
-    const cooldown = state.MegumiState.divineDogsCD.cooldown;
-    dispatch(
-      setDivineDogsCD({
-        isReady: false,
-        remainingTime: cooldown,
-      })
-    );
+export const togglePurpleCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.GojoState.purpleCD.isReady) return;
+  const cooldown = state.GojoState.purpleCD.cooldown;
+  dispatch(
+    setPurpleCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
 
-    const interval = setInterval(() => {
-      const currentState = getState();
-      const remainingTime = currentState.MegumiState.divineDogsCD.remainingTime;
-      if (remainingTime > 1) {
-        dispatch(
-          setDivineDogsCD({
-            isReady: false,
-            remainingTime: remainingTime - 1,
-          })
-        );
-      } else {
-        clearInterval(interval);
-        dispatch(
-          setDivineDogsCD({
-            isReady: true,
-            remainingTime: 0,
-          })
-        );
-      }
-    }, 1000); // her saniye güncelle
-  };
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.GojoState.purpleCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setPurpleCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setPurpleCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
+export const toggleDomainCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.GojoState.domainCD.isReady) return;
+  const cooldown = state.GojoState.domainCD.cooldown;
+  dispatch(
+    setDomainCD({
+      isReady: false,
+      remainingTime: cooldown,
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime = currentState.GojoState.domainCD.remainingTime;
+    if (remainingTime > 1) {
+      dispatch(
+        setDomainCD({
+          isReady: false,
+          remainingTime: remainingTime - 1,
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setDomainCD({
+          isReady: true,
+          remainingTime: 0,
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
