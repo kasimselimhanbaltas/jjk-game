@@ -2,12 +2,14 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import megumiSlice from "../../store/character-slices/MegumiSlice";
 import sukunaSlice from "../../store/character-slices/SukunaSlice";
-import { setNueDirection } from "../../store/NueSlice";
+import nueSlice, { setNueDirection } from "../../store/NueSlice";
 import React from "react";
+import divineDogsSlice from "../../store/DivineDogsSlice";
 
-const Megumi = () => {
+const Megumi = ({ rivalState, rivalSlice }) => {
     const megumi = useSelector((state: any) => state.MegumiState);
     const sukuna = useSelector((state: any) => state.SukunaState);
+    const nue = useSelector((state: any) => state.NueState);
     const gameSettings = useSelector((state: any) => state.GameSettingsState);
 
     const [displaySlash, setDisplaySlash] = React.useState("none");
@@ -123,6 +125,111 @@ const Megumi = () => {
             setSlashRotation({ rotate: "270deg" });
         }, degrees.length * 3 * 100);
     };
+
+
+
+    const attackInterval = React.useRef(null);
+
+    // const handleBlueAttack = () => {
+    //     if (gojo.blueCD.isReady) {
+    //         dispatch(gojoSlice.actions.changeCursedEnergy(blueCost));
+    //         dispatch2(toggleBlueCD());
+    //         blueAttack();
+    //     }
+    // }
+    // const handleRedAttack = () => {
+    //     if (gojo.redCD.isReady) {
+    //         dispatch(gojoSlice.actions.changeCursedEnergy(redCost));
+    //         dispatch2(toggleRedCD());
+    //         redAttack();
+    //     }
+    // }
+    // const handlePurpleAttack = () => {
+    //     if (gojo.purpleCD.isReady) {
+    //         dispatch(gojoSlice.actions.setCanMove(false));
+    //         dispatch(gojoSlice.actions.changeCursedEnergy(purpleCost));
+    //         dispatch2(togglePurpleCD());
+    //         purpleAttack();
+    //         setTimeout(() => {
+    //             dispatch(gojoSlice.actions.setCanMove(true));
+    //         }, 15000);
+    //     }
+    // }
+
+    const handleCallNue = () => {
+        console.log("callnue")
+        dispatch(nueSlice.actions.setNueAuto(true))
+    }
+    const handleNueAttack = () => {
+        console.log("nueAttack")
+        dispatch(nueSlice.actions.setNueAutoAttack(true))
+
+        setTimeout(() => {
+            dispatch(nueSlice.actions.setNueAutoAttack(false))
+        }, 1000);
+    }
+    const handleDivineDogsAttack = () => {
+        dispatch(divineDogsSlice.actions.setWolfAuto(true))
+        setTimeout(() => {
+            dispatch(divineDogsSlice.actions.setWolfAuto(false))
+        }, 1000);
+    }
+
+    const startAttackInterval = () => {
+        // if (gameSettings.selectedCharacter === "sukuna") return;
+        const attackDirection = megumi.x - rivalState.x >= 0 ? "left" : "right";
+        const stepDistance = attackDirection === "left" ? -100 : 100;
+        dispatch(megumiSlice.actions.setDirection(attackDirection))
+        const randomInterval = 1000; // 3-10 saniye arasında rastgele bir değer
+        // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
+        console.log("attack interval before")
+        attackInterval.current = setInterval(() => {
+            console.log("attack interval")
+            // if (megumi.health.currentHealth > 0 && sukuna.health.currentHealth > 0) {
+            if (rivalState.health.currentHealth > 0 && megumi.health.currentHealth > 0 && megumi.canMove && !sukuna.domainAttack) {
+                const attackDirection = megumi.x - rivalState.x >= 0 ? "left" : "right";
+                // const stepDistance = attackDirection === "left" ? -100 : 100;
+                console.log("gojo ce: ", megumi.cursedEnergy.currentCursedEnergy)
+                if (megumi.cursedEnergy.currentCursedEnergy >= 20 && megumi.divineDogsCD.isReady)
+                    handleDivineDogsAttack();
+                else if (nue.isActive && megumi.cursedEnergy.currentCursedEnergy >= 20 && megumi.nueAttackCD.isReady)
+                    handleNueAttack();
+                else if (megumi.cursedEnergy.currentCursedEnergy >= 100 && megumi.callNueCD.isReady && !nue.isActive)
+                    handleCallNue();
+
+            } else {
+                stopAttackInterval(); // Megumi ölünce saldırıyı durdur
+            }
+        }, randomInterval);
+    };
+    const stopAttackInterval = () => {
+        clearInterval(attackInterval.current);
+    };
+
+    useEffect(() => {
+        if (megumi.health.currentHealth <= 0 && gameSettings.selectedCharacter !== "megumi")
+            stopAttackInterval();
+    }, [megumi.health.currentHealth]);
+
+    // MEGUMI AUTO ATTACK
+    useEffect(() => {
+        if (megumi.health.currentHealth > 0 && rivalState.health.currentHealth > 0
+            && megumi.canMove && gameSettings.selectedCharacter !== "megumi") {
+
+            if (megumi.cursedEnergy.currentCursedEnergy >= 0) {
+                startAttackInterval();
+            }
+        } else {
+            stopAttackInterval();
+        }
+        return () => {
+            stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
+        };
+
+    }, [dispatch, megumi.closeRange, megumi.direction, megumi.canMove,
+        megumi.health.currentHealth, megumi.callNueCD.isReady, megumi.nueAttackCD.isReady, megumi.divineDogsCD.isReady,
+        // megumi.domainCD.isReady,
+        rivalState.health.currentHealth, megumi.health.currentHealth, rivalState.domainAttack]);
 
     return (
         <>

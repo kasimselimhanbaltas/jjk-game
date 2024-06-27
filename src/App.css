@@ -93,7 +93,10 @@
   width: 100px;
   height: 100px;
   z-index: 9;
-  transition: transform 1s ease-in, top 4s linear;
+  /* transition: transform 1s ease-in, top 4s linear; */
+    transition: transform .1s ease-in,
+    top 1s linear;
+
 }
 .nue {
   position: absolute;

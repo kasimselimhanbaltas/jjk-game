@@ -9,8 +9,8 @@ const initialState: Megumi = {
   x: 200,
   y: 200,
   health: {
-    currentHealth: 2000,
-    maxHealth: 2000,
+    currentHealth: 1500,
+    maxHealth: 1500,
   },
   cursedEnergy: {
     currentCursedEnergy: 200,
@@ -47,9 +47,9 @@ const megumiSlice = createSlice({
       let inputY = action.payload.y;
       if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 70) {
         state.x += inputX;
-        //   if (inputX > 0) {
-        //     state.direction = "right";
-        //   } else if (inputX < 0) state.direction = "left";
+        if (inputX > 0) {
+          state.direction = "right";
+        } else if (inputX < 0) state.direction = "left";
       } else {
         // console.log("limit reached in x direction");
       }

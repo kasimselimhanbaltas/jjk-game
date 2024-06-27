@@ -11,6 +11,8 @@ const initialState: Nue = {
   direction: "right",
   isAttacking: false,
   isActive: false,
+  nueAuto: false,
+  nueAutoAttack: false,
 };
 
 const nueSlice = createSlice({
@@ -38,10 +40,22 @@ const nueSlice = createSlice({
     setNueDirection(state, action) {
       state.direction = action.payload;
     },
+    setNueAuto(state, action) {
+      state.nueAuto = action.payload;
+    },
+    setNueAutoAttack(state, action) {
+      state.nueAutoAttack = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
 
-export const { moveNue, nueAttacking, nueActivity, setNueDirection } =
-  nueSlice.actions;
+export const {
+  moveNue,
+  nueAttacking,
+  nueActivity,
+  setNueDirection,
+  setNueAuto,
+  setNueAutoAttack,
+} = nueSlice.actions;
 export default nueSlice;

@@ -10,8 +10,8 @@ const initialState: Sukuna = {
   x: 800,
   y: 200,
   health: {
-    currentHealth: 200,
-    maxHealth: 200,
+    currentHealth: 1500,
+    maxHealth: 1500,
   },
   cursedEnergy: {
     currentCursedEnergy: 100,

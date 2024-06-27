@@ -24,8 +24,8 @@ const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 const megumiSpeed = 30;
 const shrineHeight = 250;
-const redDamage = -60;
-const purpleDamage = -150;
+const redDamage = -200;
+const purpleDamage = -500;
 
 const GameArea = () => {
 
@@ -36,7 +36,6 @@ const GameArea = () => {
   const gojo = useSelector((state: any) => state.GojoState);
   const nue = useSelector((state: any) => state.NueState);
   const divineDogs = useSelector((state: any) => state.DivineDogsState);
-  const xDistance = useMemo(() => (megumi.x - sukuna.x), [megumi.x, sukuna.x]);
   const yDistance = useMemo(() => (megumi.y - sukuna.y), [megumi.y, sukuna.y]);
   const keysPressed = useRef({ w: false, a: false, s: false, d: false, t: false, space: false });
   let intervalId = null;
@@ -50,20 +49,20 @@ const GameArea = () => {
 
   const selectedState = useSelector((state: any) => {
     if (gameSettings.selectedCharacter === "sukuna") {
-      return { player: state.SukunaState, rival: state.MegumiState };
+      return { player: state.SukunaState, rival: state.GojoState };
     } else if (gameSettings.selectedCharacter === "megumi") {
       return { player: state.MegumiState, rival: state.SukunaState };
     } else if (gameSettings.selectedCharacter === "gojo") {
-      return { player: state.GojoState, rival: state.SukunaState };
+      return { player: state.GojoState, rival: state.MegumiState };
     }
   });
   const selectedSlice = useSelector((state: any) => {
     if (gameSettings.selectedCharacter === "sukuna") {
-      return { player: sukunaSlice, rival: megumiSlice };
+      return { player: sukunaSlice, rival: gojoSlice };
     } else if (gameSettings.selectedCharacter === "megumi") {
       return { player: megumiSlice, rival: sukunaSlice };
     } else if (gameSettings.selectedCharacter === "gojo") {
-      return { player: gojoSlice, rival: sukunaSlice };
+      return { player: gojoSlice, rival: megumiSlice };
     }
 
   });
@@ -76,6 +75,7 @@ const GameArea = () => {
   const rivalCharacter = selectedState.rival;
 
 
+  const xDistance = useMemo(() => (playerCharacter.x - rivalCharacter.x), [playerCharacter.x, rivalCharacter.x]);
 
   // place characters
   useEffect(() => {
@@ -85,29 +85,49 @@ const GameArea = () => {
 
   //check red damage, purple damage
   useEffect(() => {
-    if (playerCharacter.redAttackMoment) {
-      let distance =
-        gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalCharacter.x) <= 200 ? "close range" : "far") :
-          (Math.abs(gojo.x - 200 - rivalCharacter.x) <= 200 ? "close range" : "far")
-      console.log("gamearea red: ", distance)
-      if (distance === "close range") dispatch(rivalSlice.actions.updateHealth(redDamage))
+    if (gameSettings.selectedCharacter === "gojo") {
+      if (gojo.redAttackMoment) {
+        let distance =
+          gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalCharacter.x) <= 200 ? "close range" : "far") :
+            (Math.abs(gojo.x - 200 - rivalCharacter.x) <= 200 ? "close range" : "far")
+        console.log("gamearea red: ", distance)
+        if (distance === "close range") dispatch(rivalSlice.actions.updateHealth(redDamage))
+      }
+      if (gojo.purpleAttackMoment) {
+        let distance =
+          gojo.y - rivalCharacter.y >= -150 && gojo.y - rivalCharacter.y <= 100 ?
+            gojo.direction === "right" ? (gojo.x - rivalCharacter.x <= 0 ? "hit" : "miss") :
+              (gojo.x - rivalCharacter.x > 0 ? "hit" : "miss") : "miss"
+        console.log("gamearea red: ", distance)
+        if (distance === "hit") dispatch(rivalSlice.actions.updateHealth(purpleDamage))
+      }
     }
-    if (playerCharacter.purpleAttackMoment) {
-      let distance =
-        gojo.y - rivalCharacter.y >= -150 && gojo.y - rivalCharacter.y <= 100 ?
-          gojo.direction === "right" ? (gojo.x - rivalCharacter.x <= 0 ? "hit" : "miss") :
-            (gojo.x - rivalCharacter.x > 0 ? "hit" : "miss") : "miss"
-      console.log("gamearea red: ", distance)
-      if (distance === "hit") dispatch(rivalSlice.actions.updateHealth(purpleDamage))
+    else {
+      if (gojo.redAttackMoment) {
+        let distance =
+          gojo.direction === "right" ? (Math.abs(gojo.x + 250 - playerCharacter.x) <= 200 ? "close range" : "far") :
+            (Math.abs(gojo.x - 200 - playerCharacter.x) <= 200 ? "close range" : "far")
+        console.log("gamearea red: ", distance)
+        if (distance === "close range") dispatch(playerSlice.actions.updateHealth(redDamage))
+      }
+      if (gojo.purpleAttackMoment) {
+        let distance =
+          gojo.y - playerCharacter.y >= -150 && gojo.y - playerCharacter.y <= 100 ?
+            gojo.direction === "right" ? (gojo.x - playerCharacter.x <= 0 ? "hit" : "miss") :
+              (gojo.x - playerCharacter.x > 0 ? "hit" : "miss") : "miss"
+        console.log("gamearea red: ", distance)
+        if (distance === "hit") dispatch(playerSlice.actions.updateHealth(purpleDamage))
+      }
     }
-  }, [playerCharacter.redAttackMoment, playerCharacter.purpleAttackMoment])
+
+  }, [gojo.redAttackMoment, gojo.purpleAttackMoment])
 
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
     if (playerCEincreaseIntervalRef.current != null) return;
     playerCEincreaseIntervalRef.current = setInterval(() => {
       if (playerCharacter.cursedEnergy.currentCursedEnergy < playerCharacter.cursedEnergy.maxCursedEnergy) {
-        dispatch(playerSlice.actions.changeCursedEnergy(+10));
+        dispatch(playerSlice.actions.changeCursedEnergy(gameSettings.selectedCharacter === "gojo" ? + 50 : 10));
       }
     }, 1000);
   };
@@ -201,11 +221,11 @@ const GameArea = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [dispatch, playerCharacter.health, playerCharacter.y, playerCharacter.x, rivalCharacter.x, rivalCharacter.canMove, xDistance]);
+  }, [dispatch, playerCharacter.health, playerCharacter.y, playerCharacter.x, rivalCharacter.x, rivalCharacter.canMove, playerCharacter.canMove, xDistance]);
 
   // Sukuna movement
   useEffect(() => {
-    if (gameSettings.selectedCharacter === "sukuna") return;
+    // if (gameSettings.selectedCharacter === "sukuna") return;
     const interval = setInterval(() => {
       if (rivalCharacter.canMove) {
         if (rivalCharacter.dashGauge > 70) {
@@ -278,7 +298,7 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state
+  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
@@ -357,24 +377,28 @@ const GameArea = () => {
           }}></div>
           {gameSettings.selectedCharacter === "sukuna" && (
             <>
-              <Megumi />
-              <Sukuna xDistance={xDistance} rivalSlice={rivalSlice} rivalState={megumi} />
+              <SatoruGojo rivalSlice={playerSlice} rivalState={playerCharacter} />
+              <Sukuna xDistance={xDistance} rivalSlice={rivalSlice} rivalState={gojo} />
             </>
           )}
           {gameSettings.selectedCharacter === "megumi" && (
             <>
-              <Megumi />
-              <Sukuna xDistance={xDistance} rivalSlice={megumiSlice} rivalState={megumi} />
+              <Megumi rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+              <Sukuna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
+              <Nue rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+              <DivineDogs rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+
+
             </>
           )}
           {gameSettings.selectedCharacter === "gojo" && (
             <>
-              <SatoruGojo rivalSlice={sukunaSlice} rivalState={sukuna} />
-              <Sukuna xDistance={xDistance} rivalSlice={gojoSlice} rivalState={gojo} />
+              <SatoruGojo rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+              <Megumi rivalSlice={playerSlice} rivalState={playerCharacter} />
+              <DivineDogs rivalSlice={playerSlice} rivalState={playerCharacter} />
+              <Nue rivalSlice={playerSlice} rivalState={playerCharacter} />
             </>
           )}
-          <Nue />
-          <DivineDogs />
           {/* PLAYER INTERFACE COMPONENT FOR SUKUNA */}
           {gameSettings.selectedCharacter === "sukuna" && (
 

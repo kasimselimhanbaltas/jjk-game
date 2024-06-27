@@ -263,7 +263,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 {gameSettings.selectedCharacter !== "sukuna" && (
                     <>
                         <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                            <div style={{ position: "absolute", width: sukuna.health.currentHealth * 150 / 100, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
+                            <div style={{ position: "absolute", width: sukuna.health.currentHealth * 150 / sukuna.health.maxHealth, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
                             </div>
                             <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{sukuna.health.currentHealth}</p>
                         </div>

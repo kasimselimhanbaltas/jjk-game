@@ -11,6 +11,7 @@ const initialState: DivineDogs = {
   direction: "right",
   isAttacking: false,
   isActive: false,
+  wolfAuto: false,
 };
 
 const divineDogsSlice = createSlice({
@@ -33,6 +34,9 @@ const divineDogsSlice = createSlice({
     setDivineDogsDirection(state, action) {
       state.direction = action.payload;
     },
+    setWolfAuto(state, action) {
+      state.wolfAuto = action.payload;
+    },
     // Diğer action'lar (yumrukAt, divineDogs çağırma, domain açma vb.)
   },
 });
@@ -42,5 +46,6 @@ export const {
   divineDogsAttacking,
   divineDogsActivity,
   setDivineDogsDirection,
+  setWolfAuto,
 } = divineDogsSlice.actions;
 export default divineDogsSlice;

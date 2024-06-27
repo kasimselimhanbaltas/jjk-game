@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { setCanMove, updateHealth } from "../store/character-slices/SukunaSlice";
+import nueSlice, { moveNue, nueActivity, nueAttacking, setNueAuto, setNueAutoAttack, setNueDirection } from "../store/NueSlice";
 import { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../store/character-slices/MegumiSlice";
 import { AppDispatch } from "../store/GlobalStore";
 
@@ -12,15 +11,14 @@ const characterWidth = 50;
 const characterHeight = 120;
 const callNueCost = 50;
 const nueAttackCost = 20;
-const nueDamage = 10;
+const nueDamage = 100;
 const shikigamiDrainingCost = 2;
 const defaultNueTransform = "all .4s ease";
 
 
-const Nue = () => {
+const Nue = ({ rivalSlice, rivalState }) => {
 
     const megumi = useSelector((state: any) => state.MegumiState);
-    const sukuna = useSelector((state: any) => state.SukunaState);
     const nue = useSelector((state: any) => state.NueState);
     const gameSettings = useSelector((state: any) => state.GameSettingsState);
 
@@ -73,7 +71,7 @@ const Nue = () => {
         if (megumi.cursedEnergy.currentCursedEnergy < nueAttackCost) return;
 
         let attackDirection = "";
-        attackDirection = megumi.x < sukuna.x ? "right" : "left";
+        attackDirection = megumi.x < rivalState.x ? "right" : "left";
         console.log("nue direction: ", nue.direction, "attackDirection: ", attackDirection,)
         // nue updates
 
@@ -82,25 +80,25 @@ const Nue = () => {
         setNueStyle({ ...nueStyle, transition: "all .5s ease" });
         dispatch(setNueDirection(attackDirection));
         // setImageStyle({ ...imageStyle, transform: `scaleX(${attackDirection === "right" ? -1 : 1})` });
-        dispatch(moveNue({ x: sukuna.x, y: sukuna.y - 100 })); //move to sukuna
+        dispatch(moveNue({ x: rivalState.x, y: rivalState.y - 100 })); //move to rivalState
 
         setTimeout(() => {
-            dispatch(setCanMove(false)); // stun sukuna
-            setImageSrc(require('../Assets/nue.png')); // nue arrives to sukuna
+            dispatch(rivalSlice.actions.setCanMove(false)); // stun rivalState
+            setImageSrc(require('../Assets/nue.png')); // nue arrives to rivalState
 
             setTimeout(() => { // electric attack
                 setImageSrc(require('../Assets/nue-side.png')); // nue move after electric attack
-                if (sukuna.x > megumi.x) {
-                    dispatch(moveNue({ x: sukuna.x + 200, y: sukuna.y - 200 }));
+                if (rivalState.x > megumi.x) {
+                    dispatch(moveNue({ x: rivalState.x + 200, y: rivalState.y - 200 }));
                 } else {
-                    dispatch(moveNue({ x: sukuna.x - 200, y: sukuna.y - 200 }));
+                    dispatch(moveNue({ x: rivalState.x - 200, y: rivalState.y - 200 }));
                 }
                 if (nue.isAttacking) return;
                 setTimeout(() => {
-                    dispatch(updateHealth(-nueDamage))
+                    dispatch(rivalSlice.actions.updateHealth(-nueDamage))
                     setTimeout(() => {
                         dispatch(nueAttacking(false));
-                        dispatch(setCanMove(true)); // cancel stun sukuna
+                        dispatch(rivalSlice.actions.setCanMove(true)); // cancel stun rivalState
                         dispatch(setNueDirection(attackDirection === "right" ? "left" : "right"));
                         setTimeout(() => {
                             setImageStyle({ ...imageStyle, transform: "" });
@@ -111,6 +109,32 @@ const Nue = () => {
             }, 250)
         }, 500)
     }
+
+    useEffect(() => {
+        if (nue.nueAuto) {
+            if (nue.isActive === false && megumi.cursedEnergy.currentCursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
+                console.log(" nue auto ")
+                dispatch(changeCursedEnergy(-callNueCost));
+                dispatch2(toggleCallNueCD());
+                startNueInterval();
+                nueSound.current.volume = 0.5;
+                nueSound.current.play();
+                dispatch(nueActivity(true));
+            } else {
+                dispatch(nueActivity(false));
+                stopInterval(nueIntervalRef);
+            }
+            dispatch(setNueAuto(false));
+        }
+        else if (nue.isActive && nue.isAttacking === false && !rivalState.domainAttack) {
+            if (megumi.nueAttackCD.isReady && nue.nueAutoAttack) {
+                console.log("--------------")
+                dispatch2(toggleNueAttackCD());
+                nueAttack();
+                dispatch(setNueAutoAttack(false))
+            }
+        }
+    }, [nue.nueAuto, nue.nueAutoAttack, nue.isActive]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -130,13 +154,14 @@ const Nue = () => {
         const intervalId = setInterval(() => {
             if (gameSettings.selectedCharacter !== "megumi") return;
 
-            if (keysPressed.current.j && nue.isAttacking === false && !sukuna.domainAttack) {
-                if (nue.isActive === true && sukuna.health.currentHealth > 0 && megumi.nueAttackCD.isReady) {
+            if (keysPressed.current.j && nue.isAttacking === false && !rivalState.domainAttack) {
+                if (nue.isActive === true && rivalState.health.currentHealth > 0 && megumi.nueAttackCD.isReady) {
                     dispatch2(toggleNueAttackCD());
                     nueAttack();
                 }
             }
-            if (keysPressed.current.k) {
+            if (keysPressed.current.k || nue.nueAuto) {
+                console.log(" nue auto ")
                 if (nue.isActive === false && megumi.cursedEnergy.currentCursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
                     dispatch(changeCursedEnergy(-callNueCost));
                     dispatch2(toggleCallNueCD());
@@ -156,7 +181,7 @@ const Nue = () => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy, sukuna.domainAttack]);
+    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy, rivalState.domainAttack, nue.nueAuto]);
 
     return (
         <div

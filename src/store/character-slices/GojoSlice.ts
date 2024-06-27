@@ -10,8 +10,8 @@ const initialState: Gojo = {
   x: 200,
   y: 200,
   health: {
-    currentHealth: 2000,
-    maxHealth: 2000,
+    currentHealth: 1500,
+    maxHealth: 1500,
   },
   cursedEnergy: {
     currentCursedEnergy: 200,
@@ -24,12 +24,12 @@ const initialState: Gojo = {
   rivalDirection: "stop",
   blueCD: {
     isReady: true,
-    cooldown: 5,
+    cooldown: 8,
     remainingTime: 0,
   },
   redCD: {
     isReady: true,
-    cooldown: 5,
+    cooldown: 10,
     remainingTime: 0,
   },
   purpleCD: {
@@ -55,9 +55,9 @@ const gojoSlice = createSlice({
       let inputY = action.payload.y;
       if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 70) {
         state.x += inputX;
-        //   if (inputX > 0) {
-        //     state.direction = "right";
-        //   } else if (inputX < 0) state.direction = "left";
+        if (inputX > 0) {
+          state.direction = "right";
+        } else if (inputX < 0) state.direction = "left";
       } else {
         // console.log("limit reached in x direction");
       }

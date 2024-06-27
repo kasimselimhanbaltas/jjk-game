@@ -98,6 +98,8 @@ export interface Nue {
   health: number;
   direction: "left" | "right";
   isAttacking: boolean;
+  nueAuto: boolean;
+  nueAutoAttack: boolean;
 }
 export interface DivineDogs {
   isActive: boolean;
@@ -106,6 +108,7 @@ export interface DivineDogs {
   health: number;
   direction: "left" | "right";
   isAttacking: boolean;
+  wolfAuto: boolean;
 }
 
 function App() {
