@@ -589,19 +589,19 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 }} />
                 {gameSettings.selectedCharacter !== "gojo" && (
                     <>
-                        <div className="gojo-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
+                        <div className="gojo-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-28%" }}>
                             <div style={{ position: "absolute", width: gojo.health.currentHealth * 150 / gojo.health.maxHealth, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
                             </div>
                             <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{gojo.health.currentHealth}</p>
                         </div>
-                        <div className="gojo-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-2%" }}>
+                        <div className="gojo-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
                             <div style={{ position: "absolute", width: gojo.cursedEnergy.currentCursedEnergy * 150 / gojo.cursedEnergy.maxCursedEnergy, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
                             </div>
                             <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{gojo.cursedEnergy.currentCursedEnergy}</p>
                         </div>
                     </>
                 )}
-                <p style={{ marginTop: gameSettings.selectedCharacter === "gojo" ? -30 : -20, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Satoru Gojo</p>
+                <p style={{ marginTop: gameSettings.selectedCharacter === "gojo" ? -30 : -80, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Satoru Gojo</p>
 
                 <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
                 <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />

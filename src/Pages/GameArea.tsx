@@ -15,6 +15,8 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import SatoruGojo from "../components/characters/SatoruGojo";
 import FinishMenu from "../components/FinishMenu";
 import { setWinner } from "../store/GameSettingsSlice";
+import SukunaSlice from "../store/character-slices/SukunaSlice";
+import MegumiSlice from "../store/character-slices/MegumiSlice";
 
 const characterHeight = 50;
 
@@ -45,34 +47,31 @@ const GameArea = () => {
   // Sound Effects
   const yowaimoSoundEffectRef = useRef<HTMLAudioElement>(null);
 
-
-
-  const selectedState = useSelector((state: any) => {
+  const selectedPlayer = useSelector((state: any) => {
     if (gameSettings.selectedCharacter === "sukuna") {
-      return { player: state.SukunaState, rival: state.GojoState };
+      return { playerState: state.SukunaState, playerSlice: sukunaSlice };
     } else if (gameSettings.selectedCharacter === "megumi") {
-      return { player: state.MegumiState, rival: state.SukunaState };
+      return { playerState: state.MegumiState, playerSlice: megumiSlice };
     } else if (gameSettings.selectedCharacter === "gojo") {
-      return { player: state.GojoState, rival: state.MegumiState };
+      return { playerState: state.GojoState, playerSlice: gojoSlice };
     }
   });
-  const selectedSlice = useSelector((state: any) => {
-    if (gameSettings.selectedCharacter === "sukuna") {
-      return { player: sukunaSlice, rival: gojoSlice };
-    } else if (gameSettings.selectedCharacter === "megumi") {
-      return { player: megumiSlice, rival: sukunaSlice };
-    } else if (gameSettings.selectedCharacter === "gojo") {
-      return { player: gojoSlice, rival: megumiSlice };
+  const selectedRival = useSelector((state: any) => {
+    if (gameSettings.selectedRivalCharacter === "sukuna") {
+      return { rivalState: state.SukunaState, rivalSlice: sukunaSlice };
+    } else if (gameSettings.selectedRivalCharacter === "megumi") {
+      return { rivalState: state.MegumiState, rivalSlice: megumiSlice };
+    } else if (gameSettings.selectedRivalCharacter === "gojo") {
+      return { rivalState: state.GojoState, rivalSlice: gojoSlice };
     }
-
   });
   // for reducer methods
-  const playerSlice = selectedSlice.player;
-  const rivalSlice = selectedSlice.rival;
+  const playerSlice = selectedPlayer.playerSlice;
+  const rivalSlice = selectedRival.rivalSlice;
 
   // for reading
-  const playerCharacter = selectedState.player;
-  const rivalCharacter = selectedState.rival;
+  const playerCharacter = selectedPlayer.playerState;
+  const rivalCharacter = selectedRival.rivalState;
 
 
   const xDistance = useMemo(() => (playerCharacter.x - rivalCharacter.x), [playerCharacter.x, rivalCharacter.x]);
@@ -377,28 +376,41 @@ const GameArea = () => {
           }}></div>
           {gameSettings.selectedCharacter === "sukuna" && (
             <>
-              <SatoruGojo rivalSlice={playerSlice} rivalState={playerCharacter} />
-              <Sukuna xDistance={xDistance} rivalSlice={rivalSlice} rivalState={gojo} />
+              {/* <SatoruGojo rivalSlice={playerSlice} rivalState={playerCharacter} /> */}
+              <Sukuna xDistance={xDistance} rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+            </>
+          )}
+          {gameSettings.selectedRivalCharacter === "sukuna" && (
+            <>
+              <Sukuna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
             </>
           )}
           {gameSettings.selectedCharacter === "megumi" && (
             <>
               <Megumi rivalSlice={rivalSlice} rivalState={rivalCharacter} />
-              <Sukuna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
+              {/* <Sukuna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} /> */}
               <Nue rivalSlice={rivalSlice} rivalState={rivalCharacter} />
               <DivineDogs rivalSlice={rivalSlice} rivalState={rivalCharacter} />
-
-
             </>
           )}
-          {gameSettings.selectedCharacter === "gojo" && (
+          {gameSettings.selectedRivalCharacter === "megumi" && (
             <>
-              <SatoruGojo rivalSlice={rivalSlice} rivalState={rivalCharacter} />
               <Megumi rivalSlice={playerSlice} rivalState={playerCharacter} />
               <DivineDogs rivalSlice={playerSlice} rivalState={playerCharacter} />
               <Nue rivalSlice={playerSlice} rivalState={playerCharacter} />
             </>
           )}
+          {gameSettings.selectedCharacter === "gojo" && (
+            <>
+              <SatoruGojo rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+            </>
+          )}
+          {gameSettings.selectedRivalCharacter === "gojo" && (
+            <>
+              <SatoruGojo rivalSlice={playerSlice} rivalState={playerCharacter} />
+            </>
+          )}
+
           {/* PLAYER INTERFACE COMPONENT FOR SUKUNA */}
           {gameSettings.selectedCharacter === "sukuna" && (
 

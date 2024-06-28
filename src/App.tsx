@@ -7,6 +7,7 @@ import Controls from './components/Controls';
 
 export interface GameSettings {
   selectedCharacter: string,
+  selectedRivalCharacter: string,
   winner: string,
   loser: string
 }

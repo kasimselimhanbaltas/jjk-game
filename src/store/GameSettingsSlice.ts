@@ -3,6 +3,7 @@ import { GameSettings } from "../App";
 
 const initialState: GameSettings = {
   selectedCharacter: "gojo",
+  selectedRivalCharacter: "sukuna",
   winner: "",
   loser: "",
 };
@@ -14,6 +15,9 @@ const gameSettingsSlice = createSlice({
     selectCharacter(state, action) {
       state.selectedCharacter = action.payload;
     },
+    selectRivalCharacter(state, action) {
+      state.selectedRivalCharacter = action.payload;
+    },
     setWinner(state, action) {
       state.winner = action.payload;
     },
@@ -23,6 +27,6 @@ const gameSettingsSlice = createSlice({
   },
 });
 
-export const { selectCharacter, setWinner, setLoser } =
+export const { selectCharacter, selectRivalCharacter, setWinner, setLoser } =
   gameSettingsSlice.actions;
 export default gameSettingsSlice;
