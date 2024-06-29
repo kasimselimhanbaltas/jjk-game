@@ -36,6 +36,7 @@ const initialState: Megumi = {
     cooldown: 10,
     remainingTime: 0,
   },
+  isBlocking: false,
 };
 
 const megumiSlice = createSlice({
@@ -64,7 +65,9 @@ const megumiSlice = createSlice({
       state.y = action.payload.y;
     },
     updateHealth(state, action) {
-      state.health.currentHealth += action.payload;
+      if (action.payload < 0 && state.isBlocking) {
+        state.health.currentHealth += action.payload * 0.5;
+      } else state.health.currentHealth += action.payload;
     },
     setHealth(state, action) {
       state.health.currentHealth = action.payload;
@@ -109,6 +112,9 @@ const megumiSlice = createSlice({
       state.divineDogsCD.remainingTime = action.payload.remainingTime;
     },
     resetState: () => initialState,
+    setIsBlocking(state, action) {
+      state.isBlocking = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -128,6 +134,7 @@ export const {
   setNueAttackCD,
   setDivineDogsCD,
   resetState,
+  setIsBlocking,
 } = megumiSlice.actions;
 export default megumiSlice;
 

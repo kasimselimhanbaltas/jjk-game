@@ -39,7 +39,7 @@ const GameArea = () => {
   const nue = useSelector((state: any) => state.NueState);
   const divineDogs = useSelector((state: any) => state.DivineDogsState);
   const yDistance = useMemo(() => (megumi.y - sukuna.y), [megumi.y, sukuna.y]);
-  const keysPressed = useRef({ w: false, a: false, s: false, d: false, t: false, space: false });
+  const keysPressed = useRef({ w: false, a: false, s: false, d: false, q: false, t: false, space: false });
   let intervalId = null;
   const playerCEincreaseIntervalRef = useRef(null);
   const rivalCEincreaseIntervalRef = useRef(null);
@@ -177,6 +177,10 @@ const GameArea = () => {
       let key = event.key.toLowerCase();
       if (event.key === " ") key = "space";
       keysPressed.current[key] = false;
+      if (key === "q") {
+        dispatch(playerSlice.actions.setIsBlocking(false));
+        dispatch(playerSlice.actions.setCanMove(true));
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -187,6 +191,7 @@ const GameArea = () => {
     clearInterval(intervalId);
     intervalId = setInterval(() => {
       if (playerCharacter.canMove) {
+
         dispatch(sukunaSlice.actions.setCloseRange(Math.abs(xDistance) < 200));
 
         if (keysPressed.current.w && playerCharacter.y > 0) {
@@ -203,12 +208,17 @@ const GameArea = () => {
           dispatch(playerSlice.actions.moveCharacter({ x: megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("right"));
         }
+        if (keysPressed.current.q) {
+          dispatch(playerSlice.actions.setIsBlocking(true));
+          dispatch(playerSlice.actions.setCanMove(true));
+        }
         if (keysPressed.current.t) {
           if (rivalCharacter.canMove) dispatch(rivalSlice.actions.setCanMove(false));
-          else dispatch(rivalSlice.actions.setCanMove(true));
+          else dispatch(rivalSlice.actions.setCanMove(false));
         }
         if (keysPressed.current.space)
           dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.direction === "right" ? 200 : -200, y: 0 }));
+
       }
     }, 75);
 

@@ -259,6 +259,10 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} />
                 <img src={require('../../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require('../../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
+                <img src={require(`../../Assets/guard.png`)} alt="" style={{
+                    display: sukuna.isBlocking ? "block" : "none", height: characterHeight, width: characterHeight, opacity: 0.8, scale: "1.2",
+                    transform: "translate(-10%,0)"
+                }} />
                 <p style={{ marginTop: gameSettings.selectedCharacter !== "sukuna" ? -80 : -30, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
                 {gameSettings.selectedCharacter !== "sukuna" && (
                     <>

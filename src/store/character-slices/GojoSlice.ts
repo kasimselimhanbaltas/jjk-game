@@ -44,6 +44,7 @@ const initialState: Gojo = {
   },
   redAttackMoment: false,
   purpleAttackMoment: false,
+  isBlocking: false,
 };
 
 const gojoSlice = createSlice({
@@ -72,7 +73,9 @@ const gojoSlice = createSlice({
       state.y = action.payload.y;
     },
     updateHealth(state, action) {
-      state.health.currentHealth += action.payload;
+      if (action.payload < 0 && state.isBlocking) {
+        state.health.currentHealth += action.payload * 0.5;
+      } else state.health.currentHealth += action.payload;
     },
     setHealth(state, action) {
       state.health.currentHealth = action.payload;
@@ -130,6 +133,9 @@ const gojoSlice = createSlice({
     setPurpleAttackMoment(state, action) {
       state.purpleAttackMoment = action.payload;
     },
+    setIsBlocking(state, action) {
+      state.isBlocking = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -152,6 +158,7 @@ export const {
   resetState,
   setRedAttackMoment,
   setPurpleAttackMoment,
+  setIsBlocking,
 } = gojoSlice.actions;
 export default gojoSlice;
 

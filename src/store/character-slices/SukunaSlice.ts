@@ -45,6 +45,7 @@ const initialState: Sukuna = {
     maxCount: 10,
     currentCount: 0,
   },
+  isBlocking: false,
 };
 
 const RivalSlice = createSlice({
@@ -74,7 +75,9 @@ const RivalSlice = createSlice({
       state.y = action.payload.y;
     },
     updateHealth(state, action) {
-      state.health.currentHealth += action.payload;
+      if (action.payload < 0 && state.isBlocking) {
+        state.health.currentHealth += action.payload * 0.5;
+      } else state.health.currentHealth += action.payload;
     },
     setHealth(state, action) {
       state.health.currentHealth = action.payload;
@@ -141,7 +144,9 @@ const RivalSlice = createSlice({
       state.rapidAttackCounter.currentCount = action.payload;
     },
     resetState: () => initialState,
-
+    setIsBlocking(state, action) {
+      state.isBlocking = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -168,6 +173,7 @@ export const {
   setDomainCD,
   setRapidAttackCounter,
   resetState,
+  setIsBlocking,
 } = RivalSlice.actions;
 export default RivalSlice;
 

@@ -36,6 +36,7 @@ export interface Megumi {
   callNueCD: Skill,
   nueAttackCD: Skill,
   divineDogsCD: Skill,
+  isBlocking: boolean,
 }
 export interface Gojo {
   characterName: string,
@@ -60,6 +61,7 @@ export interface Gojo {
   domainCD: Skill,
   redAttackMoment: boolean,
   purpleAttackMoment: boolean,
+  isBlocking: boolean,
 
 }
 
@@ -90,7 +92,9 @@ export interface Sukuna {
   rapidAttackCounter: {
     maxCount: number,
     currentCount: number,
-  }
+  },
+  isBlocking: boolean,
+
 }
 export interface Nue {
   isActive: boolean;
