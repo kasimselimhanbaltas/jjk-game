@@ -37,6 +37,8 @@ const initialState: Megumi = {
     remainingTime: 0,
   },
   isBlocking: false,
+  // animationState: "stance" | "move" | "jump" | "punch" | "block" | "callNue" | "nueAttack" | "divineDogs",
+  animationState: "stance",
 };
 
 const megumiSlice = createSlice({
@@ -115,6 +117,9 @@ const megumiSlice = createSlice({
     setIsBlocking(state, action) {
       state.isBlocking = action.payload;
     },
+    setAnimationState(state, action) {
+      state.animationState = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -135,6 +140,7 @@ export const {
   setDivineDogsCD,
   resetState,
   setIsBlocking,
+  setAnimationState,
 } = megumiSlice.actions;
 export default megumiSlice;
 

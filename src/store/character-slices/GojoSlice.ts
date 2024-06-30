@@ -19,7 +19,7 @@ const initialState: Gojo = {
   },
   direction: "right",
   isAttacking: false,
-  canMove: true,
+  canMove: false,
   dashGauge: 0,
   rivalDirection: "stop",
   blueCD: {
@@ -45,6 +45,7 @@ const initialState: Gojo = {
   redAttackMoment: false,
   purpleAttackMoment: false,
   isBlocking: false,
+  animationState: "stance",
 };
 
 const gojoSlice = createSlice({
@@ -136,7 +137,9 @@ const gojoSlice = createSlice({
     setIsBlocking(state, action) {
       state.isBlocking = action.payload;
     },
-
+    setAnimationState(state, action) {
+      state.animationState = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -159,6 +162,7 @@ export const {
   setRedAttackMoment,
   setPurpleAttackMoment,
   setIsBlocking,
+  setAnimationState,
 } = gojoSlice.actions;
 export default gojoSlice;
 

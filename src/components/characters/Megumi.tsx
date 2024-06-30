@@ -231,6 +231,33 @@ const Megumi = ({ rivalState, rivalSlice }) => {
         // megumi.domainCD.isReady,
         rivalState.health.currentHealth, megumi.health.currentHealth, rivalState.domainAttack]);
 
+    const [megumiStyle, setMegumiStyle] = React.useState({
+        animation: "stance 1s steps(3) infinite;",
+        width: 65, height: 65
+    });
+
+    useEffect(() => {
+        if (megumi.animationState === "stance") {
+            setMegumiStyle({
+                animation: "stance 1s steps(3) infinite",
+                width: 43, height: 64
+            })
+        }
+        else if (megumi.animationState === "move") {
+            setMegumiStyle({
+                animation: "move .5s steps(7) infinite",
+                width: 58, height: 54
+            })
+        }
+        else if (megumi.animationState === "punch") {
+            setMegumiStyle({
+                animation: "punch .9s steps(8)",
+                width: 65, height: 62
+            })
+        }
+
+    }, [megumi.animationState]);
+
     return (
         <>
             <audio src={require("../../Assets/audios/slash.mp3")} ref={slashSoundEffectRef}></audio>
@@ -240,13 +267,17 @@ const Megumi = ({ rivalState, rivalSlice }) => {
             <div
                 className="megumi"
                 style={{
-                    top: megumi.y, left: megumi.x, width: characterWidth, height: characterHeight,
+                    top: megumi.y, left: megumi.x,
                     display: megumi.health.currentHealth > 0 ? "block" : "none",
                 }}
             >
-                <img src={require('../../Assets/megumi.png')} alt="" style={{
+                <div className="megumi-container" style={{
+                    animation: megumiStyle.animation, width: megumiStyle.width, height: megumiStyle.height,
+                    transform: megumi.direction === "left" ? "scaleX(-1)" : "none"
+                }}></div>
+                {/* <img src={require('../../Assets/megumi.png')} alt="" style={{
                     transform: megumi.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
-                }} />
+                }} /> */}
                 {gameSettings.selectedCharacter !== "megumi" && (
                     <>
                         <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-16%" }}>
@@ -261,7 +292,7 @@ const Megumi = ({ rivalState, rivalSlice }) => {
                         </div>
                     </>
                 )}
-                <p style={{ marginTop: gameSettings.selectedCharacter === "megumi" ? -20 : -60, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Megumi Fushiguro</p>
+                {/* <p style={{ marginTop: gameSettings.selectedCharacter === "megumi" ? -20 : -60, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Megumi Fushiguro</p> */}
 
                 <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
                 <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />

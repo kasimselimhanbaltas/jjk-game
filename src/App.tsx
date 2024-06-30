@@ -3,7 +3,15 @@ import Megumi from './components/characters/Megumi';
 import Sukuna from './components/characters/Sukuna';
 import GameArea from './Pages/GameArea';
 import Controls from './components/Controls';
-
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { useEffect, useState } from 'react';
+import Preloader from './Pages/Pre';
+import Playground from './Pages/Playground';
 
 export interface GameSettings {
   selectedCharacter: string,
@@ -37,6 +45,7 @@ export interface Megumi {
   nueAttackCD: Skill,
   divineDogsCD: Skill,
   isBlocking: boolean,
+  animationState: "stance" | "move" | "jump" | "punch" | "block" | "callNue" | "nueAttack" | "divineDogs",
 }
 export interface Gojo {
   characterName: string,
@@ -62,6 +71,7 @@ export interface Gojo {
   redAttackMoment: boolean,
   purpleAttackMoment: boolean,
   isBlocking: boolean,
+  animationState: "stance" | "move" | "jump" | "punch" | "block",
 
 }
 
@@ -94,6 +104,7 @@ export interface Sukuna {
     currentCount: number,
   },
   isBlocking: boolean,
+  animationState: "stance" | "move" | "jump" | "punch" | "block",
 
 }
 export interface Nue {
@@ -116,14 +127,34 @@ export interface DivineDogs {
   wolfAuto: boolean;
 }
 
+
 function App() {
+  const [load, upadateLoad] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      upadateLoad(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <Controls />
-        <GameArea />
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <Preloader load={load} />
+          <Routes>
+            <Route path='/jjk-game' element={(
+              <div>
+                <Controls />
+                <GameArea />
+              </div>
+            )} />
+            <Route path='/jjk-game/playground' element={<Playground />} />
+          </Routes>
+        </header>
+      </div>
+    </Router>
   );
 }
 

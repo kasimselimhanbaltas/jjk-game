@@ -73,7 +73,6 @@ const GameArea = () => {
   const playerCharacter = selectedPlayer.playerState;
   const rivalCharacter = selectedRival.rivalState;
 
-
   const xDistance = useMemo(() => (playerCharacter.x - rivalCharacter.x), [playerCharacter.x, rivalCharacter.x]);
 
   // place characters
@@ -181,6 +180,10 @@ const GameArea = () => {
         dispatch(playerSlice.actions.setIsBlocking(false));
         dispatch(playerSlice.actions.setCanMove(true));
       }
+      if (key === "a" || key === "d") {
+        dispatch(playerSlice.actions.setAnimationState("stance"));
+      }
+
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -200,6 +203,7 @@ const GameArea = () => {
         if (keysPressed.current.a && playerCharacter.x > 0) {
           dispatch(playerSlice.actions.moveCharacter({ x: -megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("left"));
+          dispatch(playerSlice.actions.setAnimationState("move"));
         }
         if (keysPressed.current.s && playerCharacter.y < gameAreaHeight - megumiHeight) {
           dispatch(playerSlice.actions.moveCharacter({ x: 0, y: megumiSpeed }));
@@ -207,6 +211,8 @@ const GameArea = () => {
         if (keysPressed.current.d && playerCharacter.x < gameAreaWidth - megumiWidth) {
           dispatch(playerSlice.actions.moveCharacter({ x: megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("right"));
+          dispatch(playerSlice.actions.setAnimationState("move"));
+
         }
         if (keysPressed.current.q) {
           dispatch(playerSlice.actions.setIsBlocking(true));
@@ -214,12 +220,13 @@ const GameArea = () => {
         }
         if (keysPressed.current.t) {
           if (rivalCharacter.canMove) dispatch(rivalSlice.actions.setCanMove(false));
-          else dispatch(rivalSlice.actions.setCanMove(false));
+          else dispatch(rivalSlice.actions.setCanMove(true));
         }
         if (keysPressed.current.space)
           dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.direction === "right" ? 200 : -200, y: 0 }));
 
-      }
+      } else
+        dispatch(playerSlice.actions.setAnimationState("stance"));
     }, 75);
 
 
@@ -307,7 +314,7 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
+  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {

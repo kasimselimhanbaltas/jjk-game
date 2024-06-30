@@ -46,6 +46,7 @@ const initialState: Sukuna = {
     currentCount: 0,
   },
   isBlocking: false,
+  animationState: "stance",
 };
 
 const RivalSlice = createSlice({
@@ -147,6 +148,9 @@ const RivalSlice = createSlice({
     setIsBlocking(state, action) {
       state.isBlocking = action.payload;
     },
+    setAnimationState(state, action) {
+      state.animationState = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -174,6 +178,7 @@ export const {
   setRapidAttackCounter,
   resetState,
   setIsBlocking,
+  setAnimationState,
 } = RivalSlice.actions;
 export default RivalSlice;
 

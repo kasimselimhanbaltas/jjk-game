@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import nueSlice, { moveNue, nueActivity, nueAttacking, setNueAuto, setNueAutoAttack, setNueDirection } from "../store/NueSlice";
-import { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../store/character-slices/MegumiSlice";
+import megumiSlice, { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../store/character-slices/MegumiSlice";
 import { AppDispatch } from "../store/GlobalStore";
 
 
@@ -155,6 +155,10 @@ const Nue = ({ rivalSlice, rivalState }) => {
             if (gameSettings.selectedCharacter !== "megumi") return;
 
             if (keysPressed.current.j && nue.isAttacking === false && !rivalState.domainAttack) {
+                dispatch(megumiSlice.actions.setAnimationState("punch"));
+                setTimeout(() => {
+                    dispatch(megumiSlice.actions.setAnimationState("stance"));
+                }, 900);
                 if (nue.isActive === true && rivalState.health.currentHealth > 0 && megumi.nueAttackCD.isReady) {
                     dispatch2(toggleNueAttackCD());
                     nueAttack();
