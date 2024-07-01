@@ -39,7 +39,7 @@ const GameArea = () => {
   const nue = useSelector((state: any) => state.NueState);
   const divineDogs = useSelector((state: any) => state.DivineDogsState);
   const yDistance = useMemo(() => (megumi.y - sukuna.y), [megumi.y, sukuna.y]);
-  const keysPressed = useRef({ w: false, a: false, s: false, d: false, q: false, t: false, space: false });
+  const keysPressed = useRef({ w: false, a: false, s: false, d: false, q: false, t: false, space: false, y: false });
   let intervalId = null;
   const playerCEincreaseIntervalRef = useRef(null);
   const rivalCEincreaseIntervalRef = useRef(null);
@@ -97,7 +97,9 @@ const GameArea = () => {
             gojo.direction === "right" ? (gojo.x - rivalCharacter.x <= 0 ? "hit" : "miss") :
               (gojo.x - rivalCharacter.x > 0 ? "hit" : "miss") : "miss"
         console.log("gamearea red: ", distance)
-        if (distance === "hit") dispatch(rivalSlice.actions.updateHealth(purpleDamage))
+        if (distance === "hit") {
+          dispatch(rivalSlice.actions.updateHealth(purpleDamage))
+        }
       }
     }
     else {
@@ -114,7 +116,14 @@ const GameArea = () => {
             gojo.direction === "right" ? (gojo.x - playerCharacter.x <= 0 ? "hit" : "miss") :
               (gojo.x - playerCharacter.x > 0 ? "hit" : "miss") : "miss"
         console.log("gamearea red: ", distance)
-        if (distance === "hit") dispatch(playerSlice.actions.updateHealth(purpleDamage))
+        if (distance === "hit") {
+          dispatch(playerSlice.actions.updateHealth(purpleDamage))
+          dispatch(megumiSlice.actions.moveCharacterWD({ x: playerCharacter.direction === "right" ? -200 : +200, y: 0 }));
+          dispatch(megumiSlice.actions.setAnimationState("takeDamage"))
+          setTimeout(() => {
+            dispatch(megumiSlice.actions.setAnimationState("stance"))
+          }, 1000);
+        }
       }
     }
 
@@ -224,9 +233,17 @@ const GameArea = () => {
         }
         if (keysPressed.current.space)
           dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.direction === "right" ? 200 : -200, y: 0 }));
+        if (keysPressed.current.y) {
+          dispatch(megumiSlice.actions.moveCharacterWD({ x: playerCharacter.direction === "right" ? -50 : +50, y: 0 }));
+          dispatch(megumiSlice.actions.setAnimationState("takeDamage"))
+          setTimeout(() => {
+            dispatch(megumiSlice.actions.setAnimationState("stance"))
+          }, 1000);
+        }
 
-      } else
-        dispatch(playerSlice.actions.setAnimationState("stance"));
+      }
+      // else
+      // dispatch(playerSlice.actions.setAnimationState("stance"));
     }, 75);
 
 

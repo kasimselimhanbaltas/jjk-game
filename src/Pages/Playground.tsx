@@ -1,4 +1,4 @@
-import "../PixelStyles.css"
+// import "../PixelStyles.css"
 
 const Playground = () => {
     return (

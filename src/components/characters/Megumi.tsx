@@ -232,30 +232,36 @@ const Megumi = ({ rivalState, rivalSlice }) => {
         rivalState.health.currentHealth, megumi.health.currentHealth, rivalState.domainAttack]);
 
     const [megumiStyle, setMegumiStyle] = React.useState({
-        animation: "stance 1s steps(3) infinite;",
-        width: 65, height: 65
+        animation: "stance 1s steps(1) infinite",
     });
 
     useEffect(() => {
         if (megumi.animationState === "stance") {
             setMegumiStyle({
                 animation: "stance 1s steps(3) infinite",
-                width: 43, height: 64
             })
         }
         else if (megumi.animationState === "move") {
             setMegumiStyle({
-                animation: "move .5s steps(7) infinite",
-                width: 58, height: 54
+                animation: "move .5s steps(1) infinite",
             })
         }
         else if (megumi.animationState === "punch") {
             setMegumiStyle({
                 animation: "punch .9s steps(8)",
-                width: 65, height: 62
             })
         }
-
+        else if (megumi.animationState === "swordAttack") {
+            setMegumiStyle({
+                animation: "swordAttack 1s steps(14)",
+            })
+        }
+        else if (megumi.animationState === "takeDamage") {
+            console.log("takedamage")
+            setMegumiStyle({
+                animation: "takeDamage 1s steps(1) infinite",
+            })
+        }
     }, [megumi.animationState]);
 
     return (
@@ -271,8 +277,10 @@ const Megumi = ({ rivalState, rivalSlice }) => {
                     display: megumi.health.currentHealth > 0 ? "block" : "none",
                 }}
             >
+                {/* {megumi.animationState} */}
                 <div className="megumi-container" style={{
-                    animation: megumiStyle.animation, width: megumiStyle.width, height: megumiStyle.height,
+                    animation: megumiStyle.animation,
+                    // animation: "takeDamage step(1) infinite",
                     transform: megumi.direction === "left" ? "scaleX(-1)" : "none"
                 }}></div>
                 {/* <img src={require('../../Assets/megumi.png')} alt="" style={{

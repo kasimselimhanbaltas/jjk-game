@@ -71,7 +71,7 @@ export interface Gojo {
   redAttackMoment: boolean,
   purpleAttackMoment: boolean,
   isBlocking: boolean,
-  animationState: "stance" | "move" | "jump" | "punch" | "block",
+  animationState: "stance" | "move" | "jump" | "punch" | "block" | "swordAttack",
 
 }
 
@@ -104,7 +104,7 @@ export interface Sukuna {
     currentCount: number,
   },
   isBlocking: boolean,
-  animationState: "stance" | "move" | "jump" | "punch" | "block",
+  animationState: "stance" | "move" | "jump" | "punch" | "block" | "entry" | "walk",
 
 }
 export interface Nue {
@@ -116,6 +116,7 @@ export interface Nue {
   isAttacking: boolean;
   nueAuto: boolean;
   nueAutoAttack: boolean;
+  animationState: "nueStance" | "move" | "jump" | "punch" | "block" | "nueAttack",
 }
 export interface DivineDogs {
   isActive: boolean;

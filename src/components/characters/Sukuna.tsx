@@ -10,6 +10,7 @@ import { Howl, Howler } from 'howler';
 import ReactHowler from 'react-howler';
 import useCooldown from '../../hooks/useCoolDown';
 import { AppDispatch, RootState } from '../../store/GlobalStore';
+import "../../Sukuna.css";
 
 const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
@@ -110,6 +111,10 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     }
     const localDismantleAttack = (stepDistance) => {
         if (!sukuna.closeRange) return;
+        dispatch(sukunaSlice.actions.setAnimationState("cleave"))
+        setTimeout(() => {
+            dispatch(sukunaSlice.actions.setAnimationState("stance"))
+        }, 1000);
         dispatch(rivalSlice.actions.updateHealth(dismantleAttackDamage)); // Megumi'ın canını azalt
         dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 3));
         dispatch(sukunaSlice.actions.changeCursedEnergy(dismantleCost));
@@ -247,23 +252,62 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         dispatch2(toggleDomainCD()); // cooldown control
         rivalDomainExpansion(); // attack
     };
+
+    const [sukunaStyle, setSukunaStyle] = React.useState({
+        animation: "stance-sukuna steps(1) 1s infinite",
+    });
+    const [cleaveAnimation, setCleaveAnimation] = React.useState(
+        "none"
+    )
+
+    useEffect(() => {
+        if (sukuna.animationState === "stance") {
+            setSukunaStyle({
+                animation: "stance-sukuna 1s steps(1) infinite",
+            })
+        }
+        else if (sukuna.animationState === "move") {
+            setSukunaStyle({
+                animation: "walk-sukuna 1s steps(1) infinite",
+            })
+        }
+        else if (sukuna.animationState === "cleave") {
+            setSukunaStyle({
+                animation: "sukuna-cleave .5s steps(1) infinite",
+            })
+            setCleaveAnimation("cleave steps(1) .5s")
+        }
+
+    }, [sukuna.animationState]);
+
     return (
         <div>
             <audio src={require("../../Assets/audios/sukuna.mp3")} ref={sukunaSoundEffectRef}></audio>
-            <div className="sukuna"
+            <div className="sukuna-container"
                 style={{
                     top: sukuna.y, left: sukuna.x, width: characterWidth, height: characterHeight,
                     display: sukuna.health.currentHealth > 0 ? "block" : "none",
                 }}>
+                {/* <div className='sukuna-container' style={{
+                    top: sukuna.y, left: sukuna.x,
+                    display: sukuna.health.currentHealth > 0 ? "block" : "none",
+                }}> */}
+                <div className='sukunaCC' style={{
+                    transform: sukuna.direction === "left" ? "scaleX(-1)" : "none",
+                    animation: sukunaStyle.animation
+                }}>
+                </div>
+                <div className='cleave' style={{ top: sukuna.top, left: sukuna.direction === "left" ? -200 : 200, animation: cleaveAnimation }}></div>
+                {/* </div> */}
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
-                <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} />
+                {/* <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} /> */}
                 <img src={require('../../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require('../../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require(`../../Assets/guard.png`)} alt="" style={{
                     display: sukuna.isBlocking ? "block" : "none", height: characterHeight, width: characterHeight, opacity: 0.8, scale: "1.2",
                     transform: "translate(-10%,0)"
                 }} />
-                <p style={{ marginTop: gameSettings.selectedCharacter !== "sukuna" ? -80 : -30, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p>
+                {/* <p style={{ marginTop: gameSettings.selectedCharacter !== "sukuna" ? -80 : -30, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p> */}
                 {gameSettings.selectedCharacter !== "sukuna" && (
                     <>
                         <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>

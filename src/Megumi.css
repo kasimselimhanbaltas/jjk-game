@@ -1,0 +1,66 @@
+
+
+
+@keyframes divineDogBlack {
+    0% {
+        background-position: -314px -1614px;
+        width: 65px;
+        height: 37px;
+    }
+
+    20% {
+        background-position: -401px -1614px;
+        width: 65px;
+        height: 37px;
+    }
+
+    40% {
+        background-position: -479px -1613px;
+        width: 66px;
+        height: 37px;
+    }
+
+    60% {
+        background-position: -556px -1614px;
+        width: 74px;
+        height: 30px;
+    }
+
+    80% {
+        background-position: -643px -1614px;
+        width: 74px;
+        height: 30px;
+    }
+}
+
+@keyframes divineDogWhite {
+    0% {
+        background-position: -319px -1680px;
+        width: 65px;
+        height: 37px;
+    }
+
+    20% {
+        background-position: -406px -1680px;
+        width: 65px;
+        height: 37px;
+    }
+
+    40% {
+        background-position: -484px -1679px;
+        width: 66px;
+        height: 37px;
+    }
+
+    60% {
+        background-position: -561px -1680px;
+        width: 74px;
+        height: 30px;
+    }
+
+    80% {
+        background-position: -648px -1680px;
+        width: 74px;
+        height: 30px;
+    }
+}

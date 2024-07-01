@@ -62,6 +62,21 @@ const megumiSlice = createSlice({
         // console.log("limit reached in y direction");
       }
     },
+    // Move character without direction
+    moveCharacterWD(state, action) {
+      let inputX = action.payload.x;
+      let inputY = action.payload.y;
+      if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 70) {
+        state.x += inputX;
+      } else {
+        // console.log("limit reached in x direction");
+      }
+      if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 150) {
+        state.y += inputY;
+      } else {
+        // console.log("limit reached in y direction");
+      }
+    },
     moveCharacterTo(state, action) {
       state.x = action.payload.x;
       state.y = action.payload.y;
@@ -141,6 +156,7 @@ export const {
   resetState,
   setIsBlocking,
   setAnimationState,
+  moveCharacterWD,
 } = megumiSlice.actions;
 export default megumiSlice;
 

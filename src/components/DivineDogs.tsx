@@ -117,7 +117,7 @@ const DivineDogs = ({ rivalSlice, rivalState }) => {
         // setImageStyle({ ...imageStyle, transform: `scaleX(${attackDirection === "right" ? -1 : 1})` });
 
         setTimeout(() => { // **5 seconds of sleep for divine dogs sound effect
-            dispatch(setCanMove(false)) // FIRST ATTACK
+            // dispatch(setCanMove(false)) // FIRST ATTACK
             moveDivineDogsToRival();
 
             setTimeout(() => { // 250 ms sleep for attack
@@ -150,7 +150,7 @@ const DivineDogs = ({ rivalSlice, rivalState }) => {
                                 setTimeout(() => {
                                     dispatch(divineDogsActivity(false));
                                     setWolfStyle({ ...wolfStyle, transition: defaultNueTransform });
-                                    dispatch(setCanMove(true))
+                                    // dispatch(setCanMove(true))
                                     setBlackDivineDogSidePosition("stop")
                                     setWhiteDivineDogSidePosition("stop")
                                 }, 250);

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { GameSettings } from "../App";
 
 const initialState: GameSettings = {
-  selectedCharacter: "megumi",
+  selectedCharacter: "sukuna",
   selectedRivalCharacter: "gojo",
   winner: "",
   loser: "",
