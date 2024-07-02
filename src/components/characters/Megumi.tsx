@@ -21,7 +21,7 @@ const Megumi = ({ rivalState, rivalSlice }) => {
     const intervalRef = useRef(null);
     const characterWidth = 120;
     const characterHeight = 180;
-
+    const gameAreaHeight = 600;
 
     // Sound effects
     const slashSoundEffectRef = React.useRef(null);
@@ -235,10 +235,55 @@ const Megumi = ({ rivalState, rivalSlice }) => {
         animation: "stance 1s steps(1) infinite",
     });
 
+    const keysPressed = useRef({ u: false, });
+
+    // Megumi keyboard control
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            const key = event.key.toLowerCase();
+            keysPressed.current[key] = true;
+        };
+
+        const handleKeyUp = (event) => {
+            const key = event.key.toLowerCase();
+            keysPressed.current[key] = false;
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
+
+        const intervalId = setInterval(() => {
+            if (gameSettings.selectedCharacter !== "megumi") return;
+            if (rivalState.health.currentHealth > 0) {
+                if (keysPressed.current.u && megumi.canMove) {
+                    console.log("")
+                    dispatch(megumiSlice.actions.setAnimationState("callMahoraga"))
+                    dispatch(megumiSlice.actions.setCanMove(false))
+
+                    setTimeout(() => {
+                        dispatch(megumiSlice.actions.setAnimationState("stance"))
+                        dispatch(megumiSlice.actions.setCanMove(true))
+
+                    }, 1000);
+                }
+            }
+        }, 100);
+
+        return () => {
+            clearInterval(intervalId);
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keyup", handleKeyUp);
+        };
+    }, [dispatch, megumi.animationState, megumi.cursedEnergy]);
+
+    const [mahoragaStyle, setMahoragaStyle] = React.useState({
+        opacity: 0, animation: "stance 1s steps(1) infinite", bottom: gameAreaHeight - megumi.y, left: megumi.x
+    });
+
     useEffect(() => {
         if (megumi.animationState === "stance") {
             setMegumiStyle({
-                animation: "stance 1s steps(3) infinite",
+                animation: "stance 1s steps(1) infinite",
             })
         }
         else if (megumi.animationState === "move") {
@@ -262,6 +307,34 @@ const Megumi = ({ rivalState, rivalSlice }) => {
                 animation: "takeDamage 1s steps(1) infinite",
             })
         }
+        else if (megumi.animationState === "callDivineDogs") {
+            setMegumiStyle({
+                animation: "call-divine-dogs 1s steps(1)",
+            })
+        }
+        else if (megumi.animationState === "callNue") {
+            setMegumiStyle({
+                animation: "call-nue 1s steps(1)",
+            })
+        }
+        else if (megumi.animationState === "callMahoraga") {
+            setMegumiStyle({
+                animation: "call-mahoraga 2s steps(1)",
+            })
+            setTimeout(() => {
+                setMahoragaStyle({
+                    opacity: 1,
+                    animation: "mahoraga-stance 1s steps(1) infinite",
+                    bottom: gameAreaHeight - megumi.y + 50,
+                    left: megumi.x + 100,
+                })
+            }, 1000);
+
+            setTimeout(() => {
+                setMahoragaStyle(prevStyle => ({ ...prevStyle, opacity: 1 }));
+            }, 1000);
+        }
+
     }, [megumi.animationState]);
 
     return (
@@ -270,19 +343,39 @@ const Megumi = ({ rivalState, rivalSlice }) => {
             <audio src={require("../../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/nue.mp3")} ref={nueSoundEffectRef}></audio>
+
+
+
+            <div className="mahoraga" style={{
+                animation: mahoragaStyle.animation,
+                opacity: mahoragaStyle.opacity,
+                top: gameAreaHeight - mahoragaStyle.bottom, left: mahoragaStyle.left,
+            }}>
+                <div className="wheel" style={{
+                    top: "-20px", left: "50%"
+                }}></div>
+            </div>
+            <div className="megumi-container" style={{
+                bottom: gameAreaHeight - megumi.y, left: megumi.x,
+                animation: megumiStyle.animation,
+                // animation: "takeDamage step(1) infinite",
+                transform: megumi.direction === "left" ? "scaleX(-1)" : "none",
+            }}></div>
             <div
                 className="megumi"
                 style={{
-                    top: megumi.y, left: megumi.x,
+                    bottom: gameAreaHeight - megumi.y, left: megumi.x,
+
                     display: megumi.health.currentHealth > 0 ? "block" : "none",
                 }}
             >
+
                 {/* {megumi.animationState} */}
-                <div className="megumi-container" style={{
+                {/* <div className="megumi-container" style={{
                     animation: megumiStyle.animation,
                     // animation: "takeDamage step(1) infinite",
-                    transform: megumi.direction === "left" ? "scaleX(-1)" : "none"
-                }}></div>
+                    // transform: megumi.direction === "left" ? "scaleX(-1)" : "none",
+                }}></div> */}
                 {/* <img src={require('../../Assets/megumi.png')} alt="" style={{
                     transform: megumi.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
                 }} /> */}

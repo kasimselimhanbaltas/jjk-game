@@ -45,7 +45,8 @@ export interface Megumi {
   nueAttackCD: Skill,
   divineDogsCD: Skill,
   isBlocking: boolean,
-  animationState: "stance" | "move" | "jump" | "punch" | "block" | "callNue" | "nueAttack" | "divineDogs",
+  animationState: "stance" | "move" | "jump" | "punch" | "block" |
+  "callNue" | "nueAttack" | "callDivineDogs | callMahoraga",
 }
 export interface Gojo {
   characterName: string,
@@ -117,6 +118,19 @@ export interface Nue {
   nueAuto: boolean;
   nueAutoAttack: boolean;
   animationState: "nueStance" | "move" | "jump" | "punch" | "block" | "nueAttack",
+}
+export interface Mahoraga {
+  isActive: boolean;
+  x: number;
+  y: number;
+  canMove: boolean,
+  health: {
+    currentHealth: number,
+    maxHealth: number,
+  };
+  direction: "left" | "right";
+  isAttacking: boolean;
+  animationState: "stance" | "move" | "jump" | "punch" | "block",
 }
 export interface DivineDogs {
   isActive: boolean;

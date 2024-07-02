@@ -1,6 +1,285 @@
+.megumi-container {
+    position: absolute;
+    width: 43px;
+    height: 64px;
+    /* transform: translateX(-50%); */
+    background: url(./Assets/megu.png);
+    transition: all .2s ease, transform 0s;
+    animation: stance 1s steps(3) infinite;
+    /* animation: stance 1s steps(3) infinite ;
+  animation: move .5s steps(7) infinite;
+  animation: jump 2s steps(11) infinite;
+  animation: punch .9s steps(8) infinite;
+  animation: swordAttack 1s steps(14);
+  animation: takeDamage 1s steps(14); */
+}
+.deneme {
+    background: red;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: deneme-animation 5s infinite;
+}
+
+@keyframes deneme-animation {
+    0% {
+        width: 100px;
+        height: 100px;
+        margin-left: 0;
+        margin-top: 0;
+    }
+
+    20% {
+        width: 120px;
+        height: 120px;
+        margin-top: -20px;
+        /* (120 - 100) */
+    }
+
+    40% {
+        width: 80px;
+        height: 80px;
+        margin-top: 20px;
+        /* (80 - 100) */
+    }
+
+    60% {
+        width: 150px;
+        height: 150px;
+        margin-top: -50px;
+        /* (150 - 100) */
+    }
+
+    80% {
+        width: 90px;
+        height: 90px;
+        margin-top: 10px;
+        /* (90 - 100) */
+    }
+
+    100% {
+        width: 100px;
+        height: 100px;
+        margin-top: 0;
+    }
+}
+.divine-dog-black {
+    position: absolute;
+    background: url(./Assets/megu.png);
+    scale: 1.5;}
+.divine-dog-white {
+    position: absolute;
+    background: url(./Assets/megu.png);
+    scale: 1.5;
+}
+.mahoraga {
+    position: absolute;
+    background: url(./Assets/mahoraga.png);
+    scale: 1;
+    bottom: 400px;
+    left: 50%;
+    width: 67px;
+    height: 140px;
+    animation: mahoraga-walk 1s steps(1) infinite;
+}
+.wheel {
+    position: absolute;
+    background: url(./Assets/mahoraga.png) no-repeat -737px -38px;
+    width: 43px;
+    height: 34px;
+}
 
 
+@keyframes stance {
+    0% {
+        background-position: -22px -85px;
+        width: 32px;
+        height: 52px;
+        margin-top: calc(-52px);
+        margin-left: calc(-32px / 2);
+    }
 
+    33% {
+        background-position: -65px -85px;
+        width: 31px;
+        height: 52px;
+        margin-top: calc(-52px);
+        margin-left: calc(-31px / 2);
+    }
+
+    66% {
+        background-position: -108px -84px;
+        width: 32px;
+        height: 53px;
+        margin-top: calc(-53px);
+        margin-left: calc(-32px / 2);
+    }
+
+    100% {
+        background-position: -149px -86px;
+        width: 31px;
+        height: 52px;
+        margin-top: calc(-52px);
+        margin-left: calc(-31px / 2);
+    }
+}
+
+@keyframes move {
+
+    /* 58x54 */
+    0% {
+        background-position: -10px -203px;
+        width: 46px;
+        height: 39px;
+    }
+
+    12.5% {
+        background-position: -73px -207px;
+        width: 45px;
+        height: 35px;
+    }
+
+    25% {
+        background-position: -135px -200px;
+        width: 36px;
+        height: 42px;
+    }
+
+    37.5% {
+        background-position: -188px -206px;
+        width: 36px;
+        height: 37px;
+    }
+
+    50% {
+        background-position: -245px -203px;
+        width: 46px;
+        height: 39px;
+    }
+
+    62.5% {
+        background-position: -301px -208px;
+        width: 45px;
+        height: 36px;
+    }
+
+    75% {
+        background-position: -367px -201px;
+        width: 37px;
+        height: 41px;
+    }
+
+    87.5% {
+        background-position: -431px -208px;
+        width: 33px;
+        height: 38px;
+    }
+}
+
+@keyframes jump {
+
+    /* 49x57 */
+    0% {
+        background-position: -6px -357px;
+    }
+
+    100% {
+        background-position: -544px -357px;
+    }
+}
+
+@keyframes punch {
+
+    /* 65x62 */
+    0% {
+        background-position: -7px -733px;
+    }
+
+    100% {
+        background-position: -528px -733px;
+    }
+}
+@keyframes swordAttack {
+
+    /* 120x65 */
+    0% {
+        background-position: -251px -80px;
+    }
+
+    100% {
+        background-position: -1932px -80px;
+    }
+}
+@keyframes takeDamage {
+    0% {
+        background-position: -37px -4427px;
+        width: 28px;
+        height: 47px;
+    }
+
+    9% {
+        background-position: -74px -4431px;
+        width: 41px;
+        height: 43px;
+    }
+
+    18% {
+        background-position: -129px -4426px;
+        width: 32px;
+        height: 48px;
+    }
+
+    27% {
+        background-position: -168px -4427px;
+        width: 32px;
+        height: 47px;
+    }
+
+    36% {
+        background-position: -205px -4412px;
+        width: 48px;
+        height: 39px;
+    }
+
+    45% {
+        background-position: -261px -4435px;
+        width: 44px;
+        height: 41px;
+    }
+
+    54% {
+        background-position: -312px -4457px;
+        width: 53px;
+        height: 18px;
+    }
+
+    63% {
+        background-position: -377px -4445px;
+        width: 51px;
+        height: 29px;
+    }
+
+    72% {
+        background-position: -439px -4441px;
+        width: 37px;
+        height: 33px;
+    }
+
+    81% {
+        background-position: -489px -4440px;
+        width: 30px;
+        height: 34px;
+    }
+
+    90% {
+        background-position: -531px -4431px;
+        width: 31px;
+        height: 43px;
+    }
+}
 @keyframes divineDogBlack {
     0% {
         background-position: -314px -1614px;
@@ -14,7 +293,7 @@
         height: 37px;
     }
 
-    40% {
+    50% {
         background-position: -479px -1613px;
         width: 66px;
         height: 37px;
@@ -26,13 +305,12 @@
         height: 30px;
     }
 
-    80% {
+    90% {
         background-position: -643px -1614px;
         width: 74px;
         height: 30px;
     }
 }
-
 @keyframes divineDogWhite {
     0% {
         background-position: -319px -1680px;
@@ -46,7 +324,7 @@
         height: 37px;
     }
 
-    40% {
+    50% {
         background-position: -484px -1679px;
         width: 66px;
         height: 37px;
@@ -58,9 +336,342 @@
         height: 30px;
     }
 
-    80% {
+    90% {
         background-position: -648px -1680px;
         width: 74px;
         height: 30px;
+    }
+}
+
+
+@keyframes call-nue {
+    0% {
+        background-position: -22px -1501px;
+        width: 31px;
+        height: 52px;
+    }
+
+    20% {
+        background-position: -63px -1502px;
+        width: 29px;
+        height: 51px;
+    }
+
+    40% {
+        background-position: -107px -1502px;
+        width: 31px;
+        height: 51px;
+    }
+
+    60% {
+        background-position: -159px -1502px;
+        width: 31px;
+        height: 51px;
+    }
+
+    80% {
+        background-position: -210px -1502px;
+        width: 29px;
+        height: 51px;
+    }
+}
+@keyframes call-divine-dogs {
+    0% {
+        background-position: -22px -1664px;
+        width: 31px;
+        height: 52px;
+    }
+
+    20% {
+        background-position: -63px -1665px;
+        width: 29px;
+        height: 51px;
+    }
+
+    40% {
+        background-position: -105px -1662px;
+        width: 28px;
+        height: 54px;
+    }
+
+    60% {
+        background-position: -146px -1662px;
+        width: 28px;
+        height: 54px;
+    }
+
+    80% {
+        background-position: -186px -1665px;
+        width: 29px;
+        height: 51px;
+    }
+}
+
+@keyframes call-mahoraga {
+    0% {
+        /* 86x128 */
+        /*  -25, 12 */
+        background-position: -34px -3655px;
+        width: 31px;
+        height: 52px;
+        transform: translateX(-15px);
+        }
+        /* 43x64 */
+    11.11% {
+        background-position: -75px -3656px;
+        width: 29px;
+        height: 51px;
+        /* transform: translateX(-7px); */
+    }
+
+    22.22% {
+        background-position: -117px -3656px;
+        width: 28px;
+        height: 51px;
+        /* transform: translateX(-8.5px) */
+    }
+
+    33.33% {
+        background-position: -172px -3629px;
+        width: 61px;
+        height: 78px;
+        transform: translateX(-27px);
+    }
+
+    44.44% {
+        background-position: -247px -3627px;
+        width: 64px;
+        height: 80px;
+        transform: translateX(-30px);
+    }
+
+    55.56% {
+        background-position: -326px -3630px;
+        width: 63px;
+        height: 77px;
+        transform: translateX(-28px);
+    }
+
+    66.67% {
+        background-position: -407px -3625px;
+        width: 73px;
+        height: 82px;
+        transform: translateX(-33px);
+    }
+
+    77.78% {
+        background-position: -495px -3620px;
+        width: 79px;
+        height: 87px;
+        transform: translateX(-36px);
+    }
+
+    88.89% {
+        background-position: -588px -3656px;
+        width: 28px;
+        height: 51px;
+        transform: translateX(-15px);
+    }
+}
+@keyframes mahoraga-full {
+    /* 3931 alt sınır */
+    /* orta nokta: 37 */
+    0% {
+        background-position: -42px -3791px;
+        width: 67px;
+        height: 140px;
+        transform: translateX(0px)
+    }
+
+    9.09% {
+        background-position: -138px -3791px;
+        width: 67px;
+        height: 140px;
+        transform: translateX(0px)
+    }
+
+    18.18% {
+        background-position: -237px -3773px;
+        width: 67px;
+        height: 162px;
+        transform: translateX(0px)
+    }
+
+    27.27% {
+        background-position: -341px -3770px;
+        width: 92px;
+        height: 161px;
+        transform: translateX(-7.5px)
+    }
+
+    36.36% {
+        background-position: -475px -3795px;
+        width: 141px;
+        height: 136px;
+        transform: translateX(-8.5px)
+    }
+
+    45.45% {
+        background-position: -670px -3822px;
+        width: 149px;
+        height: 109px;
+        transform: translateX(-12.5px)
+    }
+
+    54.55% {
+        background-position: -883px -3822px;
+        width: 138px;
+        height: 109px;
+        transform: translateX(-12.5px)
+    }
+
+    63.64% {
+        background-position: -1050px -3822px;
+        width: 142px;
+        height: 109px;
+        transform: translateX(-8.5px)
+    }
+
+    72.73% {
+        background-position: -1226px -3822px;
+        width: 119px;
+        height: 109px;
+        transform: translateX(-10px)
+    }
+
+    81.82% {
+        background-position: -1384px -3791px;
+        width: 67px;
+        height: 140px;
+        transform: translateX(0px)    }
+
+    90.91% {
+        background-position: -1485px -3791px;
+        width: 67px;
+        height: 140px;
+        transform: translateX(0px)
+    }
+}
+@keyframes mahoraga-stance {
+    0% {
+        background-position: -53px -239px;
+        width: 91px;
+        height: 115px;
+        margin-top: calc(-115px / 2);
+        margin-left: calc(-91px / 2);
+    }
+
+    20% {
+        background-position: -194px -246px;
+        width: 91px;
+        height: 113px;
+        margin-top: calc(-113px / 2);
+        margin-left: calc(-91px / 2);
+    }
+
+    40% {
+        background-position: -360px -248px;
+        width: 91px;
+        height: 111px;
+        margin-top: calc(-111px / 2);
+        margin-left: calc(-91px / 2);
+    }
+
+    60% {
+        background-position: -525px -242px;
+        width: 91px;
+        height: 115px;
+        margin-top: calc(-115px / 2);
+        margin-left: calc(-91px / 2);
+    }
+
+    80% {
+        background-position: -53px -239px;
+        width: 91px;
+        height: 115px;
+        margin-top: calc(-115px / 2);
+        margin-left: calc(-91px / 2);
+    }
+}
+@keyframes mahoraga-hit {
+    0% {
+        background-position: -60px -721px;
+        width: 78px;
+        height: 78px;
+        margin-top: calc(-78px / 2);
+        margin-left: calc(-78px / 2);
+    }
+
+    20% {
+        background-position: -247px -708px;
+        width: 78px;
+        height: 102px;
+        margin-top: calc(-102px / 2);
+        margin-left: calc(-78px / 2);
+    }
+
+    40% {
+        background-position: -415px -711px;
+        width: 79px;
+        height: 118px;
+        margin-top: calc(-118px / 2);
+        margin-left: calc(-79px / 2);
+    }
+
+    60% {
+        background-position: -581px -721px;
+        width: 94px;
+        height: 118px;
+        margin-top: calc(-118px / 2);
+        margin-left: calc(-94px / 2);
+    }
+
+    80% {
+        background-position: -750px -731px;
+        width: 95px;
+        height: 118px;
+        margin-top: calc(-118px / 2);
+        margin-left: calc(-95px / 2);
+    }
+}
+@keyframes mahoraga-walk {
+    0% {
+        background-position: -44px -471px;
+        width: 81px;
+        height: 118px;
+        margin-top: calc(-118px);
+        margin-left: calc(-81px / 2);
+    }
+
+    20% {
+        background-position: -188px -474px;
+        width: 86px;
+        height: 118px;
+        margin-top: calc(-118px);
+        margin-left: calc(-86px / 2);
+    }
+
+    40% {
+        background-position: -346px -494px;
+        width: 86px;
+        height: 118px;
+        margin-top: calc(-118px);
+        margin-left: calc(-86px / 2);
+    }
+
+    60% {
+        background-position: -505px -494px;
+        width: 83px;
+        height: 118px;
+        margin-top: calc(-118px);
+        margin-left: calc(-83px / 2);
+    }
+
+    80% {
+        background-position: -661px -507px;
+        width: 78px;
+        height: 117px;
+        margin-top: calc(-117px);
+        margin-left: calc(-78px / 2);
     }
 }

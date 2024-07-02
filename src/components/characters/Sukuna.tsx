@@ -21,8 +21,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const nue = useSelector((state: any) => state.NueState);
     const divineDogs = useSelector((state: any) => state.DivineDogsState);
 
-    const characterWidth = 130;
-    const characterHeight = 150;
+    const characterWidth = 70;
+    const characterHeight = 90;
     const cleaveCost = -10;
     const dismantleCost = -50;
     const cleaveAttackDamage = -10; // Saldırı hasarı
@@ -301,7 +301,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 {/* </div> */}
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
                 {/* <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} /> */}
-                <img src={require('../../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
+                <img src={require('../../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2", zIndex: 999 }} />
                 <img src={require('../../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require(`../../Assets/guard.png`)} alt="" style={{
                     display: sukuna.isBlocking ? "block" : "none", height: characterHeight, width: characterHeight, opacity: 0.8, scale: "1.2",

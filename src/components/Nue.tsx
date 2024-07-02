@@ -169,12 +169,20 @@ const Nue = ({ rivalSlice, rivalState }) => {
             if (keysPressed.current.k || nue.nueAuto) {
                 console.log(" nue auto ")
                 if (nue.isActive === false && megumi.cursedEnergy.currentCursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
+                    dispatch(megumiSlice.actions.setAnimationState("callNue"))
+                    dispatch(megumiSlice.actions.setCanMove(false))
+                    setTimeout(() => {
+                        dispatch(megumiSlice.actions.setCanMove(true))
+                        dispatch(megumiSlice.actions.setAnimationState("stance"))
+                    }, 1000);
                     dispatch(changeCursedEnergy(-callNueCost));
                     dispatch2(toggleCallNueCD());
                     startNueInterval();
                     nueSound.current.volume = 0.5;
                     nueSound.current.play();
-                    dispatch(nueActivity(true));
+                    setTimeout(() => {
+                        dispatch(nueActivity(true));
+                    }, 500);
                 } else {
                     dispatch(nueActivity(false));
                     stopInterval(nueIntervalRef);

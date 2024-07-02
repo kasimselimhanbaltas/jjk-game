@@ -13,7 +13,7 @@
     padding: 5px;
     background: url(./Assets/sukuna-sprite.png);
     /* animation: walk-sukuna steps(1) 1s infinite; */
-    scale: 2;
+    scale: 1;
 }
 .cleave {
     position: absolute;

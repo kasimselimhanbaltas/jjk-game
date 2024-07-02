@@ -46,6 +46,8 @@
     position: relative;
 }
 .megumi {
+  transform-origin: bottom center;
+    /* Alt kenar orta noktasını sabit tut */
   position: absolute;
   transition: all .2s ease, transform 0s ;
 }
@@ -102,11 +104,11 @@
   position: absolute;
   /* transition: all .4s ease; */
 }
-.megumi img{
+/* .megumi img{
   position: absolute;
   top: 0;
   left: 0;
-}
+} */
 .gojo {
   position: absolute;
   transition: all .2s ease;
@@ -247,23 +249,7 @@
   margin-top: 10px;
 }
 
-.wolf {
-  width: 145px;
-  height: 120px;
-  background-image: url('./Assets/black-wolf.png');
-  /* Sprite sheet kullanımı */
-  /* animation: wolfRun 1s steps(5) infinite; */
-  /* 8 kareli sprite sheet için */
-}
-.wolf2 {
-  width: 145px;
-  height: 85px;
-  background-image: url('./Assets/white-wolf.png');
-  background-size: cover;
-  /* Sprite sheet kullanımı */
-  /* animation: wolfRun 1s steps(5) infinite; */
-  /* 8 kareli sprite sheet için */
-}
+
 @keyframes wolfRun {
   from {
     background-position: 0 350px;
@@ -370,184 +356,7 @@
   width: 25px;
   height: 48px;;
 }
-.megumi-container {
-  width: 43px;
-  height: 64px;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  scale: 2;
-  left: 50%;
-  top: 50%;
-  background-image: url('./Assets/megu.png');
-  animation: stance 1s steps(3) infinite ;
-  animation: move .5s steps(7) infinite;
-  animation: jump 2s steps(11) infinite;
-  animation: punch .9s steps(8) infinite;
-  animation: swordAttack 1s steps(14);
-  animation: takeDamage 1s steps(14);
-}
 
-@keyframes stance {
-
-  /* 43x64 */
-  0% {
-    background-position: -14px -80px;
-  }
-
-  100% {
-    background-position: -142px -80px;
-  }
-}
-@keyframes move {
-
-  /* 58x54 */
-0% {
-    background-position: -10px -203px;
-    width: 46px;
-    height: 39px;
-  }
-
-  12.5% {
-    background-position: -73px -207px;
-    width: 45px;
-    height: 35px;
-  }
-
-  25% {
-    background-position: -135px -200px;
-    width: 36px;
-    height: 42px;
-  }
-
-  37.5% {
-    background-position: -188px -206px;
-    width: 36px;
-    height: 37px;
-  }
-
-  50% {
-    background-position: -245px -203px;
-    width: 46px;
-    height: 39px;
-  }
-
-  62.5% {
-    background-position: -301px -208px;
-    width: 45px;
-    height: 36px;
-  }
-
-  75% {
-    background-position: -367px -201px;
-    width: 37px;
-    height: 41px;
-  }
-
-  87.5% {
-    background-position: -431px -208px;
-    width: 33px;
-    height: 38px;
-  }
-}
-@keyframes jump {
-
-  /* 49x57 */
-  0% {
-    background-position: -6px -357px;
-  }
-
-  100% {
-    background-position: -544px -357px;
-  }
-}
-@keyframes punch {
-
-  /* 65x62 */
-  0% {
-    background-position: -7px -733px;
-  }
-
-  100% {
-    background-position: -528px -733px;
-  }
-}
-@keyframes swordAttack {
-  /* 120x65 */
-  0% {
-    background-position: -251px -80px;
-  }
-
-  100% {
-    background-position: -1932px -80px;
-  }
-}
-@keyframes takeDamage {
-  0% {
-    background-position: -37px -4427px;
-    width: 28px;
-    height: 47px;
-  }
-
-  9% {
-    background-position: -74px -4431px;
-    width: 41px;
-    height: 43px;
-  }
-
-  18% {
-    background-position: -129px -4426px;
-    width: 32px;
-    height: 48px;
-  }
-
-  27% {
-    background-position: -168px -4427px;
-    width: 32px;
-    height: 47px;
-  }
-
-  36% {
-    background-position: -205px -4412px;
-    width: 48px;
-    height: 39px;
-  }
-
-  45% {
-    background-position: -261px -4435px;
-    width: 44px;
-    height: 41px;
-  }
-
-  54% {
-    background-position: -312px -4457px;
-    width: 53px;
-    height: 18px;
-  }
-
-  63% {
-    background-position: -377px -4445px;
-    width: 51px;
-    height: 29px;
-  }
-
-  72% {
-    background-position: -439px -4441px;
-    width: 37px;
-    height: 33px;
-  }
-
-  81% {
-    background-position: -489px -4440px;
-    width: 30px;
-    height: 34px;
-  }
-
-  90% {
-    background-position: -531px -4431px;
-    width: 31px;
-    height: 43px;
-  }
-}
 
 .nue-container {
   width: 160px;
