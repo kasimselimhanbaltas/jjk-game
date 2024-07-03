@@ -4,12 +4,12 @@ import sukunaSlice, {
     moveCharacter, moveCharacterTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack,
     setCanMove, setCursedEnergy, setDirection, setRivalDomainExpansion,
     toggleCleaveCD, toggleDismantleCD, toggleDomainCD, setRapidAttackCounter
-} from '../../store/character-slices/SukunaSlice';
-import megumiSlice, { changeCursedEnergy } from '../../store/character-slices/MegumiSlice';
+} from '../../redux/character-slices/SukunaSlice';
+import megumiSlice, { changeCursedEnergy } from '../../redux/character-slices/MegumiSlice';
 import { Howl, Howler } from 'howler';
 import ReactHowler from 'react-howler';
 import useCooldown from '../../hooks/useCoolDown';
-import { AppDispatch, RootState } from '../../store/GlobalStore';
+import { AppDispatch, RootState } from '../../redux/GlobalStore';
 import "../../Sukuna.css";
 
 const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
@@ -21,6 +21,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const nue = useSelector((state: any) => state.NueState);
     const divineDogs = useSelector((state: any) => state.DivineDogsState);
 
+    const gameAreaHeight = 600;
     const characterWidth = 70;
     const characterHeight = 90;
     const cleaveCost = -10;
@@ -283,20 +284,24 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     return (
         <div>
             <audio src={require("../../Assets/audios/sukuna.mp3")} ref={sukunaSoundEffectRef}></audio>
+            <div className='sukunaCC' style={{
+                bottom: gameAreaHeight - sukuna.y, left: sukuna.x,
+                transform: sukuna.direction === "left" ? "scaleX(-1)" : "none",
+                animation: sukunaStyle.animation,
+                display: sukuna.health.currentHealth > 0 ? "block" : "none",
+            }}>
+            </div>
+
             <div className="sukuna-container"
                 style={{
-                    top: sukuna.y, left: sukuna.x, width: characterWidth, height: characterHeight,
+                    bottom: gameAreaHeight - sukuna.y, left: sukuna.x,
                     display: sukuna.health.currentHealth > 0 ? "block" : "none",
                 }}>
                 {/* <div className='sukuna-container' style={{
                     top: sukuna.y, left: sukuna.x,
                     display: sukuna.health.currentHealth > 0 ? "block" : "none",
                 }}> */}
-                <div className='sukunaCC' style={{
-                    transform: sukuna.direction === "left" ? "scaleX(-1)" : "none",
-                    animation: sukunaStyle.animation
-                }}>
-                </div>
+
                 <div className='cleave' style={{ top: sukuna.top, left: sukuna.direction === "left" ? -200 : 200, animation: cleaveAnimation }}></div>
                 {/* </div> */}
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
@@ -308,10 +313,10 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     transform: "translate(-10%,0)"
                 }} />
                 {/* <p style={{ marginTop: gameSettings.selectedCharacter !== "sukuna" ? -80 : -30, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p> */}
-                {gameSettings.selectedCharacter !== "sukuna" && (
+                {/* {gameSettings.selectedCharacter !== "sukuna" && (
                     <>
-                        <div className="megumi-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                            <div style={{ position: "absolute", width: sukuna.health.currentHealth * 150 / sukuna.health.maxHealth, maxWidth: "150px", height: "20px", top: "-120%", backgroundColor: "red" }}>
+                        <div className="megumi-health" style={{ position: "absolute", width: "100px", height: "15px", top: "-80px" }}>
+                            <div style={{ position: "absolute", width: sukuna.health.currentHealth * 150 / sukuna.health.maxHealth, maxWidth: "100px", height: "15px", top: "-22px", backgroundColor: "red" }}>
                             </div>
                             <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{sukuna.health.currentHealth}</p>
                         </div>
@@ -321,7 +326,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                             <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{sukuna.cursedEnergy.currentCursedEnergy}</p>
                         </div>
                     </>
-                )}
+                )} */}
                 {/* <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
                 Sukuna Direction: {sukuna.direction} <br /> Range: {sukuna.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
             </p> */}

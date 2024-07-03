@@ -39,6 +39,11 @@ const initialState: Megumi = {
   isBlocking: false,
   // animationState: "stance" | "move" | "jump" | "punch" | "block" | "callNue" | "nueAttack" | "divineDogs",
   animationState: "stance",
+  velocityY: 0,
+  isJumping: false,
+  gravity: 5,
+  jumpStrength: -30,
+  animationBlocker: false,
 };
 
 const megumiSlice = createSlice({
@@ -56,7 +61,7 @@ const megumiSlice = createSlice({
       } else {
         // console.log("limit reached in x direction");
       }
-      if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 150) {
+      if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 10) {
         state.y += inputY;
       } else {
         // console.log("limit reached in y direction");
@@ -133,9 +138,32 @@ const megumiSlice = createSlice({
       state.isBlocking = action.payload;
     },
     setAnimationState(state, action) {
-      state.animationState = action.payload;
+      if (!state.animationBlocker) state.animationState = action.payload;
     },
-
+    applyGravity: (state) => {
+      if (state.y < 300 || state.velocityY === state.jumpStrength) {
+        // Ensure the character stays above the ground level
+        state.velocityY += state.gravity;
+        state.y += state.velocityY;
+      } else {
+        state.y = 300;
+        state.velocityY = 0;
+        state.isJumping = false;
+      }
+    },
+    jump: (state) => {
+      if (!state.isJumping) {
+        state.velocityY = state.jumpStrength;
+        state.isJumping = true;
+        state.animationState = "jump";
+      }
+    },
+    setJumping(state, action) {
+      state.isJumping = action.payload;
+    },
+    setAnimatinBlocker(state, action) {
+      state.animationBlocker = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -157,6 +185,10 @@ export const {
   setIsBlocking,
   setAnimationState,
   moveCharacterWD,
+  applyGravity,
+  jump,
+  setJumping,
+  setAnimatinBlocker,
 } = megumiSlice.actions;
 export default megumiSlice;
 

@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import megumiSlice from "../../store/character-slices/MegumiSlice";
-import sukunaSlice from "../../store/character-slices/SukunaSlice";
-import nueSlice, { setNueDirection } from "../../store/NueSlice";
+import megumiSlice from "../../redux/character-slices/MegumiSlice";
+import sukunaSlice from "../../redux/character-slices/SukunaSlice";
+import nueSlice, { setNueDirection } from "../../redux/NueSlice";
 import React from "react";
-import divineDogsSlice from "../../store/DivineDogsSlice";
+import divineDogsSlice from "../../redux/DivineDogsSlice";
 
 const Megumi = ({ rivalState, rivalSlice }) => {
     const megumi = useSelector((state: any) => state.MegumiState);
@@ -264,7 +264,7 @@ const Megumi = ({ rivalState, rivalSlice }) => {
                         dispatch(megumiSlice.actions.setAnimationState("stance"))
                         dispatch(megumiSlice.actions.setCanMove(true))
 
-                    }, 1000);
+                    }, 2000);
                 }
             }
         }, 100);
@@ -290,6 +290,14 @@ const Megumi = ({ rivalState, rivalSlice }) => {
             setMegumiStyle({
                 animation: "move .5s steps(1) infinite",
             })
+        }
+        else if (megumi.animationState === "jump") {
+            setMegumiStyle({
+                animation: "jump 1.5s steps(1)",
+            })
+            setTimeout(() => {
+                dispatch(megumiSlice.actions.setAnimationState("stance"))
+            }, 1500);
         }
         else if (megumi.animationState === "punch") {
             setMegumiStyle({
@@ -332,7 +340,7 @@ const Megumi = ({ rivalState, rivalSlice }) => {
 
             setTimeout(() => {
                 setMahoragaStyle(prevStyle => ({ ...prevStyle, opacity: 1 }));
-            }, 1000);
+            }, 2000);
         }
 
     }, [megumi.animationState]);
@@ -343,7 +351,6 @@ const Megumi = ({ rivalState, rivalSlice }) => {
             <audio src={require("../../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/nue.mp3")} ref={nueSoundEffectRef}></audio>
-
 
 
             <div className="mahoraga" style={{
@@ -393,7 +400,6 @@ const Megumi = ({ rivalState, rivalSlice }) => {
                         </div>
                     </>
                 )}
-                {/* <p style={{ marginTop: gameSettings.selectedCharacter === "megumi" ? -20 : -60, width: 250, marginLeft: -50, color: "black", fontSize: "20px" }}>Megumi Fushiguro</p> */}
 
                 <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
                 <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />

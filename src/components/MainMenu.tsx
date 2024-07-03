@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCharacter, selectRivalCharacter } from '../store/GameSettingsSlice';
+import { selectCharacter, selectRivalCharacter } from '../redux/GameSettingsSlice';
 
 const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
 

@@ -178,16 +178,158 @@
         height: 38px;
     }
 }
-
 @keyframes jump {
-
-    /* 49x57 */
     0% {
-        background-position: -6px -357px;
+        background-position: -16px -359px;
+        width: 31px;
+        height: 52px;
+        transform: translateX(calc(15px + var(--xdif))) translateY(calc(26px + var(--ydif)));
+    }
+    8.33% {
+        background-position: -65px -360px;
+        width: 29px;
+        height: 51px;
+        transform: translateX(calc(15px + var(--xdif))) translateY(calc(25px + var(--ydif)));
+    }
+    16.66% {
+        background-position: -107px -367px;
+        width: 40px;
+        height: 44px;
+        transform: translateX(calc(20px + var(--xdif))) translateY(calc(22px + var(--ydif)));
+    }
+    25% {
+        background-position: -158px -358px;
+        width: 44px;
+        height: 51px;
+        transform: translateX(calc(22px + var(--xdif))) translateY(calc(25.5px + var(--ydif)));
+    }
+    33.33% {
+        background-position: -206px -359px;
+        width: 44px;
+        height: 51px;
+        transform: translateX(calc(22px + var(--xdif))) translateY(calc(25.5px + var(--ydif)));
+    }
+    41.66% {
+        background-position: -257px -358px;
+        width: 40px;
+        height: 54px;
+        transform: translateX(calc(20px + var(--xdif))) translateY(calc(27px + var(--ydif)));
+    }
+    50% {
+        background-position: -304px -358px;
+        width: 40px;
+        height: 54px;
+        transform: translateX(calc(20px + var(--xdif))) translateY(calc(27px + var(--ydif)));
+    }
+    58.33% {
+        background-position: -353px -371px;
+        width: 39px;
+        height: 40px;
+        transform: translateX(calc(19.5px + var(--xdif))) translateY(calc(20px + var(--ydif)));
+    }
+    66.66% {
+        background-position: -402px -367px;
+        width: 40px;
+        height: 44px;
+        transform: translateX(calc(20px + var(--xdif))) translateY(calc(22px + var(--ydif)));
+    }
+    75% {
+        background-position: -450px -371px;
+        width: 39px;
+        height: 40px;
+        transform: translateX(calc(19.5px + var(--xdif))) translateY(calc(20px + var(--ydif)));
+    }
+    83.33% {
+        background-position: -505px -360px;
+        width: 29px;
+        height: 51px;
+        transform: translateX(calc(14.5px + var(--xdif))) translateY(calc(25.5px + var(--ydif)));
+    }
+    100% {
+        background-position: -554px -359px;
+        width: 32px;
+        height: 52px;
+        transform: translateX(calc(16px + var(--xdif))) translateY(calc(26px + var(--ydif)));
+    }
+}
+@keyframes jump {
+    0% {
+        background-position: -16px -359px;
+        width: 31px;
+        height: 52px;
+        translate: -50%;
+    }
+
+    8.33% {
+        background-position: -65px -360px;
+        width: 29px;
+        height: 51px;
+    }
+
+    16.66% {
+        background-position: -107px -367px;
+        width: 40px;
+        height: 44px;
+    }
+
+    25% {
+        background-position: -158px -358px;
+        width: 44px;
+        height: 51px;
+    }
+
+    33.33% {
+        background-position: -206px -359px;
+        width: 44px;
+        height: 51px;
+    }
+
+    41.66% {
+        background-position: -257px -358px;
+        width: 40px;
+        height: 54px;
+    }
+
+    50% {
+        background-position: -304px -358px;
+        width: 40px;
+        height: 54px;
+    }
+
+    70% {
+        background-position: -353px -371px;
+        width: 39px;
+        height: 40px;
+    }
+
+    75% {
+        background-position: -402px -367px;
+        width: 40px;
+        height: 44px;
+    }
+
+    85% {
+        background-position: -450px -371px;
+        width: 39px;
+        height: 40px;
+    }
+
+    90% {
+        background-position: -505px -360px;
+        width: 29px;
+        height: 51px;
+    }
+
+    95% {
+        background-position: -554px -359px;
+        width: 32px;
+        height: 52px;
     }
 
     100% {
-        background-position: -544px -357px;
+        background-position: -16px -359px;
+        width: 31px;
+        height: 52px;
     }
 }
 

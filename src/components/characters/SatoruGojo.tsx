@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import gojoSlice, { toggleBlueCD, togglePurpleCD, toggleRedCD } from "../../store/character-slices/GojoSlice";
-import sukunaSlice from "../../store/character-slices/SukunaSlice";
-import { setNueDirection } from "../../store/NueSlice";
+import gojoSlice, { toggleBlueCD, togglePurpleCD, toggleRedCD } from "../../redux/character-slices/GojoSlice";
+import sukunaSlice from "../../redux/character-slices/SukunaSlice";
+import { setNueDirection } from "../../redux/NueSlice";
 import React from "react";
-import { AppDispatch } from "../../store/GlobalStore";
+import { AppDispatch } from "../../redux/GlobalStore";
 
 const Gojo = ({ rivalState, rivalSlice }) => {
 

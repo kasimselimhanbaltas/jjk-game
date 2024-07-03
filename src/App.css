@@ -36,7 +36,9 @@
     transform: rotate(360deg);
   }
 }
-
+.megumi-health p{
+  font-size: 5px;
+}
 .game-area {
   width: 1400px;
   height: 600px;

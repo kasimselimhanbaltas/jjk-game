@@ -47,6 +47,11 @@ export interface Megumi {
   isBlocking: boolean,
   animationState: "stance" | "move" | "jump" | "punch" | "block" |
   "callNue" | "nueAttack" | "callDivineDogs | callMahoraga",
+  velocityY: number,
+  isJumping: boolean,
+  gravity: number,
+  jumpStrength: number,
+  animationBlocker: boolean;
 }
 export interface Gojo {
   characterName: string,
@@ -73,7 +78,11 @@ export interface Gojo {
   purpleAttackMoment: boolean,
   isBlocking: boolean,
   animationState: "stance" | "move" | "jump" | "punch" | "block" | "swordAttack",
-
+  velocityY: number,
+  isJumping: boolean,
+  gravity: number,
+  jumpStrength: number,
+  animationBlocker: boolean;
 }
 
 export interface Sukuna {
@@ -106,7 +115,11 @@ export interface Sukuna {
   },
   isBlocking: boolean,
   animationState: "stance" | "move" | "jump" | "punch" | "block" | "entry" | "walk",
-
+  velocityY: number,
+  isJumping: boolean,
+  gravity: number,
+  jumpStrength: number,
+  animationBlocker: boolean;
 }
 export interface Nue {
   isActive: boolean;

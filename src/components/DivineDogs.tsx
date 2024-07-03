@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../store/NueSlice";
-import { setCanMove, updateHealth } from "../store/character-slices/SukunaSlice";
-import megumiSlice, { changeCursedEnergy, toggleDivineDogsAttackCD } from "../store/character-slices/MegumiSlice";
-import { divineDogsActivity, divineDogsAttacking, moveDivineDogs, setDivineDogsDirection, setWolfAuto } from "../store/DivineDogsSlice";
+import { moveNue, nueActivity, nueAttacking, setNueDirection } from "../redux/NueSlice";
+import { setCanMove, updateHealth } from "../redux/character-slices/SukunaSlice";
+import megumiSlice, { changeCursedEnergy, toggleDivineDogsAttackCD } from "../redux/character-slices/MegumiSlice";
+import { divineDogsActivity, divineDogsAttacking, moveDivineDogs, setDivineDogsDirection, setWolfAuto } from "../redux/DivineDogsSlice";
 import React from "react";
-import gameSettingsSlice from "../store/GameSettingsSlice";
-import { AppDispatch } from "../store/GlobalStore";
+import gameSettingsSlice from "../redux/GameSettingsSlice";
+import { AppDispatch } from "../redux/GlobalStore";
 import "../Megumi.css";
 
 const gameAreaWidth = 1400;

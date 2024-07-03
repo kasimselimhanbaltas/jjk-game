@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import nueSlice, { moveNue, nueActivity, nueAttacking, setAnimationState, setNueAuto, setNueAutoAttack, setNueDirection } from "../store/NueSlice";
-import megumiSlice, { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../store/character-slices/MegumiSlice";
-import { AppDispatch } from "../store/GlobalStore";
+import nueSlice, { moveNue, nueActivity, nueAttacking, setAnimationState, setNueAuto, setNueAutoAttack, setNueDirection } from "../redux/NueSlice";
+import megumiSlice, { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../redux/character-slices/MegumiSlice";
+import { AppDispatch } from "../redux/GlobalStore";
 
 
 const gameAreaWidth = 1400;

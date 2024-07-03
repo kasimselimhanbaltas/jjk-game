@@ -2,11 +2,11 @@ import { useEffect, useMemo, useRef } from "react";
 import Megumi from "../components/characters/Megumi";
 import Sukuna from "../components/characters/Sukuna";
 import Nue from "../components/Nue";
-import sukunaSlice from "../store/character-slices/SukunaSlice";
-import megumiSlice from "../store/character-slices/MegumiSlice";
-import gojoSlice from "../store/character-slices/GojoSlice";
+import sukunaSlice from "../redux/character-slices/SukunaSlice";
+import megumiSlice from "../redux/character-slices/MegumiSlice";
+import gojoSlice from "../redux/character-slices/GojoSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { nueActivity, setNueDirection } from "../store/NueSlice";
+import { nueActivity, setNueDirection } from "../redux/NueSlice";
 import DivineDogs from "../components/DivineDogs";
 import MainMenu from "../components/MainMenu";
 import React from "react";
@@ -14,9 +14,9 @@ import CircularProgressBar from "../components/CircularProgressBar";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import SatoruGojo from "../components/characters/SatoruGojo";
 import FinishMenu from "../components/FinishMenu";
-import { setWinner } from "../store/GameSettingsSlice";
-import SukunaSlice from "../store/character-slices/SukunaSlice";
-import MegumiSlice from "../store/character-slices/MegumiSlice";
+import { setWinner } from "../redux/GameSettingsSlice";
+import SukunaSlice from "../redux/character-slices/SukunaSlice";
+import MegumiSlice from "../redux/character-slices/MegumiSlice";
 
 const characterHeight = 50;
 
@@ -77,8 +77,8 @@ const GameArea = () => {
 
   // place characters
   useEffect(() => {
-    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 200 }));
-    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
+    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 100 }));
+    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 100 }));
   }, []);
 
   //check red damage, purple damage
@@ -202,17 +202,26 @@ const GameArea = () => {
 
     clearInterval(intervalId);
     intervalId = setInterval(() => {
+      // wasd movement
       if (playerCharacter.canMove) {
 
         dispatch(sukunaSlice.actions.setCloseRange(Math.abs(xDistance) < 200));
 
-        if (keysPressed.current.w && playerCharacter.y > 0) {
-          dispatch(playerSlice.actions.moveCharacter({ x: 0, y: -megumiSpeed }));
+        // if (keysPressed.current.w && playerCharacter.y > 0) {
+        //   dispatch(playerSlice.actions.moveCharacter({ x: 0, y: -megumiSpeed }));
+        // }
+        if (keysPressed.current.w && !playerCharacter.isJumping) {
+          dispatch(megumiSlice.actions.jump());
+          dispatch(megumiSlice.actions.setAnimatinBlocker(true))
+          setTimeout(() => {
+            dispatch(megumiSlice.actions.setAnimatinBlocker(false))
+          }, 1500);
         }
         if (keysPressed.current.a && playerCharacter.x > 0) {
           dispatch(playerSlice.actions.moveCharacter({ x: -megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("left"));
-          dispatch(playerSlice.actions.setAnimationState("move"));
+          if (!playerCharacter.isJumping)
+            dispatch(playerSlice.actions.setAnimationState("move"));
         }
         if (keysPressed.current.s && playerCharacter.y < gameAreaHeight - megumiHeight) {
           dispatch(playerSlice.actions.moveCharacter({ x: 0, y: megumiSpeed }));
@@ -220,7 +229,8 @@ const GameArea = () => {
         if (keysPressed.current.d && playerCharacter.x < gameAreaWidth - megumiWidth) {
           dispatch(playerSlice.actions.moveCharacter({ x: megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("right"));
-          dispatch(playerSlice.actions.setAnimationState("move"));
+          if (!playerCharacter.isJumping)
+            dispatch(playerSlice.actions.setAnimationState("move"));
 
         }
         if (keysPressed.current.q) {
@@ -246,7 +256,6 @@ const GameArea = () => {
       // dispatch(playerSlice.actions.setAnimationState("stance"));
     }, 75);
 
-
     if (!nue.isAttacking) dispatch(setNueDirection(megumi.direction));
 
     return () => {
@@ -254,9 +263,19 @@ const GameArea = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [dispatch, playerCharacter.health, playerCharacter.y, playerCharacter.x, rivalCharacter.x, rivalCharacter.canMove, playerCharacter.canMove, xDistance]);
+  }, [dispatch, playerCharacter.health, playerCharacter.y, playerCharacter.x, rivalCharacter.x,
+    rivalCharacter.canMove, playerCharacter.canMove, xDistance, playerCharacter.isJumping]);
 
-  // Sukuna movement
+  useEffect(() => {
+    const gameLoop = setInterval(() => {
+      dispatch(playerSlice.actions.applyGravity());
+      dispatch(rivalSlice.actions.applyGravity());
+    }, 1000 / 10); // 60 FPS
+
+    return () => clearInterval(gameLoop);
+  }, [megumi.isJumping]);
+
+  // Rival auto movement
   useEffect(() => {
     // if (gameSettings.selectedCharacter === "sukuna") return;
     const interval = setInterval(() => {
@@ -290,7 +309,7 @@ const GameArea = () => {
 
   }, [rivalCharacter.rivalDirection, rivalCharacter.canMove, rivalCharacter.dashGauge]);
 
-  // Sukuna Movement Control
+  // Rival Movement Control
   useEffect(() => {
     const interval = setInterval(() => {
       let direction = "";
@@ -387,6 +406,18 @@ const GameArea = () => {
       }, 2000);
     }
   }, [playerCharacter.health.currentHealth, rivalCharacter.health.currentHealth]);
+
+  // setInterval(function gravity() {
+  //   if (playerCharacter.y < gameAreaHeight) {
+  //     playerCharacter.y += 5;
+  //   }
+  // })
+
+  // useEffect(() => {
+  //   if (playerCharacter.y > rivalCharacter.y) {
+
+  //   }
+  // }, [playerCharacter.y, rivalCharacter.y]);
 
 
   return (

@@ -47,6 +47,11 @@ const initialState: Sukuna = {
   },
   isBlocking: false,
   animationState: "stance",
+  velocityY: 0,
+  isJumping: false,
+  gravity: 5,
+  jumpStrength: -30,
+  animationBlocker: false,
 };
 
 const RivalSlice = createSlice({
@@ -58,9 +63,23 @@ const RivalSlice = createSlice({
       let inputY = action.payload.y;
       if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 100) {
         state.x += inputX;
-        // if (inputX > 0) {
-        //   state.direction = "right";
-        // } else state.direction = "left";
+        if (inputX > 0) {
+          state.direction = "right";
+        } else state.direction = "left";
+      } else {
+        // console.log("limit reached in x direction");
+      }
+      if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 150) {
+        state.y += inputY;
+      } else {
+        // console.log("limit reached in y direction");
+      }
+    },
+    moveCharacterWD(state, action) {
+      let inputX = action.payload.x;
+      let inputY = action.payload.y;
+      if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 70) {
+        state.x += inputX;
       } else {
         // console.log("limit reached in x direction");
       }
@@ -151,6 +170,30 @@ const RivalSlice = createSlice({
     setAnimationState(state, action) {
       state.animationState = action.payload;
     },
+    applyGravity: (state) => {
+      if (state.y < 300 || state.velocityY === state.jumpStrength) {
+        // Ensure the character stays above the ground level
+        state.velocityY += state.gravity;
+        state.y += state.velocityY;
+      } else {
+        state.y = 300;
+        state.velocityY = 0;
+        state.isJumping = false;
+      }
+    },
+    jump: (state) => {
+      if (!state.isJumping) {
+        state.velocityY = state.jumpStrength;
+        state.isJumping = true;
+        state.animationState = "jump";
+      }
+    },
+    setJumping(state, action) {
+      state.isJumping = action.payload;
+    },
+    setAnimatinBlocker(state, action) {
+      state.animationBlocker = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -179,6 +222,11 @@ export const {
   resetState,
   setIsBlocking,
   setAnimationState,
+  moveCharacterWD,
+  applyGravity,
+  jump,
+  setJumping,
+  setAnimatinBlocker,
 } = RivalSlice.actions;
 export default RivalSlice;
 
