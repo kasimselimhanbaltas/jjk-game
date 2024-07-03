@@ -11,6 +11,7 @@ import ReactHowler from 'react-howler';
 import useCooldown from '../../hooks/useCoolDown';
 import { AppDispatch, RootState } from '../../redux/GlobalStore';
 import "../../Sukuna.css";
+import { divineDogsAttacking } from '../../redux/DivineDogsSlice';
 
 const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
@@ -306,8 +307,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 {/* </div> */}
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
                 {/* <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} /> */}
-                <img src={require('../../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2", zIndex: 999 }} />
-                <img src={require('../../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
+                <img src={require('../../Assets/electricity.png')} alt="" style={{ position: "absolute", top: "-55px", left: "-20px", display: electricityEffect ? "block" : "none", height: "60px", width: "50px", opacity: 0.8, scale: "1.2", zIndex: 999 }} />
+                <img src={require('../../Assets/claw-mark.png')} alt="" style={{ position: "absolute", top: "-75px", left: "-20px", display: divineDogs.isAttacking ? "block" : "none", height: "80px", width: "70px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require(`../../Assets/guard.png`)} alt="" style={{
                     display: sukuna.isBlocking ? "block" : "none", height: characterHeight, width: characterHeight, opacity: 0.8, scale: "1.2",
                     transform: "translate(-10%,0)"

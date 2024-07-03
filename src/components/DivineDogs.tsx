@@ -107,21 +107,22 @@ const DivineDogs = ({ rivalSlice, rivalState }) => {
         }, 1000);
         wolfSoundEffectRef.current.volume = 0.5
         wolfSoundEffectRef.current.play()
-        dispatch(moveDivineDogs({ x: megumi.x + 80, y: megumi.y + 40 })); // shikigami appears at megumi's position
-        setWhiteDivineDogPosition({ x: megumi.x + 100, y: megumi.y + 50 });
+        let attackDirection = "";
+        attackDirection = megumi.x < rivalState.x ? "right" : "left"; // direction of attack
+        setWhiteDogDirection(attackDirection);
+        setBlackDogDirection(attackDirection);
+        dispatch(setDivineDogsDirection(attackDirection));
+        dispatch(moveDivineDogs({ x: attackDirection === "right" ? megumi.x + 30 : megumi.x - 100, y: 263 })); // shikigami appears at megumi's position
+        setWhiteDivineDogPosition({ x: attackDirection === "right" ? megumi.x + 50 : megumi.x - 80, y: 263 });
         setTimeout(() => {
             dispatch(divineDogsActivity(true)); // shikigami activate
             setWolfStyle({ ...wolfStyle, animation: "divineDogBlack 4s steps(1)" });
             setWolf2Style({ ...wolf2Style, animation: "divineDogWhite 4s steps(1)" });
         }, 200);
-        let attackDirection = "";
-        attackDirection = megumi.x < rivalState.x ? "right" : "left"; // direction of attack
-        setWhiteDogDirection(attackDirection);
-        setBlackDogDirection(attackDirection);
+
 
         // divine dogs updates
         // setWolfStyle({ ...wolfStyle, transition: "all .5s ease" });
-        dispatch(setDivineDogsDirection(attackDirection));
         // setImageStyle({ ...imageStyle, transform: `scaleX(${attackDirection === "right" ? -1 : 1})` });
 
         setTimeout(() => { // **1 seconds of sleep for divine dogs sound effect
@@ -232,11 +233,11 @@ const DivineDogs = ({ rivalSlice, rivalState }) => {
                     position: "absolute",
                     opacity: divineDogs.isActive ? "1" : "0",
                     top: blackDivineDogSidePosition === "stop" ? divineDogs.y :
-                        (blackDivineDogSidePosition === "sukuna" ? rivalState.y : rivalState.y + 50),
+                        (blackDivineDogSidePosition === "sukuna" ? 240 : 263),
                     left: blackDivineDogSidePosition === "stop" ? divineDogs.x :
-                        (blackDivineDogSidePosition === "left" ? rivalState.x - 100 :
-                            (blackDivineDogSidePosition === "right" ? rivalState.x + 100 :
-                                (blackDivineDogSidePosition === "sukuna" ? rivalState.x : 0))),
+                        (blackDivineDogSidePosition === "left" ? rivalState.x - 90 :
+                            (blackDivineDogSidePosition === "right" ? rivalState.x + 50 :
+                                (blackDivineDogSidePosition === "sukuna" ? rivalState.x - 30 : 0))),
                     transform: blackDogDirection === "right" ? "scaleX(1)" : "scaleX(-1)",
                     ...wolfStyle,
                 }}>
@@ -247,11 +248,11 @@ const DivineDogs = ({ rivalSlice, rivalState }) => {
                     position: "absolute",
                     opacity: divineDogs.isActive ? "1" : "0",// right, left, sukuna, stop
                     top: whiteDivineDogSidePosition === "stop" ? whiteDivineDogPosition.y :
-                        (whiteDivineDogSidePosition === "sukuna" ? rivalState.y : rivalState.y + 50),
+                        (whiteDivineDogSidePosition === "sukuna" ? 240 : 263),
                     left: whiteDivineDogSidePosition === "stop" ? whiteDivineDogPosition.x :
-                        (whiteDivineDogSidePosition === "left" ? rivalState.x - 100 :
-                            (whiteDivineDogSidePosition === "right" ? rivalState.x + 100 :
-                                (whiteDivineDogSidePosition === "sukuna" ? rivalState.x : 0))),
+                        (whiteDivineDogSidePosition === "left" ? rivalState.x - 90 :
+                            (whiteDivineDogSidePosition === "right" ? rivalState.x + 50 :
+                                (whiteDivineDogSidePosition === "sukuna" ? rivalState.x - 30 : 0))),
                     transform: whiteDogDirection === "right" ? "scaleX(1)" : "scaleX(-1)",
                     ...wolf2Style,
                 }}>

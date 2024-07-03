@@ -361,13 +361,12 @@
 
 
 .nue-container {
-  width: 160px;
-  height: 128px;
   position: absolute;
   transform: translate(-50%, -50%);
-  scale: 1;
+  scale: .7;
   left: 50%;
   top: 50%;
+  /* transition: all 2s !important; */
   background-image: url('./Assets/megu.png');
   /* animation: nueAttack 1s steps(8); */
   /* animation: nueStance 1s steps(8);  */
@@ -397,7 +396,7 @@
     background-position: -452px -1436px;
   }
 }
-@keyframes nueAttack {
+@keyframes nueAttackold {
   /* 160x128 9*/
   0% {
     background-position: -315px -2298px;
@@ -405,5 +404,48 @@
 
   100% {
     background-position: -1595px -2298px;
+  }
+}
+@keyframes nueAttack {
+  0% {
+    background-position: -531px -2335px;
+    width: 52px;
+    height: 50px;
+  }
+
+  16.66% {
+    background-position: -695px -2322px;
+    width: 80px;
+    height: 67px;
+  }
+
+  33.33% {
+    background-position: -828px -2327px;
+    width: 107px;
+    height: 76px;
+  }
+
+  70% {
+    background-position: -972px -2320px;
+    width: 125px;
+    height: 88px;
+  }
+
+  75% {
+    background-position: -1125px -2310px;
+    width: 147px;
+    height: 107px;
+  }
+
+  85% {
+    background-position: -1281px -2314px;
+    width: 137px;
+    height: 104px;
+  }
+
+  95% {
+    background-position: -1537px -2332px;
+    width: 52px;
+    height: 50px;
   }
 }

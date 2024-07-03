@@ -12,7 +12,7 @@ const Megumi = ({ rivalState, rivalSlice }) => {
     const nue = useSelector((state: any) => state.NueState);
     const gameSettings = useSelector((state: any) => state.GameSettingsState);
 
-    const [displaySlash, setDisplaySlash] = React.useState("none");
+    const [displaySlash, setDisplaySlash] = React.useState("block");
     const [displaySlash2, setDisplaySlash2] = React.useState("none");
     const [displayDismantle, setDisplayDismantle] = React.useState("block");
     const dispatch = useDispatch();
@@ -401,9 +401,10 @@ const Megumi = ({ rivalState, rivalSlice }) => {
                     </>
                 )}
 
-                <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />
-                <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash2, height: characterHeight, width: "200px", ...slashRotation2, transform: "scale(0.7)" }} />
+                <img src={require('../../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-85px", left: "-55px", display: displaySlash, height: "120px", width: "120px", ...slashRotation, transform: "scale(0.7)" }} />
+                <img src={require('../../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-85px", left: "-55px", display: displaySlash2, height: "120px", width: "120px", ...slashRotation2, transform: "scale(0.7)" }} />
                 <img src={require(`../../Assets/guard.png`)} alt="" style={{
+                    position: "absolute",
                     display: megumi.isBlocking ? "block" : "none", height: characterHeight, width: characterHeight, opacity: 0.8, scale: "1.2",
                     transform: "translate(-10%,0)"
                 }} />

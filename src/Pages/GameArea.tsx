@@ -436,7 +436,7 @@ const GameArea = () => {
           }}></div>
           <div style={{
             width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/sukuna-domain.jpg")})`, opacity: sukuna.rivalDomainExpansion ? 1 : 0,
+            backgroundImage: `url(${require("../Assets/pixel-sukuna-domain.png")})`, opacity: sukuna.rivalDomainExpansion ? 1 : 0,
             backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
           }}></div>
           {gameSettings.selectedCharacter === "sukuna" && (

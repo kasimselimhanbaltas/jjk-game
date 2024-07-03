@@ -69,11 +69,11 @@
 .divine-dog-black {
     position: absolute;
     background: url(./Assets/megu.png);
-    scale: 1.5;}
+    scale: 1;}
 .divine-dog-white {
     position: absolute;
     background: url(./Assets/megu.png);
-    scale: 1.5;
+    scale: 1;
 }
 .mahoraga {
     position: absolute;
@@ -491,6 +491,7 @@
         background-position: -22px -1501px;
         width: 31px;
         height: 52px;
+        translate: -15px 
     }
 
     20% {
