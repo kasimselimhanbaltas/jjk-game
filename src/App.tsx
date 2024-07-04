@@ -131,6 +131,7 @@ export interface Nue {
   nueAuto: boolean;
   nueAutoAttack: boolean;
   animationState: "nueStance" | "move" | "jump" | "punch" | "block" | "nueAttack",
+  animationBlocker: boolean;
 }
 export interface Mahoraga {
   isActive: boolean;

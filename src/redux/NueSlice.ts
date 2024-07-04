@@ -14,6 +14,7 @@ const initialState: Nue = {
   nueAuto: false,
   nueAutoAttack: false,
   animationState: "nueStance",
+  animationBlocker: false,
 };
 
 const nueSlice = createSlice({
@@ -48,7 +49,10 @@ const nueSlice = createSlice({
       state.nueAutoAttack = action.payload;
     },
     setAnimationState(state, action) {
-      state.animationState = action.payload;
+      if (!state.animationBlocker) state.animationState = action.payload;
+    },
+    setAnimationBlocker(state, action) {
+      state.animationBlocker = action.payload;
     },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -62,5 +66,6 @@ export const {
   setNueAuto,
   setNueAutoAttack,
   setAnimationState,
+  setAnimationBlocker,
 } = nueSlice.actions;
 export default nueSlice;

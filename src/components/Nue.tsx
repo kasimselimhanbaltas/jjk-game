@@ -70,9 +70,10 @@ const Nue = ({ rivalSlice, rivalState }) => {
         if (megumi.cursedEnergy.currentCursedEnergy < nueAttackCost) return;
         dispatch2(toggleNueAttackCD());
         // setNueStyle({ ...nueStyle, transition: "all 2s ease" });
-
         dispatch(nueSlice.actions.setAnimationState("nueAttack"));
+        // dispatch(nueSlice.actions.setAnimationBlocker(true));
         setTimeout(() => {
+            // dispatch(nueSlice.actions.setAnimationBlocker(false));
             dispatch(nueSlice.actions.setAnimationState("nueStance"));
         }, 1500);
         let attackDirection = "";
@@ -91,22 +92,20 @@ const Nue = ({ rivalSlice, rivalState }) => {
             // setImageSrc(require('../Assets/nue.png')); // nue arrives to rivalState
             setTimeout(() => { // electric attack
                 // setImageSrc(require('../Assets/nue-side.png')); // nue move after electric attack
-                if (rivalState.x > megumi.x) {
+                if (rivalState.x > megumi.x) { // move to beside rival
                     dispatch(moveNue({ x: rivalState.x + 100, y: rivalState.y - 100 }));
                 } else {
                     dispatch(moveNue({ x: rivalState.x - 100, y: rivalState.y - 100 }));
                 }
                 if (nue.isAttacking) return;
-                setTimeout(() => {
+                setTimeout(() => { // damage
                     dispatch(rivalSlice.actions.updateHealth(-nueDamage))
                     // dispatch(moveNue({ x: megumi.direction === "left" ? megumi.x + 30 : megumi.x - 50, y: megumi.y - 75 }));
-                    setTimeout(() => {
+                    setTimeout(() => { // return
                         dispatch(nueAttacking(false));
                         // dispatch(rivalSlice.actions.setCanMove(true)); // cancel stun rivalState
-                        dispatch(setNueDirection(attackDirection === "right" ? "left" : "right"));
-                        setTimeout(() => {
-                            setNueStyle({ ...nueStyle, transition: "all .4s ease, width 0s, transform 0s" });
-                        }, 1000);
+                        // dispatch(setNueDirection(attackDirection === "right" ? "left" : "right")); // set nue direction for coming back, not needed anymore
+                        setNueStyle({ ...nueStyle, transition: "all .4s ease, width 0s, transform 0s" });
                     }, 1000);
                 }, 250)
             }, 250)
@@ -191,15 +190,16 @@ const Nue = ({ rivalSlice, rivalState }) => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy, rivalState.domainAttack, nue.nueAuto]);
+    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy, rivalState.domainAttack, nue.nueAuto, megumi.nueAttackCD]);
 
 
     useEffect(() => {
         if (nue.animationState === "nueStance") {
+            console.log("effect nueStance")
             setNueStyle({ ...nueStyle, width: 100, height: 128, animation: "nueStance 1s steps(1) infinite" })
         }
         else if (nue.animationState === "nueAttack") {
-            console.log("effect nue transition", nueStyle.transition)
+            console.log("effect nueAttack")
             setNueStyle({ ...nueStyle, width: 160, height: 128, animation: "nueAttack 1.5s steps(1)" })
         }
     }, [nue.animationState]);
