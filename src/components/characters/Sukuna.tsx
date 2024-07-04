@@ -79,12 +79,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     // Domain expansion Action
     const rivalDomainExpansion = () => {
         console.log("RIYOIKI TENKAI ")
-        dispatch(moveCharacterTo({ x: 650, y: 150 }));
+        dispatch(moveCharacterTo({ x: 700, y: 560 }));
         sukunaSoundEffectRef.current.play()
-        setSukunaImage({ src: require('../../Assets/domainpose.png'), scale: 3 });
-        setTimeout(() => {
-            setSukunaImage({ src: require('../../Assets/domainpose.png'), scale: 5 });
-        }, 100);
         dispatch(rivalSlice.actions.setCanMove(false))
         dispatch(setCanMove(false))
         dispatch(sukunaSlice.actions.changeCursedEnergy(-200));
@@ -93,9 +89,6 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         }, 6000);
         setTimeout(() => {
             setSukunaImage({ src: require('../../Assets/domainpose.png'), scale: 2 });
-            setTimeout(() => {
-                setSukunaImage({ src: require('../../Assets/sukuna.png'), scale: 1 });
-            }, 100);
             dispatch(setRivalDomainExpansion(false));
             dispatch(rivalSlice.actions.setCanMove(true))
             dispatch(setCanMove(true));
@@ -106,42 +99,72 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const localRapidAttack = () => {
         dispatch(sukunaSlice.actions.changeCursedEnergy(-20));
         dispatch(setRapidAttackCounter(0));
-        dispatch(setRapidAttack(true));
+        dispatch(sukunaSlice.actions.setAnimationState("rapid-attack"))
+        dispatch(sukunaSlice.actions.setCanMove(false))
+        dispatch(sukunaSlice.actions.setAnimationBlocker(true))
         setTimeout(() => {
-            dispatch(setRapidAttack(false));
-        }, 1000);
+            dispatch(setRapidAttack(true));
+            setTimeout(() => {
+                dispatch(sukunaSlice.actions.setCanMove(true))
+                dispatch(sukunaSlice.actions.setAnimationBlocker(false))
+                dispatch(sukunaSlice.actions.setAnimationState("stance"))
+                dispatch(setRapidAttack(false));
+            }, 3300);
+        }, 500);
     }
     const localDismantleAttack = (stepDistance) => {
         if (!sukuna.closeRange) return;
+        let attackDirection = "";
+        attackDirection = sukuna.x < rivalState.x ? "right" : "left";
+        dispatch(sukunaSlice.actions.setDirection(attackDirection))
         dispatch(sukunaSlice.actions.setAnimationState("cleave"))
+        dispatch(sukunaSlice.actions.setCanMove(false))
+        dispatch(sukunaSlice.actions.setAnimationBlocker(true))
         setTimeout(() => {
+            dispatch(sukunaSlice.actions.setAnimationBlocker(false))
+            dispatch(sukunaSlice.actions.setCanMove(true))
             dispatch(sukunaSlice.actions.setAnimationState("stance"))
         }, 1000);
-        dispatch(rivalSlice.actions.updateHealth(dismantleAttackDamage)); // Megumi'ın canını azalt
         dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 3));
-        dispatch(sukunaSlice.actions.changeCursedEnergy(dismantleCost));
+        dispatch(sukunaSlice.actions.changeCursedEnergy(-1));
         dispatch(rivalDismantleAttack(true));
-        dispatch(rivalSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
-        // slashRef.current.play();
-        // slashSoundEffect(slashAudio);
         setTimeout(() => {
-            dispatch(rivalDismantleAttack(false));
+            dispatch(rivalSlice.actions.updateHealth(dismantleAttackDamage)); // Megumi'ın canını azalt
+            dispatch(rivalSlice.actions.moveCharacter({ x: attackDirection === "right" ? -stepDistance : stepDistance, y: 0 }));
+            // slashRef.current.play();
+            // slashSoundEffect(slashAudio);
+            setTimeout(() => {
+                dispatch(rivalDismantleAttack(false));
+            }, 1000);
         }, 1000);
     }
 
     const localCleaveAttack = () => {
         dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 1));
+        let attackDirection = "";
+        attackDirection = sukuna.x < rivalState.x ? "right" : "left";
+        dispatch(sukunaSlice.actions.setDirection(attackDirection))
         dispatch(sukunaSlice.actions.changeCursedEnergy(cleaveCost));
-
+        dispatch(sukunaSlice.actions.setAnimationState("dismantle"))
+        dispatch(sukunaSlice.actions.setCanMove(false))
+        dispatch(sukunaSlice.actions.setAnimationBlocker(true))
+        setTimeout(() => {
+            dispatch(sukunaSlice.actions.setAnimationBlocker(false))
+            dispatch(sukunaSlice.actions.setCanMove(true))
+            dispatch(sukunaSlice.actions.setAnimationState("stance"))
+        }, 1000);
         setCleaveReady({ ready: false, coolDown: 5 });
-        dispatch(rivalCleaveAttack(true));
-        dispatch(rivalSlice.actions.updateHealth(cleaveAttackDamage)); // Megumi'ın canını azalt
-        setTimeout(() => { // cooldown
-            setCleaveReady({ ready: true, coolDown: 5 });
-        }, cleaveReady.coolDown * 1000);
-        setTimeout(() => { // attack finish
-            dispatch(rivalCleaveAttack(false));
-        }, 1000)
+        setTimeout(() => {
+            dispatch(rivalCleaveAttack(true));
+            dispatch(rivalSlice.actions.updateHealth(cleaveAttackDamage)); // Megumi'ın canını azalt
+            setTimeout(() => { // cooldown
+                setCleaveReady({ ready: true, coolDown: 5 });
+            }, cleaveReady.coolDown * 1000);
+            setTimeout(() => { // attack finish
+                dispatch(rivalCleaveAttack(false));
+            }, 1000)
+
+        }, 500);
     }
 
     // Sukuna attack interval - auto attack configuration
@@ -207,7 +230,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
         const intervalId = setInterval(() => {
             if (gameSettings.selectedCharacter !== "sukuna") return;
-            if (rivalState.health.currentHealth > 0) {
+            if (rivalState.health.currentHealth > 0 && !sukuna.isJumping) {
                 // !sukuna.cleaveAttack && cleaveReady.ready &&
                 if (keysPressed.current.j && sukuna.canMove) {
                     if (sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount)
@@ -238,7 +261,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue, sukuna.cleaveCD, sukuna.dismantleCD, sukuna.closeRange, sukuna.domainCD, sukuna.cursedEnergy]);
+    }, [dispatch, nue, sukuna.cleaveCD, sukuna.dismantleCD, sukuna.closeRange,
+        sukuna.domainCD, sukuna.cursedEnergy, sukuna.isJumping]);
 
     const dispatch2 = useDispatch<AppDispatch>();
     const handleCleaveAttack = () => {
@@ -275,9 +299,32 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         }
         else if (sukuna.animationState === "cleave") {
             setSukunaStyle({
-                animation: "sukuna-cleave .5s steps(1) infinite",
+                animation: sukuna.x > rivalState.x ? "sukuna-cleave-left 1s steps(1)" : "sukuna-cleave-right 1s steps(1)",
             })
-            setCleaveAnimation("cleave steps(1) .5s")
+            setTimeout(() => {
+                setCleaveAnimation("cleave steps(1) .5s")
+                setTimeout(() => {
+                    setCleaveAnimation("")
+                }, 500);
+            }, 500);
+        }
+        else if (sukuna.animationState === "dismantle") {
+            setSukunaStyle({
+                animation: sukuna.x > rivalState.x ? "sukuna-dismantle-left 1s steps(1)" : "sukuna-dismantle-right 1s steps(1)",
+            })
+        }
+        else if (sukuna.animationState === "rapid-attack") {
+            setSukunaStyle({
+                animation: sukuna.x > rivalState.x ? "sukuna-rapid-left 3.8s steps(1)" : "sukuna-rapid-right 3.8s steps(1)",
+            })
+        }
+        else if (sukuna.animationState === "jump") {
+            setSukunaStyle({
+                animation: "jump-sukuna 1.5s steps(1)",
+            })
+            setTimeout(() => {
+                dispatch(sukunaSlice.actions.setAnimationState("stance"))
+            }, 1500);
         }
 
     }, [sukuna.animationState]);
@@ -290,6 +337,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 transform: sukuna.direction === "left" ? "scaleX(-1)" : "none",
                 animation: sukunaStyle.animation,
                 display: sukuna.health.currentHealth > 0 ? "block" : "none",
+
             }}>
             </div>
 
@@ -298,39 +346,19 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     bottom: gameAreaHeight - sukuna.y, left: sukuna.x,
                     display: sukuna.health.currentHealth > 0 ? "block" : "none",
                 }}>
-                {/* <div className='sukuna-container' style={{
-                    top: sukuna.y, left: sukuna.x,
-                    display: sukuna.health.currentHealth > 0 ? "block" : "none",
-                }}> */}
 
-                <div className='cleave' style={{ top: sukuna.top, left: sukuna.direction === "left" ? -200 : 200, animation: cleaveAnimation }}></div>
+                <div className='cleave' style={{ top: -20, left: rivalState.x - sukuna.x, animation: cleaveAnimation }}></div>
                 {/* </div> */}
                 {/* Rakip karakterinin görseli veya animasyonu burada yer alacak */}
                 {/* <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} /> */}
                 <img src={require('../../Assets/electricity.png')} alt="" style={{ position: "absolute", top: "-55px", left: "-20px", display: electricityEffect ? "block" : "none", height: "60px", width: "50px", opacity: 0.8, scale: "1.2", zIndex: 999 }} />
                 <img src={require('../../Assets/claw-mark.png')} alt="" style={{ position: "absolute", top: "-75px", left: "-20px", display: divineDogs.isAttacking ? "block" : "none", height: "80px", width: "70px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require(`../../Assets/guard.png`)} alt="" style={{
-                    display: sukuna.isBlocking ? "block" : "none", height: characterHeight, width: characterHeight, opacity: 0.8, scale: "1.2",
+                    display: sukuna.isBlocking ? "block" : "none",
+                    position: "absolute", top: -65, left: -15,
+                    height: 75, width: 75, opacity: 0.8, scale: "1",
                     transform: "translate(-10%,0)"
                 }} />
-                {/* <p style={{ marginTop: gameSettings.selectedCharacter !== "sukuna" ? -80 : -30, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Ryomen Sukuna</p> */}
-                {/* {gameSettings.selectedCharacter !== "sukuna" && (
-                    <>
-                        <div className="megumi-health" style={{ position: "absolute", width: "100px", height: "15px", top: "-80px" }}>
-                            <div style={{ position: "absolute", width: sukuna.health.currentHealth * 150 / sukuna.health.maxHealth, maxWidth: "100px", height: "15px", top: "-22px", backgroundColor: "red" }}>
-                            </div>
-                            <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -250%)", fontSize: "15px" }}>{sukuna.health.currentHealth}</p>
-                        </div>
-                        <div className="megumi-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                            <div style={{ position: "absolute", width: sukuna.cursedEnergy.currentCursedEnergy * 150 / sukuna.cursedEnergy.maxCursedEnergy, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
-                            </div>
-                            <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{sukuna.cursedEnergy.currentCursedEnergy}</p>
-                        </div>
-                    </>
-                )} */}
-                {/* <p style={{ position: "absolute", top: "50%", left: "-50%", transform: "translate(-50%, -50%)", fontSize: "15px" }}>
-                Sukuna Direction: {sukuna.direction} <br /> Range: {sukuna.closeRange ? "Close Range" : "Far Range"} <br /> Distance: {xDistance}
-            </p> */}
             </div>
         </div>
     );

@@ -5,6 +5,7 @@ import sukunaSlice from "../../redux/character-slices/SukunaSlice";
 import { setNueDirection } from "../../redux/NueSlice";
 import React from "react";
 import { AppDispatch } from "../../redux/GlobalStore";
+import "../../Gojo.css";
 
 const Gojo = ({ rivalState, rivalSlice }) => {
 
@@ -26,6 +27,7 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     const characterWidth = 120;
     const characterHeight = 180;
     const keysPressed = useRef({ j: false, k: false, l: false, u: false });
+    const gameAreaHeight = 600;
 
     const blueCost = -50;
     const redCost = -100;
@@ -516,6 +518,21 @@ const Gojo = ({ rivalState, rivalSlice }) => {
     }, [nue.isAttacking]);
 
 
+    const [gojoStyle, setGojoStyle] = React.useState({
+        animation: "gojo-stance steps(1) 1s infinite",
+    });
+    useEffect(() => {
+        if (gojo.animationState === "stance") {
+            setGojoStyle({
+                animation: "gojo-stance 1s steps(1) infinite",
+            })
+        }
+
+
+    }, [gojo.animationState]);
+
+
+
     return (
         <>
             <audio src={require("../../Assets/audios/slash.mp3")} ref={slashSoundEffectRef}></audio>
@@ -572,11 +589,19 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                     transform: "scale(" + purplePositionState.scaleP + ")",
                 }} />
             </div>
+            <div className="gojoCC" style={{
+                bottom: gameAreaHeight - gojo.y, left: gojo.x,
+                display: gojo.health.currentHealth > 0 ? "block" : "none",
+                transform: gojo.direction === "left" ? "scaleX(-1)" : "none",
+                animation: gojoStyle.animation,
+            }}>
 
+
+            </div>
             <div
-                className="gojo"
+                className="gojo-container"
                 style={{
-                    top: gojo.y, left: gojo.x, width: characterWidth, height: characterHeight,
+                    bottom: gameAreaHeight - gojo.y, left: gojo.x,
                     display: gojo.health.currentHealth > 0 ? "block" : "none",
                 }}
             >
@@ -584,27 +609,13 @@ const Gojo = ({ rivalState, rivalSlice }) => {
                 <img src={require('../../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1", zIndex: 11 }} />
                 <img src={require('../../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
                 <img src={require(`../../Assets/guard.png`)} alt="" style={{
-                    display: gojo.isBlocking ? "block" : "none", height: characterHeight, width: characterHeight, opacity: 0.8, scale: "1.2",
+                    display: gojo.isBlocking ? "block" : "none",
+                    position: "absolute", top: -65, left: -15,
+                    height: 75, width: 75, opacity: 0.8, scale: "1",
                     transform: "translate(-10%,0)"
                 }} />
 
-                <img src={gojoImage} alt="" style={{
-                    transform: gojo.direction === "left" ? "scaleX(-1)" : "none", height: characterHeight, // Direction'a göre resmi ters çevir
-                }} />
-                {gameSettings.selectedCharacter !== "gojo" && (
-                    <>
-                        <div className="gojo-health" style={{ position: "absolute", width: "150px", height: "20px", top: "-28%" }}>
-                            <div style={{ position: "absolute", width: gojo.health.currentHealth * 150 / gojo.health.maxHealth, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "red" }}>
-                            </div>
-                            <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{gojo.health.currentHealth}</p>
-                        </div>
-                        <div className="gojo-cursed-energy" style={{ position: "absolute", width: "150px", height: "20px", top: "-15%" }}>
-                            <div style={{ position: "absolute", width: gojo.cursedEnergy.currentCursedEnergy * 150 / gojo.cursedEnergy.maxCursedEnergy, maxWidth: "150px", height: "20px", top: "-2%", backgroundColor: "purple" }}>
-                            </div>
-                            <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -130%)", fontSize: "15px" }}>{gojo.cursedEnergy.currentCursedEnergy}</p>
-                        </div>
-                    </>
-                )}
+
                 <p style={{ marginTop: gameSettings.selectedCharacter === "gojo" ? -30 : -80, width: 250, marginLeft: -60, color: "black", fontSize: "20px" }}>Satoru Gojo</p>
 
                 <img src={require('../../Assets/slash.png')} alt="" style={{ top: "-15px", left: "-30px", display: displaySlash, height: characterHeight, width: "200px", ...slashRotation, transform: "scale(0.7)" }} />

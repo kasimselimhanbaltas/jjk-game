@@ -4,6 +4,8 @@
     height: 64px;
     /* transform: translateX(-50%); */
     background: url(./Assets/megu.png);
+    /* translate: 0 -30px; */
+    /* scale: 1.5; */
     transition: all .2s ease, transform 0s;
     animation: stance 1s steps(3) infinite;
     /* animation: stance 1s steps(3) infinite ;

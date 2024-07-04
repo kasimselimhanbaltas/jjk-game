@@ -13,11 +13,13 @@ import { useEffect, useState } from 'react';
 import Preloader from './Pages/Pre';
 import Playground from './Pages/Playground';
 
+
 export interface GameSettings {
   selectedCharacter: string,
   selectedRivalCharacter: string,
   winner: string,
-  loser: string
+  loser: string,
+  surfaceY: number,
 }
 export interface Skill {
   isReady: boolean,

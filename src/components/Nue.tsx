@@ -161,13 +161,16 @@ const Nue = ({ rivalSlice, rivalState }) => {
                     nueAttack();
                 }
             }
-            if (keysPressed.current.k || nue.nueAuto) {
+            if ((keysPressed.current.k || nue.nueAuto) && megumi.animationState !== "callNue") {
                 console.log(" nue auto ")
                 if (nue.isActive === false && megumi.cursedEnergy.currentCursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
                     dispatch(megumiSlice.actions.setAnimationState("callNue"))
                     dispatch(megumiSlice.actions.setCanMove(false))
+                    dispatch(megumiSlice.actions.setAnimationBlocker(true))
+
                     setTimeout(() => {
                         dispatch(megumiSlice.actions.setCanMove(true))
+                        dispatch(megumiSlice.actions.setAnimationBlocker(false))
                         dispatch(megumiSlice.actions.setAnimationState("stance"))
                     }, 1000);
                     dispatch(changeCursedEnergy(-callNueCost));

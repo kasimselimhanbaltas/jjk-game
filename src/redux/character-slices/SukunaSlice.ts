@@ -33,7 +33,7 @@ const initialState: Sukuna = {
   },
   dismantleCD: {
     isReady: true,
-    cooldown: 6,
+    cooldown: 1,
     remainingTime: 0,
   },
   domainCD: {
@@ -168,15 +168,15 @@ const RivalSlice = createSlice({
       state.isBlocking = action.payload;
     },
     setAnimationState(state, action) {
-      state.animationState = action.payload;
+      if (!state.animationBlocker) state.animationState = action.payload;
     },
     applyGravity: (state) => {
-      if (state.y < 300 || state.velocityY === state.jumpStrength) {
+      if (state.y < 560 || state.velocityY === state.jumpStrength) {
         // Ensure the character stays above the ground level
         state.velocityY += state.gravity;
         state.y += state.velocityY;
       } else {
-        state.y = 300;
+        state.y = 560;
         state.velocityY = 0;
         state.isJumping = false;
       }
@@ -191,7 +191,7 @@ const RivalSlice = createSlice({
     setJumping(state, action) {
       state.isJumping = action.payload;
     },
-    setAnimatinBlocker(state, action) {
+    setAnimationBlocker(state, action) {
       state.animationBlocker = action.payload;
     },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
@@ -226,7 +226,7 @@ export const {
   applyGravity,
   jump,
   setJumping,
-  setAnimatinBlocker,
+  setAnimationBlocker,
 } = RivalSlice.actions;
 export default RivalSlice;
 

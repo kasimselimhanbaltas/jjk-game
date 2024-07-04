@@ -6,11 +6,11 @@
 }
 .sukunaCC {
     position: absolute;
-    transform: translate(-50%, -50%);
     z-index: 99;
     background: url(./Assets/sukuna-sprite.png);
     /* animation: walk-sukuna steps(1) 1s infinite; */
     scale: 1;
+    transition: all .2s ease, transform 0s;
 }
 .cleave {
     position: absolute;
@@ -19,7 +19,6 @@
     transform: translate(-50%, -50%);
     z-index: 99;
     background: url(./Assets/sukuna-sprite.png);
-    animation: walk-sukuna steps(1) 1s infinite;
     scale: 1;
 }
 /* .divineDogBlack {
@@ -154,6 +153,193 @@
         background-position: -210px -367px;
         width: 21px;
         height: 51px;
+    }
+}
+@keyframes jump-sukuna {
+    0% {
+        background-position: -618px -384px;
+        width: 34px;
+        height: 38px;
+    }
+
+    25% {
+        background-position: -666px -359px;
+        width: 25px;
+        height: 46px;
+    }
+
+    50% {
+        background-position: -723px -366px;
+        width: 27px;
+        height: 42px;
+    }
+
+    80% {
+        background-position: -764px -399px;
+        width: 40px;
+        height: 34px;
+    }
+}
+@keyframes sukuna-cleave-right {
+    0% {
+        background-position: -744px -1687px;
+        width: 21px;
+        height: 51px;
+    }
+
+    25% {
+        background-position: -783px -1691px;
+        width: 25px;
+        height: 51px;
+    }
+
+    35% {
+        background-position: -828px -1693px;
+        width: 36px;
+        height: 51px;
+    }
+}
+@keyframes sukuna-cleave-left {
+    0% {
+        background-position: -744px -1687px;
+        width: 21px;
+        height: 51px;
+        translate: -3px;
+    }
+
+    25% {
+        background-position: -783px -1691px;
+        width: 25px;
+        height: 51px;
+        translate: -7px;
+    }
+
+    35% {
+        background-position: -828px -1693px;
+        width: 36px;
+        height: 51px;
+        translate: -17px;
+    }
+}
+@keyframes sukuna-rapid-right {
+    0% {
+        background-position: -744px -1687px;
+        width: 21px;
+        height: 51px;
+    }
+
+    5% {
+        background-position: -783px -1691px;
+        width: 25px;
+        height: 51px;
+    }
+
+    10% {
+        background-position: -828px -1693px;
+        width: 36px;
+        height: 51px;
+    }
+}
+
+@keyframes sukuna-rapid-left {
+    0% {
+        background-position: -744px -1687px;
+        width: 21px;
+        height: 51px;
+        translate: -3px;
+    }
+
+    5% {
+        background-position: -783px -1691px;
+        width: 25px;
+        height: 51px;
+        translate: -7px;
+    }
+
+    10% {
+        background-position: -828px -1693px;
+        width: 36px;
+        height: 51px;
+        translate: -17px;
+    }
+}
+@keyframes sukuna-dismantle-right {
+    0% {
+        background-position: -83px -469px;
+        width: 21px;
+        height: 51px;
+    }
+
+    15% {
+        background-position: -133px -471px;
+        width: 23px;
+        height: 51px;
+    }
+
+    30% {
+        background-position: -184px -472px;
+        width: 33px;
+        height: 51px;
+    }
+
+    45% {
+        background-position: -232px -473px;
+        width: 37px;
+        height: 51px;
+    }
+
+    60% {
+        background-position: -281px -476px;
+        width: 30px;
+        height: 51px;
+    }
+
+    75% {
+        background-position: -83px -469px;
+        width: 21px;
+        height: 51px;
+    }
+}
+@keyframes sukuna-dismantle-left {
+    0% {
+        background-position: -83px -469px;
+        width: 21px;
+        height: 51px;
+    }
+
+    15% {
+        background-position: -133px -471px;
+        width: 23px;
+        height: 51px;
+        translate: -2px;
+    }
+
+    30% {
+        background-position: -184px -472px;
+        width: 33px;
+        height: 51px;
+        translate: -12px;
+    }
+
+    45% {
+        background-position: -232px -473px;
+        width: 37px;
+        height: 51px;
+        translate: -16px;
+    }
+
+    60% {
+        background-position: -281px -476px;
+        width: 30px;
+        height: 51px;
+        translate: -9px;
+    }
+
+    75% {
+        background-position: -83px -469px;
+        width: 21px;
+        height: 51px;
+        translate: 0px;
     }
 }
 @keyframes cleave {
