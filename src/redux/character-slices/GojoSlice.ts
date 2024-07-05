@@ -19,7 +19,7 @@ const initialState: Gojo = {
   },
   direction: "right",
   isAttacking: false,
-  canMove: true,
+  canMove: false,
   dashGauge: 0,
   rivalDirection: "stop",
   blueCD: {

@@ -180,6 +180,74 @@
         height: 34px;
     }
 }
+@keyframes backflip-sukuna {
+    0% {
+        background-position: -95px -999px;
+        width: 28px;
+        height: 30px;
+    }
+
+    12.5% {
+        background-position: -144px -998px;
+        width: 58px;
+        height: 41px;
+    }
+
+    25% {
+        background-position: -234px -990px;
+        width: 33px;
+        height: 52px;
+    }
+
+    37.5% {
+        background-position: -303px -982px;
+        width: 42px;
+        height: 64px;
+    }
+
+    50% {
+        background-position: -365px -998px;
+        width: 31px;
+        height: 48px;
+    }
+
+    62.5% {
+        background-position: -424px -995px;
+        width: 44px;
+        height: 38px;
+    }
+
+    75% {
+        background-position: -490px -1005px;
+        width: 49px;
+        height: 31px;
+    }
+
+    87.5% {
+        background-position: -561px -1001px;
+        width: 34px;
+        height: 38px;
+    }
+}
+@keyframes dash-sukuna {
+    0% {
+        background-position: -749px -1036px;
+        width: 43px;
+        height: 36px;
+    }
+
+    50% {
+        background-position: -797px -1040px;
+        width: 43px;
+        height: 36px;
+    }
+
+    100% {
+        background-position: -749px -1036px;
+        width: 43px;
+        height: 36px;
+    }
+}
 @keyframes sukuna-cleave-right {
     0% {
         background-position: -744px -1687px;

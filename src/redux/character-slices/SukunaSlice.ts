@@ -23,7 +23,7 @@ const initialState: Sukuna = {
   rivalDomainExpansion: false,
   rivalDirection: "stop",
   closeRange: false,
-  canMove: false,
+  canMove: true,
   rapidAttack: false,
   dashGauge: 0,
   cleaveCD: {

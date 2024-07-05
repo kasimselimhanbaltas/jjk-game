@@ -370,6 +370,7 @@ const Megumi = ({ rivalState, rivalSlice }) => {
                 animation: megumiStyle.animation,
                 // animation: "takeDamage step(1) infinite",
                 transform: megumi.direction === "left" ? "scaleX(-1)" : "none",
+                display: megumi.health.currentHealth > 0 ? "block" : "none",
             }}></div>
             <div
                 className="megumi"

@@ -301,8 +301,12 @@
   height: 35px;
 }
 .skills-container {
- display: flex;
- margin-left: 50px;
+  margin-top: 80px;
+  display: flex;
+  margin-left: 50px;
+}
+.sc-right{
+  align-items: right;
 }
 .skill {
   /* background-color: red; */
@@ -355,20 +359,6 @@
   opacity: 0;
 }
 
-/* ANIMATIONS */
-.gojo-container {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  scale: 2;
-  left: 50%;
-  top: 50%;
-  background-image: url('./Assets/gojo-sprite.png');
-  background-position: -39px -136px;
-  width: 25px;
-  height: 48px;;
-}
-
-
 .nue-container {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -384,6 +374,81 @@
   /* animation: punch .9s steps(8) infinite; */
   /* animation: swordAttack 1s steps(14); */
 }
+.top-interface{
+  width: 100%;
+  height: 80px;
+  position: absolute;
+}
+.top-interface-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.player-image-container {
+  position: absolute;
+  left: 5%;
+  top: 50%;
+  translate: -50% -50%;
+  z-index: 5;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: white;
+  overflow: hidden;
+}
+.player-image-container img, .rival-image-container img {
+  width: 100%;
+  height: auto;
+}
+.rival-image-container {
+  position: absolute;
+  right: -2%;
+  top: 50%;
+  translate: -50% -50%;
+  z-index: 5;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: white;
+  overflow: hidden;
+}
+.health-bar{
+  position: absolute;
+  left: 7%;
+  top: 10%;
+  translate: 0% 0%;
+  z-index: 1;
+  width: 500px;
+  height: 25px;
+  border: 2px solid black;
+}
+.player-health-progress {
+  background: rgb(11, 128, 20);
+  background: linear-gradient(90deg, rgba(11, 128, 20, 1) 35%, rgba(0, 255, 21, 1) 100%);
+}
+.rival-health-progress {
+background: rgb(155, 53, 35);
+  background: linear-gradient(90deg, rgba(155, 53, 35, 1) 35%, rgba(80, 27, 18, 1) 100%);
+}
+.cursed-energy-bar {
+  position: absolute;
+  left: 7%;  top: 55%;
+  translate: 0% 0%;
+  z-index: 1;
+  width: 350px;
+  height: 25px;
+  border: 2px solid black;
+}
+.sukuna-logo{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  z-index: 10;
+  width: 80px;
+  height: 80px;
+}
+
 @keyframes nueStance {
   /* 100x128 9*/
   /* 0% {

@@ -32,8 +32,10 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const [electricityEffect, setElectricityEffect] = React.useState(false);
     // const [rapidAttackCounter, setRapidAttackCounter] = React.useState(5);
     const attackInterval = React.useRef(null);
+    const backflipInterval = React.useRef(null);
+
     const sukunaSoundEffectRef = React.useRef(null);
-    const keysPressed = useRef({ j: false, k: false, l: false });
+    const keysPressed = useRef({ j: false, k: false, l: false, e: false, r: false, t: false });
 
 
     // Cooldowns
@@ -218,11 +220,41 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         const handleKeyDown = (event) => {
             const key = event.key.toLowerCase();
             keysPressed.current[key] = true;
+            if (gameSettings.selectedCharacter === "sukuna") {
+
+
+                if (key === "e" && backflipInterval.current === null && sukuna.isJumping === false &&
+                    sukuna.animationState !== "backflip" && !sukuna.animationBlocker) {
+                    console.log("e pressed")
+                    dispatch(sukunaSlice.actions.setAnimationState("backflip"));
+                    dispatch(sukunaSlice.actions.setAnimationBlocker(true));
+                    backflipInterval.current = setInterval(() => {
+                        dispatch(sukunaSlice.actions.moveCharacterWD({ x: sukuna.direction === "right" ? -12 : 12, y: 0 }));
+                    }, 50)
+                }
+                if (key === " " && sukuna.animationState !== "dash") {
+                    dispatch(sukunaSlice.actions.setAnimationState("dash"));
+                    dispatch(sukunaSlice.actions.setAnimationBlocker(true));
+                }
+            }
         };
 
         const handleKeyUp = (event) => {
             const key = event.key.toLowerCase();
             keysPressed.current[key] = false;
+            if (gameSettings.selectedCharacter === "sukuna") {
+
+                if (key === "e") {
+                    dispatch(sukunaSlice.actions.setAnimationBlocker(false));
+                    dispatch(sukunaSlice.actions.setAnimationState("stance"));
+                    clearInterval(backflipInterval.current);
+                    backflipInterval.current = null;
+                }
+                if (key === " ") {
+                    dispatch(sukunaSlice.actions.setAnimationBlocker(false));
+                    dispatch(sukunaSlice.actions.setAnimationState("stance"));
+                }
+            }
         };
 
         window.addEventListener("keydown", handleKeyDown);
@@ -252,6 +284,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                         handleDomainAttack()
                     }
                 }
+                if (keysPressed.current.e) {
+                    console.log("e")
+                }
             }
 
         }, 100);
@@ -262,7 +297,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             window.removeEventListener("keyup", handleKeyUp);
         };
     }, [dispatch, nue, sukuna.cleaveCD, sukuna.dismantleCD, sukuna.closeRange,
-        sukuna.domainCD, sukuna.cursedEnergy, sukuna.isJumping]);
+        sukuna.domainCD, sukuna.cursedEnergy, sukuna.isJumping, sukuna.direction, sukuna.animationState]);
 
     const dispatch2 = useDispatch<AppDispatch>();
     const handleCleaveAttack = () => {
@@ -325,6 +360,22 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             setTimeout(() => {
                 dispatch(sukunaSlice.actions.setAnimationState("stance"))
             }, 1500);
+        }
+        else if (sukuna.animationState === "backflip") {
+            setSukunaStyle({
+                animation: "backflip-sukuna .8s steps(1) infinite",
+            })
+            // setTimeout(() => {
+            //     dispatch(sukunaSlice.actions.setAnimationState("stance"))
+            // }, 1000);
+        }
+        else if (sukuna.animationState === "dash") {
+            setSukunaStyle({
+                animation: "dash-sukuna .5s steps(1) infinite",
+            })
+            // setTimeout(() => {
+            //     dispatch(sukunaSlice.actions.setAnimationState("stance"))
+            // }, 1000);
         }
 
     }, [sukuna.animationState]);

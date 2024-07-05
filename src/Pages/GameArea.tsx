@@ -174,7 +174,7 @@ const GameArea = () => {
     }
   }, [rivalCharacter.cursedEnergy, sukuna.rivalDomainExpansion, nue.isActive]);
 
-  // Megumi movement control
+  // Player movement control
   useEffect(() => {
     const handleKeyDown = (event) => {
       let key = event.key.toLowerCase();
@@ -211,8 +211,9 @@ const GameArea = () => {
         // if (keysPressed.current.w && playerCharacter.y > 0) {
         //   dispatch(playerSlice.actions.moveCharacter({ x: 0, y: -megumiSpeed }));
         // }
-        if (keysPressed.current.w && !playerCharacter.isJumping) {
+        if (keysPressed.current.w && !playerCharacter.isJumping && !playerCharacter.animationBlocker) {
           dispatch(playerSlice.actions.jump());
+          // if (!playerCharacter.animationBlocker)
           dispatch(playerSlice.actions.setAnimationBlocker(true))
           setTimeout(() => {
             dispatch(playerSlice.actions.setAnimationBlocker(false))
@@ -356,7 +357,7 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
 
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state ##
+  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
