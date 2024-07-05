@@ -127,8 +127,27 @@ const GameArea = () => {
         }
       }
     }
+    if (gameSettings.selectedCharacter === "sukuna") {
+      if (sukuna.bamAttackMoment) {
+        console.log("bammmm")
+        let distance =
+          Math.abs(sukuna.x - rivalCharacter.x) <= 200 ? "close range" : "far"
+        if (distance === "close range") {
+          dispatch(rivalSlice.actions.updateHealth(-100))
+          setTimeout(() => {
+            dispatch(rivalSlice.actions.moveCharacterWD({ x: sukuna.x < rivalCharacter.x ? +150 : -150, y: 0 }));
+          }, 100);
+          dispatch(rivalSlice.actions.jumpWS(15))
+          dispatch(rivalSlice.actions.setAnimationState("takeDamage"))
+          setTimeout(() => {
+            dispatch(rivalSlice.actions.setAnimationState("stance"))
+          }, 1000);
+        }
 
-  }, [gojo.redAttackMoment, gojo.purpleAttackMoment])
+      }
+    }
+
+  }, [gojo.redAttackMoment, gojo.purpleAttackMoment, sukuna.bamAttackMoment])
 
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
@@ -191,6 +210,7 @@ const GameArea = () => {
         dispatch(playerSlice.actions.setCanMove(true));
       }
       if (key === "a" || key === "d") {
+
         dispatch(playerSlice.actions.setAnimationState("stance"));
       }
 
@@ -292,7 +312,8 @@ const GameArea = () => {
           let stepX = 0;
           let stepY = 0;
           if (rivalCharacter.rivalDirection === "stop") {
-            dispatch(rivalSlice.actions.setAnimationState("stance"));
+            if (rivalCharacter.animationState !== "stance")
+              dispatch(rivalSlice.actions.setAnimationState("stance"));
             [stepX, stepY] = [0, 0];
           }
           else {
@@ -307,7 +328,8 @@ const GameArea = () => {
           dispatch(rivalSlice.actions.moveCharacter({ x: stepX, y: stepY }));
         }
       } else
-        dispatch(rivalSlice.actions.setAnimationState("stance"));
+        if (rivalCharacter.animationState !== "stance")
+          dispatch(rivalSlice.actions.setAnimationState("stance"));
     }, 100); // Update interval
 
     return () => {

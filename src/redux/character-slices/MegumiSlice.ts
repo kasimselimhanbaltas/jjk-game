@@ -44,6 +44,7 @@ const initialState: Megumi = {
   gravity: 5,
   jumpStrength: -30,
   animationBlocker: false,
+  transition: "all .2s ease, transform 0s",
 };
 
 const megumiSlice = createSlice({
@@ -138,10 +139,14 @@ const megumiSlice = createSlice({
       state.isBlocking = action.payload;
     },
     setAnimationState(state, action) {
+      console.log("megumi ab", action.payload);
       if (!state.animationBlocker) state.animationState = action.payload;
     },
     applyGravity: (state) => {
-      if (state.y < 560 || state.velocityY === state.jumpStrength) {
+      if (
+        state.y + state.velocityY < 560 ||
+        state.velocityY <= state.jumpStrength
+      ) {
         // Ensure the character stays above the ground level
         state.velocityY += state.gravity;
         state.y += state.velocityY;
@@ -158,11 +163,20 @@ const megumiSlice = createSlice({
         state.animationState = "jump";
       }
     },
+    jumpWS: (state, action) => {
+      if (!state.isJumping) {
+        state.velocityY = -action.payload;
+        state.isJumping = true;
+      }
+    },
     setJumping(state, action) {
       state.isJumping = action.payload;
     },
     setAnimationBlocker(state, action) {
       state.animationBlocker = action.payload;
+    },
+    setTransition(state, action) {
+      state.transition = action.payload;
     },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -187,8 +201,10 @@ export const {
   moveCharacterWD,
   applyGravity,
   jump,
+  jumpWS,
   setJumping,
   setAnimationBlocker,
+  setTransition,
 } = megumiSlice.actions;
 export default megumiSlice;
 

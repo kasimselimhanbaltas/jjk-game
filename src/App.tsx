@@ -53,7 +53,9 @@ export interface Megumi {
   isJumping: boolean,
   gravity: number,
   jumpStrength: number,
-  animationBlocker: boolean;
+  animationBlocker: boolean,
+  transition: string,
+
 }
 export interface Gojo {
   characterName: string,
@@ -85,6 +87,8 @@ export interface Gojo {
   gravity: number,
   jumpStrength: number,
   animationBlocker: boolean;
+  transition: string,
+
 }
 
 export interface Sukuna {
@@ -122,6 +126,9 @@ export interface Sukuna {
   gravity: number,
   jumpStrength: number,
   animationBlocker: boolean;
+  transition: string,
+  bamAttackMoment: boolean,
+
 }
 export interface Nue {
   isActive: boolean;
@@ -134,6 +141,7 @@ export interface Nue {
   nueAutoAttack: boolean;
   animationState: "nueStance" | "move" | "jump" | "punch" | "block" | "nueAttack",
   animationBlocker: boolean;
+
 }
 export interface Mahoraga {
   isActive: boolean;

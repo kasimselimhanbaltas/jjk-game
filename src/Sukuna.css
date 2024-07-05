@@ -441,3 +441,107 @@
         height: 93px;
     }
 }
+.sukuna-bam-effect {
+    position: absolute;
+    width: 142px;
+    height: 104px;
+    background: url(./Assets/sukuna-sprite.png);
+    display: none;
+    /* animation: sukuna-bam-effect steps(1) 1s infinite; */
+}
+@keyframes sukuna-bam-effect {
+    0% {
+        background-position: -302px -1496px;
+        width: 142px;
+        height: 104px;
+    }
+
+    25% {
+        background-position: -455px -1504px;
+        width: 187px;
+        height: 96px;
+        translate: -25px
+    }
+
+    50% {
+        background-position: -653px -1508px;
+        width: 197px;
+        height: 84px;
+        translate: -30px
+        
+    }
+
+    75% {
+        background-position: -869px -1509px;
+        width: 192px;
+        height: 83px;
+        translate: -25px
+    }
+}
+@keyframes sukuna-bam {
+    0% {
+        background-position: -80px -1351px;
+        width: 40px;
+        height: 34px;
+    }
+
+    9% {
+        background-position: -135px -1354px;
+        width: 40px;
+        height: 34px;
+    }
+
+    18% {
+        background-position: -224px -1362px;
+        width: 55px;
+        height: 30px;
+    }
+
+    27% {
+        background-position: -289px -1374px;
+        width: 71px;
+        height: 11px;
+    }
+
+    36% {
+        background-position: -388px -1362px;
+        width: 31px;
+        height: 42px;
+    }
+
+    45% {
+        background-position: -433px -1364px;
+        width: 36px;
+        height: 42px;
+    }
+
+    50% {
+        background-position: -479px -1366px;
+        width: 40px;
+        height: 42px;
+    }
+
+    /* 63% {
+        background-position: -546px -1356px;
+        width: 112px;
+        height: 80px;
+    } */
+
+    70% {
+        background-position: -702px -1389px;
+        width: 51px;
+        height: 28px;
+    }
+
+    75% {
+        background-position: -769px -1385px;
+        width: 35px;
+        height: 38px;
+    }
+
+    80% {
+        background-position: -823px -1385px;
+        width: 35px;
+        height: 38px;
+    }
+}

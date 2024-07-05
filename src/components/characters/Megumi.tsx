@@ -313,10 +313,17 @@ const Megumi = ({ rivalState, rivalSlice }) => {
             })
         }
         else if (megumi.animationState === "takeDamage") {
-            console.log("takedamage")
+            dispatch(megumiSlice.actions.setTransition("all 1s ease, transform 0s"));
             setMegumiStyle({
-                animation: "takeDamage 1s steps(1) infinite",
+                animation: "takeDamage 1s steps(1)",
             })
+            dispatch(megumiSlice.actions.setAnimationBlocker(true))
+            setTimeout(() => {
+                dispatch(megumiSlice.actions.setAnimationBlocker(false))
+                dispatch(megumiSlice.actions.setAnimationState("stance"))
+                dispatch(megumiSlice.actions.setTransition("all .2s ease, transform 0s"));
+
+            }, 1000);
         }
         else if (megumi.animationState === "callDivineDogs") {
             setMegumiStyle({
@@ -371,6 +378,7 @@ const Megumi = ({ rivalState, rivalSlice }) => {
                 // animation: "takeDamage step(1) infinite",
                 transform: megumi.direction === "left" ? "scaleX(-1)" : "none",
                 display: megumi.health.currentHealth > 0 ? "block" : "none",
+                transition: megumi.transition
             }}></div>
             <div
                 className="megumi"

@@ -284,8 +284,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                         handleDomainAttack()
                     }
                 }
-                if (keysPressed.current.e) {
-                    console.log("e")
+                if (keysPressed.current.r) {
+                    handleBamAttack()
                 }
             }
 
@@ -300,6 +300,29 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         sukuna.domainCD, sukuna.cursedEnergy, sukuna.isJumping, sukuna.direction, sukuna.animationState]);
 
     const dispatch2 = useDispatch<AppDispatch>();
+
+    const handleBamAttack = () => {
+        dispatch(sukunaSlice.actions.setAnimationState("bam-attack"))
+        const distanceX = rivalState.x - sukuna.x;
+        dispatch(sukunaSlice.actions.setGravity(4))
+        dispatch(sukunaSlice.actions.jumpWS(40));
+        for (let i = 0; i < 17; i++) { // 
+            setTimeout(() => { // random slashes delay
+                if (i < 4) { // 4 x 10%
+                    dispatch(sukunaSlice.actions.moveCharacter({ x: distanceX / 40, y: 0 }));
+                }
+                else if (i < 13) { // 10 x  80%
+                    dispatch(sukunaSlice.actions.moveCharacter({ x: distanceX / 11, y: 0 }));
+                }
+                if (i === 10) dispatch(sukunaSlice.actions.setGravity(40))
+                if (i === 14) dispatch(sukunaSlice.actions.setGravity(5))
+                // else { // 5 x 1/10
+                //     dispatch(sukunaSlice.actions.moveCharacter({ x: distanceX / 50, y: 0 }));
+                // }
+            }, i * 100);
+        }
+    }
+
     const handleCleaveAttack = () => {
         dispatch2(toggleCleaveCD()); // cooldown control
         localCleaveAttack(); // attack
@@ -316,6 +339,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     const [sukunaStyle, setSukunaStyle] = React.useState({
         animation: "stance-sukuna steps(1) 1s infinite",
+    });
+    const [bamStyle, setBamStyle] = React.useState({
+        animation: "", display: "none", left: 0,
     });
     const [cleaveAnimation, setCleaveAnimation] = React.useState(
         "none"
@@ -377,12 +403,40 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             //     dispatch(sukunaSlice.actions.setAnimationState("stance"))
             // }, 1000);
         }
+        else if (sukuna.animationState === "bam-attack") {
+            let landingPosition = rivalState.x;
+            let attackDirection = "";
+            attackDirection = sukuna.x < rivalState.x ? "right" : "left";
+
+            setSukunaStyle({
+                animation: "sukuna-bam 1.5s steps(1)",
+            })
+            setTimeout(() => {
+                dispatch(sukunaSlice.actions.setAnimationState("stance"))
+            }, 1500);
+            dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"));
+            setTimeout(() => {
+                setBamStyle({ display: "block", animation: "sukuna-bam-effect steps(1) .5s", left: landingPosition - 100 })
+                console.log("bamnow? ", sukuna.bamAttackMoment)
+                dispatch(sukunaSlice.actions.setBamAttackMoment(true))
+                setTimeout(() => {
+                    setBamStyle({ display: "none", animation: "", left: rivalState.x - 100, })
+                    dispatch(sukunaSlice.actions.setBamAttackMoment(false))
+                }, 500);
+            }, 1400);
+
+        }
 
     }, [sukuna.animationState]);
 
     return (
         <div>
             <audio src={require("../../Assets/audios/sukuna.mp3")} ref={sukunaSoundEffectRef}></audio>
+            <div className="sukuna-bam-effect" style={{
+                top: 470, ...bamStyle
+            }}>
+
+            </div>
             <div className='sukunaCC' style={{
                 bottom: gameAreaHeight - sukuna.y, left: sukuna.x,
                 transform: sukuna.direction === "left" ? "scaleX(-1)" : "none",

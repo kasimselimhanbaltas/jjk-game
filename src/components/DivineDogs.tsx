@@ -104,6 +104,8 @@ const DivineDogs = ({ rivalSlice, rivalState }) => {
         dispatch(megumiSlice.actions.setCanMove(false))
         dispatch(megumiSlice.actions.setAnimationBlocker(true))
         setTimeout(() => {
+            console.log("1")
+
             dispatch(megumiSlice.actions.setCanMove(true))
             dispatch(megumiSlice.actions.setAnimationBlocker(false))
             dispatch(megumiSlice.actions.setAnimationState("stance"))

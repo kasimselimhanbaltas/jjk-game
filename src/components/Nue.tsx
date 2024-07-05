@@ -169,6 +169,7 @@ const Nue = ({ rivalSlice, rivalState }) => {
                     dispatch(megumiSlice.actions.setAnimationBlocker(true))
 
                     setTimeout(() => {
+
                         dispatch(megumiSlice.actions.setCanMove(true))
                         dispatch(megumiSlice.actions.setAnimationBlocker(false))
                         dispatch(megumiSlice.actions.setAnimationState("stance"))

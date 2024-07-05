@@ -52,6 +52,8 @@ const initialState: Sukuna = {
   gravity: 5,
   jumpStrength: -30,
   animationBlocker: false,
+  transition: "",
+  bamAttackMoment: false,
 };
 
 const RivalSlice = createSlice({
@@ -171,7 +173,10 @@ const RivalSlice = createSlice({
       if (!state.animationBlocker) state.animationState = action.payload;
     },
     applyGravity: (state) => {
-      if (state.y < 560 || state.velocityY === state.jumpStrength) {
+      if (
+        state.y + state.velocityY < 560 ||
+        state.velocityY <= state.jumpStrength
+      ) {
         // Ensure the character stays above the ground level
         state.velocityY += state.gravity;
         state.y += state.velocityY;
@@ -188,11 +193,24 @@ const RivalSlice = createSlice({
         state.animationState = "jump";
       }
     },
+    jumpWS: (state, action) => {
+      if (!state.isJumping) {
+        console.log("js: ", action.payload);
+        state.velocityY = -action.payload;
+        state.isJumping = true;
+      }
+    },
     setJumping(state, action) {
       state.isJumping = action.payload;
     },
     setAnimationBlocker(state, action) {
       state.animationBlocker = action.payload;
+    },
+    setGravity(state, action) {
+      state.gravity = action.payload;
+    },
+    setBamAttackMoment(state, action) {
+      state.bamAttackMoment = action.payload;
     },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -225,8 +243,11 @@ export const {
   moveCharacterWD,
   applyGravity,
   jump,
+  jumpWS,
   setJumping,
   setAnimationBlocker,
+  setGravity,
+  setBamAttackMoment,
 } = RivalSlice.actions;
 export default RivalSlice;
 

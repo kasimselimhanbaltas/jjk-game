@@ -51,6 +51,7 @@ const initialState: Gojo = {
   gravity: 5,
   jumpStrength: -30,
   animationBlocker: false,
+  transition: "",
 };
 
 const gojoSlice = createSlice({
@@ -177,6 +178,13 @@ const gojoSlice = createSlice({
         state.animationState = "jump";
       }
     },
+    jumpWS: (state, action) => {
+      if (!state.isJumping) {
+        console.log("js: ", action.payload);
+        state.velocityY = -action.payload;
+        state.isJumping = true;
+      }
+    },
     setJumping(state, action) {
       state.isJumping = action.payload;
     },
@@ -209,6 +217,7 @@ export const {
   moveCharacterWD,
   applyGravity,
   jump,
+  jumpWS,
   setJumping,
   setAnimationBlocker,
 } = gojoSlice.actions;
