@@ -55,10 +55,10 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
             <img src={require("../Assets/megumi.png")} alt="" />
             <h2 style={{}}>Fushiguro Megumi</h2>
           </button>
-          <button className="character-button" onClick={() => saveCharacter('gojo')}>
+          {/* <button className="character-button" onClick={() => saveCharacter('gojo')}>
             <img src={require("../Assets/kitkat.png")} alt="" />
             <h2 style={{}}>Satoru Gojo</h2>
-          </button>
+          </button> */}
           <button className="character-button" onClick={() => saveCharacter('sukuna')}>
             <img src={require("../Assets/sukuna.png")} alt="" />
             <h2>Ryomen Sukuna</h2>
@@ -76,14 +76,14 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
               </button>
             </div>
           )}
-          {gameSettings.selectedCharacter !== "gojo" && (
+          {/* {gameSettings.selectedCharacter !== "gojo" && (
             <div>
               <button className="character-button" onClick={() => saveRivalCharacter('gojo')}>
                 <img src={require("../Assets/kitkat.png")} alt="" />
                 <h2 style={{}}>Satoru Gojo</h2>
               </button>
             </div>
-          )}
+          )} */}
           {gameSettings.selectedCharacter !== "sukuna" && (
             <div>
               <button className="character-button" onClick={() => saveRivalCharacter('sukuna')}>

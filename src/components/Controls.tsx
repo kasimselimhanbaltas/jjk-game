@@ -20,13 +20,15 @@ const Controls = () => {
                             <p>J - Cleave</p>
                             <p> K - Dismantle(Close Range)</p>
                             <p>L - Domain Expansion</p>
+                            <p>R - Smash Attack</p>
+                            <p>E - Backflip</p>
                         </>
 
                     )}
                 {gameSettings.selectedCharacter === "megumi" && (
                     <>
-                        <p>K: Call Nue</p>
-                        <p> J - Nue Attack</p>
+                        <p>K - Call Nue</p>
+                        <p>J - Nue Attack</p>
                         <p>L - Call Divine Dogs</p>
                     </>
                 )}

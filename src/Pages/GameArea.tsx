@@ -39,7 +39,6 @@ const GameArea = () => {
   const gojo = useSelector((state: any) => state.GojoState);
   const nue = useSelector((state: any) => state.NueState);
   const divineDogs = useSelector((state: any) => state.DivineDogsState);
-  const yDistance = useMemo(() => (megumi.y - sukuna.y), [megumi.y, sukuna.y]);
   const keysPressed = useRef({ w: false, a: false, s: false, d: false, q: false, t: false, space: false, y: false });
   let intervalId = null;
   const playerCEincreaseIntervalRef = useRef(null);
@@ -80,11 +79,12 @@ const GameArea = () => {
   useEffect(() => {
     dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 100 }));
     dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 100 }));
+
   }, []);
 
   //check red damage, purple damage
   useEffect(() => {
-    if (gameSettings.selectedCharacter === "gojo") {
+    if (gameSettings.selectedCharacter === "gojo") { // is rival gonna take damage from gojo red and purple
       if (gojo.redAttackMoment) {
         let distance =
           gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalCharacter.x) <= 200 ? "close range" : "far") :
@@ -103,7 +103,7 @@ const GameArea = () => {
         }
       }
     }
-    else {
+    else { // is player gonna take damage from gojo red and purple
       if (gojo.redAttackMoment) {
         let distance =
           gojo.direction === "right" ? (Math.abs(gojo.x + 250 - playerCharacter.x) <= 200 ? "close range" : "far") :
@@ -119,17 +119,16 @@ const GameArea = () => {
         console.log("gamearea red: ", distance)
         if (distance === "hit") {
           dispatch(playerSlice.actions.updateHealth(purpleDamage))
-          dispatch(megumiSlice.actions.moveCharacterWD({ x: playerCharacter.direction === "right" ? -200 : +200, y: 0 }));
-          dispatch(megumiSlice.actions.setAnimationState("takeDamage"))
+          dispatch(playerSlice.actions.moveCharacterWD({ x: playerCharacter.direction === "right" ? -200 : +200, y: 0 }));
+          dispatch(playerSlice.actions.setAnimationState("takeDamage"))
           setTimeout(() => {
-            dispatch(megumiSlice.actions.setAnimationState("stance"))
+            dispatch(playerSlice.actions.setAnimationState("stance"))
           }, 1000);
         }
       }
     }
-    if (gameSettings.selectedCharacter === "sukuna") {
+    if (gameSettings.selectedCharacter === "sukuna") { // is rival gonna take damage from sukuna smash attack(R)
       if (sukuna.bamAttackMoment) {
-        console.log("bammmm")
         let distance =
           Math.abs(sukuna.x - rivalCharacter.x) <= 200 ? "close range" : "far"
         if (distance === "close range") {
@@ -210,7 +209,6 @@ const GameArea = () => {
         dispatch(playerSlice.actions.setCanMove(true));
       }
       if (key === "a" || key === "d") {
-
         dispatch(playerSlice.actions.setAnimationState("stance"));
       }
 
@@ -320,9 +318,6 @@ const GameArea = () => {
             dispatch(rivalSlice.actions.setAnimationState("move"));
             if (rivalCharacter.rivalDirection === "R") [stepX, stepY] = [30, 0];
             else if (rivalCharacter.rivalDirection === "L") [stepX, stepY] = [-30, 0];
-            else if (rivalCharacter.rivalDirection === "U") [stepX, stepY] = [0, -30];
-            else if (rivalCharacter.rivalDirection === "UL") [stepX, stepY] = [-30, -30];
-            else if (rivalCharacter.rivalDirection === "UR") [stepX, stepY] = [30, -30];
           }
 
           dispatch(rivalSlice.actions.moveCharacter({ x: stepX, y: stepY }));
@@ -342,31 +337,14 @@ const GameArea = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       let direction = "";
-      const deltaX = playerCharacter.x - rivalCharacter.x; // >0 is right, <0 is left
-      const deltaY = playerCharacter.y - rivalCharacter.y; // >0 is up, <0 is down
-      if (Math.abs(deltaX) <= 200 && Math.abs(deltaY) <= 80) { // Decide which direction sukuna should head to
+      if (Math.abs(xDistance) <= 100) { // Decide which direction sukuna should head to
         direction = "stop";
       } else {
-        if (deltaX <= -100) { // left
-          if (deltaY <= -20) { // up
-            direction = "UL";
-          } else if (deltaY >= 50) { // down
-            direction = "DL";
-          } else {
-            direction = "L";
-          }
+        if (xDistance <= -100) { // left
+          direction = "L";
         }
-        else if (deltaX >= 100) { // right
-          if (deltaY <= -20) { // up
-            direction = "UR";
-          } else if (deltaY >= 50) { // down
-            direction = "DR";
-          } else {
-            direction = "R";
-          }
-        } else {
-          if (deltaY > 0) direction = "D";
-          else direction = "U"
+        else if (xDistance >= 100) { // right
+          direction = "R";
         }
       }
       if (rivalCharacter.rivalDirection !== direction) {
@@ -376,8 +354,8 @@ const GameArea = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [dispatch, playerCharacter.x, playerCharacter.y, rivalCharacter.closeRange, rivalCharacter.rivalDirection]);
-
+  }, [xDistance >= 100, xDistance <= -100]);
+  // rivalCharacter.closeRange, rivalCharacter.rivalDirection
   // Main menu
   const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state

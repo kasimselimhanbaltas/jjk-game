@@ -22,15 +22,20 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                         </div>
                         <div className="health-bar">
                             <div className="player-health-progress" style={{
+                                display: playerCharacter.health.currentHealth >= 0 ? "block" : "none",
                                 position: "absolute", width: playerCharacter.health.currentHealth * 500 / playerCharacter.health.maxHealth,
                                 maxWidth: "500px", height: "25px",
                                 backgroundColor: "red",
+                                transition: "width .2s ease-out",
                             }}></div>
                         </div>
                         <div className="cursed-energy-bar">
                             <div style={{
+                                display: playerCharacter.cursedEnergy.currentCursedEnergy >= 0 ? "block" : "none",
                                 position: "absolute", width: playerCharacter.cursedEnergy.currentCursedEnergy * 350 / playerCharacter.cursedEnergy.maxCursedEnergy,
-                                maxWidth: "350px", height: "25px", backgroundColor: "#068F98"
+                                maxWidth: "350px", height: "25px", backgroundColor: "#068F98",
+                                transition: "width .2s ease-out",
+
                             }}>
                                 <img src={require(`../Assets/ce-bar.png`)} style={{
                                     display: playerCharacter.cursedEnergy.currentCursedEnergy >= playerCharacter.cursedEnergy.maxCursedEnergy
@@ -50,18 +55,22 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             left: "58.4%",
                         }}>
                             <div className="rival-health-progress" style={{
+                                display: rivalCharacter.health.currentHealth >= 0 ? "block" : "none",
                                 position: "absolute", width: rivalCharacter.health.currentHealth * 500 / rivalCharacter.health.maxHealth,
                                 maxWidth: "500px", height: "25px", backgroundColor: "red",
                                 marginLeft: 500 - (rivalCharacter.health.currentHealth * 500 / rivalCharacter.health.maxHealth),
+                                transition: "width .5s ease-out",
                             }}></div>
                         </div>
                         <div className="cursed-energy-bar" style={{
                             left: "69%",
                         }}>
                             <div style={{
+                                display: rivalCharacter.cursedEnergy.currentCursedEnergy >= 0 ? "block" : "none",
                                 position: "absolute", width: rivalCharacter.cursedEnergy.currentCursedEnergy * 350 / rivalCharacter.cursedEnergy.maxCursedEnergy,
                                 maxWidth: "350px", height: "25px", backgroundColor: "#068F98",
-                                marginLeft: 350 - (rivalCharacter.cursedEnergy.currentCursedEnergy * 350 / rivalCharacter.cursedEnergy.maxCursedEnergy)
+                                marginLeft: 350 - (rivalCharacter.cursedEnergy.currentCursedEnergy * 350 / rivalCharacter.cursedEnergy.maxCursedEnergy),
+                                transition: "width .2s ease-out",
                             }}>
                                 <img src={require(`../Assets/ce-bar.png`)} style={{
                                     display: rivalCharacter.cursedEnergy.currentCursedEnergy >= rivalCharacter.cursedEnergy.maxCursedEnergy
@@ -87,8 +96,13 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             {/* Cleave Attack */}
                             <div className="skill">
                                 <CircularProgressBar skillCD={playerCharacter.cleaveCD} />
-                                <img src={require("../Assets/slash.png")} alt="" />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Cleave:</p>
+                                <div className="image-dismantle" style={{
+                                    position: "absolute",
+                                    top: "-22px", left: "-17px", zIndex: 9,
+                                    width: "99px", height: "101px",
+                                    scale: ".4"
+                                }}></div>
+                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Dismantle:</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {playerCharacter.cleaveCD.isReady ? "Ready - J" :
                                         (playerCharacter.cleaveCD.remainingTime + "sec")}</p>
@@ -97,18 +111,13 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             {/* Dismantle Attack */}
                             <div className="skill" >
                                 <CircularProgressBar skillCD={playerCharacter.dismantleCD} />
-                                <div style={{ display: "block", position: "relative", top: "-40px", left: "0px", height: "50px" }}>
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "5px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "15px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "25px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "35px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "15px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "25px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "35px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "45px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                </div>
-                                <p style={{ marginTop: "-40px", lineBreak: "loose" }}>Dismantle:</p>
+                                <div className="image-cleave" style={{
+                                    position: "absolute",
+                                    top: "-25px", left: "-25px", zIndex: 9,
+                                    width: "99px", height: "101px",
+                                    scale: ".4"
+                                }}></div>
+                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Cleave:</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {playerCharacter.dismantleCD.isReady ?
                                         (playerCharacter.closeRange ? "Ready - K" : "Get Closer") :
@@ -127,7 +136,12 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
                             {/* Rapid Slash */}
                             <div className="skill">
-                                <img src={require("../Assets/slash.png")} alt="" />
+                                <div className="image-rapid" style={{
+                                    position: "absolute",
+                                    top: "-25px", left: "-25px", zIndex: 9,
+                                    width: "99px", height: "101px",
+                                    scale: ".4"
+                                }}></div>
                                 <CircularProgressbar
                                     value={playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}
                                     text={`${playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}%`}
@@ -136,7 +150,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                         // Text size
                                         textSize: '16px',
                                         // Colors
-                                        pathColor: (playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
+                                        pathColor: (playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100) >= 100 ? "green" : `rgba(62, 152, 199)`,
                                         textColor: 'transparent',
                                         trailColor: '#d6d6d6',
                                         backgroundColor: '#3e98c7',

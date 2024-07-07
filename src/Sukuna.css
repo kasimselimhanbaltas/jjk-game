@@ -21,6 +21,56 @@
     background: url(./Assets/sukuna-sprite.png);
     scale: 1;
 }
+.dismantle {
+    position: absolute;
+    width: 60px;
+    height: 79px;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    background: url(./Assets/sukuna-sprite.png) -871px -1681px;
+    scale: .7;
+    transition: left .2s;
+
+}
+.rapid {
+    position: absolute;
+    transform: translate(-60%, -70%);
+    z-index: 99;
+    background: url(./Assets/sukuna-sprite.png);
+    scale: .8;
+    width: 64px;
+    height: 99px;
+    animation: rapid 1.5s steps(1) infinite;
+}
+.domain-slash{
+    position: absolute;
+    transform: translate(-60%, -70%);
+    z-index: 99;
+    background: url(./Assets/sukuna-sprite.png);
+    scale: .6;
+    width: 64px;
+    height: 99px;
+    animation: domain-slash .4s steps(1) infinite;
+    transform-origin: left top !important;
+}
+@keyframes domain-slash {
+    0% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;
+    }
+
+    50% {
+        background-position: -1071px -1689px;
+        width: 99px;
+        height: 101px;
+    }
+    100% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;    
+    }
+}
 /* .divineDogBlack {
     position: absolute;
     top: 50%;
@@ -248,7 +298,7 @@
         height: 36px;
     }
 }
-@keyframes sukuna-cleave-right {
+/* @keyframes sukuna-cleave-right {
     0% {
         background-position: -744px -1687px;
         width: 21px;
@@ -266,8 +316,8 @@
         width: 36px;
         height: 51px;
     }
-}
-@keyframes sukuna-cleave-left {
+} */
+/* @keyframes sukuna-cleave-left {
     0% {
         background-position: -744px -1687px;
         width: 21px;
@@ -287,6 +337,98 @@
         width: 36px;
         height: 51px;
         translate: -17px;
+    }
+} */
+@keyframes sukuna-cleave-right {
+    0% {
+        background-position: -76px -1698px;
+        width: 35px;
+        height: 41px;
+    }
+
+    16% {
+        background-position: -128px -1697px;
+        width: 44px;
+        height: 42px;
+    }
+
+    32% {
+        background-position: -177px -1700px;
+        width: 44px;
+        height: 42px;
+    }
+
+    48% {
+        background-position: -239px -1655px;
+        width: 79px;
+        height: 125px;
+        translate: 0px 39px;
+    }
+
+    64% {
+        background-position: -343px -1655px;
+        width: 108px;
+        height: 132px;
+        translate: 0px 40px;
+    }
+
+    80% {
+        background-position: -497px -1666px;
+        width: 128px;
+        height: 126px;
+        translate: 0px 36px;
+    }
+    100% {
+        background-position: -497px -1666px;
+        width: 128px;
+        height: 126px;
+    }
+}
+@keyframes sukuna-cleave-left {
+    0% {
+        background-position: -76px -1698px;
+        width: 35px;
+        height: 41px;
+    }
+
+    16% {
+        background-position: -128px -1697px;
+        width: 44px;
+        height: 42px;
+        translate: -10px 0px;
+    }
+
+    32% {
+        background-position: -177px -1700px;
+        width: 44px;
+        height: 42px;
+    }
+
+    48% {
+        background-position: -239px -1655px;
+        width: 79px;
+        height: 125px;
+        translate: -44px 39px;
+    }
+
+    64% {
+        background-position: -343px -1655px;
+        width: 108px;
+        height: 132px;
+        translate: -73px 40px;
+    }
+
+    80% {
+        background-position: -497px -1666px;
+        width: 128px;
+        height: 126px;
+        translate: -93px 36px;
+    }
+
+    100% {
+        background-position: -497px -1666px;
+        width: 128px;
+        height: -126px;
     }
 }
 @keyframes sukuna-rapid-right {
@@ -308,7 +450,6 @@
         height: 51px;
     }
 }
-
 @keyframes sukuna-rapid-left {
     0% {
         background-position: -744px -1687px;
@@ -410,32 +551,110 @@
         translate: 0px;
     }
 }
-@keyframes cleave {
+@keyframes sukuna-domain-pose {
+    0% {
+        background-position: -815px -2005px;
+        width: 24px;
+        height: 51px;
+    }
+
+    20% {
+        background-position: -863px -2006px;
+        width: 24px;
+        height: 51px;
+    }
+
+    40% {
+        background-position: -911px -2007px;
+        width: 22px;
+        height: 51px;
+    }
+
+    60% {
+        background-position: -954px -2008px;
+        width: 22px;
+        height: 51px;
+    }
+
+    80% {
+        background-position: -998px -2009px;
+        width: 22px;
+        height: 51px;
+        animation-fill-mode: forwards;
+    }
+    100% {
+        background-position: -998px -2009px;
+        width: 22px;
+        height: 51px;
+        animation-fill-mode: forwards;
+    }
+}
+@keyframes rapid {
     0% {
         background-position: -871px -1681px;
         width: 60px;
         height: 79px;
     }
 
-    20% {
+    9% {
         background-position: -977px -1683px;
         width: 64px;
         height: 97px;
     }
 
-    40% {
+    18% {
         background-position: -1071px -1689px;
         width: 99px;
         height: 101px;
     }
 
-    60% {
+    27% {
         background-position: -1201px -1691px;
         width: 106px;
         height: 99px;
     }
+    36% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;
+        transform: translate(-60%, -70%) scaleX(-1);
+    }
 
-    80% {
+    45% {
+        background-position: -1071px -1689px;
+        width: 99px;
+        height: 101px;
+    }
+
+    54% {
+        background-position: -1201px -1691px;
+        width: 106px;
+        height: 99px;
+    }
+    63% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;
+        transform: translate(-60%, -70%) scaleX(1);
+    }
+
+    72% {
+        background-position: -1071px -1689px;
+        width: 99px;
+        height: 101px;
+    }
+
+    81% {
+        background-position: -1201px -1691px;
+        width: 106px;
+        height: 99px;
+    }
+    90% {
+        background-position: -1357px -1702px;
+        width: 79px;
+        height: 93px;
+    }
+    100% {
         background-position: -1357px -1702px;
         width: 79px;
         height: 93px;
@@ -544,4 +763,496 @@
         width: 35px;
         height: 38px;
     }
+}
+@keyframes sukuna-fuga-before-scene {
+    0% {
+        background-position: -88px -2121px;
+        width: 23px;
+        height: 50px;
+    }
+
+    5% {
+        background-position: -128px -2120px;
+        width: 23px;
+        height: 50px;
+    }
+
+    10% {
+        background-position: -176px -2120px;
+        width: 25px;
+        height: 50px;
+        translate: -2px;
+    }
+
+    15% {
+        background-position: -229px -2122px;
+        width: 27px;
+        height: 50px;
+        translate: -4px;
+    }
+
+    20% {
+        background-position: -271px -2121px;
+        width: 28px;
+        height: 50px;
+        translate: -5px;
+    }
+
+    25% {
+        background-position: -317px -2122px;
+        width: 26px;
+        height: 50px;
+        translate: -2px;
+    }
+
+    30% {
+        background-position: -360px -2123px;
+        width: 24px;
+        height: 50px;
+        translate: 0px 1px;
+    }
+
+    45% {
+        background-position: -400px -2124px;
+        translate: 0px 0px;
+    }
+
+    64% {
+        background-position: -360px -2124px;
+        translate: 0px 1px;
+
+    }
+    72% {
+        background-position: -400px -2124px;
+        translate: 0px 0px;
+    }
+    80% {
+        background-position: -360px -2124px;
+    }
+    88% {
+        background-position: -400px -2124px;
+    }
+
+    96% {
+        background-position: -360px -2124px;
+    }  
+}
+@keyframes sukuna-fuga-before-scene-left {
+    0% {
+        background-position: -88px -2121px;
+        width: 23px;
+        height: 50px;
+    }
+
+    8% {
+        background-position: -128px -2120px;
+        width: 23px;
+        height: 50px;
+    }
+
+    16% {
+        background-position: -176px -2120px;
+        width: 25px;
+        height: 50px;
+        translate: -1px;
+    }
+
+    24% {
+        background-position: -229px -2122px;
+        width: 27px;
+        height: 50px;
+        translate: -1px;
+    }
+
+    32% {
+        background-position: -271px -2121px;
+        width: 28px;
+        height: 50px;
+    }
+
+    40% {
+        background-position: -317px -2122px;
+        width: 26px;
+        height: 50px;
+        translate: -2px;
+    }
+
+    /* repeat */
+    48% {
+        background-position: -360px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+
+    56% {
+        background-position: -400px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+    64% {
+        background-position: -360px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+    72% {
+        background-position: -400px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+
+    80% {
+        background-position: -360px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+
+    88% {
+        background-position: -400px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+
+    96% {
+        background-position: -360px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+}
+@keyframes sukuna-fuga-after-scene {
+    0% {
+        background-position: -80px -2616px;
+        width: 45px;
+        height: 51px;
+        translate: -2px 3px;
+    }
+
+    14.29% {
+        background-position: -134px -2618px;
+        width: 55px;
+        height: 51px;
+        translate: -10px 3px;
+    }
+
+    28.57% {
+        background-position: -198px -2614px;
+        width: 65px;
+        height: 61px;
+        translate: -15px 5px;
+    }
+
+    42.86% {
+        background-position: -278px -2614px;
+        width: 67px;
+        height: 61px;
+        translate: -18px 3px;
+    }
+
+    57.14% {
+        background-position: -379px -2621px;
+        width: 89px;
+        height: 60px;
+        translate: -16px 6px;
+    }
+
+    71.43% {
+        background-position: -512px -2627px;
+        width: 108px;
+        height: 55px;
+        translate: -7px 3px;
+    }
+
+    85.71% {
+        background-position: -652px -2636px;
+        width: 98px;
+        height: 59px;
+        translate: -1px 10px;
+    }
+
+    100% {
+        background-position: -652px -2636px;
+        width: 98px;
+        height: 59px;
+    }
+}
+@keyframes sukuna-fuga-after-scene-left {
+    0% {
+        background-position: -80px -2616px;
+        width: 45px;
+        height: 51px;
+        translate: -10px 3px;
+    }
+
+    14.29% {
+        background-position: -134px -2618px;
+        width: 55px;
+        height: 51px;
+        translate: -12px 3px;
+    }
+
+    28.57% {
+        background-position: -198px -2614px;
+        width: 65px;
+        height: 61px;
+        translate: -17px 5px;
+    }
+
+    42.86% {
+        background-position: -278px -2614px;
+        width: 67px;
+        height: 61px;
+        translate: -16px 3px;
+    }
+
+    57.14% {
+        background-position: -379px -2621px;
+        width: 89px;
+        height: 60px;
+        translate: -40px 6px;
+    }
+
+    71.43% {
+        background-position: -512px -2627px;
+        width: 108px;
+        height: 55px;
+        translate: -68px 3px;
+    }
+
+    85.71% {
+        background-position: -652px -2636px;
+        width: 98px;
+        height: 59px;
+        translate: -64px 10px;
+    }
+
+    100% {
+        background-position: -652px -2636px;
+        width: 98px;
+        height: 59px;
+    }
+}
+@keyframes fire-arrow {
+    0% {
+        background-position: -780px -2629px;
+        width: 143px;
+        height: 35px;
+    }
+
+    33.33% {
+        background-position: -779px -2677px;
+        width: 144px;
+        height: 31px;
+    }
+
+    66.67% {
+        background-position: -772px -2729px;
+        width: 151px;
+        height: 43px;
+    }
+
+    100% {
+        background-position: -772px -2729px;
+        width: 151px;
+        height: 43px;
+    }
+}
+@keyframes fuga-explosion {
+    0% {
+        background-position: -79px -2851px;
+        width: 203px;
+        height: 272px;
+    }
+
+    16.67% {
+        background-position: -319px -2843px;
+        width: 225px;
+        height: 286px;
+    }
+
+    33.33% {
+        background-position: -584px -2829px;
+        width: 246px;
+        height: 315px;
+    }
+
+    50% {
+        background-position: -104px -3193px;
+        width: 277px;
+        height: 333px;
+    }
+
+    66.67% {
+        background-position: -470px -3193px;
+        width: 295px;
+        height: 349px;
+    }
+
+    83.33% {
+        background-position: -130px -3592px;
+        width: 301px;
+        height: 360px;
+    }
+
+    100% {
+        background-position: -130px -3592px;
+        width: 301px;
+        height: 360px;
+    }
+}
+@keyframes fuga-scene {
+    0% {
+        background-position: -4px -4px;
+    }
+
+    3.33% {
+        background-position: -436px -4px;
+    }
+
+    6.66% {
+        background-position: -868px -4px;
+    }
+
+    10% {
+        background-position: -1300px -4px;
+    }
+
+    13.33% {
+        background-position: -4px -224px;
+    }
+
+    16.66% {
+        background-position: -436px -224px;
+    }
+
+    20% {
+        background-position: -868px -224px;
+    }
+
+    23.33% {
+        background-position: -1300px -224px;
+    }
+
+    26.66% {
+        background-position: -4px -444px;
+    }
+
+    30% {
+        background-position: -436px -444px;
+    }
+
+    33.33% {
+        background-position: -868px -444px;
+    }
+
+    36.66% {
+        background-position: -1300px -444px;
+    }
+
+    40% {
+        background-position: -4px -664px;
+    }
+
+    43.33% {
+        background-position: -436px -664px;
+    }
+
+    46.66% {
+        background-position: -868px -664px;
+    }
+
+    50% {
+        background-position: -1300px -664px;
+    }
+
+    53.33% {
+        background-position: -4px -884px;
+    }
+
+    56.66% {
+        background-position: -436px -884px;
+    }
+
+    60% {
+        background-position: -868px -884px;
+    }
+
+    63.33% {
+        background-position: -1300px -884px;
+    }
+
+    66.66% {
+        background-position: -4px -1104px;
+    }
+
+    70% {
+        background-position: -436px -1104px;
+    }
+
+    73.33% {
+        background-position: -868px -1104px;
+    }
+
+    76.66% {
+        background-position: -1300px -1104px;
+    }
+
+    80% {
+        background-position: -4px -1324px;
+    }
+
+    83.33% {
+        background-position: -436px -1324px;
+    }
+
+    86.66% {
+        background-position: -868px -1324px;
+    }
+
+    90% {
+        background-position: -1300px -1324px;
+    }
+
+    93.33% {
+        background-position: -4px -1544px;
+    }
+
+    96.66% {
+        background-position: -436px -1544px;
+    }
+
+    100% {}
+}
+.image-cleave{
+    background: url(./Assets/sukuna-sprite.png) -1071px -1689px;
+}
+.image-dismantle {
+    background: url(./Assets/sukuna-sprite.png) -871px -1681px;
+}.image-rapid {
+    background: url(./Assets/sukuna-sprite.png) -1201px -1691px;
+}
+.fuga-scene {
+    position: absolute;
+    z-index: 5;
+    width: 424px;
+    height: 212px;
+    scale: .7;
+    background: url(./Assets/texture.png);
+}
+.fire-arrow{
+    position: absolute;
+    width: 143px;
+    height: 35px;
+    transition: all .5s, transform 0s, opacity 0s; 
+    background: url(./Assets/sukuna-sprite.png);
+}
+.fuga-explosion {
+    position: absolute;
+    z-index: 5;
+    width: 160px;
+    height: 90px;
+    translate: -50%;
+    /* scale: 2; */
+    bottom: 20px;
+    background: url(./Assets/sukuna-sprite.png);
+    /* opacity: 1 !important;
+    animation: fuga-explosion 1s steps(1) infinite; */
 }

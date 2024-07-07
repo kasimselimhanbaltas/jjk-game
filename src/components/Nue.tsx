@@ -41,7 +41,6 @@ const Nue = ({ rivalSlice, rivalState }) => {
         if (nueIntervalRef.current !== null) return;
 
         nueIntervalRef.current = setInterval(() => {
-            console.log("int: ", megumi.cursedEnergy.currentCursedEnergy)
             if (megumi.cursedEnergy.currentCursedEnergy >= 5) dispatch(changeCursedEnergy(-shikigamiDrainingCost));
             else {
                 dispatch(nueActivity(false));
@@ -88,9 +87,11 @@ const Nue = ({ rivalSlice, rivalState }) => {
         dispatch(moveNue({ x: rivalState.x - 20, y: rivalState.y - 50 })); //move to rivalState
 
         setTimeout(() => {
-            // dispatch(rivalSlice.actions.setCanMove(false)); // stun rivalState
+            dispatch(rivalSlice.actions.setCanMove(false)); // stun rivalState
+
             // setImageSrc(require('../Assets/nue.png')); // nue arrives to rivalState
             setTimeout(() => { // electric attack
+
                 // setImageSrc(require('../Assets/nue-side.png')); // nue move after electric attack
                 if (rivalState.x > megumi.x) { // move to beside rival
                     dispatch(moveNue({ x: rivalState.x + 100, y: rivalState.y - 100 }));
@@ -103,13 +104,13 @@ const Nue = ({ rivalSlice, rivalState }) => {
                     // dispatch(moveNue({ x: megumi.direction === "left" ? megumi.x + 30 : megumi.x - 50, y: megumi.y - 75 }));
                     setTimeout(() => { // return
                         dispatch(nueAttacking(false));
-                        // dispatch(rivalSlice.actions.setCanMove(true)); // cancel stun rivalState
+                        dispatch(rivalSlice.actions.setCanMove(true)); // cancel stun rivalState
                         // dispatch(setNueDirection(attackDirection === "right" ? "left" : "right")); // set nue direction for coming back, not needed anymore
                         setNueStyle({ ...nueStyle, transition: "all .4s ease, width 0s, transform 0s" });
                     }, 1000);
                 }, 250)
             }, 250)
-        }, 1000)
+        }, 500)
     }
 
     useEffect(() => {

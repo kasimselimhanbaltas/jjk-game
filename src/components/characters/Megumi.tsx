@@ -16,8 +16,6 @@ const Megumi = ({ rivalState, rivalSlice }) => {
     const [displaySlash2, setDisplaySlash2] = React.useState("none");
     const [displayDismantle, setDisplayDismantle] = React.useState("block");
     const dispatch = useDispatch();
-    const [slashRotation, setSlashRotation] = React.useState({ rotate: "270deg" });
-    const [slashRotation2, setSlashRotation2] = React.useState({ rotate: "270deg" });
     const intervalRef = useRef(null);
     const characterWidth = 120;
     const characterHeight = 180;
@@ -25,8 +23,6 @@ const Megumi = ({ rivalState, rivalSlice }) => {
 
     // Sound effects
     const slashSoundEffectRef = React.useRef(null);
-    const rapidSlashSoundEffectRef = React.useRef(null);
-    const domainSoundEffectRef = React.useRef(null);
     const nueSoundEffectRef = React.useRef(null);
     // domainSoundEffectRef.current.volume = 0.1;
     // nueSoundEffectRef.current.volume = 0.1;
@@ -51,85 +47,6 @@ const Megumi = ({ rivalState, rivalSlice }) => {
         }
         // else setDisplayDismantle("none")
     }, [sukuna.dismantleAttack]);
-
-    useEffect(() => {
-        if (sukuna.rapidAttack) {
-            rapidAttack()
-            setDisplaySlash("block");
-            setTimeout(() => {
-                setDisplaySlash("none")
-            }, 3000);
-        }
-    }, [sukuna.rapidAttack])
-
-
-    useEffect(() => {
-        if (sukuna.rivalDomainExpansion && sukuna.health.currentHealth > 0) {
-            domainAttack()
-        }
-    }, [sukuna.rivalDomainExpansion])
-
-    // Sukuna domain attack function
-    const domainAttack = () => {
-        if (sukuna.health.currentHealth <= 0) return;
-        setTimeout(() => {
-            setDisplaySlash("block");
-            setDisplaySlash2("block");
-            let slashDamage = -25;
-            let maxSlashCount = (megumi.health.currentHealth / Math.abs(slashDamage)) >= 50 ? 50 : (megumi.health.currentHealth / Math.abs(slashDamage));
-            console.log("maxslash", maxSlashCount)
-            const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
-            const stepDistance = attackDirection === "left" ? -10 : 10;
-            const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
-            domainSoundEffectRef.current.volume = 0.3
-            domainSoundEffectRef.current.play()
-
-
-            for (let i = 0; i < 50; i++) { // 50 random slashes -> rotate slash images, push megumi back and reduce health
-                setTimeout(() => { // random slashes delay
-                    setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                    setSlashRotation2({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                    dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
-                    dispatch(megumiSlice.actions.updateHealth(slashDamage));
-                    if (i >= maxSlashCount - 1) {
-                        domainSoundEffectRef.current.pause()
-                        domainSoundEffectRef.current.currentTime = 0; // İsterseniz başa sarabilirsiniz
-                    }
-
-                }, i * 100);
-            }
-            setTimeout(() => {
-                setSlashRotation({ rotate: "270deg" });
-                setSlashRotation2({ rotate: "270deg" });
-                setDisplaySlash("none");
-                setDisplaySlash2("none");
-
-            }, 4800);
-        }, 1000);
-
-
-    }
-
-    const rapidAttack = () => {
-        rapidSlashSoundEffectRef.current.volume = 0.1;
-
-        rapidSlashSoundEffectRef.current.play()
-        const attackDirection = sukuna.x - megumi.x >= 0 ? "left" : "right";
-        const stepDistance = attackDirection === "left" ? -10 : 10;
-        const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
-        for (let i = 0; i < degrees.length * 3; i++) {
-            setTimeout(() => {
-                setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-                dispatch(megumiSlice.actions.updateHealth(-10));
-                dispatch(megumiSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
-            }, i * 100);
-        }
-        setTimeout(() => {
-            setSlashRotation({ rotate: "270deg" });
-        }, degrees.length * 3 * 100);
-    };
-
-
 
     const attackInterval = React.useRef(null);
 
@@ -358,8 +275,6 @@ const Megumi = ({ rivalState, rivalSlice }) => {
     return (
         <>
             <audio src={require("../../Assets/audios/slash.mp3")} ref={slashSoundEffectRef}></audio>
-            <audio src={require("../../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
-            <audio src={require("../../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/nue.mp3")} ref={nueSoundEffectRef}></audio>
 
 
@@ -413,8 +328,8 @@ const Megumi = ({ rivalState, rivalSlice }) => {
                     </>
                 )} */}
 
-                <img src={require('../../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-85px", left: "-55px", display: displaySlash, height: "120px", width: "120px", ...slashRotation, transform: "scale(0.7)" }} />
-                <img src={require('../../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-85px", left: "-55px", display: displaySlash2, height: "120px", width: "120px", ...slashRotation2, transform: "scale(0.7)" }} />
+                {/* <img src={require('../../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-85px", left: "-55px", display: displaySlash, height: "120px", width: "120px", ...slashRotation, transform: "scale(0.7)" }} /> */}
+                {/* <img src={require('../../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-85px", left: "-55px", display: displaySlash2, height: "120px", width: "120px", ...slashRotation2, transform: "scale(0.7)" }} /> */}
                 <img src={require(`../../Assets/guard.png`)} alt="" style={{
                     display: megumi.isBlocking ? "block" : "none",
                     position: "absolute", top: -65, left: -15,

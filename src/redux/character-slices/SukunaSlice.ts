@@ -14,7 +14,7 @@ const initialState: Sukuna = {
     maxHealth: 1500,
   },
   cursedEnergy: {
-    currentCursedEnergy: 100,
+    currentCursedEnergy: 200,
     maxCursedEnergy: 200,
   },
   direction: "left",
@@ -33,7 +33,7 @@ const initialState: Sukuna = {
   },
   dismantleCD: {
     isReady: true,
-    cooldown: 1,
+    cooldown: 6,
     remainingTime: 0,
   },
   domainCD: {

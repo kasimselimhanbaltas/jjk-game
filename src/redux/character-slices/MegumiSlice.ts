@@ -18,7 +18,7 @@ const initialState: Megumi = {
   },
   direction: "right",
   isAttacking: false,
-  canMove: false,
+  canMove: true,
   dashGauge: 0,
   rivalDirection: "stop",
   callNueCD: {
@@ -139,7 +139,6 @@ const megumiSlice = createSlice({
       state.isBlocking = action.payload;
     },
     setAnimationState(state, action) {
-      console.log("megumi ab", action.payload);
       if (!state.animationBlocker) state.animationState = action.payload;
     },
     applyGravity: (state) => {
