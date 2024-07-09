@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/jjk-game/static/css/main.64190ed9.css",
-    "main.js": "/jjk-game/static/js/main.d3e041ba.js",
+    "main.css": "/jjk-game/static/css/main.14ecb0cf.css",
+    "main.js": "/jjk-game/static/js/main.a0647518.js",
     "static/media/texture.png": "/jjk-game/static/media/texture.e231c9c13d1b192cfb2d.png",
     "static/media/menu-bg.png": "/jjk-game/static/media/menu-bg.9178329effb63b767de8.png",
     "static/media/slash.png": "/jjk-game/static/media/slash.1b2fd6286c4980a13914.png",
-    "static/media/gojo-sprite.png": "/jjk-game/static/media/gojo-sprite.65c254fe4fdc35dc42f5.png",
     "static/media/electricity.png": "/jjk-game/static/media/electricity.372ed589e9b92dffd53b.png",
     "static/media/nue.png": "/jjk-game/static/media/nue.8a53fb45b9ddeae13336.png",
     "static/media/nue-side.png": "/jjk-game/static/media/nue-side.38fbe70fe216d2f2792c.png",
     "static/media/bg.jpg": "/jjk-game/static/media/bg.27434f6f9eeb85267197.jpg",
-    "static/media/sukuna-sprite.png": "/jjk-game/static/media/sukuna-sprite.628921451140c48214fb.png",
+    "static/media/sukuna-sprite.png": "/jjk-game/static/media/sukuna-sprite.3ca92f3ac3ad7fc1da50.png",
     "static/media/sukuna.png": "/jjk-game/static/media/sukuna.4f67cc85418bb29c4b41.png",
     "static/media/malevolent_shrine.png": "/jjk-game/static/media/malevolent_shrine.62a55412480943a97780.png",
     "static/media/guard.png": "/jjk-game/static/media/guard.765a36c9fa475ff017bc.png",
@@ -18,12 +17,12 @@
     "static/media/gojo.png": "/jjk-game/static/media/gojo.ea036a43c1a6f59403f4.png",
     "static/media/gojo-profile.png": "/jjk-game/static/media/gojo-profile.68e20cabf38c05eb5337.png",
     "static/media/megumi-profile.png": "/jjk-game/static/media/megumi-profile.28f9221218a01791217b.png",
-    "static/media/gojo-attack.png": "/jjk-game/static/media/gojo-attack.540fa55b4e3e1807ed16.png",
     "static/media/purple.png": "/jjk-game/static/media/purple.1b19ed2b8f8872115431.png",
     "static/media/sukuna-profile.png": "/jjk-game/static/media/sukuna-profile.e5281a7be7f44bc3b6e2.png",
     "static/media/ce-bar.png": "/jjk-game/static/media/ce-bar.1d5f4b582e099083dac5.png",
     "static/media/jjk.gif": "/jjk-game/static/media/jjk.8221560c7577e2839434.gif",
     "static/media/mahoraga.png": "/jjk-game/static/media/mahoraga.b06a0a5e47578b573656.png",
+    "static/media/gojo-noline.png": "/jjk-game/static/media/gojo-noline.de31f9915e7b0d5a91c8.png",
     "static/media/domain-hand.png": "/jjk-game/static/media/domain-hand.3c9d210f7e40a2e5202b.png",
     "static/media/rapid-slash.mp3": "/jjk-game/static/media/rapid-slash.259c23113924b5ad5b9c.mp3",
     "static/media/purple.mp3": "/jjk-game/static/media/purple.3c3222b0d78c67807625.mp3",
@@ -31,6 +30,7 @@
     "static/media/white-wolf.png": "/jjk-game/static/media/white-wolf.898e9ab7838222a5aab5.png",
     "static/media/rapid-slash-3.mp3": "/jjk-game/static/media/rapid-slash-3.fd9cde7f2c1f45bb23e3.mp3",
     "static/media/yowaimo.mp3": "/jjk-game/static/media/yowaimo.899b800a950f9457474d.mp3",
+    "static/media/smash.mp3": "/jjk-game/static/media/smash.50e16143ccd172f382ed.mp3",
     "static/media/sukuna-logo.png": "/jjk-game/static/media/sukuna-logo.ef7a14e4afafde6efe83.png",
     "static/media/megumi.png": "/jjk-game/static/media/megumi.ffbd1577b4575f07411d.png",
     "static/media/red-short.mp3": "/jjk-game/static/media/red-short.882e1e02f50edc6c5793.mp3",
@@ -45,11 +45,11 @@
     "static/media/blue.png": "/jjk-game/static/media/blue.2ecf7f6c05a2e021bf69.png",
     "static/media/red.png": "/jjk-game/static/media/red.4e657a12cd7b59fca08f.png",
     "index.html": "/jjk-game/index.html",
-    "main.64190ed9.css.map": "/jjk-game/static/css/main.64190ed9.css.map",
-    "main.d3e041ba.js.map": "/jjk-game/static/js/main.d3e041ba.js.map"
+    "main.14ecb0cf.css.map": "/jjk-game/static/css/main.14ecb0cf.css.map",
+    "main.a0647518.js.map": "/jjk-game/static/js/main.a0647518.js.map"
   },
   "entrypoints": [
-    "static/css/main.64190ed9.css",
-    "static/js/main.d3e041ba.js"
+    "static/css/main.14ecb0cf.css",
+    "static/js/main.a0647518.js"
   ]
 }
