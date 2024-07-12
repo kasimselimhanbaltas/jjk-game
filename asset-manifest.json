@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/jjk-game/static/css/main.14ecb0cf.css",
-    "main.js": "/jjk-game/static/js/main.a0647518.js",
+    "main.css": "/jjk-game/static/css/main.03ca793b.css",
+    "main.js": "/jjk-game/static/js/main.1889ac38.js",
     "static/media/texture.png": "/jjk-game/static/media/texture.e231c9c13d1b192cfb2d.png",
     "static/media/menu-bg.png": "/jjk-game/static/media/menu-bg.9178329effb63b767de8.png",
     "static/media/slash.png": "/jjk-game/static/media/slash.1b2fd6286c4980a13914.png",
@@ -11,10 +11,10 @@
     "static/media/bg.jpg": "/jjk-game/static/media/bg.27434f6f9eeb85267197.jpg",
     "static/media/sukuna-sprite.png": "/jjk-game/static/media/sukuna-sprite.3ca92f3ac3ad7fc1da50.png",
     "static/media/sukuna.png": "/jjk-game/static/media/sukuna.4f67cc85418bb29c4b41.png",
+    "static/media/kitkat.png": "/jjk-game/static/media/kitkat.80ad0e933c92ffaf8ae3.png",
     "static/media/malevolent_shrine.png": "/jjk-game/static/media/malevolent_shrine.62a55412480943a97780.png",
     "static/media/guard.png": "/jjk-game/static/media/guard.765a36c9fa475ff017bc.png",
     "static/media/megu.png": "/jjk-game/static/media/megu.0df408bd2890242f1bd0.png",
-    "static/media/gojo.png": "/jjk-game/static/media/gojo.ea036a43c1a6f59403f4.png",
     "static/media/gojo-profile.png": "/jjk-game/static/media/gojo-profile.68e20cabf38c05eb5337.png",
     "static/media/megumi-profile.png": "/jjk-game/static/media/megumi-profile.28f9221218a01791217b.png",
     "static/media/purple.png": "/jjk-game/static/media/purple.1b19ed2b8f8872115431.png",
@@ -45,11 +45,11 @@
     "static/media/blue.png": "/jjk-game/static/media/blue.2ecf7f6c05a2e021bf69.png",
     "static/media/red.png": "/jjk-game/static/media/red.4e657a12cd7b59fca08f.png",
     "index.html": "/jjk-game/index.html",
-    "main.14ecb0cf.css.map": "/jjk-game/static/css/main.14ecb0cf.css.map",
-    "main.a0647518.js.map": "/jjk-game/static/js/main.a0647518.js.map"
+    "main.03ca793b.css.map": "/jjk-game/static/css/main.03ca793b.css.map",
+    "main.1889ac38.js.map": "/jjk-game/static/js/main.1889ac38.js.map"
   },
   "entrypoints": [
-    "static/css/main.14ecb0cf.css",
-    "static/js/main.a0647518.js"
+    "static/css/main.03ca793b.css",
+    "static/js/main.1889ac38.js"
   ]
 }
