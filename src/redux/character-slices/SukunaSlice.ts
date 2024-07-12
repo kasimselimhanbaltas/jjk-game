@@ -14,7 +14,7 @@ const initialState: Sukuna = {
     maxHealth: 1500,
   },
   cursedEnergy: {
-    currentCursedEnergy: 200,
+    currentCursedEnergy: 50,
     maxCursedEnergy: 200,
   },
   direction: "left",
@@ -23,7 +23,7 @@ const initialState: Sukuna = {
   rivalDomainExpansion: false,
   rivalDirection: "stop",
   closeRange: false,
-  canMove: true,
+  canMove: false,
   rapidAttack: false,
   dashGauge: 0,
   cleaveCD: {
@@ -54,6 +54,8 @@ const initialState: Sukuna = {
   animationBlocker: false,
   transition: "",
   bamAttackMoment: false,
+  bamLandingPositionX: null,
+  positioningSide: "left",
 };
 
 const RivalSlice = createSlice({
@@ -212,6 +214,12 @@ const RivalSlice = createSlice({
     setBamAttackMoment(state, action) {
       state.bamAttackMoment = action.payload;
     },
+    setBamLandingPositionX(state, action) {
+      state.bamLandingPositionX = action.payload;
+    },
+    setPositioningSide(state, action) {
+      state.positioningSide = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -248,6 +256,8 @@ export const {
   setAnimationBlocker,
   setGravity,
   setBamAttackMoment,
+  setBamLandingPositionX,
+  setPositioningSide,
 } = RivalSlice.actions;
 export default RivalSlice;
 

@@ -68,40 +68,16 @@
   height: 100px;
   z-index: 9;
 }
-.red {
-  position: absolute;
-  transition: all .2s ease, transform 4s, top 0s ease, left 0s ease;
-  width: 150px;
-  height: 150px;
-  z-index: 9;
-}
-.red img {
+/* .purple img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100px;
   height: 100px;
   z-index: 9;
-}
-.purple {
-  position: absolute;
-  transition: all .2s ease, transform 4s, top 0s ease, left 2s ease-in;
-  width: 200px;
-  height: 200px;
-  z-index: 9;
-}
-.purple img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100px;
-  height: 100px;
-  z-index: 9;
-  /* transition: transform 1s ease-in, top 4s linear; */
     transition: transform .1s ease-in,
     top 1s linear;
-
-}
+} */
 .nue {
   position: absolute;
   /* transition: all .4s ease; */
@@ -215,6 +191,7 @@
   width: 250px;
   height: auto;
   cursor:  pointer;
+  /* cursor: none; */
 }
 .character-button img{
   max-height: 300px;
@@ -238,6 +215,7 @@
   color: white;
   border: none;
   cursor: pointer;
+  /* cursor: none; */
 }
 
 .small-button {
@@ -248,6 +226,7 @@
   color: white;
   border: none;
   cursor: pointer;
+  /* cursor: none; */
   margin-top: 10px;
 }
 
@@ -522,4 +501,74 @@ background: rgb(155, 53, 35);
     width: 52px;
     height: 50px;
   }
+}
+
+/* cursor */
+body {
+  /* cursor: none; */
+  overflow: hidden;
+  /* Varsayılan imleci gizle */
+}
+
+.custom-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  translate: -50% -50%;
+  z-index: 789;
+  transform-origin: center;
+}
+
+.red-circle,
+.blue-circle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transition: all 0.1s ease;
+  transform-origin: center;
+}
+
+.red-circle {
+  background-color: red;
+}
+
+.blue-circle {
+  background-color: blue;
+}
+
+
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.custom-cursor {
+  animation: rotate 2s linear infinite;
+  transform-origin: center center;
+  width: 10px;
+  height: 10px;
+}
+
+.red-circle {
+  transform: translate(5px, 0px);
+}
+
+.blue-circle {
+  transform: translate(-5px, 0px);
+}
+.clicked .red-circle,
+.clicked .blue-circle,
+.clicked .custom-cursor {
+  background-color: purple;
+  transform: translate(0, 0);
+  animation: none !important;
+  scale: 2;
 }

@@ -59,7 +59,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 position: "absolute", width: rivalCharacter.health.currentHealth * 500 / rivalCharacter.health.maxHealth,
                                 maxWidth: "500px", height: "25px", backgroundColor: "red",
                                 marginLeft: 500 - (rivalCharacter.health.currentHealth * 500 / rivalCharacter.health.maxHealth),
-                                transition: "width .5s ease-out",
+                                // transition: "width .5s ease-out",
                             }}></div>
                         </div>
                         <div className="cursed-energy-bar" style={{
@@ -70,7 +70,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 position: "absolute", width: rivalCharacter.cursedEnergy.currentCursedEnergy * 350 / rivalCharacter.cursedEnergy.maxCursedEnergy,
                                 maxWidth: "350px", height: "25px", backgroundColor: "#068F98",
                                 marginLeft: 350 - (rivalCharacter.cursedEnergy.currentCursedEnergy * 350 / rivalCharacter.cursedEnergy.maxCursedEnergy),
-                                transition: "width .2s ease-out",
+                                // transition: "width .2s ease-out",
                             }}>
                                 <img src={require(`../Assets/ce-bar.png`)} style={{
                                     display: rivalCharacter.cursedEnergy.currentCursedEnergy >= rivalCharacter.cursedEnergy.maxCursedEnergy
@@ -358,27 +358,28 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                     (rivalCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - L" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/200") :
                                     (rivalCharacter.domainCD.remainingTime + "sec")}</p>
                             </div>
+                            {/* Rapid Slash */}
+                            <div className="skill">
+                                <img src={require("../Assets/slash.png")} alt="" />
+                                <CircularProgressbar
+                                    value={rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}
+                                    text={`${rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}%`}
+                                    className="circular-skill-progress-bar"
+                                    styles={buildStyles({
+                                        // Text size
+                                        textSize: '16px',
+                                        // Colors
+                                        pathColor: (rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
+                                        textColor: 'transparent',
+                                        trailColor: '#d6d6d6',
+                                        backgroundColor: '#3e98c7',
+                                    })}
+                                />
+                                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
+                                <p style={{ marginTop: "-10px" }}> {rivalCharacter.rapidAttackCounter.currentCount >= rivalCharacter.rapidAttackCounter.maxCount ? "Ready - J" : rivalCharacter.rapidAttackCounter.currentCount + "/" + rivalCharacter.rapidAttackCounter.maxCount} </p>
+                            </div>
                         </div>
-                        {/* Rapid Slash */}
-                        <div className="skill">
-                            <img src={require("../Assets/slash.png")} alt="" />
-                            <CircularProgressbar
-                                value={rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}
-                                text={`${rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}%`}
-                                className="circular-skill-progress-bar"
-                                styles={buildStyles({
-                                    // Text size
-                                    textSize: '16px',
-                                    // Colors
-                                    pathColor: (rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
-                                    textColor: 'transparent',
-                                    trailColor: '#d6d6d6',
-                                    backgroundColor: '#3e98c7',
-                                })}
-                            />
-                            <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
-                            <p style={{ marginTop: "-10px" }}> {rivalCharacter.rapidAttackCounter.currentCount >= rivalCharacter.rapidAttackCounter.maxCount ? "Ready - J" : rivalCharacter.rapidAttackCounter.currentCount + "/" + rivalCharacter.rapidAttackCounter.maxCount} </p>
-                        </div>
+
 
                     </div>
                 )}

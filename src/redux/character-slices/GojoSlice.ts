@@ -19,7 +19,7 @@ const initialState: Gojo = {
   },
   direction: "right",
   isAttacking: false,
-  canMove: false,
+  canMove: true,
   dashGauge: 0,
   rivalDirection: "stop",
   blueCD: {
@@ -52,6 +52,7 @@ const initialState: Gojo = {
   jumpStrength: -30,
   animationBlocker: false,
   transition: "",
+  positioningSide: "left",
 };
 
 const gojoSlice = createSlice({
@@ -158,10 +159,19 @@ const gojoSlice = createSlice({
       state.isBlocking = action.payload;
     },
     setAnimationState(state, action) {
-      state.animationState = action.payload;
+      // console.log(
+      //   "slice animation state: ",
+      //   action.payload,
+      //   "blocker: ",
+      //   state.animationBlocker
+      // );
+      if (!state.animationBlocker) state.animationState = action.payload;
     },
     applyGravity: (state) => {
-      if (state.y < 560 || state.velocityY === state.jumpStrength) {
+      if (
+        state.y + state.velocityY < 560 ||
+        state.velocityY <= state.jumpStrength
+      ) {
         // Ensure the character stays above the ground level
         state.velocityY += state.gravity;
         state.y += state.velocityY;
@@ -180,7 +190,6 @@ const gojoSlice = createSlice({
     },
     jumpWS: (state, action) => {
       if (!state.isJumping) {
-        console.log("js: ", action.payload);
         state.velocityY = -action.payload;
         state.isJumping = true;
       }
@@ -190,6 +199,9 @@ const gojoSlice = createSlice({
     },
     setAnimationBlocker(state, action) {
       state.animationBlocker = action.payload;
+    },
+    setPositioningSide(state, action) {
+      state.positioningSide = action.payload;
     },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -220,6 +232,7 @@ export const {
   jumpWS,
   setJumping,
   setAnimationBlocker,
+  setPositioningSide,
 } = gojoSlice.actions;
 export default gojoSlice;
 

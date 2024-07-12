@@ -129,7 +129,7 @@ const Megumi = ({ rivalState, rivalSlice }) => {
     useEffect(() => {
         if (megumi.health.currentHealth <= 0 && gameSettings.selectedCharacter !== "megumi")
             stopAttackInterval();
-    }, [megumi.health.currentHealth]);
+    }, [megumi.health.currentHealth >= 0]);
 
     // MEGUMI AUTO ATTACK
     useEffect(() => {

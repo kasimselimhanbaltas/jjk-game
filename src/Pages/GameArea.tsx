@@ -79,20 +79,28 @@ const GameArea = () => {
   useEffect(() => {
     dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 100 }));
     dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 100 }));
-
   }, []);
 
-  //check red damage, purple damage
+  // hitboxes
   useEffect(() => {
-    if (gameSettings.selectedCharacter === "gojo") { // is rival gonna take damage from gojo red and purple
-      if (gojo.redAttackMoment) {
+    if (gojo.redAttackMoment) {
+      if (gameSettings.selectedCharacter === "gojo") { // is rival gonna take damage from gojo red and purple
         let distance =
           gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalCharacter.x) <= 200 ? "close range" : "far") :
             (Math.abs(gojo.x - 200 - rivalCharacter.x) <= 200 ? "close range" : "far")
         console.log("gamearea red: ", distance)
         if (distance === "close range") dispatch(rivalSlice.actions.updateHealth(redDamage))
+      } else {
+        let distance =
+          gojo.direction === "right" ? (Math.abs(gojo.x + 250 - playerCharacter.x) <= 200 ? "close range" : "far") :
+            (Math.abs(gojo.x - 200 - playerCharacter.x) <= 200 ? "close range" : "far")
+        console.log("gamearea red: ", distance)
+        if (distance === "close range") dispatch(playerSlice.actions.updateHealth(redDamage))
       }
-      if (gojo.purpleAttackMoment) {
+    }
+    if (gojo.purpleAttackMoment) {
+      if (gameSettings.selectedCharacter === "gojo") { // is rival gonna take damage from gojo red and purple
+
         let distance =
           gojo.y - rivalCharacter.y >= -150 && gojo.y - rivalCharacter.y <= 100 ?
             gojo.direction === "right" ? (gojo.x - rivalCharacter.x <= 0 ? "hit" : "miss") :
@@ -101,17 +109,7 @@ const GameArea = () => {
         if (distance === "hit") {
           dispatch(rivalSlice.actions.updateHealth(purpleDamage))
         }
-      }
-    }
-    else { // is player gonna take damage from gojo red and purple
-      if (gojo.redAttackMoment) {
-        let distance =
-          gojo.direction === "right" ? (Math.abs(gojo.x + 250 - playerCharacter.x) <= 200 ? "close range" : "far") :
-            (Math.abs(gojo.x - 200 - playerCharacter.x) <= 200 ? "close range" : "far")
-        console.log("gamearea red: ", distance)
-        if (distance === "close range") dispatch(playerSlice.actions.updateHealth(redDamage))
-      }
-      if (gojo.purpleAttackMoment) {
+      } else { // for other characters
         let distance =
           gojo.y - playerCharacter.y >= -150 && gojo.y - playerCharacter.y <= 100 ?
             gojo.direction === "right" ? (gojo.x - playerCharacter.x <= 0 ? "hit" : "miss") :
@@ -127,14 +125,17 @@ const GameArea = () => {
         }
       }
     }
-    if (gameSettings.selectedCharacter === "sukuna") { // is rival gonna take damage from sukuna smash attack(R)
-      if (sukuna.bamAttackMoment) {
-        let distance =
-          Math.abs(sukuna.x - rivalCharacter.x) <= 200 ? "close range" : "far"
-        if (distance === "close range") {
+    if (sukuna.bamAttackMoment) {
+      if (gameSettings.selectedCharacter === "sukuna") { // is rival gonna take damage from sukuna smash attack(R)
+        let hitOrMiss =
+          Math.abs(rivalCharacter.x - sukuna.bamLandingPositionX) <= 100 ? "hit" : "miss"
+        console.log(rivalCharacter.x, sukuna.bamLandingPositionX)
+        if (hitOrMiss === "hit") {
           dispatch(rivalSlice.actions.updateHealth(-100))
           setTimeout(() => {
-            dispatch(rivalSlice.actions.moveCharacterWD({ x: sukuna.x < rivalCharacter.x ? +150 : -150, y: 0 }));
+            dispatch(rivalSlice.actions.moveCharacterWD({ x: sukuna.x - rivalCharacter.x > 50 ? -150 : +150, y: 0 }));
+            console.log(rivalCharacter.x, sukuna.bamLandingPositionX)
+
           }, 100);
           dispatch(rivalSlice.actions.jumpWS(15))
           dispatch(rivalSlice.actions.setAnimationState("takeDamage"))
@@ -142,11 +143,26 @@ const GameArea = () => {
             dispatch(rivalSlice.actions.setAnimationState("stance"))
           }, 1000);
         }
-
+      }
+      else { // is player got hit by a sukuna smash attack
+        let hitOrMiss =
+          Math.abs(playerCharacter.x - sukuna.bamLandingPositionX) <= 100 ? "hit" : "miss"
+        if (hitOrMiss === "hit") {
+          dispatch(playerSlice.actions.updateHealth(-100))
+          setTimeout(() => {
+            dispatch(playerSlice.actions.moveCharacterWD({ x: sukuna.x < playerCharacter.x ? +150 : -150, y: 0 }));
+          }, 100);
+          dispatch(playerSlice.actions.jumpWS(15))
+          dispatch(playerSlice.actions.setAnimationState("takeDamage"))
+          setTimeout(() => {
+            dispatch(playerSlice.actions.setAnimationState("stance"))
+          }, 1000);
+        }
       }
     }
-
-  }, [gojo.redAttackMoment, gojo.purpleAttackMoment, sukuna.bamAttackMoment])
+  }, [gojo.redAttackMoment, gojo.purpleAttackMoment, sukuna.bamAttackMoment,
+  Math.abs(rivalCharacter.x - sukuna.bamLandingPositionX) <= 100
+  ])
 
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
@@ -238,18 +254,18 @@ const GameArea = () => {
           }, 1500);
         }
         if (keysPressed.current.a && playerCharacter.x > 0) {
-          dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "sukuna" ? -10 : -megumiSpeed, y: 0 }));
+          dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "sukuna" ? -5 : -megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("left"));
-          if (!playerCharacter.isJumping)
+          if (!playerCharacter.isJumping && !playerCharacter.animationBlocker && playerCharacter.animationState !== "move")
             dispatch(playerSlice.actions.setAnimationState("move"));
         }
         // if (keysPressed.current.s && playerCharacter.y < gameAreaHeight - megumiHeight) {
         //   dispatch(playerSlice.actions.moveCharacter({ x: 0, y: megumiSpeed }));
         // }
         if (keysPressed.current.d && playerCharacter.x < gameAreaWidth - megumiWidth) {
-          dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "sukuna" ? 10 : megumiSpeed, y: 0 }));
+          dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "sukuna" ? 5 : megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("right"));
-          if (!playerCharacter.isJumping)
+          if (!playerCharacter.isJumping && !playerCharacter.animationBlocker && playerCharacter.animationState !== "move")
             dispatch(playerSlice.actions.setAnimationState("move"));
 
         }
@@ -316,8 +332,8 @@ const GameArea = () => {
           }
           else {
             dispatch(rivalSlice.actions.setAnimationState("move"));
-            if (rivalCharacter.rivalDirection === "R") [stepX, stepY] = [30, 0];
-            else if (rivalCharacter.rivalDirection === "L") [stepX, stepY] = [-30, 0];
+            if (rivalCharacter.rivalDirection === "R") [stepX, stepY] = [rivalCharacter.characterName === "sukuna" ? 5 : 30, 0];
+            else if (rivalCharacter.rivalDirection === "L") [stepX, stepY] = [rivalCharacter.characterName === "sukuna" ? -5 : -30, 0];
           }
 
           dispatch(rivalSlice.actions.moveCharacter({ x: stepX, y: stepY }));
@@ -331,7 +347,8 @@ const GameArea = () => {
       clearInterval(interval);
     };
 
-  }, [rivalCharacter.rivalDirection, rivalCharacter.canMove, rivalCharacter.dashGauge]);
+  }, [rivalCharacter.rivalDirection, rivalCharacter.canMove,
+  rivalCharacter.dashGauge >= 70 || rivalCharacter.dashGauge <= 0,]);
 
   // Rival Movement Control
   useEffect(() => {
@@ -357,7 +374,7 @@ const GameArea = () => {
   }, [xDistance >= 100, xDistance <= -100]);
   // rivalCharacter.closeRange, rivalCharacter.rivalDirection
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
+  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
@@ -413,18 +430,6 @@ const GameArea = () => {
       }, 2000);
     }
   }, [playerCharacter.health.currentHealth, rivalCharacter.health.currentHealth]);
-
-  // setInterval(function gravity() {
-  //   if (playerCharacter.y < gameAreaHeight) {
-  //     playerCharacter.y += 5;
-  //   }
-  // })
-
-  // useEffect(() => {
-  //   if (playerCharacter.y > rivalCharacter.y) {
-
-  //   }
-  // }, [playerCharacter.y, rivalCharacter.y]);
 
 
   return (

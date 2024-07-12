@@ -9,7 +9,7 @@ const initialState: Megumi = {
   x: 200,
   y: 200,
   health: {
-    currentHealth: 1500,
+    currentHealth: 15000,
     maxHealth: 1500,
   },
   cursedEnergy: {

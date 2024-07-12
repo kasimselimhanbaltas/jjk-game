@@ -9,7 +9,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Preloader from './Pages/Pre';
 import Playground from './Pages/Playground';
 
@@ -88,6 +88,7 @@ export interface Gojo {
   jumpStrength: number,
   animationBlocker: boolean;
   transition: string,
+  positioningSide: string,
 
 }
 
@@ -128,7 +129,8 @@ export interface Sukuna {
   animationBlocker: boolean;
   transition: string,
   bamAttackMoment: boolean,
-
+  bamLandingPositionX: number,
+  positioningSide: string,
 }
 export interface Nue {
   isActive: boolean;
@@ -169,18 +171,50 @@ export interface DivineDogs {
 
 function App() {
   const [load, upadateLoad] = useState(true);
+  const customCursor = useRef<HTMLDivElement>(null);
+  const redCircle = document.querySelector(".red-circle");
+  const blueCircle = document.querySelector(".blue-circle");
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
 
+  const handleMouseMove = (e) => {
+    setCursorPosition({ x: e.clientX, y: e.clientY });
+  };
+  const [isClicked, setIsClicked] = useState(false);
+  const handleMouseDown = () => {
+    setIsClicked(true);
+  };
+
+  const handleMouseUp = () => {
+    setTimeout(() => {
+      setIsClicked(false);
+    }, 100);
+  };
   useEffect(() => {
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+
     const timer = setTimeout(() => {
       upadateLoad(false);
     }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+      clearTimeout(timer);
+    }
+  }, [customCursor]);
 
   return (
     <Router>
       <div className="App">
         <header className="App-header">
+          {/* <div
+            className={`custom-cursor ${isClicked ? 'clicked' : ''}`}
+            style={{ left: cursorPosition.x, top: cursorPosition.y }}>
+            <div className="red-circle"></div>
+            <div className="blue-circle"></div>
+          </div> */}
           <Preloader load={load} />
           <Routes>
             <Route path='/jjk-game' element={(
