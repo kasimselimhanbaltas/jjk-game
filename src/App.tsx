@@ -79,6 +79,8 @@ export interface Gojo {
   purpleCD: Skill,
   domainCD: Skill,
   redAttackMoment: boolean,
+  blueAttackMoment: boolean,
+  bluePosition: { x: number, y: number },
   purpleAttackMoment: boolean,
   isBlocking: boolean,
   animationState: "stance" | "move" | "jump" | "punch" | "block" | "swordAttack",

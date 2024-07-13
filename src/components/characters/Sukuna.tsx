@@ -38,7 +38,10 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const domainSoundEffectRef = React.useRef(null);
     const smashSoundEffectRef = React.useRef(null);
 
-    const keysPressed = useRef({ j: false, k: false, l: false, e: false, r: false, f: false, g: false, h: false });
+    const keysPressed = useRef({
+        a: false, s: false, d: false, w: false,
+        j: false, k: false, l: false, e: false, r: false, f: false, g: false, h: false
+    });
 
 
     // Cooldowns
@@ -300,9 +303,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             keysPressed.current[key] = true;
             if (gameSettings.selectedCharacter === "sukuna") {
 
-                if (key === "e" && backflipInterval.current === null && sukuna.isJumping === false &&
+                if (key === "s" && backflipInterval.current === null && sukuna.isJumping === false &&
                     sukuna.animationState !== "backflip" && !sukuna.animationBlocker) {
-                    console.log("e pressed")
                     dispatch(sukunaSlice.actions.setAnimationState("backflip"));
                     dispatch(sukunaSlice.actions.setAnimationBlocker(true));
                     backflipInterval.current = setInterval(() => {
@@ -321,7 +323,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             keysPressed.current[key] = false;
             if (gameSettings.selectedCharacter === "sukuna" && sukuna.canMove) {
 
-                if (key === "e") {
+                if (key === "s") {
                     dispatch(sukunaSlice.actions.setAnimationBlocker(false));
                     dispatch(sukunaSlice.actions.setAnimationState("stance"));
                     clearInterval(backflipInterval.current);
@@ -341,7 +343,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             if (gameSettings.selectedCharacter !== "sukuna") return;
             if (rivalState.health.currentHealth > 0 && !sukuna.isJumping && sukuna.canMove && !sukuna.animationBlocker) {
                 // !sukuna.cleaveAttack && cleaveReady.ready &&
-                if (keysPressed.current.j && sukuna.canMove) {
+                if (keysPressed.current.e && sukuna.canMove) {
                     if (sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount)
                         localRapidAttack();
                     else {
@@ -350,7 +352,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                         }
                     }
                 }
-                if (keysPressed.current.k) {
+                if (keysPressed.current.r) {
                     const attackDirection = sukuna.x - rivalState.x >= 0 ? "left" : "right";
                     const stepDistance = attackDirection === "left" ? -100 : 100;
                     if (sukuna.closeRange && sukuna.dismantleCD.isReady) {
@@ -362,7 +364,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                         handleDomainAttack()
                     }
                 }
-                if (keysPressed.current.r) {
+                if (keysPressed.current.k) {
                     handleBamAttack()
                 }
                 if (keysPressed.current.f) {

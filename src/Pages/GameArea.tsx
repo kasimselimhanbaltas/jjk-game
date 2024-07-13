@@ -98,6 +98,57 @@ const GameArea = () => {
         if (distance === "close range") dispatch(playerSlice.actions.updateHealth(redDamage))
       }
     }
+    if (gojo.blueAttackMoment) {
+      if (gameSettings.selectedCharacter === "gojo") { // is rival gonna take damage from gojo blue
+        let distance =
+          (Math.abs(gojo.bluePosition.x - rivalCharacter.x) <= 300 ? "close range" : "far")
+        console.log(distance)
+        if (distance === "close range") {
+          dispatch(rivalSlice.actions.setCanMove(false))
+          dispatch(sukunaSlice.actions.setGravity(0))
+          // move rival to blue
+          setTimeout(() => {
+            dispatch(rivalSlice.actions.moveCharacterTo({ x: gojo.bluePosition.x + 50, y: gojo.bluePosition.y + 30 }))
+            const damageInterval = setInterval(() => { // give damage slowly
+              dispatch(rivalSlice.actions.updateHealth(-150 / 8))
+            }, 100)
+            setTimeout(() => { // unstun rival
+              // dispatch(rivalSlice.actions.setCanMove(true)) ***
+              dispatch(sukunaSlice.actions.setGravity(5))
+              clearInterval(damageInterval);
+            }, 800);
+          }, 500);
+
+        }
+      } else {
+        let distance =
+          (Math.abs(gojo.bluePosition.x - playerCharacter.x) <= 300 ? "close range" : "far")
+        if (distance === "close range") {
+          dispatch(playerSlice.actions.setCanMove(false))
+          dispatch(sukunaSlice.actions.setGravity(0))
+          // move rival to blue
+          setTimeout(() => {
+            dispatch(playerSlice.actions.moveCharacterTo({ x: gojo.bluePosition.x + 50, y: gojo.bluePosition.y + 30 }))
+            const damageInterval = setInterval(() => { // give damage slowly
+              dispatch(rivalSlice.actions.updateHealth(-150 / 8))
+            }, 100)
+            setTimeout(() => { // unstun rival
+              // dispatch(rivalSlice.actions.setCanMove(true)) ***
+              dispatch(sukunaSlice.actions.setGravity(5))
+              clearInterval(damageInterval);
+            }, 800);
+
+            // setTimeout(() => {
+            //     setBlueStyle({
+            //         x: gojo.x, y: gojo.y, visibility: "hidden", attacking: false,
+            //         transition: "all .2s ease, transform 4s, top 0s, left 0s", ...blueStyle,
+            //     })
+            // }, 400);
+          }, 500);
+
+        }
+      }
+    }
     if (gojo.purpleAttackMoment) {
       if (gameSettings.selectedCharacter === "gojo") { // is rival gonna take damage from gojo red and purple
 
@@ -160,7 +211,7 @@ const GameArea = () => {
         }
       }
     }
-  }, [gojo.redAttackMoment, gojo.purpleAttackMoment, sukuna.bamAttackMoment,
+  }, [gojo.redAttackMoment, gojo.blueAttackMoment, gojo.purpleAttackMoment, sukuna.bamAttackMoment,
   Math.abs(rivalCharacter.x - sukuna.bamLandingPositionX) <= 100
   ])
 
@@ -169,7 +220,7 @@ const GameArea = () => {
     if (playerCEincreaseIntervalRef.current != null) return;
     playerCEincreaseIntervalRef.current = setInterval(() => {
       if (playerCharacter.cursedEnergy.currentCursedEnergy < playerCharacter.cursedEnergy.maxCursedEnergy) {
-        dispatch(playerSlice.actions.changeCursedEnergy(gameSettings.selectedCharacter === "gojo" ? + 50 : 10));
+        dispatch(playerSlice.actions.changeCursedEnergy(5));
       }
     }, 1000);
   };
@@ -178,7 +229,7 @@ const GameArea = () => {
     rivalCEincreaseIntervalRef.current = setInterval(() => {
       // && sukuna.rivalDomainExpansion === false
       if (rivalCharacter.cursedEnergy.currentCursedEnergy < rivalCharacter.cursedEnergy.maxCursedEnergy) {
-        dispatch(rivalSlice.actions.changeCursedEnergy(+10));
+        dispatch(rivalSlice.actions.changeCursedEnergy(5));
       }
     }, 1000);
   };
@@ -364,6 +415,7 @@ const GameArea = () => {
           direction = "R";
         }
       }
+      console.log("rivald: ", direction)
       if (rivalCharacter.rivalDirection !== direction) {
         dispatch(rivalSlice.actions.setRivalDirection(direction));
       }
@@ -479,12 +531,12 @@ const GameArea = () => {
           )}
           {gameSettings.selectedCharacter === "gojo" && (
             <>
-              <SatoruGojo rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+              <SatoruGojo xDistance={xDistance} rivalSlice={rivalSlice} rivalState={rivalCharacter} />
             </>
           )}
           {gameSettings.selectedRivalCharacter === "gojo" && (
             <>
-              <SatoruGojo rivalSlice={playerSlice} rivalState={playerCharacter} />
+              <SatoruGojo xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
             </>
           )}
 

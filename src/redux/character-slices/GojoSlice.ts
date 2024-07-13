@@ -14,7 +14,7 @@ const initialState: Gojo = {
     maxHealth: 1500,
   },
   cursedEnergy: {
-    currentCursedEnergy: 200,
+    currentCursedEnergy: 10000,
     maxCursedEnergy: 200,
   },
   direction: "right",
@@ -43,6 +43,8 @@ const initialState: Gojo = {
     remainingTime: 0,
   },
   redAttackMoment: false,
+  blueAttackMoment: false,
+  bluePosition: { x: 0, y: 0 },
   purpleAttackMoment: false,
   isBlocking: false,
   animationState: "stance",
@@ -151,6 +153,12 @@ const gojoSlice = createSlice({
     resetState: () => initialState,
     setRedAttackMoment(state, action) {
       state.redAttackMoment = action.payload;
+    },
+    setBlueAttackMoment(state, action) {
+      state.blueAttackMoment = action.payload;
+    },
+    setBluePosition(state, action) {
+      state.bluePosition = action.payload;
     },
     setPurpleAttackMoment(state, action) {
       state.purpleAttackMoment = action.payload;
