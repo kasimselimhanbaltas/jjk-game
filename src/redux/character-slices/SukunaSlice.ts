@@ -135,7 +135,12 @@ const RivalSlice = createSlice({
       state.cursedEnergy.currentCursedEnergy = action.payload;
     },
     changeCursedEnergy(state, action) {
-      state.cursedEnergy.currentCursedEnergy += action.payload;
+      if (
+        state.cursedEnergy.currentCursedEnergy + action.payload <=
+          state.cursedEnergy.maxCursedEnergy &&
+        state.cursedEnergy.currentCursedEnergy + action.payload >= 0
+      )
+        state.cursedEnergy.currentCursedEnergy += action.payload;
     },
     setRivalDomainExpansion(state, action) {
       state.rivalDomainExpansion = action.payload;

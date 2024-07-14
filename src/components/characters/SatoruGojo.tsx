@@ -534,20 +534,21 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     const [localBlueHelper, setLocalBlueHelper] = useState(false);
     useEffect(() => {
         if (localBlueHelper) {
+            const isShiftPressed = keysPressed.current.shift ? true : false;
             dispatch2(toggleBlueCD());
-            dispatch(gojoSlice.actions.changeCursedEnergy(false ? chargedBlueCost : blueCost));
-            blueAttack(false, gojo.x);
-            setLocalBlueHelper(false); // veya blueAttack çağrısını kontrol eden durumu sıfırla
+            dispatch(gojoSlice.actions.changeCursedEnergy(isShiftPressed ? chargedBlueCost : blueCost));
+            blueAttack(isShiftPressed, gojo.x);
+            setLocalBlueHelper(false); // blueAttack çağrısını kontrol eden durumu sıfırla
         }
     }, [gojo.x, localBlueHelper]);
     const [localRedHelper, setLocalRedHelper] = useState(false);
     useEffect(() => {
         if (localRedHelper) {
-            console.log("reddding")
-            dispatch(gojoSlice.actions.changeCursedEnergy(false ? chargedRedCost : redCost));
+            const isShiftPressed = keysPressed.current.shift ? true : false
+            dispatch(gojoSlice.actions.changeCursedEnergy(isShiftPressed ? chargedRedCost : redCost));
             dispatch2(toggleRedCD());
-            redAttack(false, gojo.x);
-            setLocalRedHelper(false); // veya blueAttack çağrısını kontrol eden durumu sıfırla
+            redAttack(isShiftPressed, gojo.x);
+            setLocalRedHelper(false); // redAttack çağrısını kontrol eden durumu sıfırla
         }
     }, [gojo.x, localRedHelper]);
 
@@ -575,17 +576,22 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
 
         if (Math.abs(xDistance) > 150) return;
         const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
-        dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
         dispatch(gojoSlice.actions.setDirection(attackDirection))
         dispatch(gojoSlice.actions.setAnimationState("gojo-punch-combination"));
         dispatch(gojoSlice.actions.setCanMove(false));
         dispatch(gojoSlice.actions.setAnimationBlocker(true))
-        dispatch(rivalSlice.actions.setCanMove(false));
-        dispatch(rivalSlice.actions.setAnimationState("stance"))
-        dispatch(rivalSlice.actions.setAnimationBlocker(true))
+        if (!rivalState.isBlocking) {
+            dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+            dispatch(rivalSlice.actions.setCanMove(false));
+            dispatch(rivalSlice.actions.setAnimationBlocker(false))
+            dispatch(rivalSlice.actions.setAnimationState("stance"))
+            dispatch(rivalSlice.actions.setAnimationBlocker(true))
+        }
         dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
         let punchCount = 0;
         const int = setInterval(() => {
+            setChaseForCloseCombat(true)
+
             if (punchCount !== 3) dispatch(rivalSlice.actions.updateHealth(-10));
             else { // last hit
                 dispatch(rivalSlice.actions.updateHealth(-70));
@@ -606,18 +612,36 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             dispatch(rivalSlice.actions.setAnimationBlocker(false))
         }, 1000);
     }
+    const [chaseForCloseCombat, setChaseForCloseCombat] = useState(false);
+    useEffect(() => { // update gojo position for close combat
+        if (chaseForCloseCombat) {
+            const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
+            if (gojo.direction !== attackDirection) {
+                dispatch(gojoSlice.actions.setDirection(attackDirection));
+                dispatch(gojoSlice.actions.setPositioningSide(attackDirection === "left" ? "right" : "left"))
+            }
+            dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
+            setChaseForCloseCombat(false)
+        }
+    }, [chaseForCloseCombat])
     const blackFlashCombo = () => {
         if (Math.abs(xDistance) > 200) return;
         const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
-        dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
         dispatch(gojoSlice.actions.setDirection(attackDirection))
         dispatch(gojoSlice.actions.setAnimationState("gojo-blackflash-combination"));
         dispatch(gojoSlice.actions.setCanMove(false));
         dispatch(gojoSlice.actions.setAnimationBlocker(true))
-        dispatch(rivalSlice.actions.setCanMove(false));
+        if (!rivalState.isBlocking) {
+            dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+            dispatch(rivalSlice.actions.setCanMove(false));
+            dispatch(rivalSlice.actions.setAnimationBlocker(false))
+            dispatch(rivalSlice.actions.setAnimationState("stance"))
+            dispatch(rivalSlice.actions.setAnimationBlocker(true))
+        }
         dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
         let punchCount = 0;
         const int = setInterval(() => {
+            setChaseForCloseCombat(true)
             if (punchCount !== 3) dispatch(rivalSlice.actions.updateHealth(-10));
             else { // last hit
                 dispatch(rivalSlice.actions.updateHealth(-70));
@@ -633,6 +657,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         setTimeout(() => { // after animation
             dispatch(gojoSlice.actions.setCanMove(true));
             dispatch(gojoSlice.actions.setAnimationBlocker(false))
+            dispatch(rivalSlice.actions.setAnimationBlocker(false))
             dispatch(rivalSlice.actions.setCanMove(true));// **********
         }, 1500);
     }
@@ -649,16 +674,16 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             if (rivalState.health.currentHealth > 0 && gojo.health.currentHealth > 0 && gojo.canMove && !sukuna.domainAttack) {
                 const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
                 // const stepDistance = attackDirection === "left" ? -100 : 100;
-                // const isShiftPressed = keysPressed.current.shift ? true : false; // auto shift?
-                if (gojo.cursedEnergy.currentCursedEnergy >= -purpleCost && gojo.purpleCD.isReady && false) // sil
+                const isShiftPressed = keysPressed.current.shift ? true : false; // auto shift?
+                if (gojo.cursedEnergy.currentCursedEnergy >= -purpleCost && gojo.purpleCD.isReady && false)
                     handlePurpleAttack();
 
-                // else if (gojo.cursedEnergy.currentCursedEnergy >= -redCost && gojo.redCD.isReady) {
-                //     handleRedAttack(false);
-                // }
-                // else if (gojo.cursedEnergy.currentCursedEnergy >= -blueCost && gojo.blueCD.isReady) {
-                //     handleBlueAttack(false);
-                // }
+                else if (gojo.cursedEnergy.currentCursedEnergy >= -redCost && gojo.redCD.isReady) {
+                    handleRedAttack(isShiftPressed);
+                }
+                else if (gojo.cursedEnergy.currentCursedEnergy >= -blueCost && gojo.blueCD.isReady) {
+                    handleBlueAttack(false);
+                }
                 else {
                     if (comboPicker === 0) {
                         punchCombo()
