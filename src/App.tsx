@@ -55,6 +55,8 @@ export interface Megumi {
   jumpStrength: number,
   animationBlocker: boolean,
   transition: string,
+  hardStun: boolean,
+
 
 }
 export interface Gojo {
@@ -91,6 +93,7 @@ export interface Gojo {
   animationBlocker: boolean;
   transition: string,
   positioningSide: string,
+  hardStun: boolean,
 
 }
 
@@ -122,6 +125,10 @@ export interface Sukuna {
     maxCount: number,
     currentCount: number,
   },
+  fugaCounter: {
+    maxCount: number,
+    currentCount: number,
+  },
   isBlocking: boolean,
   animationState: "stance" | "move" | "jump" | "punch" | "block" | "entry" | "walk",
   velocityY: number,
@@ -133,6 +140,8 @@ export interface Sukuna {
   bamAttackMoment: boolean,
   bamLandingPositionX: number,
   positioningSide: string,
+  hardStun: boolean,
+
 }
 export interface Nue {
   isActive: boolean;

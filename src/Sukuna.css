@@ -934,66 +934,67 @@
     }
 }
 @keyframes sukuna-fuga-before-scene {
-    0% {
+    0% {  /* 4x0*/
         background-position: -88px -2121px;
         width: 23px;
         height: 50px;
     }
 
-    5% {
+    5% { /* 4x0*/
         background-position: -128px -2120px;
         width: 23px;
         height: 50px;
+        translate: 0px -20px;
     }
 
-    10% {
+    10% {/* 8x0*/
         background-position: -176px -2120px;
         width: 25px;
         height: 50px;
-        translate: -2px;
+        translate: -2px -20px;
     }
 
-    15% {
+    15% {/* 12x0*/
         background-position: -229px -2122px;
         width: 27px;
         height: 50px;
-        translate: -4px;
+        translate: -5px -20px;
     }
 
-    20% {
+    20% {/* 13x0*/
         background-position: -271px -2121px;
         width: 28px;
         height: 50px;
-        translate: -5px;
+        translate: -6px -20px;
     }
 
-    25% {
+    25% {/* 8x0*/
         background-position: -317px -2122px;
         width: 26px;
         height: 50px;
-        translate: -2px;
+        translate: -2px -20px;
     }
 
-    30% {
+    30% { /*4x0*/
         background-position: -360px -2123px;
         width: 24px;
         height: 50px;
-        translate: 0px 1px;
+        translate: 0px -19px;
     }
 
     45% {
         background-position: -400px -2124px;
-        translate: 0px 0px;
+        translate: 0px -20px;
     }
 
     64% {
         background-position: -360px -2124px;
-        translate: 0px 1px;
+        translate: 0px -18px;
 
     }
     72% {
         background-position: -400px -2124px;
-        translate: 0px 0px;
+        translate: 0px -20px;
     }
     80% {
         background-position: -360px -2124px;
@@ -1017,20 +1018,21 @@
         background-position: -128px -2120px;
         width: 23px;
         height: 50px;
+        translate: 0px -20px;
     }
 
     16% {
         background-position: -176px -2120px;
         width: 25px;
         height: 50px;
-        translate: -1px;
+        translate: 0px, -20px;
     }
 
     24% {
         background-position: -229px -2122px;
         width: 27px;
         height: 50px;
-        translate: -1px;
+        translate: 0px -20px;
     }
 
     32% {
@@ -1043,7 +1045,7 @@
         background-position: -317px -2122px;
         width: 26px;
         height: 50px;
-        translate: -2px;
+        translate: 0px -20px;
     }
 
     /* repeat */
@@ -1092,49 +1094,49 @@
         background-position: -80px -2616px;
         width: 45px;
         height: 51px;
-        translate: -2px 3px;
+        translate: -2px -17px;
     }
 
     14.29% {
         background-position: -134px -2618px;
         width: 55px;
         height: 51px;
-        translate: -10px 3px;
+        translate: -10px -17px;
     }
 
     28.57% {
         background-position: -198px -2614px;
         width: 65px;
         height: 61px;
-        translate: -15px 5px;
+        translate: -15px -15px;
     }
 
     42.86% {
         background-position: -278px -2614px;
         width: 67px;
         height: 61px;
-        translate: -18px 3px;
+        translate: -18px -20px;
     }
 
     57.14% {
         background-position: -379px -2621px;
         width: 89px;
         height: 60px;
-        translate: -16px 6px;
+        translate: -8px -14px;
     }
 
     71.43% {
         background-position: -512px -2627px;
         width: 108px;
         height: 55px;
-        translate: -7px 3px;
+        translate: 15px -17px;
     }
 
     85.71% {
         background-position: -652px -2636px;
         width: 98px;
         height: 59px;
-        translate: -1px 10px;
+        translate: 22px -6px;
     }
 
     100% {
@@ -1148,49 +1150,49 @@
         background-position: -80px -2616px;
         width: 45px;
         height: 51px;
-        translate: -10px 3px;
+        translate: -10px -17px;
     }
 
     14.29% {
         background-position: -134px -2618px;
         width: 55px;
         height: 51px;
-        translate: -12px 3px;
+        translate: -10px -17px;
     }
 
     28.57% {
         background-position: -198px -2614px;
         width: 65px;
         height: 61px;
-        translate: -17px 5px;
+        translate: -15px -16px;
     }
 
     42.86% {
         background-position: -278px -2614px;
         width: 67px;
         height: 61px;
-        translate: -16px 3px;
+        translate: -12px -20px;
     }
 
     57.14% {
         background-position: -379px -2621px;
         width: 89px;
         height: 60px;
-        translate: -40px 6px;
+        translate: -46px -14px;
     }
 
     71.43% {
         background-position: -512px -2627px;
         width: 108px;
         height: 55px;
-        translate: -68px 3px;
+        translate: -88px -17px;
     }
 
     85.71% {
         background-position: -652px -2636px;
         width: 98px;
         height: 59px;
-        translate: -64px 10px;
+        translate: -85px -6px;
     }
 
     100% {
@@ -1397,6 +1399,9 @@
     background: url(./Assets/sukuna-sprite.png) -871px -1681px;
 }.image-rapid {
     background: url(./Assets/sukuna-sprite.png) -1201px -1691px;
+}
+.image-fuga {
+    background: url(./Assets/sukuna-sprite.png) -104px -3193px;
 }
 .fuga-scene {
     position: absolute;

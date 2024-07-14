@@ -38,6 +38,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     const purpleSoundEffectRef = React.useRef(null);
     const shortPurpleSoundEffectRef = React.useRef(null);
     const purpleExplosionSoundEffectRef = React.useRef(null);
+    const punchSoundEffectRef = React.useRef(null);
 
     const [comboPicker, setComboPicker] = useState(0);
 
@@ -93,7 +94,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                                 setPurpleItselfStyle(prevState => ({
                                     ...prevState, visibility: "hidden"
                                 }))
-                                dispatch(rivalSlice.actions.updateHealth(-10000));
+                                dispatch(rivalSlice.actions.updateHealth(-1000));
                                 setTimeout(() => {
                                     setPurpleItselfStyle(prevState => ({
                                         ...prevState, visibility: "hidden", transition: "all .2s ease, transform .2s, top 0s, left 0s",
@@ -132,6 +133,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         x: gojo.x, visibility: "hidden",
         attacking: false,
     });
+    const [holeStyle, setHoleStyle] = useState({
+        left: 200, top: 100, display: "none",
+    })
     const [purpleItselfStyle, setPurpleItselfStyle] = useState({
         transition: " all .2s ease, transform .2s, top 0s, left 0s",
         scale: "1",
@@ -378,6 +382,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             if (keysPressed.current.e && keysPressed.current.r && !sukuna.domainAttack && gojo.purpleCD.isReady) {
                 if (gojo.canMove === true && gojo.cursedEnergy.currentCursedEnergy >= -purpleCost && !sukuna.domainAttack
                 ) {
+                    console.log("er")
                     dispatch(gojoSlice.actions.changeCursedEnergy(purpleCost));
                     dispatch2(togglePurpleCD());
                     purpleAttack();
@@ -420,7 +425,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-blue"));
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-red"));
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-makingPurple"));
-                dispatch(gojoSlice.actions.setAnimationState("gojo-kick-combo"));
+                // dispatch(gojoSlice.actions.setAnimationState("gojo-kick-combo"));
+                dispatch(gojoSlice.actions.setAnimationState("domain-pose"));
+
             }
             if (keysPressed.current.g) {
                 if (gojo.positioningSide === "left")
@@ -444,7 +451,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     useEffect(() => {
         if (gojo.health.currentHealth > 0 && rivalState.health.currentHealth > 0 && gojo.canMove && gameSettings.selectedCharacter !== "gojo") {
 
-            if (gojo.cursedEnergy.currentCursedEnergy >= 0) {
+            if (gojo.cursedEnergy.currentCursedEnergy >= 0 && !gojo.hardStun) {
                 startAttackInterval();
             }
         } else {
@@ -454,10 +461,10 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [dispatch, gojo.closeRange, gojo.direction, gojo.canMove,
-        gojo.health.currentHealth, gojo.redCD.isReady, gojo.blueCD.isReady, gojo.purpleCD.isReady, gojo.domainCD.isReady,
-        rivalState.health.currentHealth, gojo.cursedEnergy.currentCursedEnergy >= -blueCost || gojo.cursedEnergy.currentCursedEnergy >= -redCost
-        || gojo.cursedEnergy.currentCursedEnergy >= -purpleCost, comboPicker]);
+    }, [gojo.hardStun, gojo.closeRange, gojo.direction, gojo.canMove,
+    gojo.health.currentHealth, gojo.redCD.isReady, gojo.blueCD.isReady, gojo.purpleCD.isReady, gojo.domainCD.isReady,
+    rivalState.health.currentHealth, gojo.cursedEnergy.currentCursedEnergy >= -blueCost || gojo.cursedEnergy.currentCursedEnergy >= -redCost
+    || gojo.cursedEnergy.currentCursedEnergy >= -purpleCost, comboPicker]);
 
 
 
@@ -514,9 +521,23 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             }, 3000);
         }
     }
-    const punchCombo = () => {
 
+    // CLOSE COMBAT METHODS
+    const [chaseForCloseCombat, setChaseForCloseCombat] = useState(false);
+    useEffect(() => { // update gojo position for close combat
+        if (chaseForCloseCombat) {
+            const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
+            if (gojo.direction !== attackDirection) {
+                dispatch(gojoSlice.actions.setDirection(attackDirection));
+                dispatch(gojoSlice.actions.setPositioningSide(attackDirection === "left" ? "right" : "left"))
+            }
+            dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
+            setChaseForCloseCombat(false)
+        }
+    }, [chaseForCloseCombat])
+    const punchCombo = () => {
         if (Math.abs(xDistance) > 150) return;
+        punchSoundEffectRef.current.volume = 0.5;
         const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
         dispatch(gojoSlice.actions.setDirection(attackDirection))
         dispatch(gojoSlice.actions.setAnimationState("gojo-punch-combination"));
@@ -533,20 +554,26 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         let punchCount = 0;
         const int = setInterval(() => {
             setChaseForCloseCombat(true)
+            if (punchCount === 1 || punchCount === 4 || punchCount === 7 || punchCount === 10 || punchCount === 13) {
+                dispatch(rivalSlice.actions.updateHealth(-10));
+                punchSoundEffectRef.current.play();
+                setTimeout(() => {
+                    punchSoundEffectRef.current.pause();
+                    punchSoundEffectRef.current.currentTime = 0;
+                }, 100);
+            }
 
-            if (punchCount !== 3) dispatch(rivalSlice.actions.updateHealth(-10));
-            else { // last hit
-                dispatch(rivalSlice.actions.updateHealth(-70));
+            else if (punchCount === 16) { // last hit
+                // dispatch(rivalSlice.actions.updateHealth(-20));
                 dispatch(rivalSlice.actions.moveCharacterWD(
                     { x: attackDirection === "right" ? 30 : -30, y: 0 }
                 ));
                 // increase ce
                 dispatch(gojoSlice.actions.changeCursedEnergy(20))
-
                 clearInterval(int)
             }
             punchCount++;
-        }, 200)
+        }, 1000 / 16)
         setTimeout(() => { // after animation
             dispatch(gojoSlice.actions.setCanMove(true));
             dispatch(gojoSlice.actions.setAnimationBlocker(false))
@@ -554,20 +581,10 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             dispatch(rivalSlice.actions.setAnimationBlocker(false))
         }, 1000);
     }
-    const [chaseForCloseCombat, setChaseForCloseCombat] = useState(false);
-    useEffect(() => { // update gojo position for close combat
-        if (chaseForCloseCombat) {
-            const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
-            if (gojo.direction !== attackDirection) {
-                dispatch(gojoSlice.actions.setDirection(attackDirection));
-                dispatch(gojoSlice.actions.setPositioningSide(attackDirection === "left" ? "right" : "left"))
-            }
-            dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
-            setChaseForCloseCombat(false)
-        }
-    }, [chaseForCloseCombat])
+
     const blackFlashCombo = () => {
         if (Math.abs(xDistance) > 200) return;
+        punchSoundEffectRef.current.volume = 0.5;
         const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
         dispatch(gojoSlice.actions.setDirection(attackDirection))
         dispatch(gojoSlice.actions.setAnimationState("gojo-blackflash-combination"));
@@ -583,19 +600,30 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
         let punchCount = 0;
         const int = setInterval(() => {
-            setChaseForCloseCombat(true)
-            if (punchCount !== 3) dispatch(rivalSlice.actions.updateHealth(-10));
-            else { // last hit
-                dispatch(rivalSlice.actions.updateHealth(-70));
+            if (punchCount === 0 || punchCount === 4 || punchCount === 7 || punchCount === 10) {
+                setChaseForCloseCombat(true)
+
+                if (punchCount === 10)
+                    dispatch(rivalSlice.actions.updateHealth(-50));
+                else
+                    dispatch(rivalSlice.actions.updateHealth(-10));
+                punchSoundEffectRef.current.play();
+                setTimeout(() => {
+                    punchSoundEffectRef.current.pause();
+                    punchSoundEffectRef.current.currentTime = 0;
+                }, 150);
+
+            }
+            else if (punchCount === 16) { // last hit
                 dispatch(rivalSlice.actions.moveCharacterWD(
-                    { x: attackDirection === "right" ? 30 : -30, y: 0 }
+                    { x: attackDirection === "right" ? 100 : -100, y: 0 }
                 ));
                 // increase ce
                 dispatch(gojoSlice.actions.changeCursedEnergy(30))
                 clearInterval(int)
             }
             punchCount++;
-        }, 375)
+        }, 1500 / 16)
         setTimeout(() => { // after animation
             dispatch(gojoSlice.actions.setCanMove(true));
             dispatch(gojoSlice.actions.setAnimationBlocker(false))
@@ -605,6 +633,8 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     }
     const kickCombo = () => {
         if (Math.abs(xDistance) > 200) return;
+        punchSoundEffectRef.current.volume = 0.5
+
         const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
         dispatch(gojoSlice.actions.setDirection(attackDirection))
         dispatch(gojoSlice.actions.setAnimationState("gojo-kick-combo"));
@@ -627,6 +657,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 clearInterval(int)
             }
             else if (punchCount === 1 || punchCount === 4 || punchCount === 8 || punchCount === 11 || punchCount === 14) {
+                punchSoundEffectRef.current.play()
                 dispatch(rivalSlice.actions.moveCharacterWD(
                     { x: attackDirection === "right" ? 100 : -100, y: 0 }
                 ));
@@ -830,6 +861,18 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 dispatch(gojoSlice.actions.setAnimationState("stance"))
             }, 3000);
         }
+        else if (gojo.animationState === "domain-pose") { // requires reverse positioning
+            if (gojo.direction === "left")
+                dispatch(gojoSlice.actions.setPositioningSide("right"))
+            setGojoStyle({
+                animation: "domain-pose 1s steps(1) forwards",
+            })
+            // setTimeout(() => {
+            //     if (gojo.direction === "left")
+            //         dispatch(gojoSlice.actions.setPositioningSide("left"))
+            //     dispatch(gojoSlice.actions.setAnimationState("stance"))
+            // }, 1000);
+        }
         else {
             console.log("Unknown animation: ", gojo.animationState)
             setGojoStyle({
@@ -848,7 +891,16 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             <audio src={require("../../Assets/audios/purple.mp3")} ref={purpleSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/purple-short.mp3")} ref={shortPurpleSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/hq-explosion-6288.mp3")} ref={purpleExplosionSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/punch.mp3")} ref={punchSoundEffectRef}></audio>
 
+
+            <div className="hole" style={{
+                display: holeStyle.display,
+                left: holeStyle.left,
+                top: holeStyle.top
+            }}>
+
+            </div>
             <div className="blue" style={{
                 visibility: blueStyle.visibility as "visible" | "hidden",
                 top: blueStyle.y,
