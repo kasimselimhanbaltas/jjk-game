@@ -130,7 +130,7 @@ const GameArea = () => {
           setTimeout(() => {
             dispatch(playerSlice.actions.moveCharacterTo({ x: gojo.bluePosition.x + 50, y: gojo.bluePosition.y + 30 }))
             const damageInterval = setInterval(() => { // give damage slowly
-              dispatch(rivalSlice.actions.updateHealth(-150 / 8))
+              dispatch(playerSlice.actions.updateHealth(-150 / 8))
             }, 100)
             setTimeout(() => { // unstun rival
               // dispatch(rivalSlice.actions.setCanMove(true)) ***
@@ -369,7 +369,6 @@ const GameArea = () => {
       if (rivalCharacter.canMove) {
         if (rivalCharacter.dashGauge > 70) {
           dispatch(rivalSlice.actions.moveCharacterTo({ x: playerCharacter.x, y: playerCharacter.y }));
-
           dispatch(rivalSlice.actions.setDashGauge(0))
         }
         else {
@@ -415,7 +414,7 @@ const GameArea = () => {
           direction = "R";
         }
       }
-      console.log("rivald: ", direction)
+      // console.log("rivald: ", direction)
       if (rivalCharacter.rivalDirection !== direction) {
         dispatch(rivalSlice.actions.setRivalDirection(direction));
       }

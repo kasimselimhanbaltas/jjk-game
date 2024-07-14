@@ -14,7 +14,7 @@ const initialState: Gojo = {
     maxHealth: 1500,
   },
   cursedEnergy: {
-    currentCursedEnergy: 10000,
+    currentCursedEnergy: 50,
     maxCursedEnergy: 200,
   },
   direction: "right",
@@ -29,7 +29,7 @@ const initialState: Gojo = {
   },
   redCD: {
     isReady: true,
-    cooldown: 10,
+    cooldown: 12,
     remainingTime: 0,
   },
   purpleCD: {
