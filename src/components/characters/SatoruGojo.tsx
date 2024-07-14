@@ -19,7 +19,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     const dispatch2 = useDispatch<AppDispatch>();
     const characterWidth = 120;
     const characterHeight = 180;
-    const keysPressed = useRef({ e: false, r: false, j: false, k: false, l: false, u: false, f: false, g: false, shift: false });
+    const keysPressed = useRef({ s: false, e: false, r: false, j: false, k: false, l: false, u: false, f: false, g: false, shift: false });
     const gameAreaWidth = 1400;
     const gameAreaHeight = 600;
 
@@ -182,7 +182,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                             ...prevState, animation: "",
                         }))
                     }, 500);
-                }, 10000);
+                }, 15000); // 15 seconds of stay
             } else {
                 setTimeout(() => {
                     setBlueStyle(prevState => ({
@@ -303,68 +303,6 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         }, 2000)
     }
 
-    // const purpleAttack = () => {
-    //     purpleSoundEffectRef.current.volume = 0.5;
-    //     purpleSoundEffectRef.current.play();
-    //     dispatch(rivalSlice.actions.setCanMove(false))
-    //     setTimeout(() => {
-    //         setPurplePositionState(prevState => ({
-    //             ...prevState, scaleB: 3, transition: "left .1s ease-in, top .1s ease-in"
-    //         }))
-    //         setTimeout(() => {
-    //             setPurplePositionState(prevState => ({
-    //                 ...prevState, scaleR: 3,
-    //             }))
-    //             setTimeout(() => {
-    //                 let inc = 20;
-    //                 const interval1 = setInterval(() => { // start rotating
-    //                     setRedAngle(prevAngle => prevAngle + inc);
-    //                     inc++;
-    //                 }, 10);
-    //                 const interval2 = setInterval(() => { // start rotating
-    //                     setBlueAngle(prevAngle => prevAngle - inc);
-    //                     inc--;
-    //                 }, 35);
-    //                 setPurplePositionState(prevState => ({
-    //                     ...prevState, redY: 150, blueY: -150
-    //                 }))
-    //                 setTimeout(() => {
-    //                     setPurplePositionState(prevState => ({
-    //                         ...prevState, visibilityP: "visible", scaleP: 12
-    //                     }))
-    //                     setTimeout(() => {
-    //                         setPurplePositionState(prevState => ({
-    //                             ...prevState, scaleR: 0, scaleB: 0
-    //                         }))
-    //                         clearInterval(interval1); // Dönme intervali temizleme
-    //                         clearInterval(interval2); // Dönme intervali temizleme
-    //                     }, 1000);
-    //                     setTimeout(() => {
-    //                         setGojoImage(require("../../Assets/gojo-attack.png"));
-    //                         setPurplePositionState(prevState => ({
-    //                             ...prevState, attacking: true, transition: "left 1s ease-in, top .1s ease-in"
-    //                         }))
-    //                         setTimeout(() => {
-    //                             dispatch(gojoSlice.actions.setPurpleAttackMoment(true)) // handle skillshot damage in gamearea
-    //                             setTimeout(() => {
-    //                                 setGojoImage(require("../../Assets/gojo.png"));
-    //                                 dispatch(gojoSlice.actions.setPurpleAttackMoment(false))
-    //                                 setPurplePositionState({
-    //                                     x: 0, scale: 0.2, visibility: "visible", visibilityP: "hidden", scaleR: 0, scaleB: 0, scaleP: 8,
-    //                                     attacking: false, redY: 350, blueY: -350,
-    //                                     transition: "all .2s ease, transform 4s, top 0s ease, left 0s ease"
-    //                                 })
-    //                                 dispatch(rivalSlice.actions.setCanMove(true))
-    //                             }, 2000);
-    //                         }, 500);
-    //                     }, 4200);
-    //                 }, 4000);
-    //             }, 1000);
-    //         }, 2500);
-    //     }, 2100);
-
-    // }
-
     const purpleAttack = () => {
         shortPurpleSoundEffectRef.current.volume = 0.5;
         setTimeout(() => {
@@ -467,7 +405,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 }
             }
             else if (keysPressed.current.j && !sukuna.domainAttack && gojo.canMove) {
-                punchCombo();
+                if (keysPressed.current.s)
+                    kickCombo();
+                else punchCombo();
             }
             else if (keysPressed.current.k && !sukuna.domainAttack && gojo.canMove) {
                 blackFlashCombo();
@@ -476,11 +416,11 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             if (keysPressed.current.f) {
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-entry"));
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-punch-combination"));
-                dispatch(gojoSlice.actions.setAnimationState("gojo-blackflash-combination"));
+                // dispatch(gojoSlice.actions.setAnimationState("gojo-blackflash-combination"));
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-blue"));
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-red"));
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-makingPurple"));
-
+                dispatch(gojoSlice.actions.setAnimationState("gojo-kick-combo"));
             }
             if (keysPressed.current.g) {
                 if (gojo.positioningSide === "left")
@@ -565,6 +505,8 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             dispatch(gojoSlice.actions.setCanMove(false));
             dispatch(gojoSlice.actions.changeCursedEnergy(purpleCost));
             dispatch2(togglePurpleCD());
+            dispatch2(toggleBlueCD());
+            dispatch2(toggleRedCD());
             purpleAttack();
             setTimeout(() => {
                 dispatch(gojoSlice.actions.setCanMove(true));
@@ -660,6 +602,48 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             dispatch(rivalSlice.actions.setAnimationBlocker(false))
             dispatch(rivalSlice.actions.setCanMove(true));// **********
         }, 1500);
+    }
+    const kickCombo = () => {
+        if (Math.abs(xDistance) > 200) return;
+        const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
+        dispatch(gojoSlice.actions.setDirection(attackDirection))
+        dispatch(gojoSlice.actions.setAnimationState("gojo-kick-combo"));
+        dispatch(gojoSlice.actions.setCanMove(false));
+        dispatch(gojoSlice.actions.setAnimationBlocker(true))
+        if (!rivalState.isBlocking) {
+            dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+            dispatch(rivalSlice.actions.setCanMove(false));
+            dispatch(rivalSlice.actions.setAnimationBlocker(false))
+            dispatch(rivalSlice.actions.setAnimationState("stance"))
+            dispatch(rivalSlice.actions.setAnimationBlocker(true))
+        }
+        dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
+        let punchCount = 0;
+        const int = setInterval(() => {
+            if (punchCount === 16) { // finish
+                dispatch(rivalSlice.actions.updateHealth(-70));
+                // increase ce
+                dispatch(gojoSlice.actions.changeCursedEnergy(20))
+                clearInterval(int)
+            }
+            else if (punchCount === 1 || punchCount === 4 || punchCount === 8 || punchCount === 11 || punchCount === 14) {
+                dispatch(rivalSlice.actions.moveCharacterWD(
+                    { x: attackDirection === "right" ? 100 : -100, y: 0 }
+                ));
+                dispatch(rivalSlice.actions.updateHealth(-75 / 5));
+            }
+            else { // last hit
+                setChaseForCloseCombat(true)
+            }
+            console.log(punchCount)
+            punchCount++;
+        }, 3000 / 16)
+        setTimeout(() => { // after animation
+            dispatch(gojoSlice.actions.setCanMove(true));
+            dispatch(gojoSlice.actions.setAnimationBlocker(false))
+            dispatch(rivalSlice.actions.setAnimationBlocker(false))
+            dispatch(rivalSlice.actions.setCanMove(true));// **********
+        }, 3000);
     }
 
     const startAttackInterval = () => {
@@ -778,6 +762,18 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                     dispatch(gojoSlice.actions.setPositioningSide("left"))
                 dispatch(gojoSlice.actions.setAnimationState("stance"))
             }, 1500);
+        }
+        else if (gojo.animationState === "gojo-kick-combo") { // requires reverse positioning
+            if (gojo.direction === "left")
+                dispatch(gojoSlice.actions.setPositioningSide("right"))
+            setGojoStyle({
+                animation: "gojo-kick-combo 3s steps(1)",
+            })
+            setTimeout(() => {
+                if (gojo.direction === "left")
+                    dispatch(gojoSlice.actions.setPositioningSide("left"))
+                dispatch(gojoSlice.actions.setAnimationState("stance"))
+            }, 3000);
         }
         else if (gojo.animationState === "gojo-blue") { // requires reverse positioning
             if (gojo.direction === "right")

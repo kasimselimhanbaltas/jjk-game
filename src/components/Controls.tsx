@@ -11,17 +11,17 @@ const Controls = () => {
                 <p>Controls: </p>
                 <p>W-A-S-D: Movement</p>
                 <p>Space: Dash</p>
-                <p> Q - Block</p>
+                <p>Q - Block</p>
 
 
                 {
                     gameSettings.selectedCharacter === "sukuna" && (
                         <>
-                            <p>J - Cleave</p>
-                            <p> K - Dismantle(Close Range)</p>
+                            <p>S - Backflip</p>
+                            <p>E - Cleave(Close Range)</p>
+                            <p>R - Dismantle</p>
+                            <p>K - Smash Attack</p>
                             <p>L - Domain Expansion</p>
-                            <p>R - Smash Attack</p>
-                            <p>E - Backflip</p>
                         </>
 
                     )}
@@ -34,11 +34,13 @@ const Controls = () => {
                 )}
                 {gameSettings.selectedCharacter === "gojo" && (
                     <>
-                        <p> Q - Block</p>
-                        <p> J - Blue Attack</p>
-                        <p> K - Red Attack</p>
-                        <p> L - Purple Attack</p>
-                        <p>More coming soon...</p>
+                        <p> E - Blue </p>
+                        <p> R - Red </p>
+                        <p> E + R - Purple </p>
+                        <p> J - Punch Combo</p>
+                        <p> S + J - Kick Combo</p>
+                        <p> K - Black Flash Combo</p>
+                        <p> SHIFT + E/R - Charge Skills </p>
                     </>
                 )}
             </div>

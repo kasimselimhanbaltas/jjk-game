@@ -1,6 +1,7 @@
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import CircularProgressBar from "./CircularProgressBar";
 import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
 
 
 function CharacterInterface({ playerCharacter, rivalCharacter }) {
@@ -11,6 +12,30 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
     const gojo = useSelector((state: any) => state.GojoState);
     const nue = useSelector((state: any) => state.NueState);
     const characterHeight = "80px";
+    const [render, setRender] = React.useState(0);
+    const keysPressed = React.useRef({ shift: false });
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            const key = event.key.toLowerCase();
+            keysPressed.current[key] = true;
+            if (key === "shift") {
+                console.log("rerender")
+                setRender(render + 1)
+            }
+        };
+
+        const handleKeyUp = (event) => {
+            const key = event.key.toLowerCase();
+            keysPressed.current[key] = false;
+            if (key === "shift") {
+                setRender(render + 1)
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
+
+    }, []);
+
 
     return (
         <div>
@@ -241,10 +266,16 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             <div className="skill" >
                                 <CircularProgressBar skillCD={playerCharacter.blueCD} />
                                 <img src={require('../Assets/blue.png')} alt="" style={{ scale: "0.6" }} />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Blue Attack:</p>
+                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>
+                                    {keysPressed.current.shift ? "Charged BLUE" : "BLUE "}
+                                </p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {playerCharacter.blueCD.isReady ?
-                                        "Ready - J" :
+                                        (playerCharacter.cursedEnergy.currentCursedEnergy >=
+                                            (keysPressed.current.shift ? 100 : 50) ?
+                                            (keysPressed.current.shift ? "Ready - SHIFT + E" : "Ready - E") :
+                                            "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy +
+                                            (keysPressed.current.shift ? "/100" : "/50")) :
                                         (playerCharacter.blueCD.remainingTime + "sec")}</p>
                                 {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
                             </div>
@@ -254,10 +285,14 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 <CircularProgressBar skillCD={playerCharacter.redCD} />
                                 <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} />
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>
-                                    Red Attack:</p>
+                                    {keysPressed.current.shift ? "Charged RED:" : "RED:"}</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {playerCharacter.redCD.isReady ?
-                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= 100 ? "Ready - K" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/100") :
+                                        (playerCharacter.cursedEnergy.currentCursedEnergy >=
+                                            (keysPressed.current.shift ? 150 : 100) ?
+                                            (keysPressed.current.shift ? "Ready - SHIFT + R" : "Ready - R") :
+                                            "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy +
+                                            (keysPressed.current.shift ? "/150" : "/100")) :
                                         (playerCharacter.redCD.remainingTime + "sec")}</p>
                             </div>
 
@@ -269,7 +304,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {playerCharacter.purpleCD.isReady ?
-                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= 150 ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/150") :
+                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= 150 ? "Ready - E+R" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/150") :
                                         (playerCharacter.purpleCD.remainingTime + "sec")}</p>
                             </div>
 

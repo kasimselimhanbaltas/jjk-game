@@ -103,6 +103,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         dispatch(sukunaSlice.actions.setCanMove(false))
         dispatch(sukunaSlice.actions.changeCursedEnergy(-200));
         dispatch(sukunaSlice.actions.setAnimationState("domain-pose"));
+        dispatch(sukunaSlice.actions.setAnimationBlocker(true));
         setTimeout(() => {
             dispatch(setRivalDomainExpansion(true));
             setTimeout(() => {
@@ -134,6 +135,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             dispatch(setRivalDomainExpansion(false));
             dispatch(rivalSlice.actions.setCanMove(true))
             dispatch(setCanMove(true));
+            dispatch(sukunaSlice.actions.setAnimationBlocker(true));
             dispatch(sukunaSlice.actions.setAnimationState("stance"));
         }, 12000);
     }
@@ -706,7 +708,6 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 top: 470, ...bamStyle
             }}>
             </div>
-            {sukuna.animationBlocker ? "blocked" : "not blocked"}
             <div className='sukunaCC' style={{
                 bottom: gameAreaHeight - sukuna.y,
                 left: sukuna.positioningSide === "left" ? sukuna.x : undefined,
