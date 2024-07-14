@@ -24,6 +24,7 @@ const initialState: Sukuna = {
   rivalDirection: "stop",
   closeRange: false,
   canMove: true,
+  hardStun: true,
   rapidAttack: false,
   dashGauge: 0,
   cleaveCD: {
@@ -43,6 +44,10 @@ const initialState: Sukuna = {
   },
   rapidAttackCounter: {
     maxCount: 10,
+    currentCount: 0,
+  },
+  fugaCounter: {
+    maxCount: 50,
     currentCount: 0,
   },
   isBlocking: false,
@@ -125,6 +130,9 @@ const RivalSlice = createSlice({
     setCanMove(state, action) {
       state.canMove = action.payload;
     },
+    setHardStun(state, action) {
+      state.hardStun = action.payload;
+    },
     setRapidAttack(state, action) {
       state.rapidAttack = action.payload;
     },
@@ -171,6 +179,12 @@ const RivalSlice = createSlice({
     },
     setRapidAttackCounter(state, action) {
       state.rapidAttackCounter.currentCount = action.payload;
+    },
+    setFugaCounter(state, action) {
+      state.fugaCounter.currentCount = action.payload;
+    },
+    increaseFugaCounter(state, action) {
+      state.fugaCounter.currentCount += action.payload;
     },
     resetState: () => initialState,
     setIsBlocking(state, action) {
@@ -240,6 +254,7 @@ export const {
   setCloseRange,
   setRivalPosition,
   setCanMove,
+  setHardStun,
   setRapidAttack,
   setDashGauge,
   moveCharacterTo,
@@ -250,6 +265,8 @@ export const {
   setDismantleCD,
   setDomainCD,
   setRapidAttackCounter,
+  setFugaCounter,
+  increaseFugaCounter,
   resetState,
   setIsBlocking,
   setAnimationState,

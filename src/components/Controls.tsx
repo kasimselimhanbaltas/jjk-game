@@ -20,6 +20,7 @@ const Controls = () => {
                             <p>S - Backflip</p>
                             <p>E - Cleave(Close Range)</p>
                             <p>R - Dismantle</p>
+                            <p>F - Fuga(⬜)</p>
                             <p>K - Smash Attack</p>
                             <p>L - Domain Expansion</p>
                         </>

@@ -19,6 +19,7 @@ const initialState: Megumi = {
   direction: "right",
   isAttacking: false,
   canMove: true,
+  hardStun: false,
   dashGauge: 0,
   rivalDirection: "stop",
   callNueCD: {
@@ -112,6 +113,9 @@ const megumiSlice = createSlice({
     setCanMove(state, action) {
       state.canMove = action.payload;
     },
+    setHardStun(state, action) {
+      state.hardStun = action.payload;
+    },
     setDashGauge(state, action) {
       state.dashGauge = action.payload;
     },
@@ -193,6 +197,7 @@ export const {
   changeCursedEnergy,
   setDirection,
   setCanMove,
+  setHardStun,
   setCursedEnergy,
   moveCharacterTo,
   setDashGauge,

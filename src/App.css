@@ -422,7 +422,7 @@ background: rgb(155, 53, 35);
   position: absolute;
   left: 50%;
   top: 50%;
-  translate: -50% -50%;
+  translate: -30% -50%;
   z-index: 10;
   width: 80px;
   height: 80px;

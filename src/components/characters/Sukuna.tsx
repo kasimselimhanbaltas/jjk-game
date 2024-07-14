@@ -38,6 +38,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const sukunaSoundEffectRef = React.useRef(null);
     const domainSoundEffectRef = React.useRef(null);
     const smashSoundEffectRef = React.useRef(null);
+    const fugaSoundEffectRef = React.useRef(null);
+    const punchSoundEffectRef = React.useRef(null);
 
     const keysPressed = useRef({
         a: false, s: false, d: false, w: false,
@@ -68,7 +70,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         if (sukuna.health.currentHealth > 0 && rivalState.health.currentHealth > 0 && sukuna.canMove
             && gameSettings.selectedCharacter !== "sukuna") {
 
-            if (sukuna.cursedEnergy.currentCursedEnergy >= 0 && !sukuna.animationBlocker) {
+            if (sukuna.cursedEnergy.currentCursedEnergy >= 0 && !sukuna.animationBlocker && !sukuna.hardStun) {
                 startAttackInterval();
             } else {
                 console.log("animation blocked!!!!")
@@ -80,7 +82,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [sukuna.closeRange, sukuna.canMove, sukuna.rapidAttackCounter >= 10,
+    }, [sukuna.hardStun, sukuna.closeRange, sukuna.canMove, sukuna.rapidAttackCounter >= 10,
     sukuna.health.currentHealth <= 0, sukuna.cleaveCD.isReady, sukuna.dismantleCD.isReady, sukuna.domainCD.isReady,
     rivalState.health.currentHealth <= 0, sukuna.animationBlocker, xDistance > 0]);
 
@@ -117,6 +119,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     setTimeout(() => { // random slashes delay
                         dispatch(rivalSlice.actions.moveCharacterWD({ x: stepDistance, y: 0 }));
                         dispatch(rivalSlice.actions.updateHealth(slashDamage));
+                        dispatch(sukunaSlice.actions.increaseFugaCounter(1))
 
                         // setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
 
@@ -135,7 +138,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             dispatch(setRivalDomainExpansion(false));
             dispatch(rivalSlice.actions.setCanMove(true))
             dispatch(setCanMove(true));
-            dispatch(sukunaSlice.actions.setAnimationBlocker(true));
+            dispatch(sukunaSlice.actions.setAnimationBlocker(false));
             dispatch(sukunaSlice.actions.setAnimationState("stance"));
         }, 12000);
     }
@@ -263,6 +266,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady) {
                     console.log("domain attack")
                     handleDomainAttack()
+                }
+                else if (sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount) {
+                    handleFugaAttack()
                 }
 
                 else if (sukuna.closeRange && sukuna.dismantleCD.isReady) {
@@ -403,8 +409,11 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         animation: "", display: "none"
     })
     const handleFugaAttack = () => {
-        // dispatch(sukunaSlice.actions.setAnimationState("fugaAttack"))
+        if (sukuna.fugaCounter.currentCount < sukuna.fugaCounter.maxCount) return;
+        dispatch(sukunaSlice.actions.setCanMove(false))
         console.log("FUGA")
+        fugaSoundEffectRef.current.volume = 0.5
+        fugaSoundEffectRef.current.play();
         let attackDirection = "";
         attackDirection = sukuna.x < rivalState.x ? "right" : "left";
         updateRivalDirection(attackDirection === "left" ? "right" : "left");
@@ -419,7 +428,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         setTimeout(() => {
             dispatch(sukunaSlice.actions.setAnimationState("fugaAfter")) // second animation
             setTimeout(() => {
-                setFireArrowStyle({ animation: "fire-arrow .5s steps(1)", opacity: 1, left: sukuna.x - 50 })
+                setFireArrowStyle({ animation: "fire-arrow .5s steps(1)", opacity: 1, left: attackDirection === "left" ? sukuna.x - 400 : sukuna.x - 50 })
             }, 1700);
             setTimeout(() => {
                 dispatch(sukunaSlice.actions.setAnimationState("stance"))
@@ -428,8 +437,11 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     setFireArrowStyle({ animation: "", opacity: 0, left: sukuna.x })
 
                     setFugaExplosionStyle({ animation: "fuga-explosion 1s steps(1)", display: "block" })
+                    dispatch(rivalSlice.actions.updateHealth(-500))
                     setTimeout(() => {
                         setFugaExplosionStyle({ animation: "", display: "none" })
+                        dispatch(sukunaSlice.actions.setCanMove(true))
+                        dispatch(sukunaSlice.actions.setFugaCounter(0))
                     }, 1000);
                 }, 200);
             }, 2000);
@@ -502,10 +514,12 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const handleDismantleAttack = () => {
         dispatch2(toggleCleaveCD()); // cooldown control
         localDismantleAttack(); // attack
+        dispatch(sukunaSlice.actions.increaseFugaCounter(1))
     };
     const handleCleaveAttack = () => {
         dispatch2(toggleDismantleCD()); // cooldown control
         localCleaveAttack(-100); // attack
+        dispatch(sukunaSlice.actions.increaseFugaCounter(2))
     };
 
     const handleDomainAttack = () => {
@@ -654,34 +668,6 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     // RAPID ATTACK
     const rapidSlashSoundEffectRef = React.useRef(null);
-    const [slashRotation, setSlashRotation] = React.useState({ rotate: "0deg" });
-
-    // rapid attack and cleave attack is gonna be updated
-    const rapidAttack = () => {
-        // rapidSlashSoundEffectRef.current.volume = 0.1;
-
-        // rapidSlashSoundEffectRef.current.play()
-        // const attackDirection = sukuna.x - rivalState.x >= 0 ? "left" : "right";
-        // const stepDistance = attackDirection === "left" ? -10 : 10;
-        // for (let i = 0; i < 20; i++) {
-        //     setTimeout(() => {
-        //         dispatch(rivalSlice.actions.updateHealth(-10));
-        //         dispatch(rivalSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
-        //         if (i === 19) rapidSlashSoundEffectRef.current.pause()
-        //     }, i * 100);
-        // }
-        // const degrees = [90, 270, 30, 120, 300, 240, 210, 180, 60, 150];
-        // for (let i = 0; i < degrees.length * 3; i++) {
-        //     setTimeout(() => {
-        //         setSlashRotation({ rotate: degrees[Math.floor(Math.random() * (degrees.length))] + "deg" });
-        //         dispatch(rivalSlice.actions.updateHealth(-10));
-        //         dispatch(rivalSlice.actions.moveCharacter({ x: stepDistance, y: 0 }));
-        //     }, i * 100);
-        // }
-        // setTimeout(() => {
-        //     setSlashRotation({ rotate: "0deg" });
-        // }, degrees.length * 3 * 100);
-    };
 
     return (
         <div>
@@ -689,6 +675,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             <audio src={require("../../Assets/audios/rapid-slash-3.mp3")} ref={rapidSlashSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/rapid-slash.mp3")} ref={domainSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/smash.mp3")} ref={smashSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/fuga-sound-effect.mp3")} ref={fugaSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/punch.mp3")} ref={punchSoundEffectRef}></audio>
+
 
             {/* {sukuna.animationBlocker ? "true" : "false"} */}
             <div className="fuga-scene" style={{

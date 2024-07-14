@@ -184,6 +184,31 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
                                 <p style={{ marginTop: "-10px" }}> {playerCharacter.rapidAttackCounter.currentCount >= playerCharacter.rapidAttackCounter.maxCount ? "Ready - J" : playerCharacter.rapidAttackCounter.currentCount + "/" + playerCharacter.rapidAttackCounter.maxCount} </p>
                             </div>
+                            {/* FURNITURE */}
+                            <div className="skill">
+                                <div className="image-fuga" style={{
+                                    position: "absolute",
+                                    top: "-142px", left: "-114px", zIndex: 9,
+                                    width: "277px", height: "333px",
+                                    scale: ".10"
+                                }}></div>
+                                <CircularProgressbar
+                                    value={playerCharacter.fugaCounter.currentCount / playerCharacter.fugaCounter.maxCount * 100}
+                                    text={`${playerCharacter.fugaCounter.currentCount / playerCharacter.fugaCounter.maxCount * 100}%`}
+                                    className="circular-skill-progress-bar"
+                                    styles={buildStyles({
+                                        // Text size
+                                        textSize: '16px',
+                                        // Colors
+                                        pathColor: (playerCharacter.fugaCounter.currentCount / playerCharacter.fugaCounter.maxCount * 100) >= 100 ? "red" : `rgba(62, 152, 199)`,
+                                        textColor: 'transparent',
+                                        trailColor: '#d6d6d6',
+                                        backgroundColor: '#3e98c7',
+                                    })}
+                                />
+                                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Fuga:</p>
+                                <p style={{ marginTop: "-10px" }}> {playerCharacter.fugaCounter.currentCount >= playerCharacter.fugaCounter.maxCount ? "Ready - J" : playerCharacter.fugaCounter.currentCount + "/" + playerCharacter.fugaCounter.maxCount} </p>
+                            </div>
                         </div>
 
 
@@ -304,7 +329,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {playerCharacter.purpleCD.isReady ?
-                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= 150 ? "Ready - E+R" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/150") :
+                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - E+R" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
                                         (playerCharacter.purpleCD.remainingTime + "sec")}</p>
                             </div>
 
@@ -350,38 +375,38 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
                     <div className="rival-interface">
 
-                        <div className="skills-container" style={{ marginLeft: "300px" }}>
+                        <div className="skills-container" style={{ marginLeft: "200px" }}>
 
                             {/* Cleave Attack */}
                             <div className="skill">
-                                <CircularProgressBar skillCD={rivalCharacter.cleaveCD} />
-                                <img src={require("../Assets/slash.png")} alt="" />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Cleave:</p>
+                                <CircularProgressBar skillCD={sukuna.cleaveCD} />
+                                <div className="image-dismantle" style={{
+                                    position: "absolute",
+                                    top: "-22px", left: "-17px", zIndex: 9,
+                                    width: "99px", height: "101px",
+                                    scale: ".4"
+                                }}></div>
+                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Dismantle:</p>
                                 <p style={{ marginTop: "-10px" }}>
-                                    {rivalCharacter.cleaveCD.isReady ? "Ready - J" :
-                                        (rivalCharacter.cleaveCD.remainingTime + "sec")}</p>
+                                    {sukuna.cleaveCD.isReady ? "Ready - J" :
+                                        (sukuna.cleaveCD.remainingTime + "sec")}</p>
                             </div>
 
                             {/* Dismantle Attack */}
                             <div className="skill" >
-                                <CircularProgressBar skillCD={rivalCharacter.dismantleCD} />
-                                <div style={{ display: "block", position: "relative", top: "-40px", left: "0px", height: "50px" }}>
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "5px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "15px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "25px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "35px", left: "0px", height: characterHeight, width: "50px", rotate: "45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "15px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "25px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "35px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                    <img src={require('../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-10px", left: "45px", height: characterHeight, width: "50px", rotate: "-45deg", transform: "scale(0.8) translate(-50%, -50%)" }} />
-                                </div>
-                                <p style={{ marginTop: "-40px", lineBreak: "loose" }}>Dismantle:</p>
+                                <CircularProgressBar skillCD={sukuna.dismantleCD} />
+                                <div className="image-cleave" style={{
+                                    position: "absolute",
+                                    top: "-25px", left: "-25px", zIndex: 9,
+                                    width: "99px", height: "101px",
+                                    scale: ".4"
+                                }}></div>
+                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Cleave:</p>
                                 <p style={{ marginTop: "-10px" }}>
-                                    {rivalCharacter.dismantleCD.isReady ?
-                                        (rivalCharacter.closeRange ? "Ready - K" : "Get Closer") :
-                                        (rivalCharacter.dismantleCD.remainingTime + "sec")}</p>
-                                {/* <p style={{ color: "black" }}>{rivalCharacter.closeRange ? "close range" : "far range"}</p> */}
+                                    {sukuna.dismantleCD.isReady ?
+                                        (sukuna.closeRange ? "Ready - K" : "Get Closer") :
+                                        (sukuna.dismantleCD.remainingTime + "sec")}</p>
+                                {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
                             </div>
 
                             {/* Domain Attack */}
@@ -395,23 +420,53 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
                             {/* Rapid Slash */}
                             <div className="skill">
-                                <img src={require("../Assets/slash.png")} alt="" />
+                                <div className="image-rapid" style={{
+                                    position: "absolute",
+                                    top: "-25px", left: "-25px", zIndex: 9,
+                                    width: "99px", height: "101px",
+                                    scale: ".4"
+                                }}></div>
                                 <CircularProgressbar
-                                    value={rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}
-                                    text={`${rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}%`}
+                                    value={sukuna.rapidAttackCounter.currentCount / sukuna.rapidAttackCounter.maxCount * 100}
+                                    text={`${sukuna.rapidAttackCounter.currentCount / sukuna.rapidAttackCounter.maxCount * 100}%`}
                                     className="circular-skill-progress-bar"
                                     styles={buildStyles({
                                         // Text size
                                         textSize: '16px',
                                         // Colors
-                                        pathColor: (rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
+                                        pathColor: (sukuna.rapidAttackCounter.currentCount / sukuna.rapidAttackCounter.maxCount * 100) >= 100 ? "green" : `rgba(62, 152, 199)`,
                                         textColor: 'transparent',
                                         trailColor: '#d6d6d6',
                                         backgroundColor: '#3e98c7',
                                     })}
                                 />
                                 <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
-                                <p style={{ marginTop: "-10px" }}> {rivalCharacter.rapidAttackCounter.currentCount >= rivalCharacter.rapidAttackCounter.maxCount ? "Ready - J" : rivalCharacter.rapidAttackCounter.currentCount + "/" + rivalCharacter.rapidAttackCounter.maxCount} </p>
+                                <p style={{ marginTop: "-10px" }}> {sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "Ready - J" : sukuna.rapidAttackCounter.currentCount + "/" + sukuna.rapidAttackCounter.maxCount} </p>
+                            </div>
+                            {/* FURNITURE */}
+                            <div className="skill">
+                                <div className="image-fuga" style={{
+                                    position: "absolute",
+                                    top: "-142px", left: "-114px", zIndex: 9,
+                                    width: "277px", height: "333px",
+                                    scale: ".10"
+                                }}></div>
+                                <CircularProgressbar
+                                    value={sukuna.fugaCounter.currentCount / sukuna.fugaCounter.maxCount * 100}
+                                    text={`${sukuna.fugaCounter.currentCount / sukuna.fugaCounter.maxCount * 100}%`}
+                                    className="circular-skill-progress-bar"
+                                    styles={buildStyles({
+                                        // Text size
+                                        textSize: '16px',
+                                        // Colors
+                                        pathColor: (sukuna.fugaCounter.currentCount / sukuna.fugaCounter.maxCount * 100) >= 100 ? "red" : `rgba(62, 152, 199)`,
+                                        textColor: 'transparent',
+                                        trailColor: '#d6d6d6',
+                                        backgroundColor: '#3e98c7',
+                                    })}
+                                />
+                                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Fuga:</p>
+                                <p style={{ marginTop: "-10px" }}> {sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount ? "Ready - J" : sukuna.fugaCounter.currentCount + "/" + sukuna.fugaCounter.maxCount} </p>
                             </div>
                         </div>
 
@@ -524,7 +579,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {rivalCharacter.purpleCD.isReady ?
-                                        (rivalCharacter.cursedEnergy.currentCursedEnergy >= 150 ? "Ready - L" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/150") :
+                                        (rivalCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - L" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/200") :
                                         (rivalCharacter.purpleCD.remainingTime + "sec")}</p>
                             </div>
 

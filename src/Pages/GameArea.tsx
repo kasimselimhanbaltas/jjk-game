@@ -325,8 +325,8 @@ const GameArea = () => {
           dispatch(playerSlice.actions.setCanMove(true));
         }
         if (keysPressed.current.t) {
-          if (rivalCharacter.canMove) dispatch(rivalSlice.actions.setCanMove(false));
-          else dispatch(rivalSlice.actions.setCanMove(true));
+          if (rivalCharacter.hardStun) dispatch(rivalSlice.actions.setHardStun(false));
+          else dispatch(rivalSlice.actions.setHardStun(true));
         }
         if (keysPressed.current.space)
           dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.direction === "right" ? 75 : -75, y: 0 }));
@@ -366,7 +366,7 @@ const GameArea = () => {
   useEffect(() => {
     // if (gameSettings.selectedCharacter === "sukuna") return;
     const interval = setInterval(() => {
-      if (rivalCharacter.canMove) {
+      if (rivalCharacter.canMove && !rivalCharacter.hardStun) {
         if (rivalCharacter.dashGauge > 70) {
           dispatch(rivalSlice.actions.moveCharacterTo({ x: playerCharacter.x, y: playerCharacter.y }));
           dispatch(rivalSlice.actions.setDashGauge(0))
@@ -397,7 +397,7 @@ const GameArea = () => {
       clearInterval(interval);
     };
 
-  }, [rivalCharacter.rivalDirection, rivalCharacter.canMove,
+  }, [rivalCharacter.hardStun, rivalCharacter.rivalDirection, rivalCharacter.canMove,
   rivalCharacter.dashGauge >= 70 || rivalCharacter.dashGauge <= 0,]);
 
   // Rival Movement Control
@@ -425,7 +425,7 @@ const GameArea = () => {
   }, [xDistance >= 100, xDistance <= -100, xDistance <= -300, xDistance >= 300]);
   // rivalCharacter.closeRange, rivalCharacter.rivalDirection
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
+  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
