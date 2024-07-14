@@ -36,7 +36,9 @@
     transform: rotate(360deg);
   }
 }
-
+.megumi-health p{
+  font-size: 5px;
+}
 .game-area {
   width: 1400px;
   height: 600px;
@@ -46,8 +48,10 @@
     position: relative;
 }
 .megumi {
+  transform-origin: bottom center;
+    /* Alt kenar orta noktasını sabit tut */
   position: absolute;
-  transition: all .2s ease;
+  transition: all .2s ease, transform 0s ;
 }
 .blue {
   position: absolute;
@@ -64,49 +68,25 @@
   height: 100px;
   z-index: 9;
 }
-.red {
-  position: absolute;
-  transition: all .2s ease, transform 4s, top 0s ease, left 0s ease;
-  width: 150px;
-  height: 150px;
-  z-index: 9;
-}
-.red img {
+/* .purple img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100px;
   height: 100px;
   z-index: 9;
-}
-.purple {
-  position: absolute;
-  transition: all .2s ease, transform 4s, top 0s ease, left 2s ease-in;
-  width: 200px;
-  height: 200px;
-  z-index: 9;
-}
-.purple img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100px;
-  height: 100px;
-  z-index: 9;
-  /* transition: transform 1s ease-in, top 4s linear; */
     transition: transform .1s ease-in,
     top 1s linear;
-
-}
+} */
 .nue {
   position: absolute;
   /* transition: all .4s ease; */
 }
-.megumi img{
+/* .megumi img{
   position: absolute;
   top: 0;
   left: 0;
-}
+} */
 .gojo {
   position: absolute;
   transition: all .2s ease;
@@ -170,7 +150,7 @@
   width: 100%;
   height: 100%;
   z-index: 10;
-  background-image: url('./Assets/menu-bg.jpg');
+  background-image: url('./Assets/menu-bg.png');
   background-size: cover;
 }
 .main-menu-container{
@@ -200,7 +180,7 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-image: url('./Assets/menu-bg.jpg');
+  background-image: url('./Assets/menu-bg.png');
   background-size: cover;
   z-index: 10;
 }
@@ -211,6 +191,7 @@
   width: 250px;
   height: auto;
   cursor:  pointer;
+  /* cursor: none; */
 }
 .character-button img{
   max-height: 300px;
@@ -234,6 +215,7 @@
   color: white;
   border: none;
   cursor: pointer;
+  /* cursor: none; */
 }
 
 .small-button {
@@ -244,26 +226,11 @@
   color: white;
   border: none;
   cursor: pointer;
+  /* cursor: none; */
   margin-top: 10px;
 }
 
-.wolf {
-  width: 145px;
-  height: 120px;
-  background-image: url('./Assets/black-wolf.png');
-  /* Sprite sheet kullanımı */
-  /* animation: wolfRun 1s steps(5) infinite; */
-  /* 8 kareli sprite sheet için */
-}
-.wolf2 {
-  width: 145px;
-  height: 85px;
-  background-image: url('./Assets/white-wolf.png');
-  background-size: cover;
-  /* Sprite sheet kullanımı */
-  /* animation: wolfRun 1s steps(5) infinite; */
-  /* 8 kareli sprite sheet için */
-}
+
 @keyframes wolfRun {
   from {
     background-position: 0 350px;
@@ -291,9 +258,18 @@
 }
 
 .player-interface {
-  position: relative;
+  position: absolute;
   left: 2%;
-  top: 85%;
+  top: 2%;
+  z-index: 1;
+  width: 700px;
+  height: 100px;
+  display: flex;
+}
+.rival-interface {
+  position: absolute;
+  right: -4%;
+  top: 2%;
   z-index: 1;
   width: 700px;
   height: 100px;
@@ -304,8 +280,12 @@
   height: 35px;
 }
 .skills-container {
- display: flex;
- margin-left: 50px;
+  margin-top: 80px;
+  display: flex;
+  margin-left: 50px;
+}
+.sc-right{
+  align-items: right;
 }
 .skill {
   /* background-color: red; */
@@ -337,3 +317,258 @@
   height: 50px;
 }
 
+
+/* --------- */
+/*  Preloader */
+/* --------- */
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999999;
+  background-color: #0c0513;
+  background-image: url(./Assets/jjk.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#preloader-none {
+  opacity: 0;
+}
+
+.nue-container {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  scale: .7;
+  left: 50%;
+  top: 50%;
+  /* transition: all 2s !important; */
+  background-image: url('./Assets/megu.png');
+  /* animation: nueAttack 1s steps(8); */
+  /* animation: nueStance 1s steps(8);  */
+  /* animation: move .5s steps(7) infinite; */
+  /* animation: jump 2s steps(11) infinite; */
+  /* animation: punch .9s steps(8) infinite; */
+  /* animation: swordAttack 1s steps(14); */
+}
+.top-interface{
+  width: 100%;
+  height: 80px;
+  position: absolute;
+}
+.top-interface-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.player-image-container {
+  position: absolute;
+  left: 5%;
+  top: 50%;
+  translate: -50% -50%;
+  z-index: 5;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: white;
+  overflow: hidden;
+}
+.player-image-container img, .rival-image-container img {
+  width: 100%;
+  height: auto;
+}
+.rival-image-container {
+  position: absolute;
+  right: -2%;
+  top: 50%;
+  translate: -50% -50%;
+  z-index: 5;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: white;
+  overflow: hidden;
+}
+.health-bar{
+  position: absolute;
+  left: 7%;
+  top: 10%;
+  translate: 0% 0%;
+  z-index: 1;
+  width: 500px;
+  height: 25px;
+  border: 2px solid black;
+}
+.player-health-progress {
+  background: rgb(11, 128, 20);
+  background: linear-gradient(90deg, rgba(11, 128, 20, 1) 35%, rgba(0, 255, 21, 1) 100%);
+}
+.rival-health-progress {
+background: rgb(155, 53, 35);
+  background: linear-gradient(90deg, rgba(155, 53, 35, 1) 35%, rgba(80, 27, 18, 1) 100%);
+}
+.cursed-energy-bar {
+  position: absolute;
+  left: 7%;  top: 55%;
+  translate: 0% 0%;
+  z-index: 1;
+  width: 350px;
+  height: 25px;
+  border: 2px solid black;
+}
+.sukuna-logo{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  z-index: 10;
+  width: 80px;
+  height: 80px;
+}
+
+@keyframes nueStance {
+  /* 100x128 9*/
+  /* 0% {
+    background-position: -352px -1436px;
+  }
+  100% {
+    background-position: -1153px -1436px;
+  } */
+  0% {
+    background-position: -452px -1436px;  
+  }
+  25% {
+    background-position: -552px -1436px;  
+  }
+  50% {
+    background-position: -652px -1436px;
+  }
+  100%{
+    background-position: -452px -1436px;
+  }
+}
+@keyframes nueAttackold {
+  /* 160x128 9*/
+  0% {
+    background-position: -315px -2298px;
+  }
+
+  100% {
+    background-position: -1595px -2298px;
+  }
+}
+@keyframes nueAttack {
+  0% {
+    background-position: -531px -2335px;
+    width: 52px;
+    height: 50px;
+  }
+
+  16.66% {
+    background-position: -695px -2322px;
+    width: 80px;
+    height: 67px;
+  }
+
+  33.33% {
+    background-position: -828px -2327px;
+    width: 107px;
+    height: 76px;
+  }
+
+  70% {
+    background-position: -972px -2320px;
+    width: 125px;
+    height: 88px;
+  }
+
+  75% {
+    background-position: -1125px -2310px;
+    width: 147px;
+    height: 107px;
+  }
+
+  85% {
+    background-position: -1281px -2314px;
+    width: 137px;
+    height: 104px;
+  }
+
+  95% {
+    background-position: -1537px -2332px;
+    width: 52px;
+    height: 50px;
+  }
+}
+
+/* cursor */
+body {
+  /* cursor: none; */
+  overflow: hidden;
+  /* Varsayılan imleci gizle */
+}
+
+.custom-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  translate: -50% -50%;
+  z-index: 789;
+  transform-origin: center;
+}
+
+.red-circle,
+.blue-circle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transition: all 0.1s ease;
+  transform-origin: center;
+}
+
+.red-circle {
+  background-color: red;
+}
+
+.blue-circle {
+  background-color: blue;
+}
+
+
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.custom-cursor {
+  animation: rotate 2s linear infinite;
+  transform-origin: center center;
+  width: 10px;
+  height: 10px;
+}
+
+.red-circle {
+  transform: translate(5px, 0px);
+}
+
+.blue-circle {
+  transform: translate(-5px, 0px);
+}
+.clicked .red-circle,
+.clicked .blue-circle,
+.clicked .custom-cursor {
+  background-color: purple;
+  transform: translate(0, 0);
+  animation: none !important;
+  scale: 2;
+}

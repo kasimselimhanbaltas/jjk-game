@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import nueSlice, { moveNue, nueActivity, nueAttacking, setNueAuto, setNueAutoAttack, setNueDirection } from "../store/NueSlice";
-import { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../store/character-slices/MegumiSlice";
-import { AppDispatch } from "../store/GlobalStore";
+import nueSlice, { moveNue, nueActivity, nueAttacking, setAnimationState, setNueAuto, setNueAutoAttack, setNueDirection } from "../redux/NueSlice";
+import megumiSlice, { changeCursedEnergy, toggleCallNueCD, toggleNueAttackCD } from "../redux/character-slices/MegumiSlice";
+import { AppDispatch } from "../redux/GlobalStore";
 
 
 const gameAreaWidth = 1400;
@@ -13,7 +13,7 @@ const callNueCost = 50;
 const nueAttackCost = 20;
 const nueDamage = 100;
 const shikigamiDrainingCost = 2;
-const defaultNueTransform = "all .4s ease";
+
 
 
 const Nue = ({ rivalSlice, rivalState }) => {
@@ -25,12 +25,11 @@ const Nue = ({ rivalSlice, rivalState }) => {
     const dispatch = useDispatch();
     const dispatch2 = useDispatch<AppDispatch>();
     const keysPressed = useRef({ j: false, k: false });
-    const [imageSrc, setImageSrc] = useState(require('../Assets/nue-side.png'));
-    const [imageStyle, setImageStyle] = useState({
-        transition: "all .2s ease, transform 0s",
-        transform: "",
+
+    const [nueStyle, setNueStyle] = useState({
+        transition: "all .4s ease, width 0s, transform 0s", animation: "", width: 100,
+        height: 128
     });
-    const [nueStyle, setNueStyle] = useState({ transition: defaultNueTransform });
 
     const nueSound = useRef(null);
 
@@ -42,7 +41,6 @@ const Nue = ({ rivalSlice, rivalState }) => {
         if (nueIntervalRef.current !== null) return;
 
         nueIntervalRef.current = setInterval(() => {
-            console.log("int: ", megumi.cursedEnergy.currentCursedEnergy)
             if (megumi.cursedEnergy.currentCursedEnergy >= 5) dispatch(changeCursedEnergy(-shikigamiDrainingCost));
             else {
                 dispatch(nueActivity(false));
@@ -69,7 +67,14 @@ const Nue = ({ rivalSlice, rivalState }) => {
 
     function nueAttack() {
         if (megumi.cursedEnergy.currentCursedEnergy < nueAttackCost) return;
-
+        dispatch2(toggleNueAttackCD());
+        // setNueStyle({ ...nueStyle, transition: "all 2s ease" });
+        dispatch(nueSlice.actions.setAnimationState("nueAttack"));
+        // dispatch(nueSlice.actions.setAnimationBlocker(true));
+        setTimeout(() => {
+            // dispatch(nueSlice.actions.setAnimationBlocker(false));
+            dispatch(nueSlice.actions.setAnimationState("nueStance"));
+        }, 1500);
         let attackDirection = "";
         attackDirection = megumi.x < rivalState.x ? "right" : "left";
         console.log("nue direction: ", nue.direction, "attackDirection: ", attackDirection,)
@@ -77,33 +82,31 @@ const Nue = ({ rivalSlice, rivalState }) => {
 
         dispatch(nueAttacking(true));
         dispatch(changeCursedEnergy(-nueAttackCost));
-        setNueStyle({ ...nueStyle, transition: "all .5s ease" });
         dispatch(setNueDirection(attackDirection));
         // setImageStyle({ ...imageStyle, transform: `scaleX(${attackDirection === "right" ? -1 : 1})` });
-        dispatch(moveNue({ x: rivalState.x, y: rivalState.y - 100 })); //move to rivalState
+        dispatch(moveNue({ x: rivalState.x - 20, y: rivalState.y - 50 })); //move to rivalState
 
         setTimeout(() => {
             dispatch(rivalSlice.actions.setCanMove(false)); // stun rivalState
-            setImageSrc(require('../Assets/nue.png')); // nue arrives to rivalState
 
+            // setImageSrc(require('../Assets/nue.png')); // nue arrives to rivalState
             setTimeout(() => { // electric attack
-                setImageSrc(require('../Assets/nue-side.png')); // nue move after electric attack
-                if (rivalState.x > megumi.x) {
-                    dispatch(moveNue({ x: rivalState.x + 200, y: rivalState.y - 200 }));
+
+                // setImageSrc(require('../Assets/nue-side.png')); // nue move after electric attack
+                if (rivalState.x > megumi.x) { // move to beside rival
+                    dispatch(moveNue({ x: rivalState.x + 100, y: rivalState.y - 100 }));
                 } else {
-                    dispatch(moveNue({ x: rivalState.x - 200, y: rivalState.y - 200 }));
+                    dispatch(moveNue({ x: rivalState.x - 100, y: rivalState.y - 100 }));
                 }
                 if (nue.isAttacking) return;
-                setTimeout(() => {
+                setTimeout(() => { // damage
                     dispatch(rivalSlice.actions.updateHealth(-nueDamage))
-                    setTimeout(() => {
+                    // dispatch(moveNue({ x: megumi.direction === "left" ? megumi.x + 30 : megumi.x - 50, y: megumi.y - 75 }));
+                    setTimeout(() => { // return
                         dispatch(nueAttacking(false));
                         dispatch(rivalSlice.actions.setCanMove(true)); // cancel stun rivalState
-                        dispatch(setNueDirection(attackDirection === "right" ? "left" : "right"));
-                        setTimeout(() => {
-                            setImageStyle({ ...imageStyle, transform: "" });
-                            setNueStyle({ ...nueStyle, transition: defaultNueTransform });
-                        }, 1000);
+                        // dispatch(setNueDirection(attackDirection === "right" ? "left" : "right")); // set nue direction for coming back, not needed anymore
+                        setNueStyle({ ...nueStyle, transition: "all .4s ease, width 0s, transform 0s" });
                     }, 1000);
                 }, 250)
             }, 250)
@@ -156,19 +159,30 @@ const Nue = ({ rivalSlice, rivalState }) => {
 
             if (keysPressed.current.j && nue.isAttacking === false && !rivalState.domainAttack) {
                 if (nue.isActive === true && rivalState.health.currentHealth > 0 && megumi.nueAttackCD.isReady) {
-                    dispatch2(toggleNueAttackCD());
                     nueAttack();
                 }
             }
-            if (keysPressed.current.k || nue.nueAuto) {
+            if ((keysPressed.current.k || nue.nueAuto) && megumi.animationState !== "callNue") {
                 console.log(" nue auto ")
                 if (nue.isActive === false && megumi.cursedEnergy.currentCursedEnergy >= callNueCost + shikigamiDrainingCost * 2) {
+                    dispatch(megumiSlice.actions.setAnimationState("callNue"))
+                    dispatch(megumiSlice.actions.setCanMove(false))
+                    dispatch(megumiSlice.actions.setAnimationBlocker(true))
+
+                    setTimeout(() => {
+
+                        dispatch(megumiSlice.actions.setCanMove(true))
+                        dispatch(megumiSlice.actions.setAnimationBlocker(false))
+                        dispatch(megumiSlice.actions.setAnimationState("stance"))
+                    }, 1000);
                     dispatch(changeCursedEnergy(-callNueCost));
                     dispatch2(toggleCallNueCD());
                     startNueInterval();
                     nueSound.current.volume = 0.5;
                     nueSound.current.play();
-                    dispatch(nueActivity(true));
+                    setTimeout(() => {
+                        dispatch(nueActivity(true));
+                    }, 500);
                 } else {
                     dispatch(nueActivity(false));
                     stopInterval(nueIntervalRef);
@@ -181,25 +195,44 @@ const Nue = ({ rivalSlice, rivalState }) => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy, rivalState.domainAttack, nue.nueAuto]);
+    }, [dispatch, nue.isAttacking, nue, megumi.cursedEnergy, rivalState.domainAttack, nue.nueAuto, megumi.nueAttackCD]);
+
+
+    useEffect(() => {
+        if (nue.animationState === "nueStance") {
+            console.log("effect nueStance")
+            setNueStyle({ ...nueStyle, width: 100, height: 128, animation: "nueStance 1s steps(1) infinite" })
+        }
+        else if (nue.animationState === "nueAttack") {
+            console.log("effect nueAttack")
+            setNueStyle({ ...nueStyle, width: 160, height: 128, animation: "nueAttack 1.5s steps(1)" })
+        }
+    }, [nue.animationState]);
 
     return (
-        <div
-            className="nue"
-            style={{
-                opacity: nue.isActive ? "1" : "0",
-                top: nue.isAttacking ? nue.y : megumi.y - 100,
-                left: nue.isAttacking ? nue.x : megumi.direction === "left" ? megumi.x + 100 : megumi.x - 100,
-                width: characterWidth,
-                height: characterHeight,
-                ...nueStyle,
-            }}>
+        // <div
+        //     className="nue"
+        //     style={{
+        //         opacity: nue.isActive ? "1" : "0",
+        //         top: nue.isAttacking ? nue.y : megumi.y - 100,
+        //         left: nue.isAttacking ? nue.x : megumi.direction === "left" ? megumi.x + 100 : megumi.x - 100,
+        //         width: characterWidth,
+        //         height: characterHeight,
+        //         ...nueStyle,
+        //     }}>
+        <div className="nue-container" style={{
+            opacity: nue.isActive ? "1" : "0",
+            top: nue.isAttacking ? nue.y : megumi.y - 75,
+            left: nue.isAttacking ? nue.x : megumi.direction === "left" ? megumi.x + 30 : megumi.x - 50,
+            ...nueStyle,
+            transition: nue.isAttacking === true ? "left 1s, top 1s" : nueStyle.transition,
+            transform: "translate(-50%, -50%) scaleX(" + (nue.direction === "left" ? -1 : 1) + ")",
+        }}>
 
-            <img src={imageSrc} alt="" style={{
-                ...imageStyle, transform: nue.direction === "left" ? "scaleX(-1)" : "scaleX(1)", height: characterHeight // Direction'a göre resmi ters çevir
-            }} />
-            <audio src={require("../Assets/audios/nue.mp3")} ref={nueSound}></audio>
-        </div>
+            < audio src={require("../Assets/audios/nue.mp3")} ref={nueSound} />
+        </div >
+
+
     );
 };
 

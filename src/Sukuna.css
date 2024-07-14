@@ -1,0 +1,1427 @@
+.sukuna-container{
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s ease;
+}
+.sukunaCC {
+    position: absolute;
+    z-index: 99;
+    width: 40px;
+    height: 94px;
+    background: url(./Assets/sukuna-sprite.png);
+    /* animation: walk-sukuna steps(1) 1s infinite; */
+    scale: 1.8;
+    translate: 0px -20px;
+    transition: all .2s ease, transform 0s;
+}
+.cleave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    background: url(./Assets/sukuna-sprite.png);
+    scale: 1;
+}
+.dismantle {
+    position: absolute;
+    width: 60px;
+    height: 79px;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    background: url(./Assets/sukuna-sprite.png) -871px -1681px;
+    transition: left .2s;
+
+}
+.rapid {
+    position: absolute;
+    transform: translate(-60%, -70%);
+    z-index: 99;
+    background: url(./Assets/sukuna-sprite.png);
+    scale: 1;
+    width: 64px;
+    height: 99px;
+    animation: rapid 1.5s steps(1) infinite;
+}
+.domain-slash{
+    position: absolute;
+    transform: translate(-60%, -70%);
+    z-index: 99;
+    background: url(./Assets/sukuna-sprite.png);
+    width: 64px;
+    height: 99px;
+    animation: domain-slash 1s steps(1) infinite;
+    transform-origin: 32px 50px !important;
+}
+@keyframes domain-slash {
+    0% {
+        background-position: -871px -1681px;
+        width: 60px;
+        height: 79px;
+    }
+
+    9% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;
+    }
+
+    18% {
+        background-position: -1071px -1689px;
+        width: 99px;
+        height: 101px;
+    }
+
+    27% {
+        background-position: -1201px -1691px;
+        width: 106px;
+        height: 99px;
+    }
+    36% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;
+        transform: translate(-30%, -70%) scaleX(-1);
+    }
+
+    45% {
+        background-position: -1071px -1689px;
+        width: 99px;
+        height: 101px;
+    }
+
+    54% {
+        background-position: -1201px -1691px;
+        width: 106px;
+        height: 99px;
+    }
+    63% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;
+        transform: translate(-60%, -70%) scaleX(1);
+    }
+
+    72% {
+        background-position: -1071px -1689px;
+        width: 99px;
+        height: 101px;
+    }
+
+    81% {
+        background-position: -1201px -1691px;
+        width: 106px;
+        height: 99px;
+    }
+    90% {
+        background-position: -1357px -1702px;
+        width: 79px;
+        height: 93px;
+    }
+    100% {
+        background-position: -1357px -1702px;
+        width: 79px;
+        height: 93px;
+        transform: translate(-60%, -70%) scaleX(1);
+    }
+}
+/* .divineDogBlack {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    padding: 5px;
+    background: url(./Assets/sukuna-sprite.png);
+    /* animation: walk-sukuna steps(1) 1s infinite; */
+    /* scale: 2; 
+} */
+@keyframes entry-sukuna {
+    0% {
+        background-position: -74px -277px;
+        width: 136px;
+        height: 30px;
+    }
+
+    10% {
+        background-position: -240px -264px;
+        width: 33px;
+        height: 52px;
+    }
+
+    20% {
+        background-position: -240px -264px;
+        width: 33px;
+        height: 52px;
+    }
+
+    30% {
+        background-position: -240px -264px;
+        width: 33px;
+        height: 52px;
+    }
+
+    40% {
+        background-position: -463px -269px;
+        width: 83px;
+        height: 51px;
+    }
+
+    50% {
+        background-position: -560px -268px;
+        width: 85px;
+        height: 55px;
+    }
+
+    60% {
+        background-position: -652px -269px;
+        width: 83px;
+        height: 58px;
+    }
+
+    70% {
+        background-position: -744px -274px;
+        width: 98px;
+        height: 55px;
+    }
+
+    80% {
+        background-position: -854px -279px;
+        width: 98px;
+        height: 55px;
+    }
+
+    90% {
+        background-position: -965px -280px;
+        width: 73px;
+        height: 55px;
+    }
+}
+@keyframes stance-sukuna {
+    0% {
+        background-position: -497px -190px;
+        width: 22px;
+        height: 52px;
+    }
+
+    16.6% {
+        background-position: -548px -192px;
+        width: 22px;
+        height: 52px;
+    }
+
+    33.3% {
+        background-position: -597px -196px;
+        width: 22px;
+        height: 52px;
+    }
+
+    50% {
+        background-position: -646px -197px;
+        width: 22px;
+        height: 52px;
+    }
+
+    /* 66.6% {
+        background-position: -707px -194px;
+        width: 22px;
+        height: 52px;
+    }
+
+    83.3% {
+        background-position: -746px -197px;
+        width: 22px;
+        height: 52px;
+    } */
+}
+@keyframes walk-sukuna {
+    0% {
+        background-position: -245px -367px;
+        width: 20px;
+        height: 51px;
+    }
+
+    25% {
+        background-position: -280px -366px;
+        width: 21px;
+        height: 52px;
+    }
+
+    50% {
+        background-position: -245px -367px;
+        width: 20px;
+        height: 51px;
+    }
+
+    75% {
+        background-position: -210px -367px;
+        width: 21px;
+        height: 51px;
+    }
+}
+@keyframes sukuna-walk {
+    0% {
+        background-position: -126px -188px;
+        width: 23px;
+        height: 51px;
+        /* translate: -1px 0px; */
+        translate: -1px -20px;
+    }
+
+    16.67% {
+        background-position: -171px -187px;
+        width: 20px;
+        height: 52px;
+        /* translate: 0 1px; */
+        translate: -1px -19px;
+    }
+
+    33.33% {
+        background-position: -82px -187px;
+        width: 20px;
+        height: 51px;
+        /* translate: 0 0px; */
+        translate: 0px -20px;
+    }
+
+    50% {
+        background-position: -212px -188px;
+        width: 21px;
+        height: 51px;
+    }
+
+    66.67% {
+        background-position: -253px -187px;
+        width: 20px;
+        height: 52px;
+        /* translate: 0 1px; */
+        translate: 0px -19px;
+    }
+
+    83.33% {
+        background-position: -82px -187px;
+        width: 20px;
+        height: 51px;
+        /* translate: 0 0px; */
+        translate: 0px -20px;
+    }
+
+    100% {
+        background-position: -126px -188px;
+        width: 23px;
+        height: 51px;
+    }
+}
+@keyframes sukuna-walk-left {
+    0% {
+        background-position: -126px -188px;
+        width: 23px;
+        height: 51px;
+        translate: -5px -20px;
+    }
+
+    16.67% {
+        background-position: -171px -187px;
+        width: 20px;
+        height: 52px;
+        translate: -3px -19px;
+    }
+
+    33.33% {
+        background-position: -82px -187px;
+        width: 20px;
+        height: 51px;
+        translate: -3px -20px;
+    }
+
+    50% {
+        background-position: -212px -188px;
+        width: 21px;
+        height: 51px;
+        translate: -4px -20px;
+    }
+
+    66.67% {
+        background-position: -253px -187px;
+        width: 20px;
+        height: 52px;
+        translate: -3px -19px;
+    }
+
+    83.33% {
+        background-position: -82px -187px;
+        width: 20px;
+        height: 51px;
+        translate: -3px -20px;
+    }
+
+    100% {
+        background-position: -126px -188px;
+        width: 23px;
+        height: 51px;
+        translate: -3px -20px;
+    }
+}
+@keyframes jump-sukuna {
+    0% {
+        background-position: -618px -384px;
+        width: 34px;
+        height: 38px;
+    }
+
+    25% {
+        background-position: -666px -359px;
+        width: 25px;
+        height: 46px;
+    }
+
+    50% {
+        background-position: -723px -366px;
+        width: 27px;
+        height: 42px;
+    }
+
+    80% {
+        background-position: -764px -399px;
+        width: 40px;
+        height: 34px;
+    }
+}
+@keyframes backflip-sukuna {
+    0% {
+        background-position: -95px -999px;
+        width: 28px;
+        height: 30px;
+    }
+
+    12.5% {
+        background-position: -144px -998px;
+        width: 58px;
+        height: 41px;
+    }
+
+    25% {
+        background-position: -234px -990px;
+        width: 33px;
+        height: 52px;
+    }
+
+    37.5% {
+        background-position: -303px -982px;
+        width: 42px;
+        height: 64px;
+    }
+
+    50% {
+        background-position: -365px -998px;
+        width: 31px;
+        height: 48px;
+    }
+
+    62.5% {
+        background-position: -424px -995px;
+        width: 44px;
+        height: 38px;
+    }
+
+    75% {
+        background-position: -490px -1005px;
+        width: 49px;
+        height: 31px;
+    }
+
+    87.5% {
+        background-position: -561px -1001px;
+        width: 34px;
+        height: 38px;
+    }
+}
+@keyframes dash-sukuna {
+    0% {
+        background-position: -749px -1036px;
+        width: 43px;
+        height: 36px;
+    }
+
+    50% {
+        background-position: -797px -1040px;
+        width: 43px;
+        height: 36px;
+    }
+
+    100% {
+        background-position: -749px -1036px;
+        width: 43px;
+        height: 36px;
+    }
+}
+/* @keyframes sukuna-cleave-right {
+    0% {
+        background-position: -744px -1687px;
+        width: 21px;
+        height: 51px;
+    }
+
+    25% {
+        background-position: -783px -1691px;
+        width: 25px;
+        height: 51px;
+    }
+
+    35% {
+        background-position: -828px -1693px;
+        width: 36px;
+        height: 51px;
+    }
+} */
+/* @keyframes sukuna-cleave-left {
+    0% {
+        background-position: -744px -1687px;
+        width: 21px;
+        height: 51px;
+        translate: -3px;
+    }
+
+    25% {
+        background-position: -783px -1691px;
+        width: 25px;
+        height: 51px;
+        translate: -7px;
+    }
+
+    35% {
+        background-position: -828px -1693px;
+        width: 36px;
+        height: 51px;
+        translate: -17px;
+    }
+} */
+@keyframes sukuna-cleave-right {
+    0% {
+        background-position: -76px -1698px;
+        width: 35px;
+        height: 41px;
+        translate: 0px -16px;
+    }
+
+    16% {
+        background-position: -128px -1697px;
+        width: 44px;
+        height: 42px;
+        translate: 0px -16px;
+    }
+
+    32% {
+        background-position: -177px -1700px;
+        width: 44px;
+        height: 42px;
+        translate: 0px -16px;
+    }
+
+    48% {
+        background-position: -239px -1655px;
+        width: 79px;
+        height: 125px;
+        translate: 14px 20px;
+    }
+
+    64% {
+        background-position: -343px -1655px;
+        width: 108px;
+        height: 132px;
+        translate: 25px 20px;
+    }
+
+    80% {
+        background-position: -497px -1666px;
+        width: 128px;
+        height: 126px;
+        translate: 33px 16px;
+    }
+    100% {
+        background-position: -497px -1666px;
+        width: 128px;
+        height: 126px;
+    }
+}
+@keyframes sukuna-cleave-left {
+0% {
+        background-position: -76px -1698px;
+        width: 35px;
+        height: 41px;
+        translate: 0px -16px;
+    }
+
+    16% {
+        background-position: -128px -1697px;
+        width: 44px;
+        height: 42px;
+        translate: -10px -16px;
+    }
+
+    32% {
+        background-position: -177px -1700px;
+        width: 44px;
+        height: 42px;
+        translate: -10px -16px;
+    }
+
+    48% {
+        background-position: -239px -1655px;
+        width: 79px;
+        height: 125px;
+        translate: -60px 20px;
+    }
+
+    64% {
+        background-position: -343px -1655px;
+        width: 108px;
+        height: 132px;
+        translate: -100px 20px;
+    }
+
+    80% {
+        background-position: -497px -1666px;
+        width: 128px;
+        height: 126px;
+        translate: -128px 16px;
+    }
+
+    100% {
+        background-position: -497px -1666px;
+        width: 128px;
+        height: 126px;
+    }
+}
+@keyframes sukuna-rapid-right {
+    0% {
+        background-position: -744px -1687px;
+        width: 21px;
+        height: 51px;
+    }
+
+    5% {
+        background-position: -783px -1691px;
+        width: 25px;
+        height: 51px;
+        translate: 100px, -20px;
+    }
+
+    10% {
+        background-position: -828px -1693px;
+        width: 36px;
+        height: 51px;
+        translate: 7px, -20px;
+    }
+}
+@keyframes sukuna-rapid-left {
+    0% {
+        background-position: -744px -1687px;
+        width: 21px;
+        height: 51px;
+        translate: -60px, -20px !important;
+    }
+
+    5% {
+        background-position: -783px -1691px;
+        width: 25px;
+        height: 51px;
+        translate: -14px, -20px;
+    }
+
+    10% {
+        background-position: -828px -1693px;
+        width: 36px;
+        height: 51px;
+        translate: -34px, -20px;
+    }
+}
+@keyframes sukuna-dismantle-right {
+    0% {
+        background-position: -83px -469px;
+        width: 21px;
+        height: 51px;
+    }
+
+    15% {
+        background-position: -133px -471px;
+        width: 23px;
+        height: 51px;
+        translate: 1px -20px;
+    }
+
+    30% {
+        background-position: -184px -472px;
+        width: 33px;
+        height: 51px;
+        translate: 5px -20px;
+    }
+
+    45% {
+        background-position: -232px -473px;
+        width: 37px;
+        height: 51px;
+        translate: 6.5px -20px;
+    }
+
+    60% {
+        background-position: -281px -476px;
+        width: 30px;
+        height: 51px;
+        translate: 4px -20px;
+    }
+
+    100% {
+        background-position: -83px -469px;
+        width: 21px;
+        height: 51px;
+        translate: 0px -20px;
+    }
+}
+@keyframes sukuna-dismantle-left {
+    0% {
+        background-position: -83px -469px;
+        width: 21px;
+        height: 51px;
+    }
+    15% {
+        background-position: -133px -471px;
+        width: 23px;
+        height: 51px;
+        translate: -2px -20px;
+    }
+
+    30% {
+        background-position: -184px -472px;
+        width: 33px;
+        height: 51px;
+        translate: -16px -20px;
+    }
+
+    45% {
+        background-position: -232px -473px;
+        width: 37px;
+        height: 51px;
+        translate: -22px -20px;
+    }
+
+    60% {
+        background-position: -281px -476px;
+        width: 30px;
+        height: 51px;
+        translate: -12px -20px;
+    }
+
+    100% {
+        background-position: -83px -469px;
+        width: 21px;
+        height: 51px;
+        translate: 0px -20px;
+    }
+}
+@keyframes sukuna-domain-pose {
+    0% {
+        background-position: -815px -2005px;
+        width: 24px;
+        height: 51px;
+    }
+
+    20% {
+        background-position: -863px -2006px;
+        width: 24px;
+        height: 51px;
+    }
+
+    40% {
+        background-position: -911px -2007px;
+        width: 22px;
+        height: 51px;
+    }
+
+    60% {
+        background-position: -954px -2008px;
+        width: 22px;
+        height: 51px;
+    }
+
+    80% {
+        background-position: -998px -2009px;
+        width: 22px;
+        height: 51px;
+        animation-fill-mode: forwards;
+    }
+    100% {
+        background-position: -998px -2009px;
+        width: 22px;
+        height: 51px;
+        animation-fill-mode: forwards;
+    }
+}
+@keyframes rapid {
+    0% {
+        background-position: -871px -1681px;
+        width: 60px;
+        height: 79px;
+    }
+
+    9% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;
+    }
+
+    18% {
+        background-position: -1071px -1689px;
+        width: 99px;
+        height: 101px;
+    }
+
+    27% {
+        background-position: -1201px -1691px;
+        width: 106px;
+        height: 99px;
+    }
+    36% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;
+        transform: translate(-60%, -70%) scaleX(-1);
+    }
+
+    45% {
+        background-position: -1071px -1689px;
+        width: 99px;
+        height: 101px;
+    }
+
+    54% {
+        background-position: -1201px -1691px;
+        width: 106px;
+        height: 99px;
+    }
+    63% {
+        background-position: -977px -1683px;
+        width: 64px;
+        height: 97px;
+        transform: translate(-60%, -70%) scaleX(1);
+    }
+
+    72% {
+        background-position: -1071px -1689px;
+        width: 99px;
+        height: 101px;
+    }
+
+    81% {
+        background-position: -1201px -1691px;
+        width: 106px;
+        height: 99px;
+    }
+    90% {
+        background-position: -1357px -1702px;
+        width: 79px;
+        height: 93px;
+    }
+    100% {
+        background-position: -1357px -1702px;
+        width: 79px;
+        height: 93px;
+    }
+}
+.sukuna-bam-effect {
+    position: absolute;
+    width: 142px;
+    height: 104px;
+    background: url(./Assets/sukuna-sprite.png);
+    display: none;
+    /* animation: sukuna-bam-effect steps(1) 1s infinite; */
+}
+@keyframes sukuna-bam-effect {
+    0% {
+        background-position: -302px -1496px;
+        width: 142px;
+        height: 104px;
+    }
+
+    25% {
+        background-position: -455px -1504px;
+        width: 187px;
+        height: 96px;
+        translate: -25px
+    }
+
+    50% {
+        background-position: -653px -1508px;
+        width: 197px;
+        height: 84px;
+        translate: -30px
+        
+    }
+
+    75% {
+        background-position: -869px -1509px;
+        width: 192px;
+        height: 83px;
+        translate: -25px
+    }
+}
+@keyframes sukuna-bam {
+    0% {
+        background-position: -80px -1351px;
+        width: 40px;
+        height: 34px;
+    }
+
+    9% {
+        background-position: -135px -1354px;
+        width: 40px;
+        height: 34px;
+    }
+
+    18% {
+        background-position: -224px -1362px;
+        width: 55px;
+        height: 30px;
+    }
+
+    27% {
+        background-position: -289px -1374px;
+        width: 71px;
+        height: 11px;
+    }
+
+    36% {
+        background-position: -388px -1362px;
+        width: 31px;
+        height: 42px;
+    }
+
+    45% {
+        background-position: -433px -1364px;
+        width: 36px;
+        height: 42px;
+    }
+
+    50% {
+        background-position: -479px -1366px;
+        width: 40px;
+        height: 42px;
+    }
+
+    /* 63% {
+        background-position: -546px -1356px;
+        width: 112px;
+        height: 80px;
+    } */
+
+    70% {
+        background-position: -702px -1389px;
+        width: 51px;
+        height: 28px;
+    }
+
+    75% {
+        background-position: -769px -1385px;
+        width: 35px;
+        height: 38px;
+    }
+
+    80% {
+        background-position: -823px -1385px;
+        width: 35px;
+        height: 38px;
+    }
+}
+@keyframes sukuna-fuga-before-scene {
+    0% {
+        background-position: -88px -2121px;
+        width: 23px;
+        height: 50px;
+    }
+
+    5% {
+        background-position: -128px -2120px;
+        width: 23px;
+        height: 50px;
+    }
+
+    10% {
+        background-position: -176px -2120px;
+        width: 25px;
+        height: 50px;
+        translate: -2px;
+    }
+
+    15% {
+        background-position: -229px -2122px;
+        width: 27px;
+        height: 50px;
+        translate: -4px;
+    }
+
+    20% {
+        background-position: -271px -2121px;
+        width: 28px;
+        height: 50px;
+        translate: -5px;
+    }
+
+    25% {
+        background-position: -317px -2122px;
+        width: 26px;
+        height: 50px;
+        translate: -2px;
+    }
+
+    30% {
+        background-position: -360px -2123px;
+        width: 24px;
+        height: 50px;
+        translate: 0px 1px;
+    }
+
+    45% {
+        background-position: -400px -2124px;
+        translate: 0px 0px;
+    }
+
+    64% {
+        background-position: -360px -2124px;
+        translate: 0px 1px;
+
+    }
+    72% {
+        background-position: -400px -2124px;
+        translate: 0px 0px;
+    }
+    80% {
+        background-position: -360px -2124px;
+    }
+    88% {
+        background-position: -400px -2124px;
+    }
+
+    96% {
+        background-position: -360px -2124px;
+    }  
+}
+@keyframes sukuna-fuga-before-scene-left {
+    0% {
+        background-position: -88px -2121px;
+        width: 23px;
+        height: 50px;
+    }
+
+    8% {
+        background-position: -128px -2120px;
+        width: 23px;
+        height: 50px;
+    }
+
+    16% {
+        background-position: -176px -2120px;
+        width: 25px;
+        height: 50px;
+        translate: -1px;
+    }
+
+    24% {
+        background-position: -229px -2122px;
+        width: 27px;
+        height: 50px;
+        translate: -1px;
+    }
+
+    32% {
+        background-position: -271px -2121px;
+        width: 28px;
+        height: 50px;
+    }
+
+    40% {
+        background-position: -317px -2122px;
+        width: 26px;
+        height: 50px;
+        translate: -2px;
+    }
+
+    /* repeat */
+    48% {
+        background-position: -360px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+
+    56% {
+        background-position: -400px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+    64% {
+        background-position: -360px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+    72% {
+        background-position: -400px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+
+    80% {
+        background-position: -360px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+
+    88% {
+        background-position: -400px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+
+    96% {
+        background-position: -360px -2124px;
+        width: 24px;
+        height: 50px;
+    }
+}
+@keyframes sukuna-fuga-after-scene {
+    0% {
+        background-position: -80px -2616px;
+        width: 45px;
+        height: 51px;
+        translate: -2px 3px;
+    }
+
+    14.29% {
+        background-position: -134px -2618px;
+        width: 55px;
+        height: 51px;
+        translate: -10px 3px;
+    }
+
+    28.57% {
+        background-position: -198px -2614px;
+        width: 65px;
+        height: 61px;
+        translate: -15px 5px;
+    }
+
+    42.86% {
+        background-position: -278px -2614px;
+        width: 67px;
+        height: 61px;
+        translate: -18px 3px;
+    }
+
+    57.14% {
+        background-position: -379px -2621px;
+        width: 89px;
+        height: 60px;
+        translate: -16px 6px;
+    }
+
+    71.43% {
+        background-position: -512px -2627px;
+        width: 108px;
+        height: 55px;
+        translate: -7px 3px;
+    }
+
+    85.71% {
+        background-position: -652px -2636px;
+        width: 98px;
+        height: 59px;
+        translate: -1px 10px;
+    }
+
+    100% {
+        background-position: -652px -2636px;
+        width: 98px;
+        height: 59px;
+    }
+}
+@keyframes sukuna-fuga-after-scene-left {
+    0% {
+        background-position: -80px -2616px;
+        width: 45px;
+        height: 51px;
+        translate: -10px 3px;
+    }
+
+    14.29% {
+        background-position: -134px -2618px;
+        width: 55px;
+        height: 51px;
+        translate: -12px 3px;
+    }
+
+    28.57% {
+        background-position: -198px -2614px;
+        width: 65px;
+        height: 61px;
+        translate: -17px 5px;
+    }
+
+    42.86% {
+        background-position: -278px -2614px;
+        width: 67px;
+        height: 61px;
+        translate: -16px 3px;
+    }
+
+    57.14% {
+        background-position: -379px -2621px;
+        width: 89px;
+        height: 60px;
+        translate: -40px 6px;
+    }
+
+    71.43% {
+        background-position: -512px -2627px;
+        width: 108px;
+        height: 55px;
+        translate: -68px 3px;
+    }
+
+    85.71% {
+        background-position: -652px -2636px;
+        width: 98px;
+        height: 59px;
+        translate: -64px 10px;
+    }
+
+    100% {
+        background-position: -652px -2636px;
+        width: 98px;
+        height: 59px;
+    }
+}
+@keyframes fire-arrow {
+    0% {
+        background-position: -780px -2629px;
+        width: 143px;
+        height: 35px;
+    }
+
+    33.33% {
+        background-position: -779px -2677px;
+        width: 144px;
+        height: 31px;
+    }
+
+    66.67% {
+        background-position: -772px -2729px;
+        width: 151px;
+        height: 43px;
+    }
+
+    100% {
+        background-position: -772px -2729px;
+        width: 151px;
+        height: 43px;
+    }
+}
+@keyframes fuga-explosion {
+    0% {
+        background-position: -79px -2851px;
+        width: 203px;
+        height: 272px;
+    }
+
+    16.67% {
+        background-position: -319px -2843px;
+        width: 225px;
+        height: 286px;
+    }
+
+    33.33% {
+        background-position: -584px -2829px;
+        width: 246px;
+        height: 315px;
+    }
+
+    50% {
+        background-position: -104px -3193px;
+        width: 277px;
+        height: 333px;
+    }
+
+    66.67% {
+        background-position: -470px -3193px;
+        width: 295px;
+        height: 349px;
+    }
+
+    83.33% {
+        background-position: -130px -3592px;
+        width: 301px;
+        height: 360px;
+    }
+
+    100% {
+        background-position: -130px -3592px;
+        width: 301px;
+        height: 360px;
+    }
+}
+@keyframes fuga-scene {
+    0% {
+        background-position: -4px -4px;
+    }
+
+    3.33% {
+        background-position: -436px -4px;
+    }
+
+    6.66% {
+        background-position: -868px -4px;
+    }
+
+    10% {
+        background-position: -1300px -4px;
+    }
+
+    13.33% {
+        background-position: -4px -224px;
+    }
+
+    16.66% {
+        background-position: -436px -224px;
+    }
+
+    20% {
+        background-position: -868px -224px;
+    }
+
+    23.33% {
+        background-position: -1300px -224px;
+    }
+
+    26.66% {
+        background-position: -4px -444px;
+    }
+
+    30% {
+        background-position: -436px -444px;
+    }
+
+    33.33% {
+        background-position: -868px -444px;
+    }
+
+    36.66% {
+        background-position: -1300px -444px;
+    }
+
+    40% {
+        background-position: -4px -664px;
+    }
+
+    43.33% {
+        background-position: -436px -664px;
+    }
+
+    46.66% {
+        background-position: -868px -664px;
+    }
+
+    50% {
+        background-position: -1300px -664px;
+    }
+
+    53.33% {
+        background-position: -4px -884px;
+    }
+
+    56.66% {
+        background-position: -436px -884px;
+    }
+
+    60% {
+        background-position: -868px -884px;
+    }
+
+    63.33% {
+        background-position: -1300px -884px;
+    }
+
+    66.66% {
+        background-position: -4px -1104px;
+    }
+
+    70% {
+        background-position: -436px -1104px;
+    }
+
+    73.33% {
+        background-position: -868px -1104px;
+    }
+
+    76.66% {
+        background-position: -1300px -1104px;
+    }
+
+    80% {
+        background-position: -4px -1324px;
+    }
+
+    83.33% {
+        background-position: -436px -1324px;
+    }
+
+    86.66% {
+        background-position: -868px -1324px;
+    }
+
+    90% {
+        background-position: -1300px -1324px;
+    }
+
+    93.33% {
+        background-position: -4px -1544px;
+    }
+
+    96.66% {
+        background-position: -436px -1544px;
+    }
+
+    100% {}
+}
+.image-cleave{
+    background: url(./Assets/sukuna-sprite.png) -1071px -1689px;
+}
+.image-dismantle {
+    background: url(./Assets/sukuna-sprite.png) -871px -1681px;
+}.image-rapid {
+    background: url(./Assets/sukuna-sprite.png) -1201px -1691px;
+}
+.fuga-scene {
+    position: absolute;
+    z-index: 5;
+    width: 424px;
+    height: 212px;
+    scale: .7;
+    background: url(./Assets/texture.png);
+}
+.fire-arrow{
+    position: absolute;
+    width: 143px;
+    height: 35px;
+    transition: all .5s, transform 0s, opacity 0s; 
+    background: url(./Assets/sukuna-sprite.png);
+}
+.fuga-explosion {
+    position: absolute;
+    z-index: 5;
+    width: 160px;
+    height: 90px;
+    translate: -50%;
+    /* scale: 2; */
+    bottom: 20px;
+    background: url(./Assets/sukuna-sprite.png);
+    /* opacity: 1 !important;
+    animation: fuga-explosion 1s steps(1) infinite; */
+}

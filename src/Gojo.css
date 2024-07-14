@@ -1,0 +1,1123 @@
+.gojo-container {
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s ease;
+}
+
+.gojoCC {
+    position: absolute;
+    width: 66px;
+    height: 94px;
+    background: url(./Assets/gojo-noline.png);
+    /* animation: gojo-stance steps(1) 1s infinite; */
+    scale: 1;
+    transition: all .2s ease, transform 0s;
+}
+@keyframes gojo-stance {
+0% {
+        background-position: -321px -187px;
+        width: 66px;
+        height: 94px;
+    }
+
+    20% {
+        background-position: -403px -189px;
+        width: 66px;
+        height: 92px;
+    }
+
+    40% {
+        background-position: -493px -187px;
+        width: 66px;
+        height: 94px;
+    }
+
+    60% {
+        background-position: -570px -187px;
+        width: 66px;
+        height: 94px;
+    }
+
+    80% {
+        background-position: -656px -187px;
+        width: 66px;
+        height: 94px;
+    }
+
+    100% {
+        background-position: -321px -187px;
+        width: 66px;
+        height: 94px;
+    }
+}
+@keyframes gojo-entry {
+    0% {
+        background-position: -34px -46px;
+        width: 50px;
+        height: 104px;
+    }
+
+    12.5% {
+        background-position: -94px -46px;
+        width: 52px;
+        height: 104px;
+    }
+
+    25% {
+        background-position: -158px -46px;
+        width: 48px;
+        height: 104px;
+    }
+
+    37.5% {
+        background-position: -212px -46px;
+        width: 112px;
+        height: 104px;
+    }
+
+    50% {
+        background-position: -328px -46px;
+        width: 112px;
+        height: 104px;
+    }
+
+    62.5% {
+        background-position: -446px -46px;
+        width: 70px;
+        height: 104px;
+    }
+
+    75% {
+        background-position: -529px -46px;
+        width: 62px;
+        height: 104px;
+    }
+
+    87.5% {
+        background-position: -617px -46px;
+        width: 44px;
+        height: 104px;
+    }
+
+    100% {
+        background-position: -34px -46px;
+        width: 50px;
+        height: 104px;
+    }
+}
+@keyframes gojo-jump {
+    0% {
+        background-position: -52px -361px;
+        width: 64px;
+        height: 78px;
+    }
+
+    5% {
+        background-position: -138px -306px;
+        width: 58px;
+        height: 108px;
+    }
+
+    20% {
+        background-position: -222px -303px;
+        width: 58px;
+        height: 80px;
+    }
+
+    60% {
+        background-position: -319px -308px;
+        width: 44px;
+        height: 106px;
+    }
+
+    80% {
+        background-position: -373px -361px;
+        width: 64px;
+        height: 78px;
+    }
+
+    100% {
+        background-position: -52px -361px;
+        width: 64px;
+        height: 78px;
+    }
+
+    /* 62.5% {
+        background-position: -484px -350px;
+        width: 68px;
+        height: 90px;
+    }
+
+    75% {
+        background-position: -571px -362px;
+        width: 64px;
+        height: 78px;
+    }
+
+    87.5% {
+        background-position: -647px -352px;
+        width: 78px;
+        height: 88px;
+    } */
+}
+@keyframes gojo-punch-combination {
+    0% {
+        background-position: -38px -493px;
+        width: 68px;
+        height: 88px;
+    }
+
+    5.88% {
+        background-position: -118px -495px;
+        width: 86px;
+        height: 86px;
+    }
+
+    11.76% {
+        background-position: -223px -494px;
+        width: 86px;
+        height: 86px;
+    }
+
+    17.64% {
+        background-position: -328px -493px;
+        width: 68px;
+        height: 88px;
+    }
+
+    23.52% {
+        background-position: -413px -495px;
+        width: 84px;
+        height: 86px;
+    }
+
+    29.40% {
+        background-position: -509px -495px;
+        width: 84px;
+        height: 86px;
+    }
+
+    35.28% {
+        background-position: -611px -503px;
+        width: 74px;
+        height: 78px;
+    }
+
+    41.16% {
+        background-position: -704px -503px;
+        width: 98px;
+        height: 78px;
+    }
+
+    47.04% {
+        background-position: -815px -503px;
+        width: 86px;
+        height: 78px;
+    }
+
+    52.92% {
+        background-position: -920px -497px;
+        width: 72px;
+        height: 84px;
+    }
+
+    58.80% {
+        background-position: -1012px -499px;
+        width: 78px;
+        height: 82px;
+    }
+
+    64.68% {
+        background-position: -1104px -499px;
+        width: 76px;
+        height: 82px;
+    }
+
+    70.56% {
+        background-position: -1195px -493px;
+        width: 78px;
+        height: 88px;
+    }
+
+    76.44% {
+        background-position: -1285px -491px;
+        width: 86px;
+        height: 90px;
+    }
+
+    82.32% {
+        background-position: -1387px -455px;
+        width: 90px;
+        height: 134px;
+        translate: 0px 8px;
+    }
+
+    88.20% {
+        background-position: -1513px -443px;
+        width: 88px;
+        height: 160px;
+        translate: 0px 22px;
+    }
+
+    94.08% {
+        background-position: -1627px -491px;
+        width: 76px;
+        height: 90px;
+        translate: 0px 0px;
+    }
+
+    100% {
+        background-position: -38px -493px;
+        width: 68px;
+        height: 88px;
+    }
+}
+@keyframes gojo-blackflash-combination {
+    0% {
+        background-position: -31px -655px;
+        width: 108px;
+        height: 86px;
+    }
+
+    7.14% {
+        background-position: -160px -655px;
+        width: 83px;
+        height: 86px;
+    }
+
+    14.28% {
+        background-position: -286px -657px;
+        width: 58px;
+        height: 84px;
+    }
+
+    21.42% {
+        background-position: -366px -649px;
+        width: 78px;
+        height: 92px;
+    }
+
+    28.56% {
+        background-position: -463px -649px;
+        width: 78px;
+        height: 92px;
+    }
+
+    35.70% {
+        background-position: -559px -653px;
+        width: 68px;
+        height: 88px;
+    }
+
+    42.84% {
+        background-position: -653px -647px;
+        width: 72px;
+        height: 94px;
+    }
+
+    49.98% {
+        background-position: -745px -647px;
+        width: 72px;
+        height: 94px;
+    }
+
+    57.12% {
+        background-position: -833px -653px;
+        width: 78px;
+        height: 88px;
+    }
+
+    64.26% {
+        background-position: -929px -655px;
+        width: 88px;
+        height: 86px;
+    }
+
+    71.40% {
+        background-position: -1026px -635px;
+        width: 138px;
+        height: 110px;
+        translate: 0px 4px;
+    }
+
+    78.54% {
+        background-position: -1196px -655px;
+        width: 94px;
+        height: 86px;
+        translate: 0px 0px;
+    }
+
+    85.68% {
+        background-position: -1306px -655px;
+        width: 100px;
+        height: 86px;
+    }
+
+    92.82% {
+        background-position: -1424px -641px;
+        width: 118px;
+        height: 104px;
+        translate: 0px 4px;
+    }
+
+    100% {
+        background-position: -1563px -655px;
+        width: 82px;
+        height: 86px;
+        translate: 0px 0px;
+    }
+}
+@keyframes gojo-blue {
+    0% {
+        background-position: -77px -1197px;
+        width: 44px;
+        height: 104px;
+    }
+
+    10% {
+        background-position: -150px -1217px;
+        width: 72px;
+        height: 84px;
+    }
+
+    20% {
+        background-position: -239px -1217px;
+        width: 58px;
+        height: 84px;
+    }
+
+    30% {
+        background-position: -317px -1217px;
+        width: 58px;
+        height: 84px;
+    }
+
+    40% {
+        background-position: -392px -1217px;
+        width: 76px;
+        height: 84px;
+    }
+
+    50% {
+        background-position: -477px -1217px;
+        width: 84px;
+        height: 84px;
+    }
+
+    60% {
+        background-position: -565px -1217px;
+        width: 90px;
+        height: 84px;
+    }
+
+    70% {
+        background-position: -667px -1213px;
+        width: 92px;
+        height: 88px;
+    }
+
+    80% {
+        background-position: -790px -1209px;
+        width: 78px;
+        height: 92px;
+    }
+
+    90% {
+        background-position: -892px -1209px;
+        width: 78px;
+        height: 92px;
+    }
+
+    100% {
+        background-position: -77px -1197px;
+        width: 44px;
+        height: 104px;
+    }
+}
+.blue{
+    background: url(./Assets/gojo-noline.png) no-repeat;
+}
+@keyframes blueEffect {
+    0%{
+        background-position: -1210px -1147px;
+        width: 125px;
+        height: 111px;
+    }
+
+    33% {
+        background-position: -1085px -1147px;
+        width: 110px;
+        height: 114px;
+    }
+
+    66% {
+        background-position: -973px -1161px;
+        width: 98px;
+        height: 88px;
+    }
+
+    100% {
+        background-position: -1210px -1147px;
+        width: 125px;
+        height: 111px;
+    }
+}
+@keyframes blue-itself {
+    /* top:  80 62 84 */
+    /* left: 74 62 76  */
+    0% {
+        background-position: -65px -1327px;
+        width: 218px;
+        height: 184px;
+    }
+
+    33% {
+        background-position: -289px -1349px;
+        width: 200px;
+        height: 198px;
+        translate: 12px 18px;
+    }
+
+    66% {
+        background-position: -545px -1343px;
+        width: 216px;
+        height: 204px;
+        translate: -2px -2px;
+    }
+    100% {
+        background-position: -65px -1327px;
+        width: 218px;
+        height: 184px;
+        translate: 0px 0px;
+    }
+}
+@keyframes gojo-red-up {
+    0% {
+        background-position: -90px -1618px;
+        width: 43px;
+        height: 104px;
+    }
+
+    6% {
+        background-position: -162px -1638px;
+        width: 72px;
+        height: 84px;
+    }
+
+    12% {
+        background-position: -252px -1624px;
+        width: 66px;
+        height: 98px;
+    }
+
+    18% {
+        background-position: -335px -1624px;
+        width: 60px;
+        height: 98px;
+    }
+
+    24% {
+        background-position: -426px -1622px;
+        width: 62px;
+        height: 100px;
+    }
+
+    30% {
+        background-position: -515px -1620px;
+        width: 64px;
+        height: 102px;
+    }
+
+    36% {
+        background-position: -608px -1624px;
+        width: 66px;
+        height: 98px;
+    }
+
+    42% {
+        background-position: -695px -1624px;
+        width: 62px;
+        height: 98px;
+    }
+
+    48% {
+        background-position: -770px -1624px;
+        width: 62px;
+        height: 98px;
+    }
+
+    54% {
+        background-position: -851px -1624px;
+        width: 74px;
+        height: 98px;
+    }
+
+    60% {
+        background-position: -939px -1624px;
+        width: 74px;
+        height: 98px;
+    }
+
+    66% {
+        background-position: -1025px -1624px;
+        width: 80px;
+        height: 98px;
+    }
+
+    72% {
+        background-position: -1115px -1624px;
+        width: 78px;
+        height: 98px;
+    }
+
+    78% {
+        background-position: -1240px -1618px;
+        width: 64px;
+        height: 104px;
+    }
+
+    84% { /* upside */
+        background-position: -1316px -1618px;
+        width: 44px;
+        height: 104px;
+    }
+
+    90% { /* upside */
+        background-position: -1390px -1618px;
+        width: 44px;
+        height: 104px;
+    }
+    100% { /* upside */
+        background-position: -1390px -1618px;
+        width: 44px;
+        height: 104px;
+    }
+}
+@keyframes gojo-red-horizontal {
+    0% {
+        background-position: -90px -1618px;
+        width: 43px;
+        height: 104px;
+    }
+
+    6% {
+        background-position: -162px -1638px;
+        width: 72px;
+        height: 84px;
+    }
+
+    12% {
+        background-position: -252px -1624px;
+        width: 66px;
+        height: 98px;
+    }
+
+    18% {
+        background-position: -335px -1624px;
+        width: 60px;
+        height: 98px;
+    }
+
+    24% {
+        background-position: -426px -1622px;
+        width: 62px;
+        height: 100px;
+    }
+
+    30% {
+        background-position: -515px -1620px;
+        width: 64px;
+        height: 102px;
+    }
+
+    36% {
+        background-position: -608px -1624px;
+        width: 66px;
+        height: 98px;
+    }
+
+    42% {
+        background-position: -695px -1624px;
+        width: 62px;
+        height: 98px;
+    }
+
+    48% {
+        background-position: -770px -1624px;
+        width: 62px;
+        height: 98px;
+    }
+
+    54% {
+        background-position: -851px -1624px;
+        width: 74px;
+        height: 98px;
+    }
+
+    60% {
+        background-position: -939px -1624px;
+        width: 74px;
+        height: 98px;
+    }
+
+    66% {
+        background-position: -1025px -1624px;
+        width: 80px;
+        height: 98px;
+    }
+
+    72% {
+        background-position: -1115px -1624px;
+        width: 78px;
+        height: 98px;
+    }
+
+    78% {
+        background-position: -1240px -1618px;
+        width: 64px;
+        height: 104px;
+    }
+    100% {
+        background-position: -1240px -1618px;
+        width: 64px;
+        height: 104px;
+    }
+}
+@keyframes gojo-red-vertical {
+    0% {
+        background-position: -90px -1618px;
+        width: 43px;
+        height: 104px;
+    }
+
+    6% {
+        background-position: -162px -1638px;
+        width: 72px;
+        height: 84px;
+    }
+
+    12% {
+        background-position: -252px -1624px;
+        width: 66px;
+        height: 98px;
+    }
+
+    18% {
+        background-position: -335px -1624px;
+        width: 60px;
+        height: 98px;
+    }
+
+    24% {
+        background-position: -426px -1622px;
+        width: 62px;
+        height: 100px;
+    }
+
+    30% {
+        background-position: -515px -1620px;
+        width: 64px;
+        height: 102px;
+    }
+
+    36% {
+        background-position: -608px -1624px;
+        width: 66px;
+        height: 98px;
+    }
+
+    42% {
+        background-position: -695px -1624px;
+        width: 62px;
+        height: 98px;
+    }
+
+    48% {
+        background-position: -770px -1624px;
+        width: 62px;
+        height: 98px;
+    }
+
+    54% {
+        background-position: -851px -1624px;
+        width: 74px;
+        height: 98px;
+    }
+
+    60% {
+        background-position: -939px -1624px;
+        width: 74px;
+        height: 98px;
+    }
+
+    66% {
+        background-position: -1025px -1624px;
+        width: 80px;
+        height: 98px;
+    }
+
+    72% {
+        background-position: -1115px -1624px;
+        width: 78px;
+        height: 98px;
+    }
+
+    78% {
+        background-position: -1240px -1618px;
+        width: 64px;
+        height: 104px;
+    }
+    80%{
+        background-position: -1240px -1618px;
+        width: 64px;
+        height: 104px;
+    }
+    85% {
+        background-position: -1316px -1618px;
+        width: 44px;
+        height: 104px;
+    }
+    90% {
+        background-position: -1390px -1508px;
+        width: 55px;
+        height: 214px;
+    }
+    100% {
+        background-position: -1390px -1508px;
+        width: 55px;
+        height: 214px;
+    }
+}
+@keyframes gojo-red-minieffect {
+    0% {
+        background-position: -1407px -1585px;
+        width: 34px;
+        height: 30px;
+    }
+    33%{
+        background-position: -1401px -1545px;
+        width: 42px;
+        height: 30px;
+    }
+    66% {
+        background-position: -1397px -1508px;
+        width: 48px;
+        height: 30px;
+    }
+    100% {
+        background-position: -1407px -1585px;
+        width: 34px;
+        height: 30px;
+    }
+}
+@keyframes red-itself {
+    /* 68x76 62x62 76x84 */
+    0% {
+        background-position: -78px -1743px;
+        width: 202px;
+        height: 180px;
+    }
+
+    33% {
+        background-position: -296px -1761px;
+        width: 200px;
+        height: 198px;
+        translate: 6px 14px;
+        /* translate: 3px 7px; */
+    }
+    66% {
+        background-position: -552px -1755px;
+        width: 216px;
+        height: 204px;
+        translate: -8px -5px;
+        /* translate: -4px -2.5px; */
+    }
+    100% {
+        background-position: -78px -1743px;
+        width: 202px;
+        height: 180px;
+        translate: 0px 0px;
+    }
+}
+@keyframes purple-itself {
+
+    /* 96x84 117x120 98x116 */
+    0% {
+        background-position: -854px -2356px;
+        width: 258px;
+        height: 218px;
+    }
+
+    33% {
+        background-position: -1114px -2336px;
+        width: 278px;
+        height: 272px;
+        translate: -22px -36px;
+        /* translate: 3px 7px; */
+    }
+
+    66% {
+        background-position: -1450px -2334px;
+        width: 254px;
+        height: 290px;
+        translate: -2px -34px;
+        /* translate: -4px -2.5px; */
+    }
+
+    100% {
+        background-position: -854px -2356px;
+        width: 258px;
+        height: 218px;
+        translate: 0px 0px;
+    }
+}
+@keyframes gojo-makingPurple {
+    0% {
+        background-position: -117px -2017px;
+        width: 44px;
+        height: 104px;
+    }
+
+    7% {
+        background-position: -191px -2019px;
+        width: 40px;
+        height: 102px;
+    }
+
+    14% {
+        background-position: -250px -2019px;
+        width: 154px;
+        height: 102px;
+        translate: -52px 0px;
+    }
+
+    21% {
+        background-position: -432px -2019px;
+        width: 170px;
+        height: 102px;
+        translate: -59px 0px;
+    }
+
+    28% {
+        background-position: -633px -2019px;
+        width: 178px;
+        height: 102px;
+        translate: -65px 0px;
+    }
+
+    35% {
+        background-position: -835px -1991px;
+        width: 218px;
+        height: 130px;
+        translate: -71px 0px;
+    }
+
+    42% {
+        background-position: -1084px -2008px;
+        width: 220px;
+        height: 113px;
+        translate: -92px 0px;
+    }
+
+    49% {
+        background-position: -1328px -2019px;
+        width: 150px;
+        height: 102px;
+        translate: -54px 0px;
+    }
+
+    56% {
+        background-position: -110px -2135px;
+        width: 90px;
+        height: 114px;
+        translate: -18px 0px;
+    }
+
+    63% {
+        background-position: -223px -2145px;
+        width: 84px;
+        height: 104px;
+        translate: -16px 0px;
+    }
+    70% {
+        background-position: -337px -2145px;
+        width: 84px;
+        height: 104px;
+    }
+    77% {
+        background-position: -446px -2155px;
+        width: 171px;
+        height: 115px;
+        translate: 0px 20px;
+    }
+    84% {
+        background-position: -637px -2163px;
+        width: 170px;
+        height: 88px;
+        translate: 0px 1px;
+    }
+    91% {
+        background-position: -827px -2163px;
+        width: 170px;
+        height: 88px;
+    }
+    100% {
+        background-position: -827px -2163px;
+        width: 170px;
+        height: 88px;
+    }
+}
+@keyframes gojo-makingPurple-left {
+    0% {
+        background-position: -117px -2017px;
+        width: 44px;
+        height: 104px;
+    }
+
+    7% {
+        background-position: -191px -2019px;
+        width: 40px;
+        height: 102px;
+    }
+
+    14% {
+        background-position: -250px -2019px;
+        width: 154px;
+        height: 102px;
+        translate: 52px 0px;
+    }
+
+    21% {
+        background-position: -432px -2019px;
+        width: 170px;
+        height: 102px;
+        translate: 59px 0px;
+    }
+
+    28% {
+        background-position: -633px -2019px;
+        width: 178px;
+        height: 102px;
+        translate: 65px 0px;
+    }
+
+    35% {
+        background-position: -835px -1991px;
+        width: 218px;
+        height: 130px;
+        translate: 71px 0px;
+    }
+
+    42% {
+        background-position: -1084px -2008px;
+        width: 220px;
+        height: 113px;
+        translate: 92px 0px;
+    }
+
+    49% {
+        background-position: -1328px -2019px;
+        width: 150px;
+        height: 102px;
+        translate: 54px 0px;
+    }
+
+    56% {
+        background-position: -110px -2135px;
+        width: 90px;
+        height: 114px;
+        translate: 18px 0px;
+    }
+
+    63% {
+        background-position: -223px -2145px;
+        width: 84px;
+        height: 104px;
+        translate: 16px 0px;
+    }
+
+    70% {
+        background-position: -337px -2145px;
+        width: 84px;
+        height: 104px;
+    }
+
+    77% {
+        background-position: -446px -2155px;
+        width: 171px;
+        height: 115px;
+        translate: 0px 20px;
+    }
+
+    84% {
+        background-position: -637px -2163px;
+        width: 170px;
+        height: 88px;
+        translate: 0px 1px;
+    }
+
+    91% {
+        background-position: -827px -2163px;
+        width: 170px;
+        height: 88px;
+    }
+
+    100% {
+        background-position: -827px -2163px;
+        width: 170px;
+        height: 88px;
+    }
+}
+
+@keyframes purple-throwing {
+    0% {
+        background-position: -112px -2289px;
+        width: 266px;
+        height: 84px;
+    }
+
+    33% {
+        background-position: -112px -2385px;
+        width: 266px;
+        height: 84px;
+    }
+
+    66% {
+        background-position: -112px -2483px;
+        width: 266px;
+        height: 84px;
+    }
+
+    100% {
+        background-position: -112px -2289px;
+        width: 266px;
+        height: 84px;
+    }
+}
+.purple-itself {
+    position: absolute;
+    transition: all .2s ease, transform 4s, top 0s ease, left 0s ease-in;
+    width: 258px;
+    height: 218px;
+    z-index: 9;
+    background: url(./Assets/gojo-noline.png);
+    animation: purple-itself .4s steps(1) infinite;
+}
+.purple {
+    position: absolute;
+    transition: all .2s ease, transform 4s, top 0s ease, left 2s ease-in;
+    width: 200px;
+    height: 200px;
+    z-index: 9;
+    background: url(./Assets/gojo-noline.png);
+    animation: purple-throwing .5s steps(1) infinite;
+}
+.red {
+    position: absolute;
+    transition: all .2s ease, transform 4s, top 0s ease, left 0s ease;
+    width: 150px;
+    height: 150px;
+    z-index: 9;
+    background: url(./Assets/gojo-noline.png);
+}
