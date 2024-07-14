@@ -13,6 +13,11 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
+    if (savedUsername === "change_") {
+      localStorage.removeItem('username');
+      console.log("change")
+      setSavedUsername(null)
+    }
     if (storedUsername) {
       setSavedUsername(storedUsername);
       setShowMainMenu(true)
@@ -46,9 +51,23 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
 
   return (
     <div className="main-screen">
-      {savedUsername && (
-        <div style={{ position: "absolute", top: "0%", left: "50%", translate: "-50% 0" }}>
-          <h2>Welcome, {savedUsername} !</h2>
+      {localStorage.getItem('username') && (
+        <div style={{ position: "absolute", top: "0%", left: "50%", translate: "-50% 0", zIndex: 99 }}>
+          <h2>Welcome,
+            <button className='username-button' onClick={() => setSavedUsername('change_')} style={{
+              outline: "none", backgroundColor: "transparent", border: "none",
+              fontSize: "1em",
+              fontWeight: "bold",
+              marginBlockStart: "0.83em",
+              marginBlockEnd: "0.83em",
+              marginInlineStart: "0px",
+              marginInlineEnd: "0px",
+              color: "white",
+              cursor: "pointer",
+            }}>
+              {savedUsername} !
+            </button>
+          </h2>
         </div>
       )}
       {showMainMenu &&
@@ -71,7 +90,7 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
 
         </div>
       }
-      {!savedUsername && (
+      {!localStorage.getItem('username') && (
         <div style={{ position: "absolute", top: "0%", left: "50%", translate: "-50% 0" }}>
           <h1>Enter Your Username</h1>
           <form onSubmit={handleSubmit}>
@@ -93,10 +112,10 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
 
       {showCharacterMenu && (
         <div className="character-menu">
-          <button className="character-button" onClick={() => saveCharacter('megumi')}>
+          {/* <button className="character-button" onClick={() => saveCharacter('megumi')}>
             <img src={require("../Assets/megumi.png")} alt="" />
             <h2 style={{}}>Fushiguro Megumi</h2>
-          </button>
+          </button> */}
           <button className="character-button" onClick={() => saveCharacter('gojo')}>
             <img src={require("../Assets/kitkat.png")} alt="" />
             <h2 style={{}}>Satoru Gojo</h2>
@@ -110,14 +129,14 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
       {showRivalCharacterMenu && (
         <div className="character-menu">
           <h1 style={{ position: "absolute", top: "10%", left: "50%", transform: "translate(-50%, -50%)" }}>Select Your Rival</h1>
-          {gameSettings.selectedCharacter !== "megumi" && (
+          {/* {gameSettings.selectedCharacter !== "megumi" && (
             <div>
               <button className="character-button" onClick={() => saveRivalCharacter('megumi')}>
                 <img src={require("../Assets/megumi.png")} alt="" />
                 <h2 style={{}}>Fushiguro Megumi</h2>
               </button>
             </div>
-          )}
+          )} */}
           {gameSettings.selectedCharacter !== "gojo" && (
             <div>
               <button className="character-button" onClick={() => saveRivalCharacter('gojo')}>

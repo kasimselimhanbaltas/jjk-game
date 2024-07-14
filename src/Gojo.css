@@ -368,6 +368,112 @@
         translate: 0px 0px;
     }
 }
+@keyframes gojo-kick-combo {
+    0% {
+        background-position: -64px -811px;
+        width: 70px;
+        height: 88px;
+    }
+
+    6.25% {
+        background-position: -162px -811px;
+        width: 80px;
+        height: 88px;
+    }
+
+    12.5% {
+        background-position: -255px -810px;
+        width: 76px;
+        height: 88px;
+    }
+
+    18.75% {
+        background-position: -347px -803px;
+        width: 62px;
+        height: 96px;
+    }
+
+    25% {
+        background-position: -421px -811px;
+        width: 78px;
+        height: 88px;
+    }
+
+    31.25% {
+        background-position: -519px -811px;
+        width: 78px;
+        height: 88px;
+    }
+
+    37.5% {
+        background-position: -621px -811px;
+        width: 78px;
+        height: 88px;
+    }
+
+    43.75% {
+        background-position: -715px -805px;
+        width: 56px;
+        height: 94px;
+    }
+
+    50% {
+        background-position: -793px -807px;
+        width: 78px;
+        height: 94px;
+    }
+
+    56.25% {
+        background-position: -897px -808px;
+        width: 64px;
+        height: 92px;
+    }
+
+    62.5% {
+        background-position: -998px -805px;
+        width: 42px;
+        height: 76px;
+    }
+
+    68.75% {
+        background-position: -1066px -802px;
+        width: 112px;
+        height: 84px;
+    }
+
+    75% {
+        background-position: -1196px -799px;
+        width: 102px;
+        height: 84px;
+    }
+
+    81.25% {
+        background-position: -1321px -799px;
+        width: 62px;
+        height: 82px;
+    }
+
+    87.5% {
+        background-position: -1414px -805px;
+        width: 100px;
+        height: 78px;
+    }
+
+    93.75% {
+        background-position: -1534px -807px;
+        width: 94px;
+        height: 78px;
+    }
+
+    100% {
+        background-position: -1534px -807px;
+        width: 94px;
+        height: 78px;
+    }
+
+    /* Son karede animasyonu sabitlemek için */
+}
+
 @keyframes gojo-blue {
     0% {
         background-position: -77px -1197px;

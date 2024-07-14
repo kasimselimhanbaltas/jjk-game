@@ -422,10 +422,10 @@ const GameArea = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [xDistance >= 100, xDistance <= -100]);
+  }, [xDistance >= 100, xDistance <= -100, xDistance <= -300, xDistance >= 300]);
   // rivalCharacter.closeRange, rivalCharacter.rivalDirection
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state ##
+  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
