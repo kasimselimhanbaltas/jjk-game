@@ -96,7 +96,12 @@ const megumiSlice = createSlice({
       state.health.currentHealth = action.payload;
     },
     changeCursedEnergy(state, action) {
-      state.cursedEnergy.currentCursedEnergy += action.payload;
+      if (
+        state.cursedEnergy.currentCursedEnergy + action.payload <=
+          state.cursedEnergy.maxCursedEnergy &&
+        state.cursedEnergy.currentCursedEnergy + action.payload >= 0
+      )
+        state.cursedEnergy.currentCursedEnergy += action.payload;
     },
     setCursedEnergy(state, action) {
       state.cursedEnergy.currentCursedEnergy = action.payload;

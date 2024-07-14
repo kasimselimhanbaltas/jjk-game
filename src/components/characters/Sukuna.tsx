@@ -12,6 +12,7 @@ import useCooldown from '../../hooks/useCoolDown';
 import { AppDispatch, RootState } from '../../redux/GlobalStore';
 import "../../Sukuna.css";
 import { divineDogsAttacking } from '../../redux/DivineDogsSlice';
+import { setAnimationBlocker } from '../../redux/NueSlice';
 
 const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
@@ -292,8 +293,14 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     useEffect(() => {
         if (sukuna.health.currentHealth <= 0 && gameSettings.selectedCharacter !== "sukuna")
             stopAttackInterval();
-    }, [sukuna.health.currentHealth]);
+    }, [sukuna.health.currentHealth <= 0]);
 
+    useEffect(() => { // when sukuna gets stun, cancel backflip 
+        if (sukuna.canMove === false) {
+            clearInterval(backflipInterval.current);
+            backflipInterval.current = null;
+        }
+    }, [sukuna.canMove]);
 
 
     // Sukuna keyboard control
@@ -304,7 +311,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             if (gameSettings.selectedCharacter === "sukuna") {
 
                 if (key === "s" && backflipInterval.current === null && sukuna.isJumping === false &&
-                    sukuna.animationState !== "backflip" && !sukuna.animationBlocker) {
+                    sukuna.animationState !== "backflip" && !sukuna.animationBlocker && sukuna.canMove) {
                     dispatch(sukunaSlice.actions.setAnimationState("backflip"));
                     dispatch(sukunaSlice.actions.setAnimationBlocker(true));
                     backflipInterval.current = setInterval(() => {
@@ -699,7 +706,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 top: 470, ...bamStyle
             }}>
             </div>
-
+            {sukuna.animationBlocker ? "blocked" : "not blocked"}
             <div className='sukunaCC' style={{
                 bottom: gameAreaHeight - sukuna.y,
                 left: sukuna.positioningSide === "left" ? sukuna.x : undefined,
