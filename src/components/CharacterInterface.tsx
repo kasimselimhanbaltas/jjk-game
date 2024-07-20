@@ -207,7 +207,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                     })}
                                 />
                                 <p style={{ marginTop: "60px", lineBreak: "loose" }}>Fuga:</p>
-                                <p style={{ marginTop: "-10px" }}> {playerCharacter.fugaCounter.currentCount >= playerCharacter.fugaCounter.maxCount ? "Ready - J" : playerCharacter.fugaCounter.currentCount + "/" + playerCharacter.fugaCounter.maxCount} </p>
+                                <p style={{ marginTop: "-10px" }}> {playerCharacter.fugaCounter.currentCount >= playerCharacter.fugaCounter.maxCount ? "Ready - F" : playerCharacter.fugaCounter.currentCount + "/" + playerCharacter.fugaCounter.maxCount} </p>
                             </div>
                         </div>
 
@@ -466,7 +466,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                     })}
                                 />
                                 <p style={{ marginTop: "60px", lineBreak: "loose" }}>Fuga:</p>
-                                <p style={{ marginTop: "-10px" }}> {sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount ? "Ready - J" : sukuna.fugaCounter.currentCount + "/" + sukuna.fugaCounter.maxCount} </p>
+                                <p style={{ marginTop: "-10px" }}> {sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount ? "Ready - F" : sukuna.fugaCounter.currentCount + "/" + sukuna.fugaCounter.maxCount} </p>
                             </div>
                         </div>
 

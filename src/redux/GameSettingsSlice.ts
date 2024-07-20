@@ -2,11 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import { GameSettings } from "../App";
 
 const initialState: GameSettings = {
-  selectedCharacter: "gojo",
-  selectedRivalCharacter: "sukuna",
+  selectedCharacter: "sukuna",
+  selectedRivalCharacter: "gojo",
   winner: "",
   loser: "",
   surfaceY: 560,
+  entry: false,
 };
 
 const gameSettingsSlice = createSlice({
@@ -28,6 +29,9 @@ const gameSettingsSlice = createSlice({
     setSurfaceY(state, action) {
       state.surfaceY = action.payload;
     },
+    setEntry(state, action) {
+      state.entry = action.payload;
+    },
   },
 });
 
@@ -37,6 +41,7 @@ export const {
   setWinner,
   setLoser,
   setSurfaceY,
+  setEntry,
 } = gameSettingsSlice.actions;
 export default gameSettingsSlice;
 

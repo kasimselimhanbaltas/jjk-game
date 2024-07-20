@@ -21,6 +21,7 @@ const Controls = () => {
                             <p>E - Cleave(Close Range)</p>
                             <p>R - Dismantle</p>
                             <p>F - Fuga(⬜)</p>
+                            <p style={{ color: "gold" }}>J - Kick Combo</p>
                             <p>K - Smash Attack</p>
                             <p>L - Domain Expansion</p>
                         </>
@@ -37,11 +38,11 @@ const Controls = () => {
                     <>
                         <p> E - Blue </p>
                         <p> R - Red </p>
-                        <p> E + R - Purple </p>
+                        <p style={{ color: "gold" }}> E + R - Purple </p>
                         <p> J - Punch Combo</p>
                         <p> S + J - Kick Combo</p>
                         <p> K - Black Flash Combo</p>
-                        <p> SHIFT + E/R - Charge Skills </p>
+                        <p style={{ color: "gold" }}> SHIFT + E/R - Charge Skills </p>
                     </>
                 )}
             </div>

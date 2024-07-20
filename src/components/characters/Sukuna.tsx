@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import sukunaSlice, {
     moveCharacter, moveCharacterTo, rivalCleaveAttack, rivalDismantleAttack, setRapidAttack,
@@ -13,6 +13,7 @@ import { AppDispatch, RootState } from '../../redux/GlobalStore';
 import "../../Sukuna.css";
 import { divineDogsAttacking } from '../../redux/DivineDogsSlice';
 import { setAnimationBlocker } from '../../redux/NueSlice';
+import gojoSlice from '../../redux/character-slices/GojoSlice';
 
 const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
@@ -40,6 +41,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const smashSoundEffectRef = React.useRef(null);
     const fugaSoundEffectRef = React.useRef(null);
     const punchSoundEffectRef = React.useRef(null);
+    const slashSoundEffectRef = React.useRef(null);
 
     const keysPressed = useRef({
         a: false, s: false, d: false, w: false,
@@ -84,7 +86,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     }, [sukuna.hardStun, sukuna.closeRange, sukuna.canMove, sukuna.rapidAttackCounter >= 10,
     sukuna.health.currentHealth <= 0, sukuna.cleaveCD.isReady, sukuna.dismantleCD.isReady, sukuna.domainCD.isReady,
-    rivalState.health.currentHealth <= 0, sukuna.animationBlocker, xDistance > 0]);
+    rivalState.health.currentHealth <= 0, sukuna.animationBlocker, xDistance > 0, sukuna.direction]);
 
     function updateRivalDirection(direction) {
         if (gameSettings.selectedCharacter === "sukuna") {
@@ -186,6 +188,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     }
     const localCleaveAttack = (stepDistance) => {
         if (!sukuna.closeRange || sukuna.animationBlocker) return;
+        slashSoundEffectRef.current.volume = 0.1;
         let attackDirection = "";
         attackDirection = sukuna.x < rivalState.x ? "right" : "left";
 
@@ -196,9 +199,15 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
         updateRivalDirection(attackDirection === "right" ? "left" : "right");
         dispatch(sukunaSlice.actions.setDirection(attackDirection))
+        dispatch(rivalSlice.actions.setHardStun(true))
+        dispatch(sukunaSlice.actions.setHardStun(true))
         dispatch(sukunaSlice.actions.setCanMove(false))
         dispatch(sukunaSlice.actions.setAnimationState("cleave"))
         dispatch(sukunaSlice.actions.setAnimationBlocker(true))
+        setTimeout(() => {
+            slashSoundEffectRef.current.currentTime = 0;
+            slashSoundEffectRef.current.play()
+        }, 300);
         setTimeout(() => {
             dispatch(sukunaSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 50 : rivalState.x + 70, y: sukuna.y }));
         }, 200);
@@ -207,14 +216,19 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             dispatch(sukunaSlice.actions.setCanMove(true))
             dispatch(sukunaSlice.actions.setAnimationState("stance"))
         }, 1000);
-        dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 3)); //3
+        // dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 3)); //3
         dispatch(sukunaSlice.actions.changeCursedEnergy(dismantleCost));
+
         dispatch(rivalDismantleAttack(true));
         setTimeout(() => {
-            dispatch(rivalSlice.actions.updateHealth(dismantleAttackDamage)); // Megumi'ın canını azalt
+            dispatch(gojoSlice.actions.setTakeDamage({
+                isTakingDamage: true, damage: 100, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+            }));
             dispatch(rivalSlice.actions.moveCharacterWD({ x: attackDirection === "right" ? -stepDistance : stepDistance, y: 0 }));
             dispatch(rivalSlice.actions.setAnimationState("takeDamage"))
             setTimeout(() => {
+                dispatch(rivalSlice.actions.setHardStun(false)) // ****
+                dispatch(sukunaSlice.actions.setHardStun(false)) // ****
                 dispatch(rivalSlice.actions.setAnimationState("stance"))
                 dispatch(rivalSlice.actions.setCanMove(true))
             }, 1000);
@@ -226,9 +240,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         }, 700);
     }
 
-    const localDismantleAttack = () => {
-        if (sukuna.animationBlocker) return;
-        dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 1));
+    const localDismantleAttack = useCallback(() => {
+        slashSoundEffectRef.current.volume = 0.1;
+        // dispatch(setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 1));
         let attackDirection = "";
         attackDirection = sukuna.x < rivalState.x ? "right" : "left";
         dispatch(sukunaSlice.actions.setDirection(attackDirection))
@@ -236,6 +250,10 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         dispatch(sukunaSlice.actions.setAnimationState("dismantle"))
         dispatch(sukunaSlice.actions.setCanMove(false))
         dispatch(sukunaSlice.actions.setAnimationBlocker(true))
+        setTimeout(() => {
+            slashSoundEffectRef.current.currentTime = 0;
+            slashSoundEffectRef.current.play()
+        }, 200);
         setTimeout(() => {
             dispatch(sukunaSlice.actions.setAnimationBlocker(false))
             dispatch(sukunaSlice.actions.setCanMove(true))
@@ -253,7 +271,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             }, 1000)
 
         }, 500);
-    }
+    }, [sukuna.x < rivalState.x]);
 
     // Sukuna attack interval - auto attack configuration
     const startAttackInterval = () => {
@@ -308,7 +326,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             clearInterval(backflipInterval.current);
             backflipInterval.current = null;
         }
-    }, [sukuna.canMove]);
+    }, [sukuna.canMove === false]);
 
 
     // Sukuna keyboard control
@@ -379,11 +397,23 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                         handleDomainAttack()
                     }
                 }
+                if (keysPressed.current.j) {
+                    if (keysPressed.current.s)
+                        handleKickDismantleCombo()
+                    else
+                        handleKickAttack()
+                }
                 if (keysPressed.current.k) {
                     handleBamAttack()
                 }
                 if (keysPressed.current.f) {
                     handleFugaAttack()
+                }
+                if (keysPressed.current.g) {
+                    // dispatch(sukunaSlice.actions.setTakeDamage({
+                    //     isTakingDamage: true, damage: 10, takeDamageAnimationCheck: true, knockback: 250, timeout: 300
+                    // }));
+                    dispatch(sukunaSlice.actions.setAnimationState("entry"));
                 }
             }
 
@@ -411,6 +441,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     const handleFugaAttack = () => {
         if (sukuna.fugaCounter.currentCount < sukuna.fugaCounter.maxCount) return;
         dispatch(sukunaSlice.actions.setCanMove(false))
+        dispatch(sukunaSlice.actions.setHardStun(true))
+        dispatch(rivalSlice.actions.setCanMove(false))
+        dispatch(rivalSlice.actions.setHardStun(true))
         console.log("FUGA")
         fugaSoundEffectRef.current.volume = 0.5
         fugaSoundEffectRef.current.play();
@@ -419,6 +452,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         updateRivalDirection(attackDirection === "left" ? "right" : "left");
         dispatch(sukunaSlice.actions.setDirection(attackDirection))
         dispatch(sukunaSlice.actions.setAnimationState("fugaBefore")) // first animation
+        dispatch(sukunaSlice.actions.setAnimationBlocker(true))
+
         setTimeout(() => { // play fuga scene
             setFugaSceneStyle({ animation: "fuga-scene 4s steps(1)", display: "block", top: sukuna.y - 250, left: sukuna.x - 200 })
             setTimeout(() => {
@@ -426,11 +461,14 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             }, 4000);
         }, 1000);
         setTimeout(() => {
+            dispatch(sukunaSlice.actions.setAnimationBlocker(false))
             dispatch(sukunaSlice.actions.setAnimationState("fugaAfter")) // second animation
+            dispatch(sukunaSlice.actions.setAnimationBlocker(true))
             setTimeout(() => {
                 setFireArrowStyle({ animation: "fire-arrow .5s steps(1)", opacity: 1, left: attackDirection === "left" ? sukuna.x - 400 : sukuna.x - 50 })
             }, 1700);
             setTimeout(() => {
+                dispatch(sukunaSlice.actions.setAnimationBlocker(false))
                 dispatch(sukunaSlice.actions.setAnimationState("stance"))
 
                 setTimeout(() => {
@@ -440,24 +478,28 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     dispatch(rivalSlice.actions.updateHealth(-500))
                     setTimeout(() => {
                         setFugaExplosionStyle({ animation: "", display: "none" })
-                        dispatch(sukunaSlice.actions.setCanMove(true))
                         dispatch(sukunaSlice.actions.setFugaCounter(0))
+                        dispatch(sukunaSlice.actions.setCanMove(true))
+                        dispatch(sukunaSlice.actions.setHardStun(false))
+                        dispatch(rivalSlice.actions.setHardStun(false))
+                        dispatch(rivalSlice.actions.setCanMove(true))
                     }, 1000);
                 }, 200);
             }, 2000);
         }, 4000);
 
     }
-    const handleBamAttack = () => {
+    const handleBamAttack = useCallback(() => {
         let attackDirection = "";
         attackDirection = sukuna.x < rivalState.x ? "right" : "left";
         smashSoundEffectRef.current.volume = 0.1;
         dispatch(sukunaSlice.actions.setDirection(attackDirection))
+        dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
         dispatch(sukunaSlice.actions.setAnimationState("bam-attack"))
         dispatch(sukunaSlice.actions.setAnimationBlocker(true))
 
         let landingPosition = rivalState.x;
-        updateRivalDirection(attackDirection === "left" ? "right" : "left");
+        // updateRivalDirection(attackDirection === "left" ? "right" : "left");
 
         setTimeout(() => { // style updates of bam effect and hitbox change, timeout for animation 1400
             dispatch(sukunaSlice.actions.setBamLandingPositionX(
@@ -466,6 +508,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 display: "block", animation: "sukuna-bam-effect steps(1) .5s",
                 left: attackDirection === "left" ? landingPosition - 20 : landingPosition - 50
             })
+            dispatch(sukunaSlice.actions.changeCursedEnergy(10))
             dispatch(sukunaSlice.actions.setBamAttackMoment(true))
             setTimeout(() => {
                 setBamStyle({ display: "none", animation: "", left: rivalState.x - 100, })
@@ -509,16 +552,223 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 // }
             }, i * 100);
         }
-    }
+    }, [sukuna.x, rivalState.x])
 
+    const handleKickDismantleCombo = useCallback(() => {
+        if (Math.abs(sukuna.x - rivalState.x) > 150) return;
+        punchSoundEffectRef.current.volume = 0.1;
+        let attackDirection = sukuna.x < rivalState.x ? "right" : "left";
+        dispatch(sukunaSlice.actions.setDirection(attackDirection))
+        dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+        dispatch(sukunaSlice.actions.setAnimationState("sukuna-kick"))
+        dispatch(sukunaSlice.actions.setAnimationBlocker(true))
+        dispatch(sukunaSlice.actions.setCanMove(false))
+        dispatch(rivalSlice.actions.setHardStun(true))
+
+        let airPosition = rivalState.x;
+        updateRivalDirection(attackDirection === "left" ? "right" : "left");
+
+        dispatch(sukunaSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 30 : rivalState.x + 50, y: sukuna.y }))
+
+        setTimeout(() => {
+            dispatch(sukunaSlice.actions.setCanMove(true))
+            dispatch(sukunaSlice.actions.setAnimationBlocker(false))
+            // dispatch(sukunaSlice.actions.setAnimationState("stance"))
+            dispatch(sukunaSlice.actions.setAnimationState("land-sukuna"))
+            setTimeout(() => {
+                dispatch(sukunaSlice.actions.setAnimationState("stance"))
+            }, 700);
+
+        }, 1500);
+
+        let distanceX =
+            attackDirection === "right" ? 400 : -400;
+        if (rivalState.x + distanceX <= 0) distanceX = -rivalState.x + 50;
+        else if (rivalState.x + distanceX >= 1400) distanceX = 1300 - rivalState.x - 50;
+        dispatch(sukunaSlice.actions.setGravity(0))
+        dispatch(rivalSlice.actions.setGravity(0))
+        dispatch(rivalSlice.actions.setTransition("all .2s ease, transform 0s, bottom 1s ease-in-out, left 1s ease-in-out"))
+        dispatch(sukunaSlice.actions.setTransition("all .5s ease, transform, 0s, bottom .2s"))
+        dispatch(rivalSlice.actions.moveCharacterWD({ x: distanceX, y: - 200 }));
+        punchSoundEffectRef.current.play();
+        let i = 0;
+        const int = setInterval(() => { // random slashes delay
+            if (i === 0) { // launch 
+                // dispatch(rivalSlice.actions.updateHealth(-20))
+                dispatch(gojoSlice.actions.setTakeDamage({
+                    isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+                }));
+            }
+            if (i === 5) { // sukuna jump
+                dispatch(sukunaSlice.actions.moveCharacterWD({ x: 0, y: -150 }))
+            }
+            if (i === 6) {
+                dispatch(sukunaSlice.actions.setTransition("all 0s ease"))
+                dispatch(sukunaSlice.actions.setDirection(attackDirection === "right" ? "left" : "right"))
+                dispatch(sukunaSlice.actions.moveCharacterTo({
+                    x: attackDirection === "left" ? rivalState.x + distanceX - 20 : rivalState.x + distanceX + 50, y: rivalState.y - 220
+                }))
+            }
+            if (i === 8) { // sukuna teleport to rival in mid-air
+                dispatch(rivalSlice.actions.setTransition("all .2s ease, transform 0s"))
+            }
+            if (i === 9) { // sukuna hits the rival in mid-air
+                setTimeout(() => {
+                    punchSoundEffectRef.current.play();
+                    dispatch(rivalSlice.actions.setDirection(attackDirection))
+                    dispatch(rivalSlice.actions.setGravity(100))
+                    dispatch(gojoSlice.actions.setTakeDamage({
+                        isTakingDamage: true, damage: 30, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+                    }));
+                }, 100);
+            }
+            if (i === 10) {
+                dispatch(rivalSlice.actions.moveCharacterWD({ x: -distanceX / 2, y: 200 }))
+            }
+            if (i === 12) { // end
+                dispatch(sukunaSlice.actions.setTransition("all .2s ease, transform 0s"))
+                dispatch(rivalSlice.actions.setTransition("all .2s ease, transform 0s"))
+                clearInterval(int);
+                setTimeout(() => {
+                    dispatch(sukunaSlice.actions.changeCursedEnergy(20))
+                    dispatch(rivalSlice.actions.setGravity(5))
+                    dispatch(sukunaSlice.actions.setGravity(30))
+                    // dispatch(sukunaSlice.actions.setAnimationState("land-sukuna"))
+                    dispatch(rivalSlice.actions.setHardStun(false)) // ***
+                    setTimeout(() => {
+                        dispatch(sukunaSlice.actions.setGravity(5))
+                    }, 500);
+                }, 300);
+            }
+            i++;
+        }, 1000 / 12);
+    }, [sukuna.x, rivalState.x])
+
+    const handleKickAttack = useCallback(() => {
+        if (Math.abs(sukuna.x - rivalState.x) > 150) return;
+        punchSoundEffectRef.current.volume = 0.1;
+        let attackDirection = sukuna.x < rivalState.x ? "right" : "left";
+        dispatch(sukunaSlice.actions.setDirection(attackDirection))
+        dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+        dispatch(sukunaSlice.actions.setAnimationState("sukuna-kick"))
+        dispatch(sukunaSlice.actions.setAnimationBlocker(true))
+        dispatch(sukunaSlice.actions.setCanMove(false))
+        dispatch(rivalSlice.actions.setHardStun(true))
+
+        let airPosition = rivalState.x;
+        updateRivalDirection(attackDirection === "left" ? "right" : "left");
+
+        dispatch(sukunaSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 30 : rivalState.x + 50, y: sukuna.y }))
+
+        setTimeout(() => {
+            dispatch(sukunaSlice.actions.setCanMove(true))
+            dispatch(sukunaSlice.actions.setAnimationBlocker(false))
+            // dispatch(sukunaSlice.actions.setAnimationState("stance"))
+            dispatch(sukunaSlice.actions.setAnimationState("land-sukuna"))
+            setTimeout(() => {
+                dispatch(sukunaSlice.actions.setAnimationState("stance"))
+            }, 700);
+
+        }, 1500);
+
+        let distanceX =
+            attackDirection === "right" ? 400 : -400;
+        if (rivalState.x + distanceX <= 0) distanceX = -rivalState.x + 50;
+        else if (rivalState.x + distanceX >= 1400) distanceX = 1300 - rivalState.x - 50;
+        dispatch(sukunaSlice.actions.setGravity(0))
+        dispatch(rivalSlice.actions.setGravity(0))
+        dispatch(rivalSlice.actions.setTransition("all .2s ease, transform 0s, bottom 1s ease-in-out, left 1s ease-in-out"))
+        dispatch(sukunaSlice.actions.setTransition("all .5s ease, transform, 0s, bottom .2s"))
+        dispatch(rivalSlice.actions.moveCharacterWD({ x: distanceX, y: - 200 }));
+        punchSoundEffectRef.current.play();
+        let i = 0;
+        const int = setInterval(() => { // random slashes delay
+            if (i === 0) { // launch 
+                // dispatch(rivalSlice.actions.updateHealth(-20))
+                dispatch(gojoSlice.actions.setTakeDamage({
+                    isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+                }));
+            }
+            if (i === 5) { // sukuna jump
+                dispatch(sukunaSlice.actions.moveCharacterWD({ x: 0, y: -150 }))
+            }
+            if (i === 6) {
+                dispatch(sukunaSlice.actions.setTransition("all 0s ease"))
+                dispatch(sukunaSlice.actions.setDirection(attackDirection === "right" ? "left" : "right"))
+                dispatch(sukunaSlice.actions.moveCharacterTo({
+                    x: attackDirection === "left" ? rivalState.x + distanceX - 20 : rivalState.x + distanceX + 50, y: rivalState.y - 220
+                }))
+            }
+            if (i === 8) { // sukuna teleport to rival in mid-air
+                dispatch(rivalSlice.actions.setTransition("all .2s ease, transform 0s"))
+            }
+            if (i === 9) { // sukuna hits the rival in mid-air
+                setTimeout(() => {
+                    punchSoundEffectRef.current.play();
+                    dispatch(rivalSlice.actions.setDirection(attackDirection))
+                    dispatch(rivalSlice.actions.setGravity(100))
+                    dispatch(gojoSlice.actions.setTakeDamage({
+                        isTakingDamage: true, damage: 30, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+                    }));
+                }, 100);
+            }
+            if (i === 10) {
+                dispatch(rivalSlice.actions.moveCharacterWD({ x: -distanceX / 2, y: 200 }))
+            }
+            if (i === 12) { // end
+                dispatch(sukunaSlice.actions.setTransition("all .2s ease, transform 0s"))
+                dispatch(rivalSlice.actions.setTransition("all .2s ease, transform 0s"))
+                clearInterval(int);
+                setTimeout(() => {
+                    dispatch(sukunaSlice.actions.changeCursedEnergy(20))
+                    dispatch(rivalSlice.actions.setGravity(5))
+                    dispatch(sukunaSlice.actions.setGravity(30))
+                    // dispatch(sukunaSlice.actions.setAnimationState("land-sukuna"))
+                    dispatch(rivalSlice.actions.setHardStun(false)) // ***
+                    setTimeout(() => {
+                        dispatch(sukunaSlice.actions.setGravity(5))
+                    }, 500);
+                }, 300);
+            }
+            i++;
+        }, 1000 / 12);
+    }, [sukuna.x, rivalState.x])
+
+    const handleTakeDamage = useCallback((takeDamageAnimationCheck, timeout, damage, knockback) => {
+        dispatch(sukunaSlice.actions.updateHealth(-damage));
+        if (knockback && knockback > 0)
+            dispatch(sukunaSlice.actions.moveCharacterWD({ x: sukuna.direction === "left" ? knockback : -knockback, y: 0 }))
+        if (takeDamageAnimationCheck) {
+            dispatch(sukunaSlice.actions.setHardStun(true));
+            dispatch(sukunaSlice.actions.setAnimationState("take-damage"));
+            dispatch(sukunaSlice.actions.setTransition("all .2s ease, transform 0s, left .8s ease-in-out"));
+            dispatch(sukunaSlice.actions.setAnimationBlocker(true));
+            setTimeout(() => {
+                dispatch(sukunaSlice.actions.setAnimationBlocker(false));
+                dispatch(sukunaSlice.actions.setHardStun(false)); // ****
+                dispatch(sukunaSlice.actions.setAnimationState("stance"));
+                dispatch(sukunaSlice.actions.setTransition("all .2s ease, transform 0s"));
+                dispatch(sukunaSlice.actions.setTakeDamage({ isTakingDamage: false, damage: 0, takeDamageAnimationCheck: false, knockback: 0, timeout: 0 }));
+            }, 500 + timeout);
+        }
+    }, [sukuna.direction]);
+    useEffect(() => {
+        const obj = sukuna.takeDamage;
+        if (obj.isTakingDamage) {
+            handleTakeDamage(obj.takeDamageAnimationCheck, obj.timeout, obj.damage, obj.knockback);
+        }
+    }, [sukuna.takeDamage.isTakingDamage === true])
     const handleDismantleAttack = () => {
+        if (sukuna.animationBlocker) return;
         dispatch2(toggleCleaveCD()); // cooldown control
         localDismantleAttack(); // attack
+        dispatch(sukunaSlice.actions.setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 1));
         dispatch(sukunaSlice.actions.increaseFugaCounter(1))
     };
     const handleCleaveAttack = () => {
         dispatch2(toggleDismantleCD()); // cooldown control
         localCleaveAttack(-100); // attack
+        dispatch(sukunaSlice.actions.setRapidAttackCounter(sukuna.rapidAttackCounter.currentCount + 3));
         dispatch(sukunaSlice.actions.increaseFugaCounter(2))
     };
 
@@ -550,8 +800,17 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     useEffect(() => {
         if (sukuna.animationState === "stance") {
             setSukunaStyle({
-                animation: "stance-sukuna 3s steps(1) infinite",
+                animation: "stance-sukuna 2s steps(1) infinite",
             })
+        }
+        else if (sukuna.animationState === "entry") {
+
+            setSukunaStyle({
+                animation: "entry-sukuna 1s steps(1)",
+            })
+            setTimeout(() => {
+                dispatch(sukunaSlice.actions.setAnimationState("stance"))
+            }, 900);
         }
         else if (sukuna.animationState === "move") {
             setSukunaStyle({
@@ -590,17 +849,17 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             }, 500);
         }
         else if (sukuna.animationState === "rapid-attack") {
-            if (sukuna.direction === "right") {
-                dispatch(sukunaSlice.actions.setPositioningSide("right"))
-            }
+            // if (sukuna.direction === "right") {
+            //     dispatch(sukunaSlice.actions.setPositioningSide("right"))
+            // }
             setSukunaStyle({
                 animation: xDistance >= 0 ? "sukuna-rapid-left 3.8s steps(1)" : "sukuna-rapid-right 3.8s steps(1)",
             })
-            setTimeout(() => {
-                if (sukuna.direction === "right") {
-                    dispatch(sukunaSlice.actions.setPositioningSide("left"))
-                }
-            }, 3.8 * 1000);
+            // setTimeout(() => {
+            //     if (sukuna.direction === "right") {
+            //         dispatch(sukunaSlice.actions.setPositioningSide("left"))
+            //     }
+            // }, 3.8 * 1000);
         }
         else if (sukuna.animationState === "jump") {
             setSukunaStyle({
@@ -636,7 +895,11 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             //     dispatch(sukunaSlice.actions.setAnimationBlocker(false))
             //     dispatch(sukunaSlice.actions.setAnimationState("stance"))
             // }, 1500);
-
+        }
+        else if (sukuna.animationState === "sukuna-kick") {
+            setSukunaStyle({
+                animation: "sukuna-kick 1s steps(1) forwards",
+            })
         }
         else if (sukuna.animationState === "fugaBefore") {
             if (sukuna.direction === "left") {
@@ -663,6 +926,15 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 animation: "sukuna-domain-pose 1s steps(1) forwards"
             })
         }
+        else if (sukuna.animationState === "take-damage") {
+            setSukunaStyle({
+                animation: "sukuna-take-damage .5s steps(1) forwards"
+            })
+        }
+        else if (sukuna.animationState === "land-sukuna") {
+            setSukunaStyle({ animation: "land-sukuna .5s steps(1) forwards" })
+        }
+
 
     }, [sukuna.animationState, xDistance > 0, sukuna.direction]);
 
@@ -677,6 +949,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             <audio src={require("../../Assets/audios/smash.mp3")} ref={smashSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/fuga-sound-effect.mp3")} ref={fugaSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/punch.mp3")} ref={punchSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/slash.mp3")} ref={slashSoundEffectRef}></audio>
+
 
 
             {/* {sukuna.animationBlocker ? "true" : "false"} */}
@@ -704,7 +978,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 transform: sukuna.direction === "left" ? "scaleX(-1)" : "none",
                 animation: sukunaStyle.animation,
                 display: sukuna.health.currentHealth > 0 ? "block" : "none",
+                transition: sukuna.transition,
             }}>
+
             </div>
             <div className='dismantle' style={{
                 position: "absolute", top: rivalState.y - 40,
