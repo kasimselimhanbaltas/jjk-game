@@ -7,14 +7,14 @@ const gameAreaHeight = 600;
 
 const initialState: Sukuna = {
   characterName: "sukuna",
-  x: 800,
+  x: 100,
   y: 200,
   health: {
     currentHealth: 1500,
     maxHealth: 1500,
   },
   cursedEnergy: {
-    currentCursedEnergy: 50,
+    currentCursedEnergy: 150,
     maxCursedEnergy: 200,
   },
   direction: "left",
@@ -57,10 +57,17 @@ const initialState: Sukuna = {
   gravity: 5,
   jumpStrength: -30,
   animationBlocker: false,
-  transition: "",
+  transition: "all .2s ease, transform 0s",
   bamAttackMoment: false,
   bamLandingPositionX: null,
   positioningSide: "left",
+  takeDamage: {
+    isTakingDamage: false,
+    damage: 0,
+    takeDamageAnimationCheck: false,
+    knockback: 0,
+    timeout: 0,
+  },
 };
 
 const RivalSlice = createSlice({
@@ -135,6 +142,9 @@ const RivalSlice = createSlice({
     },
     setRapidAttack(state, action) {
       state.rapidAttack = action.payload;
+    },
+    setTransition(state, action) {
+      state.transition = action.payload;
     },
     setDashGauge(state, action) {
       state.dashGauge = action.payload;
@@ -239,6 +249,29 @@ const RivalSlice = createSlice({
     setPositioningSide(state, action) {
       state.positioningSide = action.payload;
     },
+    setTakeDamage(state, action) {
+      state.animationBlocker = false;
+      state.takeDamage.isTakingDamage = action.payload.isTakingDamage;
+      state.takeDamage.takeDamageAnimationCheck =
+        action.payload.takeDamageAnimationCheck;
+      state.takeDamage.damage = action.payload.damage;
+      state.takeDamage.timeout = action.payload.timeout;
+      console.log(state.x, action.payload.knockback);
+      if (
+        state.direction === "left" &&
+        state.x + action.payload.knockback >= 1400
+      ) {
+        state.takeDamage.knockback = 1300 - state.x;
+      } else if (
+        state.direction === "right" &&
+        state.x - action.payload.knockback <= 0
+      ) {
+        state.takeDamage.knockback = Math.abs(50 - state.x);
+      } else {
+        state.takeDamage.knockback = action.payload.knockback;
+      }
+    },
+
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -256,6 +289,7 @@ export const {
   setCanMove,
   setHardStun,
   setRapidAttack,
+  setTransition,
   setDashGauge,
   moveCharacterTo,
   setCursedEnergy,
@@ -280,6 +314,7 @@ export const {
   setBamAttackMoment,
   setBamLandingPositionX,
   setPositioningSide,
+  setTakeDamage,
 } = RivalSlice.actions;
 export default RivalSlice;
 

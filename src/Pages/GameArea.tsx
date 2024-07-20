@@ -14,7 +14,7 @@ import CircularProgressBar from "../components/CircularProgressBar";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import SatoruGojo from "../components/characters/SatoruGojo";
 import FinishMenu from "../components/FinishMenu";
-import { setWinner } from "../redux/GameSettingsSlice";
+import { setEntry, setWinner } from "../redux/GameSettingsSlice";
 import SukunaSlice from "../redux/character-slices/SukunaSlice";
 import MegumiSlice from "../redux/character-slices/MegumiSlice";
 import CharacterInterface from "../components/CharacterInterface";
@@ -77,9 +77,45 @@ const GameArea = () => {
 
   // place characters
   useEffect(() => {
-    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 100 }));
-    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 100 }));
-  }, []);
+    if (gameSettings.entry) {
+      if (gameSettings.selectedCharacter === "gojo" || gameSettings.selectedRivalCharacter === "gojo") {
+        yowaimoSoundEffectRef.current.volume = 0.2;
+        yowaimoSoundEffectRef.current.play();
+      }
+
+      dispatch(playerSlice.actions.setHardStun(true))
+      dispatch(rivalSlice.actions.setHardStun(true))
+      dispatch(playerSlice.actions.setDirection("right"));
+      console.log(gameSettings.selectedRivalCharacter)
+      if (gameSettings.selectedRivalCharacter == "sukuna")
+        dispatch(rivalSlice.actions.setDirection("right"));
+      else
+        dispatch(rivalSlice.actions.setDirection("left"));
+      dispatch(sukunaSlice.actions.setTransition("all .2s, transform 0s, left 0s"))
+
+      dispatch(playerSlice.actions.moveCharacterTo({ x: gameSettings.selectedCharacter === "sukuna" ? -1000 : 600, y: 560 }));
+      dispatch(rivalSlice.actions.moveCharacterTo({ x: gameSettings.selectedRivalCharacter === "sukuna" ? -1000 : 800, y: 560 }));
+      setTimeout(() => {
+      }, 2000);
+      setTimeout(() => {
+        dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 560 }));
+        dispatch(rivalSlice.actions.setAnimationState("entry"))
+
+        setTimeout(() => {
+          dispatch(playerSlice.actions.moveCharacterTo({ x: 600, y: 560 }));
+          dispatch(playerSlice.actions.setAnimationState("entry"))
+          dispatch(rivalSlice.actions.setDirection("left"));
+        }, 1000);
+      }, 2000);
+      setTimeout(() => {
+        dispatch(rivalSlice.actions.setHardStun(false)) // ***
+        dispatch(playerSlice.actions.setHardStun(false))
+        dispatch(setEntry(false));
+        dispatch(rivalSlice.actions.setDirection("left"));
+        dispatch(sukunaSlice.actions.setTransition("all .2s, transform 0s"))
+      }, 4000);
+    }
+  }, [gameSettings.entry]);
 
   // hitboxes
   useEffect(() => {
@@ -113,7 +149,7 @@ const GameArea = () => {
               dispatch(rivalSlice.actions.updateHealth(-150 / 8))
             }, 100)
             setTimeout(() => { // unstun rival
-              // dispatch(rivalSlice.actions.setCanMove(true)) ***
+              dispatch(rivalSlice.actions.setCanMove(true)) // ***
               dispatch(sukunaSlice.actions.setGravity(5))
               clearInterval(damageInterval);
             }, 800);
@@ -133,7 +169,7 @@ const GameArea = () => {
               dispatch(playerSlice.actions.updateHealth(-150 / 8))
             }, 100)
             setTimeout(() => { // unstun rival
-              // dispatch(rivalSlice.actions.setCanMove(true)) ***
+              dispatch(rivalSlice.actions.setCanMove(true)) // ***
               dispatch(sukunaSlice.actions.setGravity(5))
               clearInterval(damageInterval);
             }, 800);
@@ -158,7 +194,9 @@ const GameArea = () => {
               (gojo.x - rivalCharacter.x > 0 ? "hit" : "miss") : "miss"
         console.log("gamearea red: ", distance)
         if (distance === "hit") {
-          dispatch(rivalSlice.actions.updateHealth(purpleDamage))
+          dispatch(sukunaSlice.actions.setTakeDamage({
+            isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
+          }));
         }
       } else { // for other characters
         let distance =
@@ -167,12 +205,12 @@ const GameArea = () => {
               (gojo.x - playerCharacter.x > 0 ? "hit" : "miss") : "miss"
         console.log("gamearea red: ", distance)
         if (distance === "hit") {
-          dispatch(playerSlice.actions.updateHealth(purpleDamage))
-          dispatch(playerSlice.actions.moveCharacterWD({ x: playerCharacter.direction === "right" ? -200 : +200, y: 0 }));
-          dispatch(playerSlice.actions.setAnimationState("takeDamage"))
-          setTimeout(() => {
-            dispatch(playerSlice.actions.setAnimationState("stance"))
-          }, 1000);
+          dispatch(sukunaSlice.actions.setTakeDamage({
+            isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
+          }));
+          // setTimeout(() => {
+          //   dispatch(playerSlice.actions.setAnimationState("stance"))
+          // }, 1000);
         }
       }
     }
@@ -182,13 +220,17 @@ const GameArea = () => {
           Math.abs(rivalCharacter.x - sukuna.bamLandingPositionX) <= 100 ? "hit" : "miss"
         console.log(rivalCharacter.x, sukuna.bamLandingPositionX)
         if (hitOrMiss === "hit") {
-          dispatch(rivalSlice.actions.updateHealth(-100))
+
+          // dispatch(rivalSlice.actions.updateHealth(-100))
           setTimeout(() => {
             dispatch(rivalSlice.actions.moveCharacterWD({ x: sukuna.x - rivalCharacter.x > 50 ? -150 : +150, y: 0 }));
             console.log(rivalCharacter.x, sukuna.bamLandingPositionX)
 
           }, 100);
           dispatch(rivalSlice.actions.jumpWS(15))
+          dispatch(gojoSlice.actions.setTakeDamage({
+            isTakingDamage: true, damage: 100, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+          }));
           dispatch(rivalSlice.actions.setAnimationState("takeDamage"))
           setTimeout(() => {
             dispatch(rivalSlice.actions.setAnimationState("stance"))
@@ -289,7 +331,7 @@ const GameArea = () => {
     clearInterval(intervalId);
     intervalId = setInterval(() => {
       // wasd movement
-      if (playerCharacter.canMove) {
+      if (playerCharacter.canMove && !playerCharacter.hardStun) {
 
         dispatch(sukunaSlice.actions.setCloseRange(Math.abs(xDistance) < 200));
 
@@ -351,7 +393,7 @@ const GameArea = () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
   }, [dispatch, playerCharacter.health, playerCharacter.y, playerCharacter.x, rivalCharacter.x,
-    rivalCharacter.canMove, playerCharacter.canMove, xDistance, playerCharacter.isJumping]);
+    rivalCharacter.canMove, playerCharacter.canMove, xDistance, playerCharacter.isJumping, playerCharacter.hardStun]);
 
   useEffect(() => {
     const gameLoop = setInterval(() => {
@@ -389,7 +431,7 @@ const GameArea = () => {
           dispatch(rivalSlice.actions.moveCharacter({ x: stepX, y: stepY }));
         }
       } else
-        if (rivalCharacter.animationState !== "stance")
+        if (rivalCharacter.animationState !== "stance" && !gameSettings.entry)
           dispatch(rivalSlice.actions.setAnimationState("stance"));
     }, 100); // Update interval
 
@@ -398,7 +440,7 @@ const GameArea = () => {
     };
 
   }, [rivalCharacter.hardStun, rivalCharacter.rivalDirection, rivalCharacter.canMove,
-  rivalCharacter.dashGauge >= 70 || rivalCharacter.dashGauge <= 0,]);
+  rivalCharacter.dashGauge >= 70 || rivalCharacter.dashGauge <= 0, gameSettings.entry]);
 
   // Rival Movement Control
   useEffect(() => {
@@ -425,31 +467,22 @@ const GameArea = () => {
   }, [xDistance >= 100, xDistance <= -100, xDistance <= -300, xDistance >= 300]);
   // rivalCharacter.closeRange, rivalCharacter.rivalDirection
   // Main menu
-  const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state ##
+  // const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state ##
+  const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
   const handleStartGame = () => {
     dispatch(playerSlice.actions.resetState())
     dispatch(rivalSlice.actions.resetState())
-    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 200 }));
-    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
     setShowFinishMenu(false)
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
-    if (gameSettings.selectedCharacter === "gojo") {
-      yowaimoSoundEffectRef.current.volume = 0.5;
-      yowaimoSoundEffectRef.current.play();
-    }
+    dispatch(setEntry(true));
   };
   const handleRestart = () => {
     dispatch(playerSlice.actions.resetState())
     dispatch(rivalSlice.actions.resetState())
-    dispatch(playerSlice.actions.moveCharacterTo({ x: 200, y: 200 }));
-    dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 200 }));
     setShowFinishMenu(false);
-    if (gameSettings.selectedCharacter === "gojo") {
-      yowaimoSoundEffectRef.current.volume = 0.2;
-      yowaimoSoundEffectRef.current.play();
-    }
+    dispatch(setEntry(true));
   };
   const handleReturnToMainMenu = () => {
     setShowMenu(true)

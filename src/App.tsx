@@ -20,6 +20,7 @@ export interface GameSettings {
   winner: string,
   loser: string,
   surfaceY: number,
+  entry: boolean
 }
 export interface Skill {
   isReady: boolean,
@@ -94,7 +95,13 @@ export interface Gojo {
   transition: string,
   positioningSide: string,
   hardStun: boolean,
-
+  takeDamage: {
+    isTakingDamage: boolean,
+    takeDamageAnimationCheck: boolean,
+    damage: number,
+    timeout: number
+    knockback: number,
+  },
 }
 
 export interface Sukuna {
@@ -141,7 +148,13 @@ export interface Sukuna {
   bamLandingPositionX: number,
   positioningSide: string,
   hardStun: boolean,
-
+  takeDamage: {
+    isTakingDamage: boolean,
+    takeDamageAnimationCheck: boolean,
+    damage: number,
+    timeout: number
+    knockback: number,
+  },
 }
 export interface Nue {
   isActive: boolean;

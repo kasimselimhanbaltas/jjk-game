@@ -187,6 +187,37 @@
         height: 88px;
     } */
 }
+@keyframes gojo-running {
+    0% {
+        background-position: -808px -188px;
+        width: 79px;
+        height: 91px;
+    }
+
+    25% {
+        background-position: -902px -189px;
+        width: 78px;
+        height: 91px;
+    }
+
+    50% {
+        background-position: -1002px -193px;
+        width: 79px;
+        height: 91px;
+    }
+
+    75% {
+        background-position: -1098px -196px;
+        width: 78px;
+        height: 91px;
+    }
+
+    100% {
+        background-position: -1098px -196px;
+        width: 78px;
+        height: 91px;
+    }
+}
 @keyframes gojo-punch-combination {
     0% {
         background-position: -38px -493px;
@@ -1201,7 +1232,6 @@
         height: 88px;
     }
 }
-
 @keyframes purple-throwing {
     0% {
         background-position: -112px -2289px;
@@ -1227,6 +1257,52 @@
         height: 84px;
     }
 }
+@keyframes gojo-take-damage {
+    0%{
+        background-position: -240px -1036px;
+        width: 64px;
+        height: 92px;
+    }
+    20%{
+        background-position: -308px -1030px;
+        width: 74px;
+        height: 98px;
+    }
+    40%{
+        background-position: -386px -1034px;
+            width: 74px;
+            height: 94px;
+    }
+    60%{
+        background-position: -149px -1040px;
+        width: 58px;
+        height: 88px;
+    }
+    80%{
+        background-position:  -73px -1036px;
+        width: 54px;
+        height: 92px;
+    }
+    100% {
+        background-position: -73px -1036px;
+        width: 54px;
+        height: 92px;
+    }
+    
+}
+@keyframes gojo-purple-pose {
+    0%{
+        background-position: -773px -43px;
+        width: 98px;
+        height: 104px;
+    }
+    100% {
+        background-position: -773px -43px;
+        width: 98px;
+        height: 104px;
+    }
+}
+
 .purple-itself {
     position: absolute;
     transition: all .2s ease, transform 4s, top 0s ease, left 0s ease-in;

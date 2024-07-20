@@ -7,20 +7,20 @@ const gameAreaHeight = 600;
 
 const initialState: Gojo = {
   characterName: "gojo",
-  x: 200,
+  x: 800,
   y: 200,
   health: {
     currentHealth: 1500,
     maxHealth: 1500,
   },
   cursedEnergy: {
-    currentCursedEnergy: 50,
+    currentCursedEnergy: 200,
     maxCursedEnergy: 200,
   },
   direction: "right",
   isAttacking: false,
   canMove: true,
-  hardStun: false,
+  hardStun: true,
   dashGauge: 0,
   rivalDirection: "stop",
   blueCD: {
@@ -54,8 +54,15 @@ const initialState: Gojo = {
   gravity: 5,
   jumpStrength: -30,
   animationBlocker: false,
-  transition: "",
+  transition: "all .2s ease, transform 0s",
   positioningSide: "left",
+  takeDamage: {
+    isTakingDamage: false,
+    damage: 0,
+    takeDamageAnimationCheck: false,
+    knockback: 0,
+    timeout: 0,
+  },
 };
 
 const gojoSlice = createSlice({
@@ -124,6 +131,9 @@ const gojoSlice = createSlice({
     },
     setHardStun(state, action) {
       state.hardStun = action.payload;
+    },
+    setTransition(state, action) {
+      state.transition = action.payload;
     },
     setDashGauge(state, action) {
       state.dashGauge = action.payload;
@@ -211,6 +221,9 @@ const gojoSlice = createSlice({
         state.isJumping = true;
       }
     },
+    setGravity(state, action) {
+      state.gravity = action.payload;
+    },
     setJumping(state, action) {
       state.isJumping = action.payload;
     },
@@ -219,6 +232,27 @@ const gojoSlice = createSlice({
     },
     setPositioningSide(state, action) {
       state.positioningSide = action.payload;
+    },
+    setTakeDamage(state, action) {
+      state.takeDamage.isTakingDamage = action.payload.isTakingDamage;
+      state.takeDamage.takeDamageAnimationCheck =
+        action.payload.takeDamageAnimationCheck;
+      state.takeDamage.damage = action.payload.damage;
+      state.takeDamage.timeout = action.payload.timeout;
+      console.log(state.x, action.payload.knockback);
+      if (
+        state.direction === "left" &&
+        state.x + action.payload.knockback >= 1400
+      ) {
+        state.takeDamage.knockback = 1300 - state.x;
+      } else if (
+        state.direction === "right" &&
+        state.x - action.payload.knockback <= 0
+      ) {
+        state.takeDamage.knockback = Math.abs(70 - state.x);
+      } else {
+        state.takeDamage.knockback = action.payload.knockback;
+      }
     },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -234,6 +268,7 @@ export const {
   setHardStun,
   setCursedEnergy,
   moveCharacterTo,
+  setTransition,
   setDashGauge,
   setBlueCD,
   setRedCD,
@@ -251,6 +286,8 @@ export const {
   setJumping,
   setAnimationBlocker,
   setPositioningSide,
+  setGravity,
+  setTakeDamage,
 } = gojoSlice.actions;
 export default gojoSlice;
 
