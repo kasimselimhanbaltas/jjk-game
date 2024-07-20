@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/jjk-game/static/css/main.a1aaf6d7.css",
-    "main.js": "/jjk-game/static/js/main.49fa6c50.js",
+    "main.css": "/jjk-game/static/css/main.cb05e11b.css",
+    "main.js": "/jjk-game/static/js/main.8e12b2c3.js",
     "static/media/texture.png": "/jjk-game/static/media/texture.e231c9c13d1b192cfb2d.png",
     "static/media/menu-bg.png": "/jjk-game/static/media/menu-bg.9178329effb63b767de8.png",
     "static/media/electricity.png": "/jjk-game/static/media/electricity.372ed589e9b92dffd53b.png",
@@ -21,7 +21,7 @@
     "static/media/ce-bar.png": "/jjk-game/static/media/ce-bar.1d5f4b582e099083dac5.png",
     "static/media/jjk.gif": "/jjk-game/static/media/jjk.8221560c7577e2839434.gif",
     "static/media/mahoraga.png": "/jjk-game/static/media/mahoraga.b06a0a5e47578b573656.png",
-    "static/media/gojo-noline.png": "/jjk-game/static/media/gojo-noline.de31f9915e7b0d5a91c8.png",
+    "static/media/gojo-noline.png": "/jjk-game/static/media/gojo-noline.6e68c6af2e27d2e15210.png",
     "static/media/domain-hand.png": "/jjk-game/static/media/domain-hand.3c9d210f7e40a2e5202b.png",
     "static/media/fuga-sound-effect.mp3": "/jjk-game/static/media/fuga-sound-effect.63d46957b124531819cb.mp3",
     "static/media/rapid-slash.mp3": "/jjk-game/static/media/rapid-slash.259c23113924b5ad5b9c.mp3",
@@ -46,11 +46,11 @@
     "static/media/red.png": "/jjk-game/static/media/red.4e657a12cd7b59fca08f.png",
     "static/media/punch.mp3": "/jjk-game/static/media/punch.307ae82ee93e79118fc5.mp3",
     "index.html": "/jjk-game/index.html",
-    "main.a1aaf6d7.css.map": "/jjk-game/static/css/main.a1aaf6d7.css.map",
-    "main.49fa6c50.js.map": "/jjk-game/static/js/main.49fa6c50.js.map"
+    "main.cb05e11b.css.map": "/jjk-game/static/css/main.cb05e11b.css.map",
+    "main.8e12b2c3.js.map": "/jjk-game/static/js/main.8e12b2c3.js.map"
   },
   "entrypoints": [
-    "static/css/main.a1aaf6d7.css",
-    "static/js/main.49fa6c50.js"
+    "static/css/main.cb05e11b.css",
+    "static/js/main.8e12b2c3.js"
   ]
 }
