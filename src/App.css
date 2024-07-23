@@ -45,7 +45,8 @@
   margin: auto;
   /* background-color: #001c24; */
   background-color: #763e3e;
-    position: relative;
+  position: relative;
+  overflow: hidden;
 }
 .megumi {
   transform-origin: bottom center;

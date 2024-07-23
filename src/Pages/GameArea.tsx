@@ -77,6 +77,7 @@ const GameArea = () => {
 
   // place characters
   useEffect(() => {
+    dispatch(rivalSlice.actions.setDevStun(true)) // ***
     if (gameSettings.entry) {
       if (gameSettings.selectedCharacter === "gojo" || gameSettings.selectedRivalCharacter === "gojo") {
         yowaimoSoundEffectRef.current.volume = 0.2;
@@ -367,8 +368,8 @@ const GameArea = () => {
           dispatch(playerSlice.actions.setCanMove(true));
         }
         if (keysPressed.current.t) {
-          if (rivalCharacter.hardStun) dispatch(rivalSlice.actions.setHardStun(false));
-          else dispatch(rivalSlice.actions.setHardStun(true));
+          if (rivalCharacter.devStun) dispatch(rivalSlice.actions.setDevStun(false));
+          else dispatch(rivalSlice.actions.setDevStun(true));
         }
         if (keysPressed.current.space)
           dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.direction === "right" ? 75 : -75, y: 0 }));
@@ -408,7 +409,7 @@ const GameArea = () => {
   useEffect(() => {
     // if (gameSettings.selectedCharacter === "sukuna") return;
     const interval = setInterval(() => {
-      if (rivalCharacter.canMove && !rivalCharacter.hardStun) {
+      if (rivalCharacter.canMove && !rivalCharacter.hardStun && !rivalCharacter.devStun) {
         if (rivalCharacter.dashGauge > 70) {
           dispatch(rivalSlice.actions.moveCharacterTo({ x: playerCharacter.x, y: playerCharacter.y }));
           dispatch(rivalSlice.actions.setDashGauge(0))
@@ -439,7 +440,7 @@ const GameArea = () => {
       clearInterval(interval);
     };
 
-  }, [rivalCharacter.hardStun, rivalCharacter.rivalDirection, rivalCharacter.canMove,
+  }, [rivalCharacter.hardStun, rivalCharacter.devStun, rivalCharacter.rivalDirection, rivalCharacter.canMove,
   rivalCharacter.dashGauge >= 70 || rivalCharacter.dashGauge <= 0, gameSettings.entry]);
 
   // Rival Movement Control
@@ -534,6 +535,11 @@ const GameArea = () => {
             width: "100%", height: "100%", position: "absolute",
             backgroundImage: `url(${require("../Assets/pixel-sukuna-domain.png")})`, opacity: sukuna.rivalDomainExpansion ? 1 : 0,
             backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
+          }}></div>
+          <div style={{
+            width: "100%", height: "100%", position: "absolute",
+            backgroundImage: `url(${require("../Assets/gojo-domain-end.png")})`, opacity: gojo.domainState === "open" ? 1 : 0,
+            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
           }}></div>
           {gameSettings.selectedCharacter === "sukuna" && (
             <>

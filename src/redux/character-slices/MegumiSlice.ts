@@ -46,6 +46,7 @@ const initialState: Megumi = {
   jumpStrength: -30,
   animationBlocker: false,
   transition: "all .2s ease, transform 0s",
+  devStun: false,
 };
 
 const megumiSlice = createSlice({
@@ -186,6 +187,9 @@ const megumiSlice = createSlice({
     setTransition(state, action) {
       state.transition = action.payload;
     },
+    setDevStun(state, action) {
+      state.devStun = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -214,6 +218,7 @@ export const {
   setJumping,
   setAnimationBlocker,
   setTransition,
+  setDevStun,
 } = megumiSlice.actions;
 export default megumiSlice;
 

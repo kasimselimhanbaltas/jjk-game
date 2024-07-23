@@ -492,6 +492,54 @@
         height: 36px;
     }
 }
+@keyframes sukuna-launch-knee {
+    0% {
+        background-position: -450px -498px;
+        width: 40px;
+        height: 34px;
+        translate: 10px -10px;
+    }
+
+    16.66% {
+        background-position: -505px -501px;
+        width: 40px;
+        height: 34px;
+    }
+
+    33.33% {
+        background-position: -594px -509px;
+        width: 136px;
+        height: 30px;
+    }
+
+    50% {
+        background-position: -758px -508px;
+        width: 37px;
+        height: 47px;
+        translate: 10px -17px;
+    }
+
+    66.66% {
+        background-position: -819px -512px;
+        width: 25px;
+        height: 46px;
+        translate: 10px -17px;
+    }
+
+    83.33% {
+        background-position: -858px -479px;
+        width: 140px;
+        height: 95px;
+        translate: 55px -10px;
+    }
+
+    100% {
+        background-position: -858px -479px;
+        width: 140px;
+        height: 95px;
+        translate: 55px -10px;
+    }
+}
 /* @keyframes sukuna-cleave-right {
     0% {
         background-position: -744px -1687px;
