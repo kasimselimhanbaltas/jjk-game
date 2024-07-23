@@ -45,7 +45,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     const keysPressed = useRef({
         a: false, s: false, d: false, w: false,
-        j: false, k: false, l: false, e: false, r: false, f: false, g: false, h: false
+        j: false, k: false, l: false, e: false, r: false, f: false, g: false, h: false, shift: false,
     });
 
 
@@ -72,7 +72,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         if (sukuna.health.currentHealth > 0 && rivalState.health.currentHealth > 0 && sukuna.canMove
             && gameSettings.selectedCharacter !== "sukuna") {
 
-            if (sukuna.cursedEnergy.currentCursedEnergy >= 0 && !sukuna.animationBlocker && !sukuna.hardStun) {
+            if (sukuna.cursedEnergy.currentCursedEnergy >= 0 && !sukuna.animationBlocker && !sukuna.hardStun && !sukuna.devStun) {
                 startAttackInterval();
             } else {
                 console.log("animation blocked!!!!")
@@ -84,7 +84,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [sukuna.hardStun, sukuna.closeRange, sukuna.canMove, sukuna.rapidAttackCounter >= 10,
+    }, [sukuna.hardStun, sukuna.devStun, sukuna.closeRange, sukuna.canMove, sukuna.rapidAttackCounter >= 10,
     sukuna.health.currentHealth <= 0, sukuna.cleaveCD.isReady, sukuna.dismantleCD.isReady, sukuna.domainCD.isReady,
     rivalState.health.currentHealth <= 0, sukuna.animationBlocker, xDistance > 0, sukuna.direction]);
 
@@ -398,7 +398,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     }
                 }
                 if (keysPressed.current.j) {
-                    if (keysPressed.current.s)
+                    if (keysPressed.current.shift)
                         handleKickDismantleCombo()
                     else
                         handleKickAttack()
@@ -555,7 +555,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     }, [sukuna.x, rivalState.x])
 
     const handleKickDismantleCombo = useCallback(() => {
-        if (Math.abs(sukuna.x - rivalState.x) > 150) return;
+        dispatch(sukunaSlice.actions.setAnimationState("sukuna-launch-knee"))
+        // if (Math.abs(sukuna.x - rivalState.x) > 150)
+        return;
         punchSoundEffectRef.current.volume = 0.1;
         let attackDirection = sukuna.x < rivalState.x ? "right" : "left";
         dispatch(sukunaSlice.actions.setDirection(attackDirection))
@@ -899,6 +901,11 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         else if (sukuna.animationState === "sukuna-kick") {
             setSukunaStyle({
                 animation: "sukuna-kick 1s steps(1) forwards",
+            })
+        }
+        else if (sukuna.animationState === "sukuna-launch-knee") {
+            setSukunaStyle({
+                animation: "sukuna-launch-knee 3s steps(1) infinite",
             })
         }
         else if (sukuna.animationState === "fugaBefore") {

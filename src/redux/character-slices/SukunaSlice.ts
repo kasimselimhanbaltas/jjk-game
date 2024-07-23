@@ -68,6 +68,7 @@ const initialState: Sukuna = {
     knockback: 0,
     timeout: 0,
   },
+  devStun: false,
 };
 
 const RivalSlice = createSlice({
@@ -271,6 +272,9 @@ const RivalSlice = createSlice({
         state.takeDamage.knockback = action.payload.knockback;
       }
     },
+    setDevStun(state, action) {
+      state.devStun = action.payload;
+    },
 
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
@@ -315,6 +319,7 @@ export const {
   setBamLandingPositionX,
   setPositioningSide,
   setTakeDamage,
+  setDevStun,
 } = RivalSlice.actions;
 export default RivalSlice;
 

@@ -57,7 +57,7 @@ export interface Megumi {
   animationBlocker: boolean,
   transition: string,
   hardStun: boolean,
-
+  devStun: boolean,
 
 }
 export interface Gojo {
@@ -86,7 +86,7 @@ export interface Gojo {
   bluePosition: { x: number, y: number },
   purpleAttackMoment: boolean,
   isBlocking: boolean,
-  animationState: "stance" | "move" | "jump" | "punch" | "block" | "swordAttack",
+  animationState: "stance" | "move" | "jump" | "punch" | "block" | "first-pose",
   velocityY: number,
   isJumping: boolean,
   gravity: number,
@@ -102,6 +102,8 @@ export interface Gojo {
     timeout: number
     knockback: number,
   },
+  devStun: boolean,
+  domainState: string,
 }
 
 export interface Sukuna {
@@ -155,6 +157,8 @@ export interface Sukuna {
     timeout: number
     knockback: number,
   },
+  devStun: boolean,
+
 }
 export interface Nue {
   isActive: boolean;

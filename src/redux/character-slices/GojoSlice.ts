@@ -48,7 +48,7 @@ const initialState: Gojo = {
   bluePosition: { x: 0, y: 0 },
   purpleAttackMoment: false,
   isBlocking: false,
-  animationState: "stance",
+  animationState: "first-pose",
   velocityY: 0,
   isJumping: false,
   gravity: 5,
@@ -63,12 +63,17 @@ const initialState: Gojo = {
     knockback: 0,
     timeout: 0,
   },
+  devStun: false,
+  domainState: "closed",
 };
 
 const gojoSlice = createSlice({
   name: "gojo",
   initialState: initialState,
   reducers: {
+    setDomainState(state, action) {
+      state.domainState = action.payload;
+    },
     moveCharacter(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
@@ -254,6 +259,9 @@ const gojoSlice = createSlice({
         state.takeDamage.knockback = action.payload.knockback;
       }
     },
+    setDevStun(state, action) {
+      state.devStun = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -288,6 +296,7 @@ export const {
   setPositioningSide,
   setGravity,
   setTakeDamage,
+  setDomainState,
 } = gojoSlice.actions;
 export default gojoSlice;
 

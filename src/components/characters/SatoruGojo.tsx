@@ -39,6 +39,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     const shortPurpleSoundEffectRef = React.useRef(null);
     const purpleExplosionSoundEffectRef = React.useRef(null);
     const punchSoundEffectRef = React.useRef(null);
+    const domainSoundEffectRef = React.useRef(null);
 
     const [comboPicker, setComboPicker] = useState(0);
 
@@ -440,7 +441,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-red"));
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-makingPurple"));
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-kick-combo"));
-                dispatch(gojoSlice.actions.setAnimationState("domain-pose"));
+                handleDomainExpansion();
 
             }
             if (keysPressed.current.g) {
@@ -466,7 +467,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     useEffect(() => {
         if (gojo.health.currentHealth > 0 && rivalState.health.currentHealth > 0 && gojo.canMove && gameSettings.selectedCharacter !== "gojo") {
 
-            if (gojo.cursedEnergy.currentCursedEnergy >= 0 && !gojo.hardStun) {
+            if (gojo.cursedEnergy.currentCursedEnergy >= 0 && !gojo.hardStun && !gojo.devStun) {
                 startAttackInterval();
             }
         } else {
@@ -476,12 +477,42 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             stopAttackInterval(); // Bileşen unmount olduğunda interval'ı temizle
         };
 
-    }, [gojo.hardStun, gojo.closeRange, gojo.direction, gojo.canMove,
+    }, [gojo.hardStun, gojo.devStun, gojo.closeRange, gojo.direction, gojo.canMove,
     gojo.health.currentHealth, gojo.redCD.isReady, gojo.blueCD.isReady, gojo.purpleCD.isReady, gojo.domainCD.isReady,
     rivalState.health.currentHealth, gojo.cursedEnergy.currentCursedEnergy >= -blueCost || gojo.cursedEnergy.currentCursedEnergy >= -redCost
     || gojo.cursedEnergy.currentCursedEnergy >= -purpleCost, comboPicker]);
 
 
+    const domainStarter = useRef(null)
+
+    const handleDomainExpansion = useCallback(() => {
+        dispatch(gojoSlice.actions.setAnimationState("domain-pose"));
+        dispatch(gojoSlice.actions.setHardStun(true));
+        domainSoundEffectRef.current.play();
+
+        dispatch(rivalSlice.actions.setDevStun(true));
+
+        if (domainStarter.current) {
+            dispatch(gojoSlice.actions.setHardStun(true))
+            setTimeout(() => {
+                domainStarter.current.style.scale = 300;
+                setTimeout(() => {
+                    dispatch(gojoSlice.actions.setDomainState("open"));
+                    domainStarter.current.style.transition = "all 0s";
+                    domainStarter.current.style.scale = 0;
+
+                    dispatch(gojoSlice.actions.setHardStun(false));
+                    setTimeout(() => {
+                        dispatch(gojoSlice.actions.setAnimationState("stance"));
+                    }, 1000);
+                }, 6000);
+            }, 1000);
+        }
+        setTimeout(() => {
+            // domainStarter.current.style.scale = 1;
+            dispatch(gojoSlice.actions.setHardStun(false))
+        }, 5000)
+    }, [gojo.x])
 
     const attackInterval = React.useRef(null);
 
@@ -796,13 +827,24 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     }, [gojo.takeDamage.isTakingDamage === true])
 
     const [gojoStyle, setGojoStyle] = React.useState({
-        animation: "gojo-entry steps(1) 1s",
+        animation: "gojo-first-pose steps(1) 1s infinite",
     });
     useEffect(() => {
         if (gojo.animationState === "stance") {
             setGojoStyle({
                 animation: "gojo-stance 1s steps(1) infinite",
             })
+        }
+        else if (gojo.animationState === "first-pose") {
+            if (gojo.direction === "right")
+                dispatch(gojoSlice.actions.setPositioningSide("right"))
+            setGojoStyle({
+                animation: "gojo-first-pose 1s steps(1) infinite",
+            })
+            setTimeout(() => {
+                if (gojo.direction === "right") dispatch(gojoSlice.actions.setPositioningSide("left"))
+
+            }, 3000);
         }
         else if (gojo.animationState === "move") {
             setGojoStyle({
@@ -821,6 +863,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         else if (gojo.animationState === "entry") { // requires reverse positioning
             if (gojo.direction === "right")
                 dispatch(gojoSlice.actions.setPositioningSide("right"))
+            if (gojo.direction === "left")
+                dispatch(gojoSlice.actions.setPositioningSide("right"))
+
             setGojoStyle({
                 animation: "gojo-entry 1s steps(1)",
             })
@@ -971,8 +1016,12 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             <audio src={require("../../Assets/audios/purple-short.mp3")} ref={shortPurpleSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/hq-explosion-6288.mp3")} ref={purpleExplosionSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/punch.mp3")} ref={punchSoundEffectRef}></audio>
+            <audio src={require("../../Assets/audios/gojo.mp3")} ref={domainSoundEffectRef}></audio>
 
 
+            <div className="domain-starter" ref={domainStarter}
+                style={{ top: gojo.y - 50, left: gojo.x + 20 }}
+            ></div>
             <div className="hole" style={{
                 display: holeStyle.display,
                 left: holeStyle.left,

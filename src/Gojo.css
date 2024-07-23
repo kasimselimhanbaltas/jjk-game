@@ -51,6 +51,13 @@
         height: 94px;
     }
 }
+@keyframes gojo-first-pose {
+    0% {
+        background-position: -34px -46px;
+        width: 50px;
+        height: 104px;
+    }
+}
 @keyframes gojo-entry {
     0% {
         background-position: -34px -46px;
@@ -1337,4 +1344,13 @@
     background-color: #282c34;
     border-radius: 50%;
     z-index: 99;
+}
+.domain-starter{
+    width:10px;
+    height:10px;
+    border-radius: 50%;
+    background-color: black;
+    position: absolute;
+    z-index: 0;
+    transition: all .2s, scale 5s;
 }
