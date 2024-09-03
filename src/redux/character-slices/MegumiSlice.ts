@@ -47,12 +47,54 @@ const initialState: Megumi = {
   animationBlocker: false,
   transition: "all .2s ease, transform 0s",
   devStun: false,
+  // ...
+  domainAmplification: {
+    isActive: false,
+    skill: {
+      isReady: true,
+      cooldown: 15,
+      remainingTime: 0,
+    },
+  },
+  simpleDomain: {
+    isActive: false,
+    duration: 5,
+    skill: {
+      isReady: true,
+      cooldown: 15,
+      remainingTime: 0,
+    },
+  },
+  fallingBlossomEmotion: {
+    isActive: false,
+    skill: {
+      isReady: true,
+      cooldown: 15,
+      remainingTime: 0,
+    },
+  },
 };
 
 const megumiSlice = createSlice({
   name: "megumi",
   initialState: initialState,
   reducers: {
+    setFallingBlossomEmotion(state, action) {
+      state.fallingBlossomEmotion.isActive = action.payload.isActive;
+      // state.fallingBlossomEmotion.skill.isReady = action.payload.skill.isReady;
+      // state.fallingBlossomEmotion.skill.cooldown =
+      //   action.payload.skill.cooldown;
+      // state.fallingBlossomEmotion.skill.remainingTime =
+      //   action.payload.skill.remainingTime;
+    },
+    setDomainAmplification(state, action) {
+      state.domainAmplification.isActive = action.payload.isActive;
+      console.log("AP: ", action.payload.isActive);
+      // state.domainAmplification.skill.isReady = action.payload.skill.isReady;
+      // // state.domainAmplification.skill.cooldown = action.payload.skill.cooldown; // not needed
+      // state.domainAmplification.skill.remainingTime =
+      //   action.payload.skill.remainingTime;
+    },
     moveCharacter(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
@@ -219,6 +261,7 @@ export const {
   setAnimationBlocker,
   setTransition,
   setDevStun,
+  setFallingBlossomEmotion,
 } = megumiSlice.actions;
 export default megumiSlice;
 

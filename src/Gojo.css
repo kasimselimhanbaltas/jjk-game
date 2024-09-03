@@ -13,6 +13,7 @@
     /* animation: gojo-stance steps(1) 1s infinite; */
     scale: 1;
     transition: all .2s ease, transform 0s;
+    z-index: 5;
 }
 @keyframes gojo-stance {
 0% {
@@ -1353,4 +1354,108 @@
     position: absolute;
     z-index: 0;
     transition: all .2s, scale 5s;
+}
+
+
+.infinity {
+    width: 80px;
+    height: 100px;
+    position: absolute;
+    background-color: #33FFFF;
+    transition: all .2s;
+    filter: blur(20px);
+    opacity: 1;
+    border-radius: 50%;
+    z-index: 0;
+}
+/* @keyframes rct-heal {
+    0% {
+        background-position: 0px 0px;
+    }
+
+    5.88% {
+        background-position: -75px 0px;
+    }
+
+    11.76% {
+        background-position: -150px 0px;
+    }
+
+    17.64% {
+        background-position: -225px 0px;
+    }
+
+    23.52% {
+        background-position: -300px 0px;
+    }
+
+    29.40% {
+        background-position: -375px 0px;
+    }
+
+    35.28% {
+        background-position: -450px 0px;
+    }
+
+    41.16% {
+        background-position: -525px 0px;
+    }
+
+    47.04% {
+        background-position: -600px 0px;
+    }
+
+    52.92% {
+        background-position: -675px 0px;
+    }
+
+    58.80% {
+        background-position: -750px 0px;
+    }
+
+    64.68% {
+        background-position: -825px 0px;
+    }
+
+    70.56% {
+        background-position: -900px 0px;
+    }
+
+    76.44% {
+        background-position: -975px 0px;
+    }
+
+    82.32% {
+        background-position: -1050px 0px;
+    }
+
+    88.20% {
+        background-position: -1125px 0px;
+    }
+
+    94.08% {
+        background-position: -1200px 0px;
+    }
+
+    100% {
+        background-position: -1275px 0px;
+    }
+} */
+.gojo-domain-amplification{
+    width: 90px;
+    height: 120px;
+    background: url(./Assets/gojo-domain-amplification.png);
+    animation: gojo-domain-amplification .8s steps(6) infinite;
+}
+@keyframes gojo-domain-amplification {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: -540px 0px;
+    }
+}
+.stun-div {
+    background: url(./Assets/stun.png);
+    background-size: contain; 
 }

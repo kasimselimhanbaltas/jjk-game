@@ -20,7 +20,9 @@ export interface GameSettings {
   winner: string,
   loser: string,
   surfaceY: number,
-  entry: boolean
+  entry: boolean,
+  domainClashReady: boolean,
+  domainClash: boolean,
 }
 export interface Skill {
   isReady: boolean,
@@ -58,6 +60,20 @@ export interface Megumi {
   transition: string,
   hardStun: boolean,
   devStun: boolean,
+  // ...
+  domainAmplification: {
+    isActive: boolean,
+    skill: Skill,
+  },
+  simpleDomain: {
+    isActive: boolean,
+    duration: number,
+    skill: Skill,
+  },
+  fallingBlossomEmotion: {
+    isActive: boolean,
+    skill: Skill,
+  },
 
 }
 export interface Gojo {
@@ -79,7 +95,6 @@ export interface Gojo {
   dashGauge: number,
   blueCD: Skill,
   redCD: Skill,
-  purpleCD: Skill,
   domainCD: Skill,
   redAttackMoment: boolean,
   blueAttackMoment: boolean,
@@ -103,7 +118,33 @@ export interface Gojo {
     knockback: number,
   },
   devStun: boolean,
-  domainState: string,
+  domainStatus: {
+    sureHitStatus: boolean,
+    clashStatus: boolean,
+    isInitiated: boolean,
+    isActive: boolean,
+    duration: number,
+    refineLevel: number,
+    afterDomainRestrictions: boolean,
+  },
+  rct: {
+    rctActive: boolean,
+    rctMode: string,
+  },
+  infinity: boolean,
+  simpleDomain: {
+    isActive: boolean,
+    duration: number,
+    skill: Skill,
+  },
+  domainAmplification: {
+    isActive: boolean,
+    skill: Skill,
+  },
+  fallingBlossomEmotion: {
+    isActive: boolean,
+    skill: Skill,
+  },
 }
 
 export interface Sukuna {
@@ -158,7 +199,32 @@ export interface Sukuna {
     knockback: number,
   },
   devStun: boolean,
-
+  domainStatus: {
+    sureHitStatus: boolean,
+    clashStatus: boolean,
+    isInitiated: boolean,
+    isActive: boolean,
+    duration: number,
+    refineLevel: number,
+    afterDomainRestrictions: boolean,
+  },
+  rct: {
+    rctActive: boolean,
+    rctMode: string,
+  },
+  domainAmplification: {
+    isActive: boolean,
+    skill: Skill,
+  },
+  simpleDomain: {
+    isActive: boolean,
+    duration: number,
+    skill: Skill,
+  },
+  fallingBlossomEmotion: {
+    isActive: boolean,
+    skill: Skill,
+  },
 }
 export interface Nue {
   isActive: boolean;

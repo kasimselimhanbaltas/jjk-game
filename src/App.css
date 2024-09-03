@@ -581,3 +581,135 @@ body {
   translate: 5px;
   scale: 1.1;
 }
+.simple-domain {
+  width: 150px;
+  height: 50px;
+  position: absolute;
+  animation: simpleDomain 1s steps(5) infinite;
+  background: url('./Assets/simple-domain.png');
+  transition: all .2s;
+}
+@keyframes simpleDomain {
+  0%{
+    background-position: 0px 0px;
+  }
+  100%{
+    background-position: 750px 0px;
+  }
+}
+.rct-body {
+  width: 75px;
+  height: 115px;
+  position: absolute;
+  /* background-color: green; */
+  transition: all .2s;
+  /* filter: blur(20px); */
+  opacity: 1;
+  /* border-radius: 50%; */
+  background: url(./Assets/reversedct2.png);
+  /* animation: rct-heal 1s steps(17) infinite;
+    animation: rct-ct 1s steps(19) infinite; */
+  scale: 1;
+  z-index: 9;
+}
+
+@keyframes rct-heal {
+  0% {
+    background: url(./Assets/reversedct2.png);
+    background-position: 0px 0px;
+    width: 75px;
+    height: 115px;
+  }
+
+  100% {
+    width: 75px;
+    height: 115px;
+    background-position: -1275px 0px;
+  }
+}
+
+@keyframes rct-ct {
+  0% {
+    background: url("./Assets/rct_ct.png");
+    width: 75px;
+    height: 105px;
+    background-position: 0px 0px;
+  }
+
+  100% {
+    background: url("./Assets/rct_ct.png");
+    width: 75px;
+    height: 105px;
+    background-position: -1425px 0px;
+  }
+}
+.falling-blossom-emotion {
+  width: 90px;
+  height: 120px;
+  position: absolute;
+  /* background-color: green; */
+  transition: all .2s, transform 0s;
+  /* filter: blur(20px); */
+  opacity: 1;
+  /* border-radius: 50%; */
+  background: url(./Assets/fbe_carved.png);
+  animation: fbe 1s steps(6) infinite;
+  scale: 1;
+  z-index: 9;
+}
+@keyframes fbe {
+  0% {
+    background-position: 0px 0px;
+  }
+
+  100% {
+    background-position: -540px 0px;
+  }
+}
+.animation-container {
+  display: none;
+  width: 700px;
+  height: 1px;
+  position: absolute;
+  background-color: transparent;
+  z-index: 9;
+  translate: -50% -50%;
+  overflow: hidden;
+  transition: all 1s !important;
+  rotate: 45deg;
+}
+
+.panel {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 9;
+}
+
+.panel img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  max-width: 100%;
+  z-index: 8;
+  rotate: -45deg;
+}
+.domain-clash-timer-container{
+  width: 300px;
+  height: 40px;
+  border: #0c0513 5px solid;
+  position: relative;
+}
+.domain-clash-timer-bar {
+  position: relative;
+  width: 280px;
+  height: 20px;
+}
+.domain-clash-timer {
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  background-color: red;
+  transition: all .2s;
+}

@@ -992,6 +992,24 @@
         height: 33px;
     }
 }
+@keyframes sukuna-failed-kick {
+    0% {
+        background-position: -142px -1195px;
+        width: 41px;
+        height: 44px;
+        scale: 2;
+    }
+    50% {
+        background-position: -205px -1193px;
+        width: 33px;
+        height: 43px;
+    }
+    100% {
+        background-position: -205px -1193px;
+        width: 33px;
+        height: 43px;
+    }
+}
 @keyframes sukuna-take-damage {
     0% {
         background-position: -621px -2010px;
@@ -1616,4 +1634,20 @@
     background: url(./Assets/sukuna-sprite.png);
     /* opacity: 1 !important;
     animation: fuga-explosion 1s steps(1) infinite; */
+}
+.sukuna-domain-amplification {
+    width: 90px;
+    height: 120px;
+    background: url(./Assets/sukuna-domain-amp.png);
+    animation: sukuna-domain-amplification .8s steps(6) infinite;
+}
+
+@keyframes sukuna-domain-amplification {
+    0% {
+        background-position: 0px 0px;
+    }
+
+    100% {
+        background-position: -540px 0px;
+    }
 }
