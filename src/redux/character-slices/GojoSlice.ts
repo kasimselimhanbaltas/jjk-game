@@ -25,22 +25,17 @@ const initialState: Gojo = {
   rivalDirection: "stop",
   blueCD: {
     isReady: true,
-    cooldown: 8,
+    cooldown: 20,
     remainingTime: 0,
   },
   redCD: {
-    isReady: true,
-    cooldown: 12,
-    remainingTime: 0,
-  },
-  purpleCD: {
     isReady: true,
     cooldown: 30,
     remainingTime: 0,
   },
   domainCD: {
     isReady: true,
-    cooldown: 30,
+    cooldown: 60,
     remainingTime: 0,
   },
   redAttackMoment: false,
@@ -64,15 +59,84 @@ const initialState: Gojo = {
     timeout: 0,
   },
   devStun: false,
-  domainState: "closed",
+  domainStatus: {
+    sureHitStatus: true,
+    clashStatus: false,
+    isInitiated: false,
+    isActive: false,
+    duration: 10,
+    refineLevel: 10,
+    afterDomainRestrictions: false,
+  },
+  rct: {
+    rctActive: false,
+    rctMode: "body",
+  },
+  infinity: true,
+  domainAmplification: {
+    isActive: false,
+    skill: {
+      isReady: true,
+      cooldown: 15,
+      remainingTime: 0,
+    },
+  },
+  simpleDomain: {
+    isActive: false,
+    duration: 5,
+    skill: {
+      isReady: true,
+      cooldown: 15,
+      remainingTime: 0,
+    },
+  },
+  fallingBlossomEmotion: {
+    isActive: false,
+    skill: {
+      isReady: true,
+      cooldown: 15,
+      remainingTime: 0,
+    },
+  },
 };
 
 const gojoSlice = createSlice({
   name: "gojo",
   initialState: initialState,
   reducers: {
+    setFallingBlossomEmotion(state, action) {
+      state.fallingBlossomEmotion.isActive = action.payload.isActive;
+      // state.fallingBlossomEmotion.skill.isReady = action.payload.skill.isReady;
+      // state.fallingBlossomEmotion.skill.cooldown =
+      //   action.payload.skill.cooldown;
+      // state.fallingBlossomEmotion.skill.remainingTime =
+      //   action.payload.skill.remainingTime;
+    },
+    setDomainAmplification(state, action) {
+      state.domainAmplification.isActive = action.payload.isActive;
+      console.log("AP: ", action.payload.isActive);
+      // state.domainAmplification.skill.isReady = action.payload.skill.isReady;
+      // // state.domainAmplification.skill.cooldown = action.payload.skill.cooldown; // not needed
+      // state.domainAmplification.skill.remainingTime =
+      //   action.payload.skill.remainingTime;
+    },
+    setSimpleDomain(state, action) {
+      state.simpleDomain.isActive = action.payload.isActive;
+      state.simpleDomain.duration = action.payload.duration;
+      state.simpleDomain.skill.isReady = action.payload.skill.isReady;
+      state.simpleDomain.skill.cooldown = action.payload.skill.cooldown;
+      state.simpleDomain.skill.remainingTime =
+        action.payload.skill.remainingTime;
+    },
     setDomainState(state, action) {
-      state.domainState = action.payload;
+      state.domainStatus.isInitiated = action.payload.isInitiated;
+      state.domainStatus.isActive = action.payload.isActive;
+      state.domainStatus.duration = action.payload.duration;
+      state.domainStatus.refineLevel = action.payload.refineLevel;
+      state.domainStatus.sureHitStatus = action.payload.sureHitStatus;
+      state.domainStatus.clashStatus = action.payload.clashStatus;
+      state.domainStatus.afterDomainRestrictions =
+        action.payload.afterDomainRestrictions;
     },
     moveCharacter(state, action) {
       let inputX = action.payload.x;
@@ -110,6 +174,7 @@ const gojoSlice = createSlice({
       state.y = action.payload.y;
     },
     updateHealth(state, action) {
+      // if (action.payload < 0 && state.infinity) return;
       if (action.payload < 0 && state.isBlocking) {
         state.health.currentHealth += action.payload * 0.5;
       } else state.health.currentHealth += action.payload;
@@ -118,12 +183,15 @@ const gojoSlice = createSlice({
       state.health.currentHealth = action.payload;
     },
     changeCursedEnergy(state, action) {
-      if (
-        state.cursedEnergy.currentCursedEnergy + action.payload <=
-          state.cursedEnergy.maxCursedEnergy &&
-        state.cursedEnergy.currentCursedEnergy + action.payload >= 0
-      )
-        state.cursedEnergy.currentCursedEnergy += action.payload;
+      if (state.cursedEnergy.currentCursedEnergy + action.payload >= 0)
+        if (
+          state.cursedEnergy.currentCursedEnergy + action.payload <=
+          state.cursedEnergy.maxCursedEnergy
+        )
+          state.cursedEnergy.currentCursedEnergy += action.payload;
+        else
+          state.cursedEnergy.currentCursedEnergy =
+            state.cursedEnergy.maxCursedEnergy;
     },
     setCursedEnergy(state, action) {
       state.cursedEnergy.currentCursedEnergy = action.payload;
@@ -132,10 +200,18 @@ const gojoSlice = createSlice({
       state.direction = action.payload;
     },
     setCanMove(state, action) {
-      state.canMove = action.payload;
+      if (action.payload === false) {
+        state.canMove = false;
+      } else {
+        state.canMove = true;
+      }
     },
     setHardStun(state, action) {
-      state.hardStun = action.payload;
+      if (action.payload === true && !state.infinity) {
+        state.hardStun = true;
+      } else {
+        state.hardStun = false;
+      }
     },
     setTransition(state, action) {
       state.transition = action.payload;
@@ -159,13 +235,6 @@ const gojoSlice = createSlice({
     ) {
       state.redCD.isReady = action.payload.isReady;
       state.redCD.remainingTime = action.payload.remainingTime;
-    },
-    setPurpleCD(
-      state,
-      action: PayloadAction<{ isReady: boolean; remainingTime: number }>
-    ) {
-      state.purpleCD.isReady = action.payload.isReady;
-      state.purpleCD.remainingTime = action.payload.remainingTime;
     },
     setDomainCD(
       state,
@@ -239,6 +308,7 @@ const gojoSlice = createSlice({
       state.positioningSide = action.payload;
     },
     setTakeDamage(state, action) {
+      // if (state.infinity) return;
       state.takeDamage.isTakingDamage = action.payload.isTakingDamage;
       state.takeDamage.takeDamageAnimationCheck =
         action.payload.takeDamageAnimationCheck;
@@ -262,6 +332,13 @@ const gojoSlice = createSlice({
     setDevStun(state, action) {
       state.devStun = action.payload;
     },
+    setRCT(state, action) {
+      state.rct.rctActive = action.payload.rctActive;
+      state.rct.rctMode = action.payload.rctMode;
+    },
+    setInfinity(state, action) {
+      state.infinity = action.payload;
+    },
     // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
   },
 });
@@ -280,7 +357,6 @@ export const {
   setDashGauge,
   setBlueCD,
   setRedCD,
-  setPurpleCD,
   setDomainCD,
   resetState,
   setRedAttackMoment,
@@ -297,13 +373,68 @@ export const {
   setGravity,
   setTakeDamage,
   setDomainState,
+  setRCT,
+  setInfinity,
+  setSimpleDomain,
+  setFallingBlossomEmotion,
 } = gojoSlice.actions;
 export default gojoSlice;
+
+export const toggleSimpleDomainCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.GojoState.simpleDomain.skill.isReady) return;
+  const cooldown = state.SukunaState.simpleDomain.skill.cooldown;
+  dispatch(
+    setSimpleDomain({
+      isActive: false,
+      duration: state.GojoState.simpleDomain.duration,
+      skill: {
+        isReady: false,
+        cooldown: cooldown,
+        remainingTime: cooldown,
+      },
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime =
+      currentState.GojoState.simpleDomain.skill.remainingTime;
+    if (remainingTime > 1) {
+      console.log("CD: ", remainingTime);
+      dispatch(
+        setSimpleDomain({
+          isActive: false,
+          duration: state.GojoState.simpleDomain.duration,
+          skill: {
+            isReady: false,
+            cooldown: cooldown,
+            remainingTime: remainingTime - 1,
+          },
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setSimpleDomain({
+          isActive: false,
+          duration: state.GojoState.simpleDomain.duration,
+          skill: {
+            isReady: true,
+            cooldown: cooldown,
+            remainingTime: 0,
+          },
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
 
 export const toggleBlueCD = (): AppThunk => (dispatch, getState) => {
   const state = getState();
   if (!state.GojoState.blueCD.isReady) return;
   const cooldown = state.GojoState.blueCD.cooldown;
+
   dispatch(
     setBlueCD({
       isReady: false,
@@ -314,11 +445,18 @@ export const toggleBlueCD = (): AppThunk => (dispatch, getState) => {
   const interval = setInterval(() => {
     const currentState = getState();
     const remainingTime = currentState.GojoState.blueCD.remainingTime;
-    if (remainingTime > 1) {
+    const rctMode = currentState.GojoState.rct.rctMode;
+
+    let decrement = 1; // default decrement
+    if (rctMode === "ct") {
+      decrement = 10; // faster decrement when in "ct" mode
+    }
+
+    if (remainingTime > decrement) {
       dispatch(
         setBlueCD({
           isReady: false,
-          remainingTime: remainingTime - 1,
+          remainingTime: remainingTime - decrement,
         })
       );
     } else {
@@ -332,10 +470,12 @@ export const toggleBlueCD = (): AppThunk => (dispatch, getState) => {
     }
   }, 1000); // her saniye güncelle
 };
+
 export const toggleRedCD = (): AppThunk => (dispatch, getState) => {
   const state = getState();
   if (!state.GojoState.redCD.isReady) return;
   const cooldown = state.GojoState.redCD.cooldown;
+
   dispatch(
     setRedCD({
       isReady: false,
@@ -346,49 +486,25 @@ export const toggleRedCD = (): AppThunk => (dispatch, getState) => {
   const interval = setInterval(() => {
     const currentState = getState();
     const remainingTime = currentState.GojoState.redCD.remainingTime;
-    if (remainingTime > 1) {
-      dispatch(
-        setRedCD({
-          isReady: false,
-          remainingTime: remainingTime - 1,
-        })
-      );
-    } else {
-      clearInterval(interval);
-      dispatch(
-        setRedCD({
-          isReady: true,
-          remainingTime: 0,
-        })
-      );
-    }
-  }, 1000); // her saniye güncelle
-};
-export const togglePurpleCD = (): AppThunk => (dispatch, getState) => {
-  const state = getState();
-  if (!state.GojoState.purpleCD.isReady) return;
-  const cooldown = state.GojoState.purpleCD.cooldown;
-  dispatch(
-    setPurpleCD({
-      isReady: false,
-      remainingTime: cooldown,
-    })
-  );
+    const rctActive = currentState.GojoState.rct.rctActive;
+    const rctMode = currentState.GojoState.rct.rctMode;
 
-  const interval = setInterval(() => {
-    const currentState = getState();
-    const remainingTime = currentState.GojoState.purpleCD.remainingTime;
-    if (remainingTime > 1) {
+    let decrement = 1; // default decrement
+    if (rctActive && rctMode === "ct") {
+      decrement = 10; // faster decrement when in "ct" mode
+    }
+
+    if (remainingTime > decrement) {
       dispatch(
-        setPurpleCD({
+        setRedCD({
           isReady: false,
-          remainingTime: remainingTime - 1,
+          remainingTime: remainingTime - decrement,
         })
       );
     } else {
       clearInterval(interval);
       dispatch(
-        setPurpleCD({
+        setRedCD({
           isReady: true,
           remainingTime: 0,
         })

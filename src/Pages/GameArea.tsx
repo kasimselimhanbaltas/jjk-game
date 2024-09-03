@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Megumi from "../components/characters/Megumi";
 import Sukuna from "../components/characters/Sukuna";
 import Nue from "../components/Nue";
@@ -14,7 +14,7 @@ import CircularProgressBar from "../components/CircularProgressBar";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import SatoruGojo from "../components/characters/SatoruGojo";
 import FinishMenu from "../components/FinishMenu";
-import { setEntry, setWinner } from "../redux/GameSettingsSlice";
+import gameSettingsSlice, { setDomainClashReady, setEntry, setWinner } from "../redux/GameSettingsSlice";
 import SukunaSlice from "../redux/character-slices/SukunaSlice";
 import MegumiSlice from "../redux/character-slices/MegumiSlice";
 import CharacterInterface from "../components/CharacterInterface";
@@ -77,11 +77,13 @@ const GameArea = () => {
 
   // place characters
   useEffect(() => {
+    dispatch(gameSettingsSlice.actions.setDomainClash(false))
+
     dispatch(rivalSlice.actions.setDevStun(true)) // ***
     if (gameSettings.entry) {
       if (gameSettings.selectedCharacter === "gojo" || gameSettings.selectedRivalCharacter === "gojo") {
         yowaimoSoundEffectRef.current.volume = 0.2;
-        yowaimoSoundEffectRef.current.play();
+        // yowaimoSoundEffectRef.current.play(); // yowaimo sound effect play
       }
 
       dispatch(playerSlice.actions.setHardStun(true))
@@ -187,14 +189,14 @@ const GameArea = () => {
       }
     }
     if (gojo.purpleAttackMoment) {
-      if (gameSettings.selectedCharacter === "gojo") { // is rival gonna take damage from gojo red and purple
+      if (gameSettings.selectedCharacter === "gojo") { // is rival gonna take damage from gojo purple
 
         let distance =
           gojo.y - rivalCharacter.y >= -150 && gojo.y - rivalCharacter.y <= 100 ?
             gojo.direction === "right" ? (gojo.x - rivalCharacter.x <= 0 ? "hit" : "miss") :
               (gojo.x - rivalCharacter.x > 0 ? "hit" : "miss") : "miss"
-        console.log("gamearea red: ", distance)
         if (distance === "hit") {
+          dispatch(rivalSlice.actions.setDirection(gojo.x < rivalCharacter.x ? "left" : "right"));
           dispatch(sukunaSlice.actions.setTakeDamage({
             isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
           }));
@@ -206,6 +208,7 @@ const GameArea = () => {
               (gojo.x - playerCharacter.x > 0 ? "hit" : "miss") : "miss"
         console.log("gamearea red: ", distance)
         if (distance === "hit") {
+          dispatch(playerSlice.actions.setDirection(gojo.x < playerCharacter.x ? "left" : "right"));
           dispatch(sukunaSlice.actions.setTakeDamage({
             isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
           }));
@@ -219,53 +222,66 @@ const GameArea = () => {
       if (gameSettings.selectedCharacter === "sukuna") { // is rival gonna take damage from sukuna smash attack(R)
         let hitOrMiss =
           Math.abs(rivalCharacter.x - sukuna.bamLandingPositionX) <= 100 ? "hit" : "miss"
-        console.log(rivalCharacter.x, sukuna.bamLandingPositionX)
+        if (rivalCharacter.characterName === "gojo" && gojo.infinity) {
+          if (!playerCharacter.domainAmplification.isActive) {
+            hitOrMiss = "miss";
+          }
+        }
         if (hitOrMiss === "hit") {
-
-          // dispatch(rivalSlice.actions.updateHealth(-100))
+          let infinity = rivalCharacter.characterName === "gojo" && gojo.infinity ? true : false;
           setTimeout(() => {
-            dispatch(rivalSlice.actions.moveCharacterWD({ x: sukuna.x - rivalCharacter.x > 50 ? -150 : +150, y: 0 }));
-            console.log(rivalCharacter.x, sukuna.bamLandingPositionX)
+            dispatch(rivalSlice.actions.setDirection(sukuna.x > rivalCharacter.x ? "right" : "left"));
+            // dispatch(rivalSlice.actions.moveCharacterWD({ x: sukuna.x - rivalCharacter.x > 50 ? -150 : +150, y: 0 }));
+            // console.log(rivalCharacter.x, sukuna.bamLandingPositionX)
 
+            dispatch(rivalSlice.actions.jumpWS(15))
+            dispatch(gojoSlice.actions.setTakeDamage({ // megfix
+              isTakingDamage: true, damage: 100, takeDamageAnimationCheck: infinity ? false : true, knockback: infinity ? 0 : 150, timeout: 300
+            }));
           }, 100);
-          dispatch(rivalSlice.actions.jumpWS(15))
-          dispatch(gojoSlice.actions.setTakeDamage({
-            isTakingDamage: true, damage: 100, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
-          }));
-          dispatch(rivalSlice.actions.setAnimationState("takeDamage"))
-          setTimeout(() => {
-            dispatch(rivalSlice.actions.setAnimationState("stance"))
-          }, 1000);
         }
       }
       else { // is player got hit by a sukuna smash attack
         let hitOrMiss =
-          Math.abs(playerCharacter.x - sukuna.bamLandingPositionX) <= 100 ? "hit" : "miss"
+          Math.abs(playerCharacter.x - sukuna.bamLandingPositionX) <= 100 ? "hit" : "miss";
         if (hitOrMiss === "hit") {
-          dispatch(playerSlice.actions.updateHealth(-100))
-          setTimeout(() => {
-            dispatch(playerSlice.actions.moveCharacterWD({ x: sukuna.x < playerCharacter.x ? +150 : -150, y: 0 }));
-          }, 100);
-          dispatch(playerSlice.actions.jumpWS(15))
-          dispatch(playerSlice.actions.setAnimationState("takeDamage"))
-          setTimeout(() => {
-            dispatch(playerSlice.actions.setAnimationState("stance"))
-          }, 1000);
+          let infinity = playerCharacter.characterName === "gojo" && gojo.infinity ? true : false;
+
+          dispatch(rivalSlice.actions.setDirection(sukuna.x > rivalCharacter.x ? "right" : "left"));
+          dispatch(gojoSlice.actions.setTakeDamage({ // megfix
+            isTakingDamage: true, damage: 100, takeDamageAnimationCheck: infinity ? false : true, knockback: infinity ? 0 : 150, timeout: 300
+          }));
+          // dispatch(gojoSlice.actions.setTakeDamage({ // playerSlice change
+          //   isTakingDamage: true, damage: 100, takeDamageAnimationCheck: true, knockback: 150, timeout: 500
+          // }))
+          // dispatch(playerSlice.actions.updateHealth(-100))
+          // setTimeout(() => {
+          //   dispatch(playerSlice.actions.moveCharacterWD({ x: sukuna.x < playerCharacter.x ? +150 : -150, y: 0 }));
+          // }, 100);
+          if (playerCharacter.characterName === "gojo" && !gojo.infinity)
+            dispatch(playerSlice.actions.jumpWS(15))
+          else if (playerCharacter.characterName !== "gojo")
+            dispatch(playerSlice.actions.jumpWS(15))
+          // dispatch(playerSlice.actions.setAnimationState("takeDamage"))
+          // setTimeout(() => {
+          //   dispatch(playerSlice.actions.setAnimationState("stance"))
+          // }, 1000);
         }
       }
     }
   }, [gojo.redAttackMoment, gojo.blueAttackMoment, gojo.purpleAttackMoment, sukuna.bamAttackMoment,
-  Math.abs(rivalCharacter.x - sukuna.bamLandingPositionX) <= 100
+  Math.abs(rivalCharacter.x - sukuna.bamLandingPositionX) <= 100, playerCharacter.x < rivalCharacter.x
   ])
 
   // Cursed energy interval functions
   const startPlayerCursedEnergyInterval = () => {
     if (playerCEincreaseIntervalRef.current != null) return;
+    const isGojo = gameSettings.selectedCharacter === "gojo" ? true : false;
     playerCEincreaseIntervalRef.current = setInterval(() => {
       if (playerCharacter.cursedEnergy.currentCursedEnergy < playerCharacter.cursedEnergy.maxCursedEnergy) {
         dispatch(playerSlice.actions.changeCursedEnergy(5));
       }
-    }, 1000);
+    }, isGojo ? 100 : 1000);
   };
   const startRivalCursedEnergyInterval = () => {
     if (rivalCEincreaseIntervalRef.current !== null) return;
@@ -293,14 +309,25 @@ const GameArea = () => {
     return () => {
       stopInterval(playerCEincreaseIntervalRef);
     }
-  }, [playerCharacter.cursedEnergy, nue.isActive]);
+  }, [playerCharacter.cursedEnergy.currentCursedEnergy < playerCharacter.cursedEnergy.maxCursedEnergy, nue.isActive]);
 
   useEffect(() => {
     startRivalCursedEnergyInterval()
     return () => {
       stopInterval(rivalCEincreaseIntervalRef);
     }
-  }, [rivalCharacter.cursedEnergy, sukuna.rivalDomainExpansion, nue.isActive]);
+  }, [rivalCharacter.cursedEnergy.currentCursedEnergy < rivalCharacter.cursedEnergy.maxCursedEnergy, sukuna.rivalDomainExpansion, nue.isActive]);
+
+
+  const [domainAmplificationKeyCD, setDomainAmplificationKeyCD] = useState(false);
+  useEffect(() => {
+    console.log(domainAmplificationKeyCD)
+    setTimeout(() => {
+      setDomainAmplificationKeyCD(false);
+    }, 500);
+  }, [domainAmplificationKeyCD]);
+
+
 
   // Player movement control
   useEffect(() => {
@@ -314,10 +341,10 @@ const GameArea = () => {
       let key = event.key.toLowerCase();
       if (event.key === " ") key = "space";
       keysPressed.current[key] = false;
-      if (key === "q") {
-        dispatch(playerSlice.actions.setIsBlocking(false));
-        dispatch(playerSlice.actions.setCanMove(true));
-      }
+      // if (key === "q") {
+      //   dispatch(playerSlice.actions.setIsBlocking(false));
+      //   dispatch(playerSlice.actions.setCanMove(true));
+      // }
       if (key === "a" || key === "d") {
         dispatch(playerSlice.actions.setAnimationState("stance"));
       }
@@ -361,11 +388,21 @@ const GameArea = () => {
           dispatch(playerSlice.actions.setDirection("right"));
           if (!playerCharacter.isJumping && !playerCharacter.animationBlocker && playerCharacter.animationState !== "move")
             dispatch(playerSlice.actions.setAnimationState("move"));
-
         }
-        if (keysPressed.current.q) {
-          dispatch(playerSlice.actions.setIsBlocking(true));
-          dispatch(playerSlice.actions.setCanMove(true));
+        if (keysPressed.current.q && !domainAmplificationKeyCD) {
+          // dispatch(playerSlice.actions.setIsBlocking(true));
+          // dispatch(playerSlice.actions.setCanMove(true)); 
+          // if DA already active, end it 
+          if (!playerCharacter.domainAmplification.isActive
+            && !playerCharacter.simpleDomain.isActive && !playerCharacter.fallingBlossomEmotion.isActive) {
+            dispatch(playerSlice.actions.setDomainAmplification({ isActive: true }))
+            dispatch(playerSlice.actions.setIsBlocking(true));
+          }
+          else {
+            dispatch(playerSlice.actions.setDomainAmplification({ isActive: false }))
+            dispatch(playerSlice.actions.setIsBlocking(false));
+          }
+          setDomainAmplificationKeyCD(true);
         }
         if (keysPressed.current.t) {
           if (rivalCharacter.devStun) dispatch(rivalSlice.actions.setDevStun(false));
@@ -393,8 +430,10 @@ const GameArea = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [dispatch, playerCharacter.health, playerCharacter.y, playerCharacter.x, rivalCharacter.x,
-    rivalCharacter.canMove, playerCharacter.canMove, xDistance, playerCharacter.isJumping, playerCharacter.hardStun]);
+  }, [dispatch, playerCharacter.health > 0, playerCharacter.y, playerCharacter.x, rivalCharacter.x,
+    rivalCharacter.canMove, playerCharacter.canMove, xDistance, playerCharacter.isJumping, playerCharacter.hardStun,
+    playerCharacter.domainAmplification.isActive, domainAmplificationKeyCD,
+    playerCharacter.simpleDomain.isActive && playerCharacter.fallingBlossomEmotion.isActive, rivalCharacter.devStun]);
 
   useEffect(() => {
     const gameLoop = setInterval(() => {
@@ -514,11 +553,36 @@ const GameArea = () => {
         dispatch(playerSlice.actions.resetState())
       }, 2000);
     }
-  }, [playerCharacter.health.currentHealth, rivalCharacter.health.currentHealth]);
+  }, [playerCharacter.health.currentHealth > 0, rivalCharacter.health.currentHealth > 0]);
+  const [reRender, setReRender] = useState(0);
+  const [domainClashText, setDomainClashText] = useState(false);
+  useEffect(() => {
+    setReRender(reRender + 1)
+    if (gameSettings.domainClash) {
+      setDomainClashText(true);
+      setTimeout(() => {
+        setDomainClashText(false);
+      }, 3000);
+    }
+  }, [gameSettings.domainClash, gameSettings.domainClashReady, playerCharacter.domainStatus.isActive, rivalCharacter.domainStatus.isActive])
 
-
+  const [timerPercentage, setTimerPercentage] = useState(100);
+  useEffect(() => {
+    if (gameSettings.domainClashReady) {
+      triggerTimer()
+    }
+  }, [gameSettings.domainClashReady])
+  const triggerTimer = () => {
+    let percentage = 100;
+    setInterval(() => { // 2 saniyede bitmesi için 2000
+      setTimerPercentage(percentage);
+      percentage -= 6
+    }, 100);
+  }
+  // const x = 50;
   return (
     <div className="game-area">
+      {/* <h1> {x * 16} x {x * 9}</h1> */}
       <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
       {showMenu ? ( // Menü gösteriliyor mu?
         <MainMenu onStartGame={handleStartGame} /> // Evet ise menüyü göster
@@ -528,17 +592,24 @@ const GameArea = () => {
         <>
           <div style={{
             width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/bg.jpg")})`, opacity: !sukuna.rivalDomainExpansion ? 0.7 : 0,
-            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
+            backgroundImage: `url(${require("../Assets/bg.jpg")})`, opacity: 1,
+            // backgroundImage: `url(${require("../Assets/domain-clash.png")})`, opacity: 1,
+            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
           }}></div>
           <div style={{
             width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/pixel-sukuna-domain.png")})`, opacity: sukuna.rivalDomainExpansion ? 1 : 0,
-            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0.5s ease-in-out",
+            backgroundImage: `url(${require("../Assets/pixel-sukuna-domain.png")})`, opacity: sukuna.domainStatus.isActive ? 1 : 0,
+            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
           }}></div>
           <div style={{
             width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/gojo-domain-end.png")})`, opacity: gojo.domainState === "open" ? 1 : 0,
+            backgroundImage: `url(${require("../Assets/gojo-domain-end.png")})`, opacity: gojo.domainStatus.isActive ? 1 : 0,
+            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
+          }}></div>
+          <div style={{
+            width: "100%", height: "100%", position: "absolute",
+            backgroundImage: `url(${require("../Assets/domain-clash.png")})`, opacity: // BETTER WAY ???
+              playerCharacter.domainStatus.isActive && rivalCharacter.domainStatus.isActive ? 1 : 0,
             backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
           }}></div>
           {gameSettings.selectedCharacter === "sukuna" && (
@@ -581,7 +652,19 @@ const GameArea = () => {
 
 
           <CharacterInterface playerCharacter={playerCharacter} rivalCharacter={rivalCharacter}></CharacterInterface>
-
+          <div className="domain-clash-timer-container" style={{
+            display: gameSettings.domainClashReady && !gameSettings.domainClash ? "block" : "none", zIndex: 9, top: "50%", left: "50%", translate: "-50% -50%",
+          }}>
+            <div className="domain-clash-timer-bar" style={{ top: "50%", left: "50%", translate: "-50% -50%" }}>
+              <div className="domain-clash-timer"
+                style={{
+                  width: `${timerPercentage}%`,
+                }}></div>
+            </div>
+          </div>
+          <div style={{ position: "absolute", display: domainClashText ? "block" : "none", top: "40%", left: "50%", translate: "-50% -50%", zIndex: 999 }}>
+            <h3>PERFECT TIMED DOMAIN CLASH</h3>
+          </div>
 
         </>
       )}

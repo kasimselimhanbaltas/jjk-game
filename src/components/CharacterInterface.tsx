@@ -14,6 +14,9 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
     const characterHeight = "80px";
     const [render, setRender] = React.useState(0);
     const keysPressed = React.useRef({ shift: false });
+
+    const purpleCost = -150;
+
     useEffect(() => {
         const handleKeyDown = (event) => {
             const key = event.key.toLowerCase();
@@ -64,7 +67,9 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             }}>
                                 <img src={require(`../Assets/ce-bar.png`)} style={{
                                     display: playerCharacter.cursedEnergy.currentCursedEnergy >= playerCharacter.cursedEnergy.maxCursedEnergy
-                                        ? "block" : "none",
+                                        ?
+                                        playerCharacter.rct.rctActive ? "none" : "block"
+                                        : "none",
                                     width: 400, position: "absolute", top: -75, left: -30, translate: "-50%, -50%",
                                     backgroundSize: "cover",
                                 }} />
@@ -324,13 +329,15 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
                             {/* Purple Attack */}
                             <div className="skill">
-                                <CircularProgressBar skillCD={playerCharacter.purpleCD} />
+                                <CircularProgressBar skillCD={playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
+                                    playerCharacter.redCD : playerCharacter.blueCD} />
                                 <img src={require("../Assets/purple.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
+                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>PURPLE:</p>
                                 <p style={{ marginTop: "-10px" }}>
-                                    {playerCharacter.purpleCD.isReady ?
-                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - E+R" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
-                                        (playerCharacter.purpleCD.remainingTime + "sec")}</p>
+                                    {playerCharacter.redCD.isReady && playerCharacter.blueCD.isReady ?
+                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= -purpleCost ? "Ready - E+R" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/" + (-purpleCost)) :
+                                        (playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
+                                            (playerCharacter.redCD.remainingTime + "sec") : (playerCharacter.blueCD.remainingTime + "sec"))}</p>
                             </div>
 
                             {/* Domain Attack */}
@@ -338,34 +345,8 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 <CircularProgressBar skillCD={playerCharacter.domainCD} />
                                 <img src={require("../Assets/domain-hand.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
                                 <p>coming soon...</p>
-                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Infinite Void:</p>
-
-                  <p style={{ marginTop: "-10px" }}>
-                    {playerCharacter.purpleCD.isReady ?
-                      (playerCharacter.purpleCD.isReady ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
-                      (playerCharacter.purpleCD.remainingTime + "sec")}</p> */}
                             </div>
                         </div>
-                        {/* Rapid Slash
-              <div className="skill">
-                <img src={require("../Assets/slash.png")} alt="" />
-                <CircularProgressbar
-                  value={playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}
-                  text={`${playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}%`}
-                  className="circular-skill-progress-bar"
-                  styles={buildStyles({
-                    // Text size
-                    textSize: '16px',
-                    // Colors
-                    pathColor: (playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
-                    textColor: 'transparent',
-                    trailColor: '#d6d6d6',
-                    backgroundColor: '#3e98c7',
-                  })}
-                />
-                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
-                <p style={{ marginTop: "-10px" }}> {playerCharacter.rapidAttackCounter.currentCount >= playerCharacter.rapidAttackCounter.maxCount ? "Ready - J" : playerCharacter.rapidAttackCounter.currentCount + "/" + playerCharacter.rapidAttackCounter.maxCount} </p>
-              </div> */}
 
                     </div>
                 )}
@@ -516,27 +497,6 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                         (rivalCharacter.divineDogsCD.remainingTime + "sec")}</p>
                             </div>
                         </div>
-                        {/* Rapid Slash
-              <div className="skill">
-                <img src={require("../Assets/slash.png")} alt="" />
-                <CircularProgressbar
-                  value={rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}
-                  text={`${rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}%`}
-                  className="circular-skill-progress-bar"
-                  styles={buildStyles({
-                    // Text size
-                    textSize: '16px',
-                    // Colors
-                    pathColor: (rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
-                    textColor: 'transparent',
-                    trailColor: '#d6d6d6',
-                    backgroundColor: '#3e98c7',
-                  })}
-                />
-                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
-                <p style={{ marginTop: "-10px" }}> {rivalCharacter.rapidAttackCounter.currentCount >= rivalCharacter.rapidAttackCounter.maxCount ? "Ready - J" : rivalCharacter.rapidAttackCounter.currentCount + "/" + rivalCharacter.rapidAttackCounter.maxCount} </p>
-              </div> */}
-
                     </div>
                 )}
 
@@ -574,13 +534,15 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
                             {/* Purple Attack */}
                             <div className="skill">
-                                <CircularProgressBar skillCD={rivalCharacter.purpleCD} />
+                                <CircularProgressBar skillCD={rivalCharacter.redCD.remainingTime > rivalCharacter.blueCD.remainingTime ?
+                                    rivalCharacter.redCD : rivalCharacter.blueCD} />
                                 <img src={require("../Assets/purple.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Purple Attack:</p>
+                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>PURPLE:</p>
                                 <p style={{ marginTop: "-10px" }}>
-                                    {rivalCharacter.purpleCD.isReady ?
-                                        (rivalCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - L" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/200") :
-                                        (rivalCharacter.purpleCD.remainingTime + "sec")}</p>
+                                    {rivalCharacter.redCD.isReady && rivalCharacter.blueCD.isReady ?
+                                        (rivalCharacter.cursedEnergy.currentCursedEnergy >= -purpleCost ? "Ready - E+R" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/" + (-purpleCost)) :
+                                        (rivalCharacter.redCD.remainingTime > rivalCharacter.blueCD.remainingTime ?
+                                            (rivalCharacter.redCD.remainingTime + "sec") : (rivalCharacter.blueCD.remainingTime + "sec"))}</p>
                             </div>
 
                             {/* Domain Attack */}

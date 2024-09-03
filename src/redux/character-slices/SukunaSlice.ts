@@ -14,7 +14,7 @@ const initialState: Sukuna = {
     maxHealth: 1500,
   },
   cursedEnergy: {
-    currentCursedEnergy: 150,
+    currentCursedEnergy: 200,
     maxCursedEnergy: 200,
   },
   direction: "left",
@@ -39,7 +39,7 @@ const initialState: Sukuna = {
   },
   domainCD: {
     isReady: true,
-    cooldown: 10,
+    cooldown: 30,
     remainingTime: 0,
   },
   rapidAttackCounter: {
@@ -69,12 +69,94 @@ const initialState: Sukuna = {
     timeout: 0,
   },
   devStun: false,
+  domainStatus: {
+    sureHitStatus: true,
+    clashStatus: false,
+    isInitiated: false,
+    isActive: false,
+    duration: 15,
+    refineLevel: 10,
+    afterDomainRestrictions: false,
+  },
+  rct: {
+    rctActive: false,
+    rctMode: "body",
+  },
+  domainAmplification: {
+    isActive: false,
+    skill: {
+      isReady: true,
+      cooldown: 15,
+      remainingTime: 0,
+    },
+  },
+  simpleDomain: {
+    isActive: false,
+    duration: 5,
+    skill: {
+      isReady: true,
+      cooldown: 15,
+      remainingTime: 0,
+    },
+  },
+  fallingBlossomEmotion: {
+    isActive: false,
+    skill: {
+      isReady: true,
+      cooldown: 15,
+      remainingTime: 0,
+    },
+  },
 };
 
 const RivalSlice = createSlice({
   name: "Sukuna",
   initialState: initialState,
   reducers: {
+    setFallingBlossomEmotion(state, action) {
+      state.fallingBlossomEmotion.isActive = action.payload.isActive;
+      // state.fallingBlossomEmotion.skill.isReady = action.payload.skill.isReady;
+      // state.fallingBlossomEmotion.skill.cooldown =
+      //   action.payload.skill.cooldown;
+      // state.fallingBlossomEmotion.skill.remainingTime =
+      //   action.payload.skill.remainingTime;
+    },
+    setSimpleDomain(state, action) {
+      state.simpleDomain.isActive = action.payload.isActive;
+      state.simpleDomain.duration = action.payload.duration;
+      state.simpleDomain.skill.isReady = action.payload.skill.isReady;
+      state.simpleDomain.skill.cooldown = action.payload.skill.cooldown;
+      state.simpleDomain.skill.remainingTime =
+        action.payload.skill.remainingTime;
+    },
+    setDomainAmplification(state, action) {
+      state.domainAmplification.isActive = action.payload.isActive;
+      console.log("AP: ", action.payload.isActive);
+      // state.domainAmplification.skill.isReady = action.payload.skill.isReady;
+      // // state.domainAmplification.skill.cooldown = action.payload.skill.cooldown; // not needed
+      // state.domainAmplification.skill.remainingTime =
+      //   action.payload.skill.remainingTime;
+    },
+    setRCT(state, action) {
+      state.rct.rctActive = action.payload.rctActive;
+      state.rct.rctMode = action.payload.rctMode;
+    },
+    setDomainState(state, action) {
+      console.log(
+        "prev: ",
+        state.domainStatus.isActive,
+        "next: ",
+        action.payload.isActive
+      );
+      state.domainStatus.isInitiated = action.payload.isInitiated;
+      state.domainStatus.isActive = action.payload.isActive;
+      state.domainStatus.duration = action.payload.duration;
+      state.domainStatus.refineLevel = action.payload.refineLevel;
+      state.domainStatus.sureHitStatus = action.payload.sureHitStatus;
+      state.domainStatus.clashStatus = action.payload.clashStatus;
+      state.domainStatus.afterDomainRestrictions =
+        action.payload.afterDomainRestrictions;
+    },
     moveCharacter(state, action) {
       let inputX = action.payload.x;
       let inputY = action.payload.y;
@@ -320,8 +402,63 @@ export const {
   setPositioningSide,
   setTakeDamage,
   setDevStun,
+  setDomainState,
+  setRCT,
+  setDomainAmplification,
+  setSimpleDomain,
+  setFallingBlossomEmotion,
 } = RivalSlice.actions;
 export default RivalSlice;
+
+export const toggleSimpleDomainCD = (): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  if (!state.SukunaState.simpleDomain.skill.isReady) return;
+  const cooldown = state.SukunaState.simpleDomain.skill.cooldown;
+  dispatch(
+    setSimpleDomain({
+      isActive: false,
+      duration: state.SukunaState.simpleDomain.duration,
+      skill: {
+        isReady: false,
+        cooldown: cooldown,
+        remainingTime: cooldown,
+      },
+    })
+  );
+
+  const interval = setInterval(() => {
+    const currentState = getState();
+    const remainingTime =
+      currentState.SukunaState.simpleDomain.skill.remainingTime;
+    if (remainingTime > 1) {
+      console.log("CD: ", remainingTime);
+      dispatch(
+        setSimpleDomain({
+          isActive: false,
+          duration: state.SukunaState.simpleDomain.duration,
+          skill: {
+            isReady: false,
+            cooldown: cooldown,
+            remainingTime: remainingTime - 1,
+          },
+        })
+      );
+    } else {
+      clearInterval(interval);
+      dispatch(
+        setSimpleDomain({
+          isActive: false,
+          duration: state.SukunaState.simpleDomain.duration,
+          skill: {
+            isReady: true,
+            cooldown: cooldown,
+            remainingTime: 0,
+          },
+        })
+      );
+    }
+  }, 1000); // her saniye güncelle
+};
 
 export const toggleCleaveCD = (): AppThunk => (dispatch, getState) => {
   const state = getState();

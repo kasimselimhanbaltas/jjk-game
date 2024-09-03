@@ -8,12 +8,20 @@ const initialState: GameSettings = {
   loser: "",
   surfaceY: 560,
   entry: false,
+  domainClashReady: false,
+  domainClash: false,
 };
 
 const gameSettingsSlice = createSlice({
   name: "gameSettings",
   initialState: initialState,
   reducers: {
+    setDomainClashReady(state, action) {
+      state.domainClashReady = action.payload;
+    },
+    setDomainClash(state, action) {
+      state.domainClash = action.payload;
+    },
     selectCharacter(state, action) {
       state.selectedCharacter = action.payload;
     },
@@ -42,6 +50,8 @@ export const {
   setLoser,
   setSurfaceY,
   setEntry,
+  setDomainClashReady,
+  setDomainClash,
 } = gameSettingsSlice.actions;
 export default gameSettingsSlice;
 
