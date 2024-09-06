@@ -549,43 +549,73 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
 
     // *** ULTRA DOMAIN HANDLER
     useEffect(() => {
-        if (gojo.domainStatus.isInitiated) {
+        //     if (gojo.domainStatus.isInitiated) {
+        //         dispatch(gojoSlice.actions.setCanMove(false));
+        //         if (gameSettings.domainClash) {
+        //             // gojo pressed l and domain clash is true, so open domain simultaneously with sukuna
+        //             // sukuna 835, 255 / gojo 250 560
+        //             console.log("A")
+        //             handleDomainExpansion();
+        //             dispatch(gameSettingsSlice.actions.setDomainClash(false));
+        //             dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: false })); // initiate false
+        //         }
+        //         else if (!gameSettings.domainClashReady) {
+        //             console.log("C")
+        //             if (domainClashCDref === false) {
+        //                 console.log("B2")
+        //                 dispatch(gameSettingsSlice.actions.setDomainClashReady(true));
+        //                 setTimeout(() => {
+        //                     setDomainClashCDref(true);
+        //                     dispatch(gameSettingsSlice.actions.setDomainClashReady(false));
+        //                 }, 2000);
+        //             }
+        //             else if (domainClashCDref === true) {
+        //                 console.log("C1")
+        //                 dispatch(rivalSlice.actions.setDevStun(true));
+        //                 handleDomainExpansion();
+        //                 dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: false }));
+        //             }
+        //         }
+        //         // gojo pressed l, so check if domainClashReady is true, 
+        //         // if its true, set domainClash to true // if its false, set domainClashReady to true and wait for 2 seconds
+        //         else if (gameSettings.domainClashReady && rivalState.domainStatus.isInitiated) { // rival already initiated domain
+        //             console.log("B1")
+        //             dispatch(gameSettingsSlice.actions.setDomainClash(true));
+        //         }
+
+        if (gameSettings.domainClash && gojo.domainCD.isReady && gojo.cursedEnergy.currentCursedEnergy >= 200) {
+            handleDomainExpansion();
+            dispatch(gameSettingsSlice.actions.setDomainClash(false));
+        }
+        else if (gojo.domainStatus.isInitiated === true) { // user pressed domain expansion key or bot initiated domain
             dispatch(gojoSlice.actions.setCanMove(false));
-            if (gameSettings.domainClash) {
-                // gojo pressed l and domain clash is true, so open domain simultaneously with sukuna
-                // sukuna 835, 255 / gojo 250 560
-                console.log("A")
-                handleDomainExpansion();
-                dispatch(gameSettingsSlice.actions.setDomainClash(false));
-                dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: false })); // initiate false
-            }
-            else if (!gameSettings.domainClashReady) {
-                console.log("C")
-                if (domainClashCDref === false) {
-                    console.log("B2")
-                    dispatch(gameSettingsSlice.actions.setDomainClashReady(true));
-                    setTimeout(() => {
-                        setDomainClashCDref(true);
-                        dispatch(gameSettingsSlice.actions.setDomainClashReady(false));
-                    }, 2000);
-                }
-                else if (domainClashCDref === true) {
-                    console.log("C1")
-                    dispatch(rivalSlice.actions.setDevStun(true));
-                    handleDomainExpansion();
-                    dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: false }));
-                }
-            }
-            // gojo pressed l, so check if domainClashReady is true, 
-            // if its true, set domainClash to true // if its false, set domainClashReady to true and wait for 2 seconds
-            else if (gameSettings.domainClashReady && rivalState.domainStatus.isInitiated) { // rival already initiated domain
-                console.log("B1")
+            dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: false }))
+            if (gameSettings.domainClashReady) { // rival already initiated domain
                 dispatch(gameSettingsSlice.actions.setDomainClash(true));
             }
-
-
+            else {
+                dispatch(gameSettingsSlice.actions.setDomainClashReady(true));
+                setTimeout(() => {
+                    setDomainClashCDref(true);
+                    dispatch(gameSettingsSlice.actions.setDomainClashReady(false));
+                }, 2000);
+            }
         }
-    }, [gojo.domainStatus.isInitiated, gameSettings.domainClashReady, gameSettings.domainClash, domainClashCDref, rivalState.domainStatus.isInitiated])
+        else {
+            if (domainClashCDref === true && gojo.domainCD.isReady && gojo.cursedEnergy.currentCursedEnergy >= 200) {
+                console.log("b")
+                handleDomainExpansion();
+            }
+        }
+    }, [gojo.domainStatus.isInitiated, gameSettings.domainClashReady, gameSettings.domainClash, domainClashCDref, gojo.domainCD.isReady])
+
+
+    //     }
+    // }, [gojo.domainStatus.isInitiated, gameSettings.domainClashReady, gameSettings.domainClash, domainClashCDref, rivalState.domainStatus.isInitiated])
+
+
+
+
 
     // check simpledomain and change sure hit effect of rival domain
     useEffect(() => {
@@ -722,8 +752,10 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         dispatch(gojoSlice.actions.setAnimationState("domain-pose"));
         dispatch(gojoSlice.actions.setHardStun(true));
         dispatch(gojoSlice.actions.setInfinity(false));
-        if (!gameSettings.domainClash)
+        if (!gameSettings.domainClash) {
+            dispatch(gojoSlice.actions.moveCharacterTo({ x: 250, y: 560 }));
             domainPanel();
+        }
         else {
             domainClashPanel();
         }
@@ -736,7 +768,6 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             setTimeout(() => {
                 domainStarter.current.style.scale = 300;
                 setTimeout(() => {
-                    dispatch(gojoSlice.actions.moveCharacterTo({ x: 250, y: 560 }));
 
                     dispatch(gojoSlice.actions.setDomainState(
                         { ...gojo.domainStatus, isActive: true }
