@@ -35,7 +35,7 @@ const initialState: Gojo = {
   },
   domainCD: {
     isReady: true,
-    cooldown: 60,
+    cooldown: 20,
     remainingTime: 0,
   },
   redAttackMoment: false,
@@ -98,12 +98,16 @@ const initialState: Gojo = {
       remainingTime: 0,
     },
   },
+  invulnerability: false,
 };
 
 const gojoSlice = createSlice({
   name: "gojo",
   initialState: initialState,
   reducers: {
+    setInvulnerability(state, action) {
+      state.invulnerability = action.payload;
+    },
     setFallingBlossomEmotion(state, action) {
       state.fallingBlossomEmotion.isActive = action.payload.isActive;
       // state.fallingBlossomEmotion.skill.isReady = action.payload.skill.isReady;
@@ -174,10 +178,11 @@ const gojoSlice = createSlice({
       state.y = action.payload.y;
     },
     updateHealth(state, action) {
-      // if (action.payload < 0 && state.infinity) return;
+      if (action.payload < 0 && state.invulnerability) return;
       if (action.payload < 0 && state.isBlocking) {
+        // if its a damage and the character is blocking
         state.health.currentHealth += action.payload * 0.5;
-      } else state.health.currentHealth += action.payload;
+      } else state.health.currentHealth += action.payload; // if its a healing or damage
     },
     setHealth(state, action) {
       state.health.currentHealth = action.payload;
@@ -377,6 +382,7 @@ export const {
   setInfinity,
   setSimpleDomain,
   setFallingBlossomEmotion,
+  setInvulnerability,
 } = gojoSlice.actions;
 export default gojoSlice;
 

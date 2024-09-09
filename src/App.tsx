@@ -23,6 +23,7 @@ export interface GameSettings {
   entry: boolean,
   domainClashReady: boolean,
   domainClash: boolean,
+  tutorial: boolean
 }
 export interface Skill {
   isReady: boolean,
@@ -74,7 +75,7 @@ export interface Megumi {
     isActive: boolean,
     skill: Skill,
   },
-
+  invulnerability: boolean,
 }
 export interface Gojo {
   characterName: string,
@@ -145,6 +146,8 @@ export interface Gojo {
     isActive: boolean,
     skill: Skill,
   },
+  invulnerability: boolean,
+
 }
 
 export interface Sukuna {
@@ -225,6 +228,8 @@ export interface Sukuna {
     isActive: boolean,
     skill: Skill,
   },
+  invulnerability: boolean,
+
 }
 export interface Nue {
   isActive: boolean;

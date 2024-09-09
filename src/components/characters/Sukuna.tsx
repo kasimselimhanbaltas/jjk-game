@@ -51,6 +51,13 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         z: false, x: false, c: false
     });
 
+    useEffect(() => {
+        const int = setInterval(() => {
+            console.log(sukuna.hardStun, sukuna.devStun)
+        }, 200)
+        return () => clearInterval(int)
+    }, [sukuna.hardStun, sukuna.devStun])
+
 
     // Cooldowns
     const [cleaveReady, setCleaveReady] = useState({ ready: true, coolDown: 0 });
@@ -160,8 +167,11 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         setTimeout(() => {
             setTimeout(() => {
                 // sukuna 835, 255 / gojo 250 560
-                dispatch(sukunaSlice.actions.setGravity(0))
-                dispatch(sukunaSlice.actions.moveCharacterTo({ x: 835, y: 255 }));
+                if (gameSettings.domainClash) {
+                    dispatch(sukunaSlice.actions.setGravity(0))
+                    dispatch(sukunaSlice.actions.moveCharacterTo({ x: 835, y: 255 }));
+                    dispatch(sukunaSlice.actions.setDirection("left"));
+                }
                 dispatch(sukunaSlice.actions.setDomainState(
                     { ...sukuna.domainStatus, isActive: true }
                 ));
@@ -602,6 +612,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     useEffect(() => {
         if (gameSettings.domainClash && sukuna.domainCD.isReady && sukuna.cursedEnergy.currentCursedEnergy >= 200) {
             handleDomainAttack();
+            dispatch(gameSettingsSlice.actions.setDomainClashReady(false));
             dispatch(gameSettingsSlice.actions.setDomainClash(false));
         }
         else if (sukuna.domainStatus.isInitiated === true) { // user pressed domain expansion key or bot initiated domain

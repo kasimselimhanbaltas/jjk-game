@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Megumi from "../components/characters/Megumi";
 import Sukuna from "../components/characters/Sukuna";
 import Nue from "../components/Nue";
@@ -47,6 +47,7 @@ const GameArea = () => {
   // Sound Effects
   const yowaimoSoundEffectRef = useRef<HTMLAudioElement>(null);
 
+
   const selectedPlayer = useSelector((state: any) => {
     if (gameSettings.selectedCharacter === "sukuna") {
       return { playerState: state.SukunaState, playerSlice: sukunaSlice };
@@ -79,7 +80,7 @@ const GameArea = () => {
   useEffect(() => {
     dispatch(gameSettingsSlice.actions.setDomainClash(false))
 
-    dispatch(rivalSlice.actions.setDevStun(true)) // ***
+    // dispatch(rivalSlice.actions.setDevStun(true))
     if (gameSettings.entry) {
       if (gameSettings.selectedCharacter === "gojo" || gameSettings.selectedRivalCharacter === "gojo") {
         yowaimoSoundEffectRef.current.volume = 0.2;
@@ -111,7 +112,8 @@ const GameArea = () => {
         }, 1000);
       }, 2000);
       setTimeout(() => {
-        dispatch(rivalSlice.actions.setHardStun(false)) // ***
+        console.log("devstun false")
+        dispatch(rivalSlice.actions.setHardStun(false)) // *stun
         dispatch(playerSlice.actions.setHardStun(false))
         dispatch(setEntry(false));
         dispatch(rivalSlice.actions.setDirection("left"));
@@ -196,10 +198,12 @@ const GameArea = () => {
             gojo.direction === "right" ? (gojo.x - rivalCharacter.x <= 0 ? "hit" : "miss") :
               (gojo.x - rivalCharacter.x > 0 ? "hit" : "miss") : "miss"
         if (distance === "hit") {
-          dispatch(rivalSlice.actions.setDirection(gojo.x < rivalCharacter.x ? "left" : "right"));
-          dispatch(sukunaSlice.actions.setTakeDamage({
-            isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
-          }));
+          setTimeout(() => {
+            dispatch(rivalSlice.actions.setDirection(gojo.x < rivalCharacter.x ? "left" : "right"));
+            dispatch(sukunaSlice.actions.setTakeDamage({
+              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
+            }));
+          }, (Math.abs(gojo.x - sukuna.x) * 0.7)); // hitbox time fixer
         }
       } else { // for other characters
         let distance =
@@ -208,10 +212,12 @@ const GameArea = () => {
               (gojo.x - playerCharacter.x > 0 ? "hit" : "miss") : "miss"
         console.log("gamearea red: ", distance)
         if (distance === "hit") {
-          dispatch(playerSlice.actions.setDirection(gojo.x < playerCharacter.x ? "left" : "right"));
-          dispatch(sukunaSlice.actions.setTakeDamage({
-            isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
-          }));
+          setTimeout(() => {
+            dispatch(playerSlice.actions.setDirection(gojo.x < playerCharacter.x ? "left" : "right"));
+            dispatch(sukunaSlice.actions.setTakeDamage({
+              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
+            }));
+          }, (Math.abs(gojo.x - sukuna.x) * 0.7)); // hitbox time fixer
           // setTimeout(() => {
           //   dispatch(playerSlice.actions.setAnimationState("stance"))
           // }, 1000);
@@ -511,13 +517,28 @@ const GameArea = () => {
   const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
 
+  useEffect(() => {
+    console.log("effect tutorial: ", gameSettings.tutorial)
+    if (gameSettings.tutorial) {
+      console.log("Tutorial mode on!")
+      dispatch(rivalSlice.actions.setDevStun(true));
+      dispatch(rivalSlice.actions.setInvulnerability(true));
+
+    }
+  }, [gameSettings.tutorial]);
   const handleStartGame = () => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername === "ayso") {
+      aysoSoundEffectRef.current.volume = 1;
+      aysoSoundEffectRef.current.play();
+    }
     dispatch(playerSlice.actions.resetState())
     dispatch(rivalSlice.actions.resetState())
     setShowFinishMenu(false)
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
     dispatch(setEntry(true));
   };
+
   const handleRestart = () => {
     dispatch(playerSlice.actions.resetState())
     dispatch(rivalSlice.actions.resetState())
@@ -580,10 +601,16 @@ const GameArea = () => {
     }, 100);
   }
   // const x = 50;
+
+  const aysoSoundEffectRef = useRef<HTMLAudioElement>(null);
+
+
   return (
     <div className="game-area">
       {/* <h1> {x * 16} x {x * 9}</h1> */}
       <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
+      <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio>
+
       {showMenu ? ( // Menü gösteriliyor mu?
         <MainMenu onStartGame={handleStartGame} /> // Evet ise menüyü göster
       ) : showFinishMenu ? (
@@ -654,7 +681,10 @@ const GameArea = () => {
           <CharacterInterface playerCharacter={playerCharacter} rivalCharacter={rivalCharacter}></CharacterInterface>
           <div className="domain-clash-timer-container" style={{
             display: gameSettings.domainClashReady && !gameSettings.domainClash ? "block" : "none", zIndex: 9, top: "50%", left: "50%", translate: "-50% -50%",
+            // display: "block", zIndex: 9, top: "50%", left: "50%", translate: "-50% -50%",
           }}>
+            <h5 style={{ position: "absolute", top: "-140%", left: "50%", translate: "-50% -50%", width: 300 }}>
+              Domain Clash Chance!</h5>
             <div className="domain-clash-timer-bar" style={{ top: "50%", left: "50%", translate: "-50% -50%" }}>
               <div className="domain-clash-timer"
                 style={{

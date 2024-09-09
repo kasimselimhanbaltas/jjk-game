@@ -107,12 +107,17 @@ const initialState: Sukuna = {
       remainingTime: 0,
     },
   },
+  invulnerability: false,
 };
 
 const RivalSlice = createSlice({
   name: "Sukuna",
   initialState: initialState,
   reducers: {
+    setInvulnerability(state, action) {
+      console.log("set invulnerability: ", action.payload);
+      state.invulnerability = action.payload;
+    },
     setFallingBlossomEmotion(state, action) {
       state.fallingBlossomEmotion.isActive = action.payload.isActive;
       // state.fallingBlossomEmotion.skill.isReady = action.payload.skill.isReady;
@@ -194,9 +199,11 @@ const RivalSlice = createSlice({
       state.y = action.payload.y;
     },
     updateHealth(state, action) {
-      if (action.payload < 0 && state.isBlocking) {
+      console.log("invulnerability: ", state.invulnerability);
+      if (action.payload < 0 && state.invulnerability) return;
+      if (action.payload < 0 && state.isBlocking) { // if its a damage and the character is blocking
         state.health.currentHealth += action.payload * 0.5;
-      } else state.health.currentHealth += action.payload;
+      } else state.health.currentHealth += action.payload; // if its a healing or damage
     },
     setHealth(state, action) {
       state.health.currentHealth = action.payload;
@@ -407,6 +414,7 @@ export const {
   setDomainAmplification,
   setSimpleDomain,
   setFallingBlossomEmotion,
+  setInvulnerability
 } = RivalSlice.actions;
 export default RivalSlice;
 
