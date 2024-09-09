@@ -73,12 +73,16 @@ const initialState: Megumi = {
       remainingTime: 0,
     },
   },
+  invulnerability: false,
 };
 
 const megumiSlice = createSlice({
   name: "megumi",
   initialState: initialState,
   reducers: {
+    setInvulnerability(state, action) {
+      state.invulnerability = action.payload;
+    },
     setFallingBlossomEmotion(state, action) {
       state.fallingBlossomEmotion.isActive = action.payload.isActive;
       // state.fallingBlossomEmotion.skill.isReady = action.payload.skill.isReady;
@@ -132,9 +136,10 @@ const megumiSlice = createSlice({
       state.y = action.payload.y;
     },
     updateHealth(state, action) {
-      if (action.payload < 0 && state.isBlocking) {
+      if (action.payload < 0 && state.invulnerability) return;
+      if (action.payload < 0 && state.isBlocking) { // if its a damage and the character is blocking
         state.health.currentHealth += action.payload * 0.5;
-      } else state.health.currentHealth += action.payload;
+      } else state.health.currentHealth += action.payload; // if its a healing or damage
     },
     setHealth(state, action) {
       state.health.currentHealth = action.payload;
@@ -262,6 +267,7 @@ export const {
   setTransition,
   setDevStun,
   setFallingBlossomEmotion,
+  setInvulnerability,
 } = megumiSlice.actions;
 export default megumiSlice;
 

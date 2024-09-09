@@ -350,6 +350,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         // }))
 
         setTimeout(() => { // gojo animation end
+            console.log("purple moment true!!!")
+            dispatch(gojoSlice.actions.setPurpleAttackMoment(true)) // handle skillshot damage in gamearea
+
             dispatch(gojoSlice.actions.setAnimationBlocker(false))
             dispatch(gojoSlice.actions.setAnimationState("stance"));
             setPurpleStyle(prevState => ({
@@ -359,7 +362,6 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 attacking: true
             }))
             setTimeout(() => {
-                dispatch(gojoSlice.actions.setPurpleAttackMoment(true)) // handle skillshot damage in gamearea
                 setTimeout(() => {
                     dispatch(gojoSlice.actions.setPurpleAttackMoment(false))
                     setPurpleStyle(prevState => ({
@@ -549,42 +551,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
 
     // *** ULTRA DOMAIN HANDLER
     useEffect(() => {
-        //     if (gojo.domainStatus.isInitiated) {
-        //         dispatch(gojoSlice.actions.setCanMove(false));
-        //         if (gameSettings.domainClash) {
-        //             // gojo pressed l and domain clash is true, so open domain simultaneously with sukuna
-        //             // sukuna 835, 255 / gojo 250 560
-        //             console.log("A")
-        //             handleDomainExpansion();
-        //             dispatch(gameSettingsSlice.actions.setDomainClash(false));
-        //             dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: false })); // initiate false
-        //         }
-        //         else if (!gameSettings.domainClashReady) {
-        //             console.log("C")
-        //             if (domainClashCDref === false) {
-        //                 console.log("B2")
-        //                 dispatch(gameSettingsSlice.actions.setDomainClashReady(true));
-        //                 setTimeout(() => {
-        //                     setDomainClashCDref(true);
-        //                     dispatch(gameSettingsSlice.actions.setDomainClashReady(false));
-        //                 }, 2000);
-        //             }
-        //             else if (domainClashCDref === true) {
-        //                 console.log("C1")
-        //                 dispatch(rivalSlice.actions.setDevStun(true));
-        //                 handleDomainExpansion();
-        //                 dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: false }));
-        //             }
-        //         }
-        //         // gojo pressed l, so check if domainClashReady is true, 
-        //         // if its true, set domainClash to true // if its false, set domainClashReady to true and wait for 2 seconds
-        //         else if (gameSettings.domainClashReady && rivalState.domainStatus.isInitiated) { // rival already initiated domain
-        //             console.log("B1")
-        //             dispatch(gameSettingsSlice.actions.setDomainClash(true));
-        //         }
-
         if (gameSettings.domainClash && gojo.domainCD.isReady && gojo.cursedEnergy.currentCursedEnergy >= 200) {
             handleDomainExpansion();
+            dispatch(gameSettingsSlice.actions.setDomainClashReady(false));
             dispatch(gameSettingsSlice.actions.setDomainClash(false));
         }
         else if (gojo.domainStatus.isInitiated === true) { // user pressed domain expansion key or bot initiated domain
@@ -753,17 +722,21 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         dispatch(gojoSlice.actions.setHardStun(true));
         dispatch(gojoSlice.actions.setInfinity(false));
         if (!gameSettings.domainClash) {
-            dispatch(gojoSlice.actions.moveCharacterTo({ x: 250, y: 560 }));
             domainPanel();
         }
         else {
+            dispatch(gojoSlice.actions.moveCharacterTo({ x: 250, y: 560 }));
+            dispatch(gojoSlice.actions.setDirection("right"));
             domainClashPanel();
         }
         domainSoundEffectRef.current.play();
 
-        // dispatch(rivalSlice.actions.setDevStun(true));
+        if (!gameSettings.domainClash) {
+            dispatch(rivalSlice.actions.setDevStun(true));
+        }
 
         if (domainStarter.current) {
+            domainStarter.current.style.transition = "all .2s, scale 5s"
             dispatch(gojoSlice.actions.setHardStun(true))
             setTimeout(() => {
                 domainStarter.current.style.scale = 300;
@@ -785,7 +758,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                             dispatch(gojoSlice.actions.setDomainState(
                                 { ...gojo.domainStatus, isActive: false }
                             ));
-                            dispatch(rivalSlice.actions.setDevStun(false));
+                            dispatch(rivalSlice.actions.setDevStun(false)); // *stun
                         }, gojo.domainStatus.duration * 1000); // duration
                     }, 1000);
                 }, 6000);

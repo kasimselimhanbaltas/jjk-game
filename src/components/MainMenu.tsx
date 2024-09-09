@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCharacter, selectRivalCharacter } from '../redux/GameSettingsSlice';
+import gameSettingsSlice, { selectCharacter, selectRivalCharacter } from '../redux/GameSettingsSlice';
 const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
 
   const dispatch = useDispatch();
@@ -48,6 +48,10 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
     setShowRivalCharacterMenu(false);
     setShowMainMenu(true);
   };
+  const tutorial = () => {
+    dispatch(gameSettingsSlice.actions.setTutorial(true));
+    onStartGame();
+  }
 
   return (
     <div className="main-screen">
@@ -79,7 +83,9 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
             <button className="start-button" onClick={onStartGame}>
               Start Game
             </button>
+            
             <button className="small-button" onClick={() => { setShowCharacterMenu(true); setShowMainMenu(false) }}>Select Character</button>
+            <button className="small-button" onClick={tutorial}>Tutorial</button>
             <button className="small-button">Options</button>
             <button className="small-button">Controls</button>
           </div>
