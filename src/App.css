@@ -217,7 +217,27 @@
   color: white;
   border: none;
   cursor: pointer;
+  position: relative;
   /* cursor: none; */
+}
+.start-button-animated{
+  width: 140px;
+  height: 60px;
+  position: absolute;
+  top: 50%;
+  left: 50%; 
+  translate: -50% -50%;
+  animation: start-button steps(4) .5s infinite;
+  background: url(./Assets/button.png);
+  scale: 2;
+}
+@keyframes start-button {
+  from{
+    background-position: 0px 0px;
+  }
+  to{
+    background-position: 560px 0px;
+  }
 }
 
 .small-button {
