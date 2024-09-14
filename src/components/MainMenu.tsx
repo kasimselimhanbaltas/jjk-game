@@ -81,11 +81,15 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
               <img className='selected-character-image' src={require(`../Assets/profiles/${gameSettings.selectedCharacter}-profile.png`)} alt="" />
             }
             <button className="start-button" onClick={onStartGame}>
-              <div className='start-button-animated'></div>
-              Start Game
+              {/* <div className='start-button-animated' style={{ position: "absolute", top: "50%", left: "50%", translate: "0 0" }}></div> */}
+              <div style={{ position: "relative" }}>
+                Start Game
+              </div>
             </button>
 
-            <button className="small-button" onClick={() => { setShowCharacterMenu(true); setShowMainMenu(false) }}>Select Character</button>
+            <button className="small-button" onClick={() => { setShowCharacterMenu(true); setShowMainMenu(false) }}
+            // style={{ marginTop: "30px" }}
+            >Select Character</button>
             <button className="small-button" onClick={tutorial}>Tutorial</button>
             <button className="small-button">Options</button>
             <button className="small-button">Controls</button>
