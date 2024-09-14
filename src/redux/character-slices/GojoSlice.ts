@@ -35,7 +35,8 @@ const initialState: Gojo = {
   },
   domainCD: {
     isReady: true,
-    cooldown: 20,
+    // cooldown: 20,
+    cooldown: 60,
     remainingTime: 0,
   },
   redAttackMoment: false,

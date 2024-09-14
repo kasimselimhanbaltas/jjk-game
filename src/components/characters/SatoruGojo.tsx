@@ -126,6 +126,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                                     dispatch(rivalSlice.actions.setHardStun(false))
                                     dispatch(gojoSlice.actions.setGravity(5))
                                     dispatch(gojoSlice.actions.setAnimationState("stance"))
+                                    setGojoStyle({
+                                        animation: "gojo-stance 1s steps(1) infinite",
+                                    })
                                 }, 1000);
                             }, 150);
                         }, 3000);
@@ -460,6 +463,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 //     dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: false }))
                 // }, 100);
                 dispatch(gojoSlice.actions.setCanMove(false))
+                setDomainBugFixer(true);
             }
 
             if (keysPressed.current.f) {
@@ -548,6 +552,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         RCT, rctCD, gojo.rct.rctActive, gojo.simpleDomain, gojo.fallingBlossomEmotion, gojo.domainAmplification.isActive]);
 
     const [domainClashCDref, setDomainClashCDref] = useState(false);
+    const [domainBugFixer, setDomainBugFixer] = useState(false);
 
     // *** ULTRA DOMAIN HANDLER
     useEffect(() => {
@@ -571,12 +576,13 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             }
         }
         else {
-            if (domainClashCDref === true && gojo.domainCD.isReady && gojo.cursedEnergy.currentCursedEnergy >= 200) {
+            if (domainBugFixer && domainClashCDref && gojo.domainCD.isReady && gojo.cursedEnergy.currentCursedEnergy >= 200) {
                 console.log("b")
                 handleDomainExpansion();
             }
         }
-    }, [gojo.domainStatus.isInitiated, gameSettings.domainClashReady, gameSettings.domainClash, domainClashCDref, gojo.domainCD.isReady])
+    }, [gojo.domainStatus.isInitiated, gameSettings.domainClashReady, gameSettings.domainClash,
+        domainClashCDref, gojo.domainCD.isReady, domainBugFixer])
 
 
     //     }
@@ -717,6 +723,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     const domainStarter = useRef(null)
 
     const handleDomainExpansion = useCallback(() => {
+        setDomainBugFixer(false);
         dispatch2(toggleDomainCD());
         dispatch(gojoSlice.actions.setAnimationState("domain-pose"));
         dispatch(gojoSlice.actions.setHardStun(true));
@@ -756,9 +763,10 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                         dispatch(gojoSlice.actions.setAnimationState("stance"));
                         setTimeout(() => { // 10 seconds later domain ends
                             dispatch(gojoSlice.actions.setDomainState(
-                                { ...gojo.domainStatus, isActive: false }
+                                { ...gojo.domainStatus, isActive: false, isInitiated: false }
                             ));
-                            dispatch(rivalSlice.actions.setDevStun(false)); // *stun
+                            if (!gameSettings.tutorial)
+                                dispatch(rivalSlice.actions.setDevStun(false)); // *stun
                         }, gojo.domainStatus.duration * 1000); // duration
                     }, 1000);
                 }, 6000);

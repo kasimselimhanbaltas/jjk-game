@@ -3,6 +3,7 @@ import Megumi from './components/characters/Megumi';
 import Sukuna from './components/characters/Sukuna';
 import GameArea from './Pages/GameArea';
 import Controls from './components/Controls';
+import ControlsPage from './Pages/ControlsPage';
 import {
   BrowserRouter as Router,
   Route,
@@ -318,6 +319,7 @@ function App() {
           <Routes>
             <Route path='/jjk-game' element={(
               <div>
+                <ControlsPage />
                 <Controls />
                 <GameArea />
               </div>

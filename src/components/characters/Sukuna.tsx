@@ -332,6 +332,11 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     // Sukuna attack interval - auto attack configuration
     const startAttackInterval = () => {
         const interval = 500; // 3-10 saniye arasında rastgele bir değer
+        // if (rivalState.infinity) {
+        //     dispatch(sukunaSlice.actions.setDomainAmplification({ isActive: true }));
+        //     dispatch(sukunaSlice.actions.setIsBlocking(true));
+
+        // }
         attackInterval.current = setInterval(() => {
             if (rivalState.health.currentHealth > 0 && sukuna.health.currentHealth > 0
                 && sukuna.canMove && sukuna.animationBlocker === false

@@ -734,3 +734,17 @@ body {
   background-color: red;
   transition: all .2s;
 }
+
+.controls-page{
+  position: absolute;
+  top: 50%; left: 50%;
+  translate: -50% -50%;
+  background-color: #282c34;
+  width: 1300px;
+  height: 550px;
+  z-index: 999;
+}
+.controls-text{
+  text-align: left;
+  margin-left: 10px;
+}
