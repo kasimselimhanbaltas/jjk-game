@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/jjk-game/static/css/main.37d357d5.css",
-    "main.js": "/jjk-game/static/js/main.70a5d4f1.js",
+    "main.css": "/jjk-game/static/css/main.54c37f4a.css",
+    "main.js": "/jjk-game/static/js/main.e7453e43.js",
     "static/media/texture.png": "/jjk-game/static/media/texture.e231c9c13d1b192cfb2d.png",
     "static/media/menu-bg.png": "/jjk-game/static/media/menu-bg.9178329effb63b767de8.png",
     "static/media/gojopanel.png": "/jjk-game/static/media/gojopanel.e7a36609351ba7bf0c9b.png",
@@ -14,6 +14,7 @@
     "static/media/sukuna-sprite.png": "/jjk-game/static/media/sukuna-sprite.3ca92f3ac3ad7fc1da50.png",
     "static/media/sukuna.png": "/jjk-game/static/media/sukuna.4f67cc85418bb29c4b41.png",
     "static/media/kitkat.png": "/jjk-game/static/media/kitkat.80ad0e933c92ffaf8ae3.png",
+    "static/media/ayso.ogg": "/jjk-game/static/media/ayso.d6da4df9fcfc9d3a63c3.ogg",
     "static/media/malevolent_shrine.png": "/jjk-game/static/media/malevolent_shrine.62a55412480943a97780.png",
     "static/media/guard.png": "/jjk-game/static/media/guard.765a36c9fa475ff017bc.png",
     "static/media/megu.png": "/jjk-game/static/media/megu.0df408bd2890242f1bd0.png",
@@ -28,6 +29,7 @@
     "static/media/gojo-noline.png": "/jjk-game/static/media/gojo-noline.6e68c6af2e27d2e15210.png",
     "static/media/domain-hand.png": "/jjk-game/static/media/domain-hand.3c9d210f7e40a2e5202b.png",
     "static/media/fuga-sound-effect.mp3": "/jjk-game/static/media/fuga-sound-effect.63d46957b124531819cb.mp3",
+    "static/media/controls-gojo.png": "/jjk-game/static/media/controls-gojo.0206160be555c5cc7d0e.png",
     "static/media/rapid-slash.mp3": "/jjk-game/static/media/rapid-slash.259c23113924b5ad5b9c.mp3",
     "static/media/purple.mp3": "/jjk-game/static/media/purple.3c3222b0d78c67807625.mp3",
     "static/media/sukuna.mp3": "/jjk-game/static/media/sukuna.9d08c3b9c592b079bcec.mp3",
@@ -37,7 +39,6 @@
     "static/media/gojo.mp3": "/jjk-game/static/media/gojo.f43cca5e4ae5ed20b95f.mp3",
     "static/media/gojohugbg.webp": "/jjk-game/static/media/gojohugbg.ceb9c1d3a8f2e55d0aa5.webp",
     "static/media/smash.mp3": "/jjk-game/static/media/smash.50e16143ccd172f382ed.mp3",
-    "static/media/sukuna-logo.png": "/jjk-game/static/media/sukuna-logo.ef7a14e4afafde6efe83.png",
     "static/media/hq-explosion-6288.mp3": "/jjk-game/static/media/hq-explosion-6288.9e89ce9ef9b3010cdde2.mp3",
     "static/media/red-short.mp3": "/jjk-game/static/media/red-short.882e1e02f50edc6c5793.mp3",
     "static/media/domainclashpanel.png": "/jjk-game/static/media/domainclashpanel.d9cbaefc7fd928e689b9.png",
@@ -53,11 +54,11 @@
     "static/media/red.png": "/jjk-game/static/media/red.4e657a12cd7b59fca08f.png",
     "static/media/punch.mp3": "/jjk-game/static/media/punch.307ae82ee93e79118fc5.mp3",
     "index.html": "/jjk-game/index.html",
-    "main.37d357d5.css.map": "/jjk-game/static/css/main.37d357d5.css.map",
-    "main.70a5d4f1.js.map": "/jjk-game/static/js/main.70a5d4f1.js.map"
+    "main.54c37f4a.css.map": "/jjk-game/static/css/main.54c37f4a.css.map",
+    "main.e7453e43.js.map": "/jjk-game/static/js/main.e7453e43.js.map"
   },
   "entrypoints": [
-    "static/css/main.37d357d5.css",
-    "static/js/main.70a5d4f1.js"
+    "static/css/main.54c37f4a.css",
+    "static/js/main.e7453e43.js"
   ]
 }
