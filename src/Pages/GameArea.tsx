@@ -18,6 +18,7 @@ import gameSettingsSlice, { setDomainClashReady, setEntry, setWinner } from "../
 import SukunaSlice from "../redux/character-slices/SukunaSlice";
 import MegumiSlice from "../redux/character-slices/MegumiSlice";
 import CharacterInterface from "../components/CharacterInterface";
+import ControlsPage from "./ControlsPage";
 
 const characterHeight = 50;
 
@@ -130,13 +131,23 @@ const GameArea = () => {
           gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalCharacter.x) <= 200 ? "close range" : "far") :
             (Math.abs(gojo.x - 200 - rivalCharacter.x) <= 200 ? "close range" : "far")
         console.log("gamearea red: ", distance)
-        if (distance === "close range") dispatch(rivalSlice.actions.updateHealth(redDamage))
+        if (distance === "close range"){
+          dispatch(sukunaSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
+          dispatch(sukunaSlice.actions.setTakeDamage({
+            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500
+          }));
+        }
       } else {
         let distance =
           gojo.direction === "right" ? (Math.abs(gojo.x + 250 - playerCharacter.x) <= 200 ? "close range" : "far") :
             (Math.abs(gojo.x - 200 - playerCharacter.x) <= 200 ? "close range" : "far")
         console.log("gamearea red: ", distance)
-        if (distance === "close range") dispatch(playerSlice.actions.updateHealth(redDamage))
+        if (distance === "close range") {
+          dispatch(sukunaSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
+          dispatch(sukunaSlice.actions.setTakeDamage({ // *char
+            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500
+          }));
+        } 
       }
     }
     if (gojo.blueAttackMoment) {
@@ -334,12 +345,16 @@ const GameArea = () => {
   }, [domainAmplificationKeyCD]);
 
 
+  const [showControls, setShowControls] = useState(false);
 
   // Player movement control
   useEffect(() => {
     const handleKeyDown = (event) => {
       let key = event.key.toLowerCase();
-      if (event.key === " ") key = "space";
+      if (key == "escape" && showControls) {
+        setShowControls(false)
+      }
+      if (key === " ") key = "space";
       keysPressed.current[key] = true;
     };
 
@@ -439,7 +454,7 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.health > 0, playerCharacter.y, playerCharacter.x, rivalCharacter.x,
     rivalCharacter.canMove, playerCharacter.canMove, xDistance, playerCharacter.isJumping, playerCharacter.hardStun,
     playerCharacter.domainAmplification.isActive, domainAmplificationKeyCD,
-    playerCharacter.simpleDomain.isActive && playerCharacter.fallingBlossomEmotion.isActive, rivalCharacter.devStun]);
+    playerCharacter.simpleDomain.isActive && playerCharacter.fallingBlossomEmotion.isActive, rivalCharacter.devStun, showControls]);
 
   useEffect(() => {
     const gameLoop = setInterval(() => {
@@ -604,15 +619,26 @@ const GameArea = () => {
 
   const aysoSoundEffectRef = useRef<HTMLAudioElement>(null);
 
-
   return (
     <div className="game-area">
       {/* <h1> {x * 16} x {x * 9}</h1> */}
       <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
       <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio>
 
+      {showControls && ( // show controls button clicked
+      <ControlsPage />
+      ) }
+
+      {!showMenu && !showFinishMenu && (
+        <>
+          <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
+          {gameSettings.tutorial && (
+            <button className="show-controls-button" onClick={() => setShowControls(true)}>Show Controls</button>
+          )}
+        </>    
+      )}
       {showMenu ? ( // Menü gösteriliyor mu?
-        <MainMenu onStartGame={handleStartGame} /> // Evet ise menüyü göster
+        <MainMenu onStartGame={handleStartGame} onShowControls={() => setShowControls(true)}/> // Evet ise menüyü göster
       ) : showFinishMenu ? (
         <FinishMenu onRestart={handleRestart} onReturnToMainMenu={() => handleReturnToMainMenu()} />
       ) : (

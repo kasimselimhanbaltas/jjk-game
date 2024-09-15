@@ -110,7 +110,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 }} />
                             </div>
                         </div>
-                        <img src={require("../Assets/sukuna-logo.png")} className="sukuna-logo" />
+                        {/* <img src={require("../Assets/sukuna-logo.png")} className="sukuna-logo" /> */}
                     </div>
                 </div>
             </div>
