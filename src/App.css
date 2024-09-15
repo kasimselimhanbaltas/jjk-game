@@ -740,11 +740,40 @@ body {
   top: 50%; left: 50%;
   translate: -50% -50%;
   background-color: #282c34;
-  width: 1300px;
-  height: 550px;
+  width: 1400px;
+  height: 600px;
   z-index: 999;
 }
 .controls-text{
-  text-align: left;
-  margin-left: 10px;
+  text-align: center;
+  margin-top: -50px;
+}
+.show-controls-button {
+  position: absolute;
+  top: 11%; left: 38%;
+  translate: -50% -50%;
+  width: 100px;
+  height: 40px;
+  z-index: 99;
+  font-size: 12px;
+  border-radius: 7px;
+  background-color: #008CBA;
+  cursor: pointer;
+  transition: all .2s;
+}
+.show-controls-button:hover {
+  scale: 1.1;
+  background-color: #5eafca;
+}
+.return-to-mainmenu{
+  position: absolute;
+  top: 20px; left: 50%;
+  translate: -30% -50%;
+  z-index: 99;
+  width: 64px; height: 64px;
+  /* background-color: transparent; */
+  background: url(./Assets/home.png) center;
+  outline: none; border: none;
+  cursor: pointer;
+  scale: .5
 }

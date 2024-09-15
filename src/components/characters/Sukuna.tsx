@@ -400,9 +400,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     const panelRef = useRef(null);
     const domainPanel = () => {
-        if (panelRef) {
+        if (panelRef.current) {
             setTimeout(() => {
-
+                if (panelRef.current) {
                 panelRef.current.style.display = "block"
                 setTimeout(() => {
                     panelRef.current.style.height = "550px"
@@ -415,6 +415,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                         panelRef.current.style.display = "none";
                     }, 800);
                 }, 3000);
+            }
             }, 4000);
         }
     }

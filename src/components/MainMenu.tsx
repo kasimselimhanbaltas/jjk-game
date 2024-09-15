@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import gameSettingsSlice, { selectCharacter, selectRivalCharacter } from '../redux/GameSettingsSlice';
-const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
+const MainMenu = ({ onStartGame, onShowControls }) => { // onStartGame prop'unu al
 
   const dispatch = useDispatch();
   const [showCharacterMenu, setShowCharacterMenu] = useState(false); // Character menu gizleme state'i
@@ -92,7 +92,7 @@ const MainMenu = ({ onStartGame }) => { // onStartGame prop'unu al
             >Select Character</button>
             <button className="small-button" onClick={tutorial}>Tutorial</button>
             <button className="small-button">Options</button>
-            <button className="small-button">Controls</button>
+            <button className="small-button" onClick={onShowControls}>Controls</button>
           </div>
           <div style={{ marginRight: "50px" }}>
             <img className='selected-character-image' src={require(`../Assets/profiles/${gameSettings.selectedRivalCharacter}-profile.png`)} alt="" />

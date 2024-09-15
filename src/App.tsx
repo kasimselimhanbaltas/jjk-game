@@ -319,8 +319,7 @@ function App() {
           <Routes>
             <Route path='/jjk-game' element={(
               <div>
-                <ControlsPage />
-                <Controls />
+                {/* <Controls /> */}
                 <GameArea />
               </div>
             )} />
