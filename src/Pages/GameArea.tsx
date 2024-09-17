@@ -543,10 +543,10 @@ const GameArea = () => {
   }, [gameSettings.tutorial]);
   const handleStartGame = () => {
     const storedUsername = localStorage.getItem('username');
-    if (storedUsername === "ayso") {
-      aysoSoundEffectRef.current.volume = 1;
-      aysoSoundEffectRef.current.play();
-    }
+    // if (storedUsername === "ayso") {
+    //   aysoSoundEffectRef.current.volume = 1;
+    //   aysoSoundEffectRef.current.play();
+    // }
     dispatch(playerSlice.actions.resetState())
     dispatch(rivalSlice.actions.resetState())
     setShowFinishMenu(false)
@@ -617,13 +617,13 @@ const GameArea = () => {
   }
   // const x = 50;
 
-  const aysoSoundEffectRef = useRef<HTMLAudioElement>(null);
+  // const aysoSoundEffectRef = useRef<HTMLAudioElement>(null);
 
   return (
     <div className="game-area">
       {/* <h1> {x * 16} x {x * 9}</h1> */}
       <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
-      <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio>
+      {/* <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio> */}
 
       {showControls && ( // show controls button clicked
       <ControlsPage />
