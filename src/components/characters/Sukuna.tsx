@@ -403,19 +403,19 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         if (panelRef.current) {
             setTimeout(() => {
                 if (panelRef.current) {
-                panelRef.current.style.display = "block"
-                setTimeout(() => {
-                    panelRef.current.style.height = "550px"
-                    panelRef.current.style.width = "350px"
-                }, 100);
-                setTimeout(() => {
-                    panelRef.current.style.height = "1px"
-                    panelRef.current.style.width = "350px"
+                    panelRef.current.style.display = "block"
                     setTimeout(() => {
-                        panelRef.current.style.display = "none";
-                    }, 800);
-                }, 3000);
-            }
+                        panelRef.current.style.height = "550px"
+                        panelRef.current.style.width = "350px"
+                    }, 100);
+                    setTimeout(() => {
+                        panelRef.current.style.height = "1px"
+                        panelRef.current.style.width = "350px"
+                        setTimeout(() => {
+                            panelRef.current.style.display = "none";
+                        }, 800);
+                    }, 3000);
+                }
             }, 4000);
         }
     }
@@ -921,8 +921,9 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         punchSoundEffectRef.current.play();
         let i = 0;
         const int = setInterval(() => { // random slashes delay
-            if (i === 0) { // launch 
+            if (i === 0) { // launch
                 // dispatch(rivalSlice.actions.updateHealth(-20))
+                // dispatch(rivalSlice.actions.setTransition("all .5s ease, transform 0s"))
                 dispatch(gojoSlice.actions.setTakeDamage({
                     isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
                 }));

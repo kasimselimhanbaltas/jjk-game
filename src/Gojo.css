@@ -1364,7 +1364,7 @@
     background-color: #33FFFF;
     transition: all .2s;
     filter: blur(20px);
-    opacity: 1;
+    opacity: .3;
     border-radius: 50%;
     z-index: 0;
 }

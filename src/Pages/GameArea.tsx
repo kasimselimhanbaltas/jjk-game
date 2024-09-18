@@ -88,8 +88,8 @@ const GameArea = () => {
         // yowaimoSoundEffectRef.current.play(); // yowaimo sound effect play
       }
 
-      dispatch(playerSlice.actions.setHardStun(true))
-      dispatch(rivalSlice.actions.setHardStun(true))
+      dispatch(playerSlice.actions.setDevStun(true))
+      dispatch(rivalSlice.actions.setDevStun(true))
       dispatch(playerSlice.actions.setDirection("right"));
       console.log(gameSettings.selectedRivalCharacter)
       if (gameSettings.selectedRivalCharacter == "sukuna")
@@ -114,8 +114,10 @@ const GameArea = () => {
       }, 2000);
       setTimeout(() => {
         console.log("devstun false")
-        dispatch(rivalSlice.actions.setHardStun(false)) // *stun
+        dispatch(rivalSlice.actions.setDevStun(false)) // *stun
+        dispatch(playerSlice.actions.setDevStun(false))
         dispatch(playerSlice.actions.setHardStun(false))
+        dispatch(rivalSlice.actions.setHardStun(false))
         dispatch(setEntry(false));
         dispatch(rivalSlice.actions.setDirection("left"));
         dispatch(sukunaSlice.actions.setTransition("all .2s, transform 0s"))
@@ -131,7 +133,7 @@ const GameArea = () => {
           gojo.direction === "right" ? (Math.abs(gojo.x + 250 - rivalCharacter.x) <= 200 ? "close range" : "far") :
             (Math.abs(gojo.x - 200 - rivalCharacter.x) <= 200 ? "close range" : "far")
         console.log("gamearea red: ", distance)
-        if (distance === "close range"){
+        if (distance === "close range") {
           dispatch(sukunaSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
           dispatch(sukunaSlice.actions.setTakeDamage({
             isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500
@@ -147,7 +149,7 @@ const GameArea = () => {
           dispatch(sukunaSlice.actions.setTakeDamage({ // *char
             isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500
           }));
-        } 
+        }
       }
     }
     if (gojo.blueAttackMoment) {
@@ -626,8 +628,8 @@ const GameArea = () => {
       {/* <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio> */}
 
       {showControls && ( // show controls button clicked
-      <ControlsPage />
-      ) }
+        <ControlsPage />
+      )}
 
       {!showMenu && !showFinishMenu && (
         <>
@@ -635,10 +637,10 @@ const GameArea = () => {
           {gameSettings.tutorial && (
             <button className="show-controls-button" onClick={() => setShowControls(true)}>Show Controls</button>
           )}
-        </>    
+        </>
       )}
       {showMenu ? ( // Menü gösteriliyor mu?
-        <MainMenu onStartGame={handleStartGame} onShowControls={() => setShowControls(true)}/> // Evet ise menüyü göster
+        <MainMenu onStartGame={handleStartGame} onShowControls={() => setShowControls(true)} /> // Evet ise menüyü göster
       ) : showFinishMenu ? (
         <FinishMenu onRestart={handleRestart} onReturnToMainMenu={() => handleReturnToMainMenu()} />
       ) : (

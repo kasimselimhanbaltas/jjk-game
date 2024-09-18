@@ -1467,16 +1467,17 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 animation: gojoStyle.animation,
                 transition: gojo.transition,
             }}>
+                <div className="infinity" style={{
+                    top: 0,
+                    left: gojo.positioningSide === "left" ? -10 : undefined,
+                    right: gojo.positioningSide === "right" ? 20 : undefined,
+                    // translate: gojo.direction === "right" ? "-10px -100%" : "0px -100%",
+                    display: gojo.infinity ? "block" : "none",
+                    transition: gojo.transition,
+                }}
+                ></div>
             </div>
-            <div className="infinity" style={{
-                top: gojo.y,
-                left: gojo.positioningSide === "left" ? gojo.x : undefined,
-                right: gojo.positioningSide === "right" ? 1400 - gojo.x - 66 : undefined,
-                translate: gojo.direction === "right" ? "-10px -100%" : "0px -100%",
-                display: gojo.infinity ? "block" : "none",
-                transition: gojo.transition + ", top .2s ease, bottom .2s ease",
-            }}
-            ></div>
+
             <div
                 className="gojo-container"
                 style={{

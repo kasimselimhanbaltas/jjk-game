@@ -319,12 +319,7 @@ function App() {
           <Routes>
             <Route path='/jjk-game' element={(
               <div>
-<<<<<<< HEAD
                 {/* <Controls /> */}
-=======
-                {/* <ControlsPage /> */}
-                <Controls />
->>>>>>> 7f9972f (remove unnecessary audio)
                 <GameArea />
               </div>
             )} />
