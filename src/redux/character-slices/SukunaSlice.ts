@@ -199,9 +199,10 @@ const RivalSlice = createSlice({
       state.y = action.payload.y;
     },
     updateHealth(state, action) {
-      console.log("invulnerability: ", state.invulnerability);
+      // console.log("invulnerability: ", state.invulnerability);
       if (action.payload < 0 && state.invulnerability) return;
-      if (action.payload < 0 && state.isBlocking) { // if its a damage and the character is blocking
+      if (action.payload < 0 && state.isBlocking) {
+        // if its a damage and the character is blocking
         state.health.currentHealth += action.payload * 0.5;
       } else state.health.currentHealth += action.payload; // if its a healing or damage
     },
@@ -249,6 +250,9 @@ const RivalSlice = createSlice({
         state.cursedEnergy.currentCursedEnergy + action.payload >= 0
       )
         state.cursedEnergy.currentCursedEnergy += action.payload;
+      else
+        state.cursedEnergy.currentCursedEnergy =
+          state.cursedEnergy.maxCursedEnergy;
     },
     setRivalDomainExpansion(state, action) {
       state.rivalDomainExpansion = action.payload;
@@ -414,7 +418,7 @@ export const {
   setDomainAmplification,
   setSimpleDomain,
   setFallingBlossomEmotion,
-  setInvulnerability
+  setInvulnerability,
 } = RivalSlice.actions;
 export default RivalSlice;
 

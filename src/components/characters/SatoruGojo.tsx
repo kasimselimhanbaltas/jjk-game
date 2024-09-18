@@ -455,7 +455,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 blackFlashCombo();
             }
             else if (keysPressed.current.l && !sukuna.domainAttack && gojo.canMove && !gojo.isJumping
-                && !gojo.fallingBlossomEmotion.isActive
+                && !gojo.fallingBlossomEmotion.isActive && gojo.domainCD.isReady
             ) {
                 dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: true }))
 
@@ -794,15 +794,18 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 { ...gojo.domainStatus, sureHitStatus: true, domainClash: false }
             ));
         }
-
-        let domainDamageInterval = null;
         if (gojo.domainStatus.isActive && gojo.domainStatus.sureHitStatus) {
-            domainDamageInterval = setInterval(() => {
-                dispatch(rivalSlice.actions.updateHealth(-10));
-            }, 100)
+            dispatch(rivalSlice.actions.updateHealth(-1000));
         }
+        // domain damage interval
+        // let domainDamageInterval = null;
+        // if (gojo.domainStatus.isActive && gojo.domainStatus.sureHitStatus) {
+        //     domainDamageInterval = setInterval(() => {
+        //         dispatch(rivalSlice.actions.updateHealth(-10));
+        //     }, 100)
+        // }
         return () => {
-            clearInterval(domainDamageInterval)
+            // clearInterval(domainDamageInterval)
         }
     }, [gojo.domainStatus, rivalState.domainStatus]);
 

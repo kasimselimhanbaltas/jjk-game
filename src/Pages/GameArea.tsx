@@ -382,11 +382,9 @@ const GameArea = () => {
     clearInterval(intervalId);
     intervalId = setInterval(() => {
       // wasd movement
-      console.log("player devstun: ", playerCharacter.devStun)
       if (playerCharacter.canMove && !playerCharacter.hardStun && !playerCharacter.devStun) {
 
         dispatch(sukunaSlice.actions.setCloseRange(Math.abs(xDistance) < 200));
-
         // if (keysPressed.current.w && playerCharacter.y > 0) {
         //   dispatch(playerSlice.actions.moveCharacter({ x: 0, y: -megumiSpeed }));
         // }

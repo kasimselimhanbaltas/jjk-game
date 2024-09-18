@@ -51,14 +51,6 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         z: false, x: false, c: false
     });
 
-    useEffect(() => {
-        const int = setInterval(() => {
-            console.log(sukuna.hardStun, sukuna.devStun)
-        }, 200)
-        return () => clearInterval(int)
-    }, [sukuna.hardStun, sukuna.devStun])
-
-
     // Cooldowns
     const [cleaveReady, setCleaveReady] = useState({ ready: true, coolDown: 0 });
 
