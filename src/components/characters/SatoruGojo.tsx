@@ -725,11 +725,13 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     const handleDomainExpansion = useCallback(() => {
         setDomainBugFixer(false);
         dispatch2(toggleDomainCD());
-        dispatch(gojoSlice.actions.setAnimationState("domain-pose"));
         dispatch(gojoSlice.actions.setHardStun(true));
         dispatch(gojoSlice.actions.setInfinity(false));
+        dispatch(gojoSlice.actions.setAnimationState("domain-pose"));
+        dispatch(gojoSlice.actions.setAnimationBlocker(true));
         if (!gameSettings.domainClash) {
             domainPanel();
+            dispatch(rivalSlice.actions.setDevStun(true));
         }
         else {
             dispatch(gojoSlice.actions.moveCharacterTo({ x: 250, y: 560 }));
@@ -738,16 +740,13 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         }
         domainSoundEffectRef.current.play();
 
-        if (!gameSettings.domainClash) {
-            dispatch(rivalSlice.actions.setDevStun(true));
-        }
-
         if (domainStarter.current) {
             domainStarter.current.style.transition = "all .2s, scale 5s"
             dispatch(gojoSlice.actions.setHardStun(true))
             setTimeout(() => {
                 domainStarter.current.style.scale = 300;
                 setTimeout(() => {
+                    dispatch(gojoSlice.actions.setAnimationBlocker(false)); // animation blocker false
 
                     dispatch(gojoSlice.actions.setDomainState(
                         { ...gojo.domainStatus, isActive: true }
@@ -1053,6 +1052,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 // const stepDistance = attackDirection === "left" ? -100 : 100;
                 const isShiftPressed = keysPressed.current.shift ? true : false; // auto shift?
                 if (gojo.cursedEnergy.currentCursedEnergy >= 200 && gojo.domainCD.isReady) {
+                    setDomainBugFixer(true);
                     dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: true }));
                 }
                 else if (gojo.cursedEnergy.currentCursedEnergy >= -purpleCost && gojo.redCD.isReady && gojo.blueCD.isReady)

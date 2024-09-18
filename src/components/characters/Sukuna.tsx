@@ -346,6 +346,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady) {
                     console.log("domain attack")
                     // handleDomainAttack()
+                    setDomainBugFixer(true);
                     dispatch(sukunaSlice.actions.setDomainState({ ...sukuna.domainStatus, isInitiated: true }))
                 }
                 else if (sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount) {

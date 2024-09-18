@@ -382,7 +382,8 @@ const GameArea = () => {
     clearInterval(intervalId);
     intervalId = setInterval(() => {
       // wasd movement
-      if (playerCharacter.canMove && !playerCharacter.hardStun) {
+      console.log("player devstun: ", playerCharacter.devStun)
+      if (playerCharacter.canMove && !playerCharacter.hardStun && !playerCharacter.devStun) {
 
         dispatch(sukunaSlice.actions.setCloseRange(Math.abs(xDistance) < 200));
 
@@ -456,7 +457,8 @@ const GameArea = () => {
   }, [dispatch, playerCharacter.health > 0, playerCharacter.y, playerCharacter.x, rivalCharacter.x,
     rivalCharacter.canMove, playerCharacter.canMove, xDistance, playerCharacter.isJumping, playerCharacter.hardStun,
     playerCharacter.domainAmplification.isActive, domainAmplificationKeyCD,
-    playerCharacter.simpleDomain.isActive && playerCharacter.fallingBlossomEmotion.isActive, rivalCharacter.devStun, showControls]);
+    playerCharacter.simpleDomain.isActive && playerCharacter.fallingBlossomEmotion.isActive, rivalCharacter.devStun, showControls,
+    playerCharacter.devStun]);
 
   useEffect(() => {
     const gameLoop = setInterval(() => {
