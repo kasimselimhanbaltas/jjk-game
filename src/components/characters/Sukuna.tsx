@@ -146,6 +146,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     // Domain expansion main function
     const sukunaDomainExpansion = () => {
+        setDomainBugFixer(false);
         if (sukuna.animationBlocker) return;
         // dispatch(sukunaSlice.actions.setGravity(0)) // 5
         // dispatch(moveCharacterTo({ x: 690, y: 400 })); // 560
@@ -486,6 +487,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 if (keysPressed.current.l && !sukuna.domainAmplification.isActive) {
                     if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady) {
                         dispatch(sukunaSlice.actions.setDomainState({ ...sukuna.domainStatus, isInitiated: true }))
+                        setDomainBugFixer(true);
+
                     }
                 }
                 if (keysPressed.current.j) {
@@ -612,6 +615,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         sukuna.dismantleCD.isReady, sukuna.cleaveCD.isReady, sukuna.domainCD.isReady
     ])
 
+    const [domainBugFixer, setDomainBugFixer] = useState(false);
     const [domainClashCDref, setDomainClashCDref] = useState(false);
 
     // *** ULTRA DOMAIN HANDLER
@@ -636,12 +640,13 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             }
         }
         else {
-            if (domainClashCDref === true && sukuna.domainCD.isReady && sukuna.cursedEnergy.currentCursedEnergy >= 200) {
+            if (domainBugFixer && domainClashCDref === true && sukuna.domainCD.isReady && sukuna.cursedEnergy.currentCursedEnergy >= 200) {
                 console.log("b")
                 handleDomainAttack();
             }
         }
-    }, [sukuna.domainStatus.isInitiated, gameSettings.domainClashReady, gameSettings.domainClash, domainClashCDref, sukuna.domainCD.isReady])
+    }, [sukuna.domainStatus.isInitiated, gameSettings.domainClashReady, gameSettings.domainClash,
+        domainClashCDref, sukuna.domainCD.isReady, domainBugFixer])
 
     // useEffect(() => {
     //     console.log("aa", domainClashCDref)
