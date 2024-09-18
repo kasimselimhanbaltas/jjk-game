@@ -5,6 +5,7 @@ import NueSlice from "./NueSlice";
 import divineDogsSlice from "./DivineDogsSlice";
 import gameSettingsSlice from "./GameSettingsSlice";
 import GojoSlice from "./character-slices/GojoSlice";
+import TutorialSlice from "./TutorialSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     NueState: NueSlice.reducer,
     DivineDogsState: divineDogsSlice.reducer,
     GameSettingsState: gameSettingsSlice.reducer,
+    TutorialState: TutorialSlice.reducer,
   },
 });
 

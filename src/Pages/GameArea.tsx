@@ -533,6 +533,7 @@ const GameArea = () => {
   // const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state ##
   const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
+  const [showTutorialMenu, setShowTutorialMenu] = useState(false); // Tutorial menu
 
   useEffect(() => {
     console.log("effect tutorial: ", gameSettings.tutorial)
@@ -565,6 +566,12 @@ const GameArea = () => {
   const handleReturnToMainMenu = () => {
     setShowMenu(true)
     setShowFinishMenu(false)
+    setShowTutorialMenu(false)
+  };
+  const handleTutorialSelected = () => {
+    setShowMenu(false)
+    setShowFinishMenu(false)
+    setShowTutorialMenu(true)
   };
 
   // useEffect(() => {
@@ -630,7 +637,7 @@ const GameArea = () => {
       {showControls && ( // show controls button clicked
         <ControlsPage />
       )}
-
+      {/* <h1>{showMenu ? "Main Menu" : showFinishMenu ? "Finish Menu" : "Game Area"}</h1> */}
       {!showMenu && !showFinishMenu && (
         <>
           <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
@@ -640,7 +647,7 @@ const GameArea = () => {
         </>
       )}
       {showMenu ? ( // Menü gösteriliyor mu?
-        <MainMenu onStartGame={handleStartGame} onShowControls={() => setShowControls(true)} /> // Evet ise menüyü göster
+        <MainMenu onStartGame={handleStartGame} onTutorialSelected={handleTutorialSelected} onShowControls={() => setShowControls(true)} /> // Evet ise menüyü göster
       ) : showFinishMenu ? (
         <FinishMenu onRestart={handleRestart} onReturnToMainMenu={() => handleReturnToMainMenu()} />
       ) : (

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import gameSettingsSlice, { selectCharacter, selectRivalCharacter } from '../redux/GameSettingsSlice';
-const MainMenu = ({ onStartGame, onShowControls }) => { // onStartGame prop'unu al
+const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // onStartGame prop'unu al
 
   const dispatch = useDispatch();
   const [showCharacterMenu, setShowCharacterMenu] = useState(false); // Character menu gizleme state'i
   const [showRivalCharacterMenu, setShowRivalCharacterMenu] = useState(false); // Character menu gizleme state'i
   const [showMainMenu, setShowMainMenu] = useState(true); // Character menu gizleme state'i
+  const [showTutorialMenu, setShowTutorialMenu] = useState(false); // Tutorial menu
   const [username, setUsername] = useState('');
   const [savedUsername, setSavedUsername] = useState('');
   const gameSettings = useSelector((state: any) => state.GameSettingsState);
+  const tutorialState = useSelector((state: any) => state.TutorialState);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -50,12 +52,18 @@ const MainMenu = ({ onStartGame, onShowControls }) => { // onStartGame prop'unu 
   };
   const tutorial = () => {
     dispatch(gameSettingsSlice.actions.setTutorial(true));
-    onStartGame();
+    setShowMainMenu(false);
+    setShowTutorialMenu(true);
+    // onTutorialSelected();
+    // onStartGame();
   }
-
+  const handleReturnToMainMenu = () => {
+    setShowMainMenu(true)
+    setShowTutorialMenu(false)
+  };
   return (
     <div className="main-screen">
-      {localStorage.getItem('username') && (
+      {localStorage.getItem('username') && showMainMenu && (
         <div style={{ position: "absolute", top: "0%", left: "50%", translate: "-50% 0", zIndex: 99 }}>
           <h2>Welcome,
             <button className='username-button' onClick={() => setSavedUsername('change_')} style={{
@@ -72,6 +80,17 @@ const MainMenu = ({ onStartGame, onShowControls }) => { // onStartGame prop'unu 
               {savedUsername} !
             </button>
           </h2>
+        </div>
+      )}
+      {showTutorialMenu && (
+        <div className="main-menu-container">
+          <div className="main-menu">
+            <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
+
+            {tutorialState.characters.gojo.map((tutorial, index) => (
+              <button key={index} className="small-button">{tutorial.title}</button>
+            ))}
+          </div>
         </div>
       )}
       {showMainMenu &&
