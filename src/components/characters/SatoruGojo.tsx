@@ -553,6 +553,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
 
     const [domainClashCDref, setDomainClashCDref] = useState(false);
     const [domainBugFixer, setDomainBugFixer] = useState(false);
+    const [domainHit, setDomainHit] = useState(false);
 
     // *** ULTRA DOMAIN HANDLER
     useEffect(() => {
@@ -746,6 +747,11 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             setTimeout(() => {
                 domainStarter.current.style.scale = 300;
                 setTimeout(() => {
+
+                    if (!gameSettings.domainClash) {
+                        setDomainHit(true);
+                    }
+
                     dispatch(gojoSlice.actions.setAnimationBlocker(false)); // animation blocker false
 
                     dispatch(gojoSlice.actions.setDomainState(
@@ -777,6 +783,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         }, 5000)
     }, [gojo.x, gameSettings.domainClash])
 
+
     // Handle side effects of Satoru Gojo's domain expansion
     useEffect(() => {
 
@@ -794,8 +801,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 { ...gojo.domainStatus, sureHitStatus: true, domainClash: false }
             ));
         }
-        if (gojo.domainStatus.isActive && gojo.domainStatus.sureHitStatus) {
+        if (gojo.domainStatus.isActive && gojo.domainStatus.sureHitStatus && domainHit) {
             dispatch(rivalSlice.actions.updateHealth(-1000));
+            setDomainHit(false);
         }
         // domain damage interval
         // let domainDamageInterval = null;
@@ -807,7 +815,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         return () => {
             // clearInterval(domainDamageInterval)
         }
-    }, [gojo.domainStatus, rivalState.domainStatus]);
+    }, [gojo.domainStatus, rivalState.domainStatus, gameSettings.domainClash, domainHit]);
 
 
     const attackInterval = React.useRef(null);

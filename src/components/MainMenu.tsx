@@ -60,6 +60,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
   const handleReturnToMainMenu = () => {
     setShowMainMenu(true)
     setShowTutorialMenu(false)
+    dispatch(gameSettingsSlice.actions.setTutorial(false));
   };
   return (
     <div className="main-screen">
