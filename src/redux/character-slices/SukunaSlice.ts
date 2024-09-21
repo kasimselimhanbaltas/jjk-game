@@ -246,7 +246,7 @@ const RivalSlice = createSlice({
     changeCursedEnergy(state, action) {
       if (
         state.cursedEnergy.currentCursedEnergy + action.payload <=
-          state.cursedEnergy.maxCursedEnergy &&
+        state.cursedEnergy.maxCursedEnergy &&
         state.cursedEnergy.currentCursedEnergy + action.payload >= 0
       )
         state.cursedEnergy.currentCursedEnergy += action.payload;

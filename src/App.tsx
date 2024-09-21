@@ -25,6 +25,7 @@ export interface GameSettings {
   domainClashReady: boolean,
   domainClash: boolean,
   tutorial: boolean
+  freePlay: boolean
 }
 export interface Skill {
   isReady: boolean,

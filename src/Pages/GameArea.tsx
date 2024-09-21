@@ -114,16 +114,18 @@ const GameArea = () => {
       }, 2000);
       setTimeout(() => {
         console.log("devstun false")
-        dispatch(rivalSlice.actions.setDevStun(false)) // *stun
         dispatch(playerSlice.actions.setDevStun(false))
         dispatch(playerSlice.actions.setHardStun(false))
-        dispatch(rivalSlice.actions.setHardStun(false))
+        if (!gameSettings.tutorial) {
+          dispatch(rivalSlice.actions.setDevStun(false)) // *stun
+          dispatch(rivalSlice.actions.setHardStun(false))
+        }
         dispatch(setEntry(false));
         dispatch(rivalSlice.actions.setDirection("left"));
         dispatch(sukunaSlice.actions.setTransition("all .2s, transform 0s"))
       }, 4000);
     }
-  }, [gameSettings.entry]);
+  }, [gameSettings.entry, gameSettings.tutorial]);
 
   // hitboxes
   useEffect(() => {
@@ -471,7 +473,7 @@ const GameArea = () => {
   useEffect(() => {
     // if (gameSettings.selectedCharacter === "sukuna") return;
     const interval = setInterval(() => {
-      if (rivalCharacter.canMove && !rivalCharacter.hardStun && !rivalCharacter.devStun) {
+      if (rivalCharacter.canMove && !rivalCharacter.hardStun && !rivalCharacter.devStun && !gameSettings.tutorial) {
         if (rivalCharacter.dashGauge > 70) {
           dispatch(rivalSlice.actions.moveCharacterTo({ x: playerCharacter.x, y: playerCharacter.y }));
           dispatch(rivalSlice.actions.setDashGauge(0))
@@ -503,7 +505,7 @@ const GameArea = () => {
     };
 
   }, [rivalCharacter.hardStun, rivalCharacter.devStun, rivalCharacter.rivalDirection, rivalCharacter.canMove,
-  rivalCharacter.dashGauge >= 70 || rivalCharacter.dashGauge <= 0, gameSettings.entry]);
+  rivalCharacter.dashGauge >= 70 || rivalCharacter.dashGauge <= 0, gameSettings.entry, gameSettings.tutorial]);
 
   // Rival Movement Control
   useEffect(() => {
@@ -545,7 +547,7 @@ const GameArea = () => {
     }
   }, [gameSettings.tutorial]);
   const handleStartGame = () => {
-    const storedUsername = localStorage.getItem('username');
+    // const storedUsername = localStorage.getItem('username');
     // if (storedUsername === "ayso") {
     //   aysoSoundEffectRef.current.volume = 1;
     //   aysoSoundEffectRef.current.play();
@@ -583,6 +585,7 @@ const GameArea = () => {
   // }, [xDistance]);
 
   useEffect(() => {
+    if (gameSettings.tutorial) return;
     if (playerCharacter.health.currentHealth <= 0) {
       setTimeout(() => {
         setShowFinishMenu(true);
@@ -598,7 +601,7 @@ const GameArea = () => {
         dispatch(playerSlice.actions.resetState())
       }, 2000);
     }
-  }, [playerCharacter.health.currentHealth > 0, rivalCharacter.health.currentHealth > 0]);
+  }, [playerCharacter.health.currentHealth > 0, rivalCharacter.health.currentHealth > 0, gameSettings.tutorial]);
   const [reRender, setReRender] = useState(0);
   const [domainClashText, setDomainClashText] = useState(false);
   useEffect(() => {
@@ -628,6 +631,15 @@ const GameArea = () => {
 
   // const aysoSoundEffectRef = useRef<HTMLAudioElement>(null);
 
+  useEffect(() => { // tutorial health refill
+    if (rivalCharacter.health.currentHealth <= 0 && gameSettings.tutorial) {
+      setTimeout(() => {
+        dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 560 }));
+        dispatch(rivalSlice.actions.setAnimationState("entry"))
+        dispatch(rivalSlice.actions.setHealth(rivalCharacter.health.maxHealth));
+      }, 1000);
+    }
+  }, [rivalCharacter.health.currentHealth <= 0, gameSettings.tutorial])
   return (
     <div className="game-area">
       {/* <h1> {x * 16} x {x * 9}</h1> */}

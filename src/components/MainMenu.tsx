@@ -50,13 +50,22 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
     setShowRivalCharacterMenu(false);
     setShowMainMenu(true);
   };
-  const tutorial = () => {
+  const handleStartGame = () => {
+    dispatch(gameSettingsSlice.actions.setTutorial(false));
+    onStartGame();
+  }
+  const tutorialMenu = () => {
     dispatch(gameSettingsSlice.actions.setTutorial(true));
     setShowMainMenu(false);
     setShowTutorialMenu(true);
     // onTutorialSelected();
     // onStartGame();
   }
+  const tutorial = () => {
+    dispatch(gameSettingsSlice.actions.setTutorial(true));
+    onStartGame();
+  }
+
   const handleReturnToMainMenu = () => {
     setShowMainMenu(true)
     setShowTutorialMenu(false)
@@ -87,7 +96,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
         <div className="main-menu-container">
           <div className="main-menu">
             <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
-            <button className="small-button" onClick={onStartGame}>Free Play</button>
+            <button className="small-button" onClick={tutorial}>Free Play</button>
 
             {tutorialState.characters.gojo.map((tutorial, index) => (
               <button key={index} className="small-button">{tutorial.title}</button>
@@ -101,7 +110,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
             {gameSettings.selectedCharacter &&
               <img className='selected-character-image' src={require(`../Assets/profiles/${gameSettings.selectedCharacter}-profile.png`)} alt="" />
             }
-            <button className="start-button" onClick={onStartGame}>
+            <button className="start-button" onClick={handleStartGame}>
               {/* <div className='start-button-animated' style={{ position: "absolute", top: "50%", left: "50%", translate: "0 0" }}></div> */}
               <div style={{ position: "relative" }}>
                 Start Game
@@ -111,7 +120,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
             <button className="small-button" onClick={() => { setShowCharacterMenu(true); setShowMainMenu(false) }}
             // style={{ marginTop: "30px" }}
             >Select Character</button>
-            <button className="small-button" onClick={tutorial}>Tutorial</button>
+            <button className="small-button" onClick={tutorialMenu}>Tutorial</button>
             <button className="small-button">Options</button>
             <button className="small-button" onClick={onShowControls}>Controls</button>
           </div>

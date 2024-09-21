@@ -11,14 +11,17 @@ const initialState: GameSettings = {
   domainClashReady: false,
   domainClash: false,
   tutorial: false,
+  freePlay: false,
 };
 
 const gameSettingsSlice = createSlice({
   name: "gameSettings",
   initialState: initialState,
   reducers: {
+    setFreePlay(state, action) {
+      state.freePlay = action.payload;
+    },
     setTutorial(state, action) {
-      console.log("tutorial in slice: ", action.payload);
       state.tutorial = action.payload;
     },
     setDomainClashReady(state, action) {
@@ -58,6 +61,7 @@ export const {
   setDomainClashReady,
   setDomainClash,
   setTutorial,
+  setFreePlay
 } = gameSettingsSlice.actions;
 export default gameSettingsSlice;
 
