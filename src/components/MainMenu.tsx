@@ -87,6 +87,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
         <div className="main-menu-container">
           <div className="main-menu">
             <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
+            <button className="small-button" onClick={onStartGame}>Free Play</button>
 
             {tutorialState.characters.gojo.map((tutorial, index) => (
               <button key={index} className="small-button">{tutorial.title}</button>
