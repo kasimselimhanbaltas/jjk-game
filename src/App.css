@@ -32,13 +32,16 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
-.megumi-health p{
+
+.megumi-health p {
   font-size: 5px;
 }
+
 .game-area {
   width: 1400px;
   height: 600px;
@@ -48,12 +51,14 @@
   position: relative;
   overflow: hidden;
 }
+
 .megumi {
   transform-origin: bottom center;
-    /* Alt kenar orta noktasını sabit tut */
+  /* Alt kenar orta noktasını sabit tut */
   position: absolute;
-  transition: all .2s ease, transform 0s ;
+  transition: all .2s ease, transform 0s;
 }
+
 .blue {
   position: absolute;
   transition: all .2s ease, transform 4s, top 0s ease, left 0s ease;
@@ -61,6 +66,7 @@
   height: 150px;
   z-index: 9;
 }
+
 .blue img {
   position: absolute;
   top: 0;
@@ -69,6 +75,7 @@
   height: 100px;
   z-index: 9;
 }
+
 /* .purple img {
   position: absolute;
   top: 0;
@@ -83,6 +90,7 @@
   position: absolute;
   /* transition: all .4s ease; */
 }
+
 /* .megumi img{
   position: absolute;
   top: 0;
@@ -92,17 +100,20 @@
   position: absolute;
   transition: all .2s ease;
 }
+
 .gojo img {
   position: absolute;
   top: 0;
   left: 0;
 }
+
 .sukuna img {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 10;
 }
+
 .sukuna {
   position: absolute;
   width: 100px;
@@ -122,6 +133,7 @@
   height: 100%;
   z-index: 10;
 }
+
 .finish-menu {
   display: flex;
   flex-direction: column;
@@ -133,6 +145,7 @@
   background-size: cover;
   z-index: 10;
 }
+
 .finish-menu button:hover {
   background-color: transparent;
   border: solid 2px white;
@@ -143,6 +156,7 @@
   border-radius: 10px;
   margin-left: 50px;
 }
+
 .main-screen {
   display: flex;
   flex-direction: column;
@@ -155,13 +169,15 @@
   background-image: url('./Assets/gojohugbg.webp');
   background-size: cover;
 }
-.main-menu-container{
+
+.main-menu-container {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: between;
   justify-items: between;
 }
+
 .main-menu {
   display: flex;
   flex-direction: column;
@@ -172,10 +188,12 @@
   /* background-image: url('./Assets/menu-bg.jpg'); */
   z-index: 10;
 }
-.selected-character-image{
+
+.selected-character-image {
   height: 150px;
   margin-left: 80px;
 }
+
 .character-menu {
   display: flex;
   align-items: center;
@@ -186,22 +204,25 @@
   background-size: cover;
   z-index: 10;
 }
+
 .character-button {
   color: white;
   border: none;
   background-color: transparent;
   width: 250px;
   height: auto;
-  cursor:  pointer;
+  cursor: pointer;
   /* cursor: none; */
 }
-.character-button img{
+
+.character-button img {
   max-height: 300px;
 }
+
 .main-screen button {
   border: solid 2px transparent;
   border-radius: 10px;
-  margin-left: 50px ;
+  margin-left: 50px;
 }
 
 .main-screen button:hover {
@@ -220,22 +241,25 @@
   position: relative;
   /* cursor: none; */
 }
-.start-button-animated{
+
+.start-button-animated {
   width: 140px;
   height: 60px;
   position: absolute;
   top: 50%;
-  left: 50%; 
+  left: 50%;
   translate: -50% -50%;
   animation: start-button steps(4) .5s infinite;
   background: url(./Assets/button-Sheet.png);
   scale: 2;
 }
+
 @keyframes start-button {
-  from{
+  from {
     background-position: 0px 0px;
   }
-  to{
+
+  to {
     background-position: 560px 0px;
   }
 }
@@ -264,6 +288,7 @@
 
   /* 8 kare * 50px = 400px */
 }
+
 .controls {
   position: absolute;
   top: 0;
@@ -273,9 +298,10 @@
   align-items: center;
   z-index: 999;
 }
+
 .controls p {
   margin: 0 0 10px 0;
-  padding: 10px ;
+  padding: 10px;
   font-size: 14px;
 }
 
@@ -288,6 +314,7 @@
   height: 100px;
   display: flex;
 }
+
 .rival-interface {
   position: absolute;
   right: -4%;
@@ -297,18 +324,22 @@
   height: 100px;
   display: flex;
 }
-.health-and-ce-bars{
+
+.health-and-ce-bars {
   width: 250px;
   height: 35px;
 }
+
 .skills-container {
   margin-top: 80px;
   display: flex;
   margin-left: 50px;
 }
-.sc-right{
+
+.sc-right {
   align-items: right;
 }
+
 .skill {
   /* background-color: red; */
   position: relative;
@@ -321,6 +352,7 @@
   font-size: 9px;
   width: 55px;
 }
+
 /* continue here */
 
 
@@ -331,10 +363,11 @@
   left: 0;
   position: absolute;
 }
+
 .circular-skill-progress-bar {
-  position: absolute !important ;
-  top:0;
-  left:0;
+  position: absolute !important;
+  top: 0;
+  left: 0;
   width: 50px;
   height: 50px;
 }
@@ -375,16 +408,19 @@
   /* animation: punch .9s steps(8) infinite; */
   /* animation: swordAttack 1s steps(14); */
 }
-.top-interface{
+
+.top-interface {
   width: 100%;
   height: 80px;
   position: absolute;
 }
+
 .top-interface-inner {
   position: relative;
   width: 100%;
   height: 100%;
 }
+
 .player-image-container {
   position: absolute;
   left: 5%;
@@ -397,10 +433,13 @@
   background-color: white;
   overflow: hidden;
 }
-.player-image-container img, .rival-image-container img {
+
+.player-image-container img,
+.rival-image-container img {
   width: 100%;
   height: auto;
 }
+
 .rival-image-container {
   position: absolute;
   right: -2%;
@@ -413,7 +452,8 @@
   background-color: white;
   overflow: hidden;
 }
-.health-bar{
+
+.health-bar {
   position: absolute;
   left: 7%;
   top: 10%;
@@ -423,24 +463,29 @@
   height: 25px;
   border: 2px solid black;
 }
+
 .player-health-progress {
   background: rgb(11, 128, 20);
   background: linear-gradient(90deg, rgba(11, 128, 20, 1) 35%, rgba(0, 255, 21, 1) 100%);
 }
+
 .rival-health-progress {
-background: rgb(155, 53, 35);
+  background: rgb(155, 53, 35);
   background: linear-gradient(90deg, rgba(155, 53, 35, 1) 35%, rgba(80, 27, 18, 1) 100%);
 }
+
 .cursed-energy-bar {
   position: absolute;
-  left: 7%;  top: 55%;
+  left: 7%;
+  top: 55%;
   translate: 0% 0%;
   z-index: 1;
   width: 350px;
   height: 25px;
   border: 2px solid black;
 }
-.sukuna-logo{
+
+.sukuna-logo {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -451,6 +496,7 @@ background: rgb(155, 53, 35);
 }
 
 @keyframes nueStance {
+
   /* 100x128 9*/
   /* 0% {
     background-position: -352px -1436px;
@@ -459,19 +505,24 @@ background: rgb(155, 53, 35);
     background-position: -1153px -1436px;
   } */
   0% {
-    background-position: -452px -1436px;  
+    background-position: -452px -1436px;
   }
+
   25% {
-    background-position: -552px -1436px;  
+    background-position: -552px -1436px;
   }
+
   50% {
     background-position: -652px -1436px;
   }
-  100%{
+
+  100% {
     background-position: -452px -1436px;
   }
 }
+
 @keyframes nueAttackold {
+
   /* 160x128 9*/
   0% {
     background-position: -315px -2298px;
@@ -481,6 +532,7 @@ background: rgb(155, 53, 35);
     background-position: -1595px -2298px;
   }
 }
+
 @keyframes nueAttack {
   0% {
     background-position: -531px -2335px;
@@ -586,6 +638,7 @@ body {
 .blue-circle {
   transform: translate(-5px, 0px);
 }
+
 .clicked .red-circle,
 .clicked .blue-circle,
 .clicked .custom-cursor {
@@ -594,14 +647,17 @@ body {
   animation: none !important;
   scale: 2;
 }
+
 .username-button {
   transition: all .2s;
 }
-.username-button:hover{
+
+.username-button:hover {
   color: blue !important;
   translate: 5px;
   scale: 1.1;
 }
+
 .simple-domain {
   width: 150px;
   height: 50px;
@@ -610,14 +666,17 @@ body {
   background: url('./Assets/simple-domain.png');
   transition: all .2s;
 }
+
 @keyframes simpleDomain {
-  0%{
+  0% {
     background-position: 0px 0px;
   }
-  100%{
+
+  100% {
     background-position: 750px 0px;
   }
 }
+
 .rct-body {
   width: 75px;
   height: 115px;
@@ -664,6 +723,7 @@ body {
     background-position: -1425px 0px;
   }
 }
+
 .falling-blossom-emotion {
   width: 90px;
   height: 120px;
@@ -678,6 +738,7 @@ body {
   scale: 1;
   z-index: 9;
 }
+
 @keyframes fbe {
   0% {
     background-position: 0px 0px;
@@ -687,6 +748,7 @@ body {
     background-position: -540px 0px;
   }
 }
+
 .animation-container {
   display: none;
   width: 700px;
@@ -716,17 +778,20 @@ body {
   z-index: 8;
   rotate: -45deg;
 }
-.domain-clash-timer-container{
+
+.domain-clash-timer-container {
   width: 300px;
   height: 40px;
   border: #0c0513 5px solid;
   position: relative;
 }
+
 .domain-clash-timer-bar {
   position: relative;
   width: 280px;
   height: 20px;
 }
+
 .domain-clash-timer {
   position: absolute;
   width: 100%;
@@ -735,22 +800,26 @@ body {
   transition: all .2s;
 }
 
-.controls-page{
+.controls-page {
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   translate: -50% -50%;
   background-color: #282c34;
   width: 1400px;
   height: 600px;
   z-index: 999;
 }
-.controls-text{
+
+.controls-text {
   text-align: center;
   margin-top: -50px;
 }
+
 .show-controls-button {
   position: absolute;
-  top: 11%; left: 38%;
+  top: 11%;
+  left: 38%;
   translate: -50% -50%;
   width: 100px;
   height: 40px;
@@ -761,19 +830,41 @@ body {
   cursor: pointer;
   transition: all .2s;
 }
+
 .show-controls-button:hover {
   scale: 1.1;
   background-color: #5eafca;
 }
-.return-to-mainmenu{
+
+.return-to-mainmenu {
   position: absolute;
-  top: 20px; left: 50%;
+  top: 20px;
+  left: 50%;
   translate: -30% -50%;
   z-index: 99;
-  width: 64px; height: 64px;
+  width: 64px;
+  height: 64px;
   /* background-color: transparent; */
   background: url(./Assets/home.png) center;
-  outline: none; border: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  scale: .5
+}
+
+.open-camera {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  translate: -30% -50%;
+  z-index: 99;
+  width: 64px;
+  height: 64px;
+  /* background-color: transparent; */
+  background: url(./Assets/camera.png) center;
+  background-size: contain;
+  outline: none;
+  border: none;
   cursor: pointer;
   scale: .5
 }

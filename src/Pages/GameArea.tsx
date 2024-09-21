@@ -19,6 +19,7 @@ import SukunaSlice from "../redux/character-slices/SukunaSlice";
 import MegumiSlice from "../redux/character-slices/MegumiSlice";
 import CharacterInterface from "../components/CharacterInterface";
 import ControlsPage from "./ControlsPage";
+import axios from "axios";
 
 const characterHeight = 50;
 
@@ -640,11 +641,142 @@ const GameArea = () => {
       }, 1000);
     }
   }, [rivalCharacter.health.currentHealth <= 0, gameSettings.tutorial])
+
+
+
+  // Kamera başlatma ve fotoğraf çekme
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const [captureLoop, setCaptureLoop] = useState(false);
+  const [detection, setDetection] = useState(null);
+  const [detectedHandSign, setDetectedHandSign] = useState(null);
+  const [isBoundingBoxDrew, setIsBoundingBoxDrew] = useState(false);
+
+  // Kameraya erişim izni ve video akışını başlat
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+      videoRef.current.srcObject = stream;
+      setCaptureLoop(true);
+    } catch (err) {
+      console.error("Kameraya erişilemedi:", err);
+    }
+  };
+  // Kamerayı durdurma
+  const stopCamera = () => {
+    const stream = videoRef.current.srcObject;
+    if (stream) {
+      const tracks = stream.getTracks();
+      tracks.forEach(track => track.stop());
+    }
+    videoRef.current.srcObject = null; // Kamerayı temizle
+    setCaptureLoop(false);
+    setDetection(null); // Detection sıfırla
+  };
+
+  // effect for photo capture interval
+  useEffect(() => {
+    let photoInterval = null;
+    if (captureLoop && videoRef.current && detection === null) {
+      photoInterval = setInterval(() => {
+        console.log("taking a photo")
+        takePhoto()
+      }, 1000);
+    }
+    return () => {
+      clearInterval(photoInterval);
+    }
+  }, [captureLoop, videoRef.current, detection]);
+
+  // Fotoğrafı çek ve state'e kaydet
+  const takePhoto = () => {
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    // Video boyutunda bir canvas ayarla
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Video akışından canvas'a fotoğrafı çiz
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Canvas'tan data URL'si al
+    const imageDataUrl = canvas.toDataURL("image/png");
+
+    axios({
+      method: "POST",
+      url: "https://detect.roboflow.com/jujutsu-kaisen-hand-signs/1",
+      params: {
+        api_key: "pzI8nWkXC1JV60NAyxAY"
+      },
+      // data: formData,
+      // data: imageData,
+      data: imageDataUrl,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    }).then(function (response) {
+      if (response.data.predictions.length > 0) {
+        console.log(response.data.predictions[0].class);
+        setDetection(response.data.predictions[0]);
+        setCaptureLoop(false);
+      }
+    })
+      .catch(function (error) {
+        console.log(error.message);
+      });
+  };
+  // Detection sonuçlarını canvas'a çiz
+  useEffect(() => {
+    if (detection && canvasRef.current && !isBoundingBoxDrew) {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d");
+
+      // // Önceki çizimleri temizle
+      // context.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Kırmızı bir kare çiz
+      context.strokeStyle = "red";
+      context.lineWidth = 2;
+      const squareSizeX = detection.width; // Karenin boyutu
+      const squareSizeY = detection.height; // Karenin boyutu
+      const centerX = detection.x - (squareSizeX / 2);
+      const centerY = detection.y - (squareSizeY / 2);
+
+      context.strokeRect(centerX, centerY, squareSizeX, squareSizeY);
+
+      setIsBoundingBoxDrew(true);
+
+    }
+  }, [detection, isBoundingBoxDrew]);
+  const handleStartCamera = () => {
+    startCamera()
+  };
+
+
   return (
     <div className="game-area">
       {/* <h1> {x * 16} x {x * 9}</h1> */}
       <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
       {/* <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio> */}
+      <button className="open-camera" style={{ marginLeft: "-50px" }} onClick={handleStartCamera}></button>
+      <button className="open-camera" style={{ marginLeft: "50px" }} onClick={stopCamera}>Kamerayı Durdur</button>
+
+      <div style={{
+        top: "50%",
+        left: gameSettings.selectedCharacter === "sukuna" ? "25%" : "75%",
+      }}>
+        <video ref={videoRef} autoPlay
+          style={{ position: "absolute", width: "100%", maxWidth: "400px", display: captureLoop ? "block" : "none", zIndex: 999 }} />
+        <canvas ref={canvasRef}
+          style={{ position: "absolute", display: detection ? "block" : "none", maxWidth: "400px", zIndex: 999 }}
+        ></canvas>
+      </div>
+
 
       {showControls && ( // show controls button clicked
         <ControlsPage />

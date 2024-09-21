@@ -63,6 +63,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
   }
   const tutorial = () => {
     dispatch(gameSettingsSlice.actions.setTutorial(true));
+    dispatch(gameSettingsSlice.actions.setTutorial(true));
     onStartGame();
   }
 
@@ -95,6 +96,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
       {showTutorialMenu && (
         <div className="main-menu-container">
           <div className="main-menu">
+
             <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
             <button className="small-button" onClick={tutorial}>Free Play</button>
 
