@@ -129,6 +129,7 @@ export interface Gojo {
     duration: number,
     refineLevel: number,
     afterDomainRestrictions: boolean,
+    forceExpand: boolean,
   },
   rct: {
     rctActive: boolean,
@@ -212,6 +213,7 @@ export interface Sukuna {
     duration: number,
     refineLevel: number,
     afterDomainRestrictions: boolean,
+    forceExpand: boolean,
   },
   rct: {
     rctActive: boolean,

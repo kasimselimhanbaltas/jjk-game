@@ -576,13 +576,16 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 }, 2000);
             }
         }
+        else if (gojo.domainStatus.forceExpand) {
+            handleDomainExpansion();
+        }
         else {
             if (domainBugFixer && domainClashCDref && gojo.domainCD.isReady && gojo.cursedEnergy.currentCursedEnergy >= 200) {
                 console.log("b")
                 handleDomainExpansion();
             }
         }
-    }, [gojo.domainStatus.isInitiated, gameSettings.domainClashReady, gameSettings.domainClash,
+    }, [gojo.domainStatus.isInitiated, gojo.domainStatus.forceExpand, gameSettings.domainClashReady, gameSettings.domainClash,
         domainClashCDref, gojo.domainCD.isReady, domainBugFixer])
 
 
@@ -768,7 +771,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                         dispatch(gojoSlice.actions.setAnimationState("stance"));
                         setTimeout(() => { // 10 seconds later domain ends
                             dispatch(gojoSlice.actions.setDomainState(
-                                { ...gojo.domainStatus, isActive: false, isInitiated: false }
+                                { ...gojo.domainStatus, isActive: false, isInitiated: false, forceExpand: false }
                             ));
                             if (!gameSettings.tutorial)
                                 dispatch(rivalSlice.actions.setDevStun(false)); // *stun

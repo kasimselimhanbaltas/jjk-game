@@ -77,6 +77,7 @@ const initialState: Sukuna = {
     duration: 15,
     refineLevel: 10,
     afterDomainRestrictions: false,
+    forceExpand: false,
   },
   rct: {
     rctActive: false,
@@ -147,12 +148,6 @@ const RivalSlice = createSlice({
       state.rct.rctMode = action.payload.rctMode;
     },
     setDomainState(state, action) {
-      console.log(
-        "prev: ",
-        state.domainStatus.isActive,
-        "next: ",
-        action.payload.isActive
-      );
       state.domainStatus.isInitiated = action.payload.isInitiated;
       state.domainStatus.isActive = action.payload.isActive;
       state.domainStatus.duration = action.payload.duration;
@@ -161,6 +156,7 @@ const RivalSlice = createSlice({
       state.domainStatus.clashStatus = action.payload.clashStatus;
       state.domainStatus.afterDomainRestrictions =
         action.payload.afterDomainRestrictions;
+      state.domainStatus.forceExpand = action.payload.forceExpand;
     },
     moveCharacter(state, action) {
       let inputX = action.payload.x;

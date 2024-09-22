@@ -640,7 +640,14 @@ const GameArea = () => {
         dispatch(rivalSlice.actions.setHealth(rivalCharacter.health.maxHealth));
       }, 1000);
     }
-  }, [rivalCharacter.health.currentHealth <= 0, gameSettings.tutorial])
+    if (playerCharacter.health.currentHealth <= 0 && gameSettings.tutorial) {
+      setTimeout(() => {
+        dispatch(playerSlice.actions.moveCharacterTo({ x: 600, y: 560 }));
+        dispatch(playerSlice.actions.setAnimationState("entry"))
+        dispatch(playerSlice.actions.setHealth(playerCharacter.health.maxHealth));
+      }, 1000);
+    }
+  }, [rivalCharacter.health.currentHealth <= 0, gameSettings.tutorial, playerCharacter.health.currentHealth <= 0])
 
 
 
@@ -660,6 +667,7 @@ const GameArea = () => {
       });
       videoRef.current.srcObject = stream;
       setCaptureLoop(true);
+      setDetection(null);
     } catch (err) {
       console.error("Kameraya erişilemedi:", err);
     }
@@ -683,7 +691,7 @@ const GameArea = () => {
       photoInterval = setInterval(() => {
         console.log("taking a photo")
         takePhoto()
-      }, 1000);
+      }, 300);
     }
     return () => {
       clearInterval(photoInterval);
@@ -723,6 +731,7 @@ const GameArea = () => {
       if (response.data.predictions.length > 0) {
         console.log(response.data.predictions[0].class);
         setDetection(response.data.predictions[0]);
+        setReRender(reRender + 1)
         setCaptureLoop(false);
       }
     })
@@ -732,7 +741,8 @@ const GameArea = () => {
   };
   // Detection sonuçlarını canvas'a çiz
   useEffect(() => {
-    if (detection && canvasRef.current && !isBoundingBoxDrew) {
+    if (detection && canvasRef.current) {
+      console.log("effect: ", detection)
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
 
@@ -751,8 +761,24 @@ const GameArea = () => {
 
       setIsBoundingBoxDrew(true);
 
+      if (detection.class === "gojo") {
+        console.log("GOJO DOMAIN EXPANSION STARTED")
+        dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, forceExpand: true }))
+        setDetection(null);
+        setIsBoundingBoxDrew(false);
+        stopCamera();
+      }
+      if (detection.class === "sukuna") {
+        console.log("SUKUNA DOMAIN EXPANSION STARTED")
+
+        dispatch(sukunaSlice.actions.setDomainState({ ...sukuna.domainStatus, forceExpand: true }))
+        setDetection(null);
+        setIsBoundingBoxDrew(false);
+        stopCamera();
+      }
+
     }
-  }, [detection, isBoundingBoxDrew]);
+  }, [detection, isBoundingBoxDrew, reRender]);
   const handleStartCamera = () => {
     startCamera()
   };
@@ -763,17 +789,17 @@ const GameArea = () => {
       {/* <h1> {x * 16} x {x * 9}</h1> */}
       <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
       {/* <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio> */}
-      <button className="open-camera" style={{ marginLeft: "-50px" }} onClick={handleStartCamera}></button>
-      <button className="open-camera" style={{ marginLeft: "50px" }} onClick={stopCamera}>Kamerayı Durdur</button>
 
       <div style={{
-        top: "50%",
-        left: gameSettings.selectedCharacter === "sukuna" ? "25%" : "75%",
+        position: "absolute",
+        top: "20%",
+        left: "40%",
+        maxWidth: "300px",
       }}>
         <video ref={videoRef} autoPlay
-          style={{ position: "absolute", width: "100%", maxWidth: "400px", display: captureLoop ? "block" : "none", zIndex: 999 }} />
+          style={{ position: "absolute", maxWidth: "300px", display: captureLoop ? "block" : "none", zIndex: 999 }} />
         <canvas ref={canvasRef}
-          style={{ position: "absolute", display: detection ? "block" : "none", maxWidth: "400px", zIndex: 999 }}
+          style={{ position: "absolute", display: detection ? "block" : "none", maxWidth: "300px", zIndex: 999 }}
         ></canvas>
       </div>
 
@@ -785,6 +811,8 @@ const GameArea = () => {
       {!showMenu && !showFinishMenu && (
         <>
           <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
+          <button className="open-camera" style={{ marginLeft: "-50px" }} onClick={() => captureLoop ? stopCamera() : handleStartCamera()}></button>
+
           {gameSettings.tutorial && (
             <button className="show-controls-button" onClick={() => setShowControls(true)}>Show Controls</button>
           )}

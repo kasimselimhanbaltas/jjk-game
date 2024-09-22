@@ -179,7 +179,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 }, 1000);
                 setTimeout(() => { // domain finish
                     dispatch(sukunaSlice.actions.setDomainState(
-                        { ...sukuna.domainStatus, isActive: false }
+                        { ...sukuna.domainStatus, isActive: false, isInitiated: false, forceExpand: false }
                     ));
                     console.log("sukuna domain close")
                     setDomainAttackStyle("none");
@@ -632,13 +632,16 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 }, 2000);
             }
         }
+        else if (sukuna.domainStatus.forceExpand) {
+            handleDomainAttack();
+        }
         else {
             if (domainBugFixer && domainClashCDref === true && sukuna.domainCD.isReady && sukuna.cursedEnergy.currentCursedEnergy >= 200) {
                 console.log("b")
                 handleDomainAttack();
             }
         }
-    }, [sukuna.domainStatus.isInitiated, gameSettings.domainClashReady, gameSettings.domainClash,
+    }, [sukuna.domainStatus.isInitiated, sukuna.domainStatus.forceExpand, gameSettings.domainClashReady, gameSettings.domainClash,
         domainClashCDref, sukuna.domainCD.isReady, domainBugFixer])
 
     // useEffect(() => {

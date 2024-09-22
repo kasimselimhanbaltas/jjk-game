@@ -68,6 +68,7 @@ const initialState: Gojo = {
     duration: 10,
     refineLevel: 10,
     afterDomainRestrictions: false,
+    forceExpand: false,
   },
   rct: {
     rctActive: false,
@@ -142,6 +143,7 @@ const gojoSlice = createSlice({
       state.domainStatus.clashStatus = action.payload.clashStatus;
       state.domainStatus.afterDomainRestrictions =
         action.payload.afterDomainRestrictions;
+      state.domainStatus.forceExpand = action.payload.forceExpand;
     },
     moveCharacter(state, action) {
       let inputX = action.payload.x;
