@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 .App {
   text-align: center;
 }
@@ -143,6 +145,7 @@
   height: 100%;
   background-image: url('./Assets/bg.jpg');
   background-size: cover;
+  background-position: bottom bottom;
   z-index: 10;
 }
 
@@ -181,7 +184,7 @@
 .main-menu {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
@@ -220,27 +223,37 @@
 }
 
 .main-screen button {
-  border: solid 2px transparent;
-  border-radius: 10px;
   margin-left: 50px;
 }
 
 .main-screen button:hover {
   background-color: transparent;
-  border: solid 2px white;
+
+}
+
+.myfont {
+  font-family: "Press Start 2P", system-ui !important;
 }
 
 .start-button {
   padding: 20px 40px;
   font-size: 24px;
-  background-color: #4CAF50;
-  /* Yeşil */
+  background: linear-gradient(90deg, #000000, #3553CD);
+  font-family: "Press Start 2P", system-ui !important;
   color: white;
   border: none;
   cursor: pointer;
   position: relative;
-  /* cursor: none; */
+  clip-path: polygon(91% 100%, 92% 89%, 94% 78%, 97% 71%, 100% 67%, 100% 34%, 97% 31%, 95% 26%, 93% 14%, 93% 0, 8% 0%, 7% 14%, 5% 25%, 3% 29%, 0 30%, 0 70%, 2% 72%, 4% 78%, 6% 87%, 7% 100%);
+  transition: all .2s ease;
 }
+
+.start-button:hover,
+.small-button:hover {
+  scale: 1.1;
+}
+
+
 
 .start-button-animated {
   width: 140px;
@@ -265,17 +278,29 @@
 }
 
 .small-button {
+  border-radius: 0px !important;
+  box-sizing: border-box;
+  outline: none;
+
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #008CBA;
-  /* Mavi */
+  background: linear-gradient(90deg, #cdffd8, #94b9ff);
   color: white;
   border: none;
+  font-family: "Press Start 2P", system-ui !important;
+
   cursor: pointer;
   /* cursor: none; */
   margin-top: 10px;
+  clip-path: polygon(6% 0, 94% 0, 100% 30%, 100% 70%, 95% 100%, 6% 100%, 0 70%, 0 31%);
+  transition: all .2s ease;
+
 }
 
+.long-button {
+  clip-path: polygon(4% 0, 97% 1%, 100% 26%, 100% 74%, 97% 97%, 4% 100%, 0 74%, 0 31%) !important;
+
+}
 
 @keyframes wolfRun {
   from {
@@ -867,4 +892,106 @@ body {
   border: none;
   cursor: pointer;
   scale: .5
+}
+
+.gojo-menu {
+  position: absolute;
+  width: 66px;
+  height: 94px;
+  background: url(./Assets/gojo-noline.png);
+  animation: gojo-stance steps(1) 1s infinite;
+  scale: 4;
+  transition: all .2s ease, transform 0s;
+  z-index: 5;
+  bottom: 250px;
+}
+
+.sukuna-menu {
+  position: absolute;
+  z-index: 99;
+  width: 40px;
+  height: 94px;
+  background: url(./Assets/sukuna-sprite.png);
+  animation: stance-sukuna steps(1) 1s infinite;
+  scale: 6.2;
+  translate: 0px -20px;
+  transition: all .2s ease, transform 0s;
+  bottom: 250px;
+
+}
+
+@keyframes gojo-stance {
+  0% {
+    background-position: -321px -187px;
+    width: 66px;
+    height: 94px;
+  }
+
+  20% {
+    background-position: -403px -189px;
+    width: 66px;
+    height: 92px;
+  }
+
+  40% {
+    background-position: -493px -187px;
+    width: 66px;
+    height: 94px;
+  }
+
+  60% {
+    background-position: -570px -187px;
+    width: 66px;
+    height: 94px;
+  }
+
+  80% {
+    background-position: -656px -187px;
+    width: 66px;
+    height: 94px;
+  }
+
+  100% {
+    background-position: -321px -187px;
+    width: 66px;
+    height: 94px;
+  }
+}
+
+@keyframes stance-sukuna {
+  0% {
+    background-position: -497px -190px;
+    width: 22px;
+    height: 52px;
+  }
+
+  16.6% {
+    background-position: -548px -192px;
+    width: 22px;
+    height: 52px;
+  }
+
+  33.3% {
+    background-position: -597px -196px;
+    width: 22px;
+    height: 52px;
+  }
+
+  50% {
+    background-position: -646px -197px;
+    width: 22px;
+    height: 52px;
+  }
+
+  /* 66.6% {
+      background-position: -707px -194px;
+      width: 22px;
+      height: 52px;
+  }
+
+  83.3% {
+      background-position: -746px -197px;
+      width: 22px;
+      height: 52px;
+  } */
 }

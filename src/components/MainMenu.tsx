@@ -108,29 +108,39 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
       )}
       {showMainMenu &&
         <div className="main-menu-container">
-          <div className="main-menu">
-            {gameSettings.selectedCharacter &&
-              <img className='selected-character-image' src={require(`../Assets/profiles/${gameSettings.selectedCharacter}-profile.png`)} alt="" />
-            }
-            <button className="start-button" onClick={handleStartGame}>
+          {gameSettings.selectedCharacter === "gojo" &&
+            <div className='gojo-menu' style={{ right: undefined, left: "250px" }}></div>
+          }
+          {gameSettings.selectedCharacter === "sukuna" &&
+            <div className='sukuna-menu' style={{ right: undefined, left: "250px" }}></div>
+          }
+          {gameSettings.selectedRivalCharacter === "gojo" &&
+            <div className='gojo-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
+          }
+          {gameSettings.selectedRivalCharacter === "sukuna" &&
+            <div className='sukuna-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
+          }
+          <div className="main-menu myfont">
+            <button className="start-button" onClick={handleStartGame} style={{ position: "relative" }}>
               {/* <div className='start-button-animated' style={{ position: "absolute", top: "50%", left: "50%", translate: "0 0" }}></div> */}
               <div style={{ position: "relative" }}>
                 Start Game
               </div>
+              <div
+                style={{
+                  content: "", width: "20px", height: "20px", backgroundColor: "white", position: "absolute",
+                  top: 0, left: 0, borderRadius: "50%", transform: "translate(-50%, -50%)",
+                }}
+              ></div>
             </button>
 
-            <button className="small-button" onClick={() => { setShowCharacterMenu(true); setShowMainMenu(false) }}
+            <button className="small-button long-button" onClick={() => { setShowCharacterMenu(true); setShowMainMenu(false) }}
             // style={{ marginTop: "30px" }}
             >Select Character</button>
             <button className="small-button" onClick={tutorialMenu}>Tutorial</button>
             <button className="small-button">Options</button>
             <button className="small-button" onClick={onShowControls}>Controls</button>
           </div>
-          <div style={{ marginRight: "50px" }}>
-            <img className='selected-character-image' src={require(`../Assets/profiles/${gameSettings.selectedRivalCharacter}-profile.png`)} alt="" />
-            <button className="small-button" style={{ marginTop: "0px" }} onClick={() => { setShowRivalCharacterMenu(true); setShowMainMenu(false) }}>Select Rival Character</button>
-          </div>
-
         </div>
       }
       {!localStorage.getItem('username') && (
