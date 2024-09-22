@@ -658,6 +658,7 @@ const GameArea = () => {
   const [detection, setDetection] = useState(null);
   const [detectedHandSign, setDetectedHandSign] = useState(null);
   const [isBoundingBoxDrew, setIsBoundingBoxDrew] = useState(false);
+  const [showCanvas, setShowCanvas] = useState(false);
 
   // Kameraya erişim izni ve video akışını başlat
   const startCamera = async () => {
@@ -733,6 +734,11 @@ const GameArea = () => {
         setDetection(response.data.predictions[0]);
         setReRender(reRender + 1)
         setCaptureLoop(false);
+        setShowCanvas(true);
+        setTimeout(() => {
+          setShowCanvas(false);
+          setIsBoundingBoxDrew(false);
+        }, 2000);
       }
     })
       .catch(function (error) {
@@ -741,7 +747,7 @@ const GameArea = () => {
   };
   // Detection sonuçlarını canvas'a çiz
   useEffect(() => {
-    if (detection && canvasRef.current) {
+    if (detection && canvasRef.current && !isBoundingBoxDrew) {
       console.log("effect: ", detection)
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
@@ -765,7 +771,6 @@ const GameArea = () => {
         console.log("GOJO DOMAIN EXPANSION STARTED")
         dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, forceExpand: true }))
         setDetection(null);
-        setIsBoundingBoxDrew(false);
         stopCamera();
       }
       if (detection.class === "sukuna") {
@@ -773,7 +778,6 @@ const GameArea = () => {
 
         dispatch(sukunaSlice.actions.setDomainState({ ...sukuna.domainStatus, forceExpand: true }))
         setDetection(null);
-        setIsBoundingBoxDrew(false);
         stopCamera();
       }
 
@@ -799,7 +803,7 @@ const GameArea = () => {
         <video ref={videoRef} autoPlay
           style={{ position: "absolute", maxWidth: "300px", display: captureLoop ? "block" : "none", zIndex: 999 }} />
         <canvas ref={canvasRef}
-          style={{ position: "absolute", display: detection ? "block" : "none", maxWidth: "300px", zIndex: 999 }}
+          style={{ position: "absolute", display: showCanvas ? "block" : "none", maxWidth: "300px", zIndex: 999 }}
         ></canvas>
       </div>
 
