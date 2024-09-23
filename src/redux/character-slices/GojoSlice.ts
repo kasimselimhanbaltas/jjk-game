@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Gojo } from "../../App";
 import { AppThunk } from "../GlobalStore";
 
+const SURFACE_Y = parseInt(process.env.REACT_APP_SURFACE_Y);
 const gameAreaWidth = 1400;
 const gameAreaHeight = 600;
 
@@ -278,14 +279,14 @@ const gojoSlice = createSlice({
     },
     applyGravity: (state) => {
       if (
-        state.y + state.velocityY < 560 ||
+        state.y + state.velocityY < SURFACE_Y ||
         state.velocityY <= state.jumpStrength
       ) {
         // Ensure the character stays above the ground level
         state.velocityY += state.gravity;
         state.y += state.velocityY;
       } else {
-        state.y = 560;
+        state.y = SURFACE_Y;
         state.velocityY = 0;
         state.isJumping = false;
       }

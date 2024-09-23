@@ -789,134 +789,136 @@ const GameArea = () => {
 
 
   return (
-    <div className="game-area">
-      {/* <h1> {x * 16} x {x * 9}</h1> */}
-      <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
-      {/* <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio> */}
+    <>
+      <div className="game-area">
+        {/* <h1> {x * 16} x {x * 9}</h1> */}
+        <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
+        {/* <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio> */}
 
-      <div style={{
-        position: "absolute",
-        top: "20%",
-        left: "40%",
-        maxWidth: "300px",
-      }}>
-        <video ref={videoRef} autoPlay
-          style={{ position: "absolute", maxWidth: "300px", display: captureLoop ? "block" : "none", zIndex: 999 }} />
-        <canvas ref={canvasRef}
-          style={{ position: "absolute", display: showCanvas ? "block" : "none", maxWidth: "300px", zIndex: 999 }}
-        ></canvas>
-      </div>
-
-
-      {showControls && ( // show controls button clicked
-        <ControlsPage />
-      )}
-      {/* <h1>{showMenu ? "Main Menu" : showFinishMenu ? "Finish Menu" : "Game Area"}</h1> */}
-      {!showMenu && !showFinishMenu && (
-        <>
-          <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
-          <button className="open-camera" style={{ marginLeft: "-50px" }} onClick={() => captureLoop ? stopCamera() : handleStartCamera()}></button>
-
-          {gameSettings.tutorial && (
-            <button className="show-controls-button" onClick={() => setShowControls(true)}>Show Controls</button>
-          )}
-        </>
-      )}
-      {showMenu ? ( // Menü gösteriliyor mu?
-        <MainMenu onStartGame={handleStartGame} onTutorialSelected={handleTutorialSelected} onShowControls={() => setShowControls(true)} /> // Evet ise menüyü göster
-      ) : showFinishMenu ? (
-        <FinishMenu onRestart={handleRestart} onReturnToMainMenu={() => handleReturnToMainMenu()} />
-      ) : (
-        <>
-          <div style={{
-            width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/bg.jpg")})`, opacity: 1,
-            // backgroundImage: `url(${require("../Assets/domain-clash.png")})`, opacity: 1,
-            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
-          }}></div>
-          <div style={{
-            width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/pixel-sukuna-domain.png")})`, opacity: sukuna.domainStatus.isActive ? 1 : 0,
-            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
-          }}></div>
-          <div style={{
-            width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/gojo-domain-end.png")})`, opacity: gojo.domainStatus.isActive ? 1 : 0,
-            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
-          }}></div>
-          <div style={{
-            width: "100%", height: "100%", position: "absolute",
-            backgroundImage: `url(${require("../Assets/domain-clash.png")})`, opacity: // BETTER WAY ???
-              playerCharacter.domainStatus.isActive && rivalCharacter.domainStatus.isActive ? 1 : 0,
-            backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
-          }}></div>
-          {gameSettings.selectedCharacter === "sukuna" && (
-            <>
-              {/* <SatoruGojo rivalSlice={playerSlice} rivalState={playerCharacter} /> */}
-              <Sukuna xDistance={xDistance} rivalSlice={rivalSlice} rivalState={rivalCharacter} />
-            </>
-          )}
-          {gameSettings.selectedRivalCharacter === "sukuna" && (
-            <>
-              <Sukuna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
-            </>
-          )}
-          {gameSettings.selectedCharacter === "megumi" && (
-            <>
-              <Megumi rivalSlice={rivalSlice} rivalState={rivalCharacter} />
-              {/* <Sukuna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} /> */}
-              <Nue rivalSlice={rivalSlice} rivalState={rivalCharacter} />
-              <DivineDogs rivalSlice={rivalSlice} rivalState={rivalCharacter} />
-            </>
-          )}
-          {gameSettings.selectedRivalCharacter === "megumi" && (
-            <>
-              <Megumi rivalSlice={playerSlice} rivalState={playerCharacter} />
-              <DivineDogs rivalSlice={playerSlice} rivalState={playerCharacter} />
-              <Nue rivalSlice={playerSlice} rivalState={playerCharacter} />
-            </>
-          )}
-          {gameSettings.selectedCharacter === "gojo" && (
-            <>
-              <SatoruGojo xDistance={xDistance} rivalSlice={rivalSlice} rivalState={rivalCharacter} />
-            </>
-          )}
-          {gameSettings.selectedRivalCharacter === "gojo" && (
-            <>
-              <SatoruGojo xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
-            </>
-          )}
+        <div style={{
+          position: "absolute",
+          top: "20%",
+          left: "40%",
+          maxWidth: "300px",
+        }}>
+          <video ref={videoRef} autoPlay
+            style={{ position: "absolute", maxWidth: "300px", display: captureLoop ? "block" : "none", zIndex: 999 }} />
+          <canvas ref={canvasRef}
+            style={{ position: "absolute", display: showCanvas ? "block" : "none", maxWidth: "300px", zIndex: 999 }}
+          ></canvas>
+        </div>
 
 
+        {showControls && ( // show controls button clicked
+          <ControlsPage />
+        )}
+        {/* <h1>{showMenu ? "Main Menu" : showFinishMenu ? "Finish Menu" : "Game Area"}</h1> */}
+        {!showMenu && !showFinishMenu && (
+          <>
+            <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
+            <button className="open-camera" style={{ marginLeft: "-50px" }} onClick={() => captureLoop ? stopCamera() : handleStartCamera()}></button>
 
-          <CharacterInterface playerCharacter={playerCharacter} rivalCharacter={rivalCharacter}></CharacterInterface>
-          <div className="domain-clash-timer-container" style={{
-            display: gameSettings.domainClashReady && !gameSettings.domainClash ? "block" : "none", zIndex: 9, top: "50%", left: "50%", translate: "-50% -50%",
-            // display: "block", zIndex: 9, top: "50%", left: "50%", translate: "-50% -50%",
-          }}>
-            <h5 style={{ position: "absolute", top: "-140%", left: "50%", translate: "-50% -50%", width: 300 }}>
-              Domain Clash Chance!</h5>
-            <div className="domain-clash-timer-bar" style={{ top: "50%", left: "50%", translate: "-50% -50%" }}>
-              <div className="domain-clash-timer"
-                style={{
-                  width: `${timerPercentage}%`,
-                }}></div>
+            {gameSettings.tutorial && (
+              <button className="show-controls-button" onClick={() => setShowControls(true)}>Show Controls</button>
+            )}
+          </>
+        )}
+        {showMenu ? ( // Menü gösteriliyor mu?
+          <MainMenu onStartGame={handleStartGame} onTutorialSelected={handleTutorialSelected} onShowControls={() => setShowControls(true)} /> // Evet ise menüyü göster
+        ) : showFinishMenu ? (
+          <FinishMenu onRestart={handleRestart} onReturnToMainMenu={() => handleReturnToMainMenu()} />
+        ) : (
+          <>
+            <div style={{
+              width: "100%", height: "100%", position: "absolute",
+              backgroundImage: `url(${require("../Assets/bg.jpg")})`, opacity: 1,
+              // backgroundImage: `url(${require("../Assets/domain-clash.png")})`, opacity: 1,
+              backgroundSize: "cover", backgroundPosition: "bottom", transition: "opacity 0s ease-in-out",
+            }}></div>
+            <div style={{
+              width: "100%", height: "100%", position: "absolute",
+              backgroundImage: `url(${require("../Assets/pixel-sukuna-domain.png")})`, opacity: sukuna.domainStatus.isActive ? 1 : 0,
+              backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
+            }}></div>
+            <div style={{
+              width: "100%", height: "100%", position: "absolute",
+              backgroundImage: `url(${require("../Assets/gojo-domain-end.png")})`, opacity: gojo.domainStatus.isActive ? 1 : 0,
+              backgroundSize: "cover", backgroundPosition: "center", transition: "opacity 0s ease-in-out",
+            }}></div>
+            <div style={{
+              width: "100%", height: "100%", position: "absolute",
+              backgroundImage: `url(${require("../Assets/domain-clash.png")})`, opacity: // BETTER WAY ???
+                playerCharacter.domainStatus.isActive && rivalCharacter.domainStatus.isActive ? 1 : 0,
+              backgroundSize: "cover", backgroundPosition: "bottom", transition: "opacity 0s ease-in-out",
+            }}></div>
+            {gameSettings.selectedCharacter === "sukuna" && (
+              <>
+                {/* <SatoruGojo rivalSlice={playerSlice} rivalState={playerCharacter} /> */}
+                <Sukuna xDistance={xDistance} rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+              </>
+            )}
+            {gameSettings.selectedRivalCharacter === "sukuna" && (
+              <>
+                <Sukuna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
+              </>
+            )}
+            {gameSettings.selectedCharacter === "megumi" && (
+              <>
+                <Megumi rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+                {/* <Sukuna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} /> */}
+                <Nue rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+                <DivineDogs rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+              </>
+            )}
+            {gameSettings.selectedRivalCharacter === "megumi" && (
+              <>
+                <Megumi rivalSlice={playerSlice} rivalState={playerCharacter} />
+                <DivineDogs rivalSlice={playerSlice} rivalState={playerCharacter} />
+                <Nue rivalSlice={playerSlice} rivalState={playerCharacter} />
+              </>
+            )}
+            {gameSettings.selectedCharacter === "gojo" && (
+              <>
+                <SatoruGojo xDistance={xDistance} rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+              </>
+            )}
+            {gameSettings.selectedRivalCharacter === "gojo" && (
+              <>
+                <SatoruGojo xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
+              </>
+            )}
+
+
+
+            <CharacterInterface playerCharacter={playerCharacter} rivalCharacter={rivalCharacter}></CharacterInterface>
+            <div className="domain-clash-timer-container" style={{
+              display: gameSettings.domainClashReady && !gameSettings.domainClash ? "block" : "none", zIndex: 9, top: "50%", left: "50%", translate: "-50% -50%",
+              // display: "block", zIndex: 9, top: "50%", left: "50%", translate: "-50% -50%",
+            }}>
+              <h5 style={{ position: "absolute", top: "-140%", left: "50%", translate: "-50% -50%", width: 300 }}>
+                Domain Clash Chance!</h5>
+              <div className="domain-clash-timer-bar" style={{ top: "50%", left: "50%", translate: "-50% -50%" }}>
+                <div className="domain-clash-timer"
+                  style={{
+                    width: `${timerPercentage}%`,
+                  }}></div>
+              </div>
             </div>
-          </div>
-          <div style={{ position: "absolute", display: domainClashText ? "block" : "none", top: "40%", left: "50%", translate: "-50% -50%", zIndex: 999 }}>
-            <h3>PERFECT TIMED DOMAIN CLASH</h3>
-          </div>
+            <div style={{ position: "absolute", display: domainClashText ? "block" : "none", top: "40%", left: "50%", translate: "-50% -50%", zIndex: 999 }}>
+              <h3>PERFECT TIMED DOMAIN CLASH</h3>
+            </div>
 
-        </>
-      )}
-
+          </>
+        )}
 
 
-      {/*
+
+        {/*
       <img src={require('../Assets/malevolent_shrine.png')} alt="" style={{ position: "absolute", display: sukuna.rivalDomainExpansion ? "block" : "none", left: megumi.x < sukuna.x ? sukuna.x + 120 : sukuna.x - 150, top: sukuna.y - 50, height: shrineHeight, opacity: 0.8, scale: "1.2" }} />
       */}
 
-    </div>
+      </div>
+    </>
   );
 };
 

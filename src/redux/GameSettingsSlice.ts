@@ -6,7 +6,7 @@ const initialState: GameSettings = {
   selectedRivalCharacter: "sukuna",
   winner: "",
   loser: "",
-  surfaceY: 560,
+  surfaceY: 470,
   entry: false,
   domainClashReady: false,
   domainClash: false,

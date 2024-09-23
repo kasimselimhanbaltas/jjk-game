@@ -1,11 +1,13 @@
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import CircularProgressBar from "./CircularProgressBar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
-
+import sukunaSlice from "../redux/character-slices/SukunaSlice";
+import gojoSlice from "../redux/character-slices/GojoSlice";
 
 function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
+    const dispatch = useDispatch();
     const gameSettings = useSelector((state: any) => state.GameSettingsState);
     const sukuna = useSelector((state: any) => state.SukunaState);
     const megumi = useSelector((state: any) => state.MegumiState);
@@ -158,7 +160,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             {/* Domain Attack */}
                             <div className="skill">
                                 <CircularProgressBar skillCD={playerCharacter.domainCD} />
-                                <img src={require("../Assets/malevolent_shrine.png")} alt="" style={{}} />
+                                <img src={require("../Assets/malevolent_shrine.png")} alt="" />
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>Domain:</p>
                                 <p style={{ marginTop: "-10px" }}>{playerCharacter.domainCD.isReady ?
                                     (playerCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
@@ -341,7 +343,8 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Domain Attack */}
-                            <div className="skill">
+                            <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(gojoSlice.actions.setDomainState(
+                                { ...gojo.domainStatus, forceExpand: true }))}>
                                 <CircularProgressBar skillCD={playerCharacter.domainCD} />
                                 <img src={require("../Assets/domain-hand.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
                                 <p>coming soon...</p>
@@ -391,7 +394,8 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Domain Attack */}
-                            <div className="skill">
+                            <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(sukunaSlice.actions.setDomainState(
+                                { ...sukuna.domainStatus, forceExpand: true }))}>
                                 <CircularProgressBar skillCD={rivalCharacter.domainCD} />
                                 <img src={require("../Assets/malevolent_shrine.png")} alt="" style={{}} />
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>Domain:</p>

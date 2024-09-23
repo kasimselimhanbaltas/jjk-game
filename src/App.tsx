@@ -312,6 +312,22 @@ function App() {
     <Router>
       <div className="App">
         <header className="App-header">
+          <div style={{
+            width: "1410px", height: "610px", border: "10px solid black",
+            position: "absolute"
+          }}></div>
+          <div style={{
+            width: "1435px", height: "635px", border: "5px solid black",
+            position: "absolute"
+          }}></div>
+          <div style={{
+            width: "1450px", height: "650px", border: "3px solid black",
+            position: "absolute"
+          }}></div>
+          <div style={{
+            width: "1459px", height: "659px", border: "1px solid black",
+            position: "absolute"
+          }}></div>
           {/* <div
             className={`custom-cursor ${isClicked ? 'clicked' : ''}`}
             style={{ left: cursorPosition.x, top: cursorPosition.y }}>
