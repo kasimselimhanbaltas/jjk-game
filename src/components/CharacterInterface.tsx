@@ -1,9 +1,20 @@
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import CircularProgressBar from "./CircularProgressBar";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import sukunaSlice from "../redux/character-slices/SukunaSlice";
 import gojoSlice from "../redux/character-slices/GojoSlice";
+
+const Tooltip = ({ text, position }) => {
+    return (
+        <div className="tooltip" style={{ top: position.top, left: position.left }}>
+            <p style={{ color: "white", lineBreak: "anywhere" }}>
+                {text}
+            </p>
+        </div>
+    );
+};
+
 
 function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
@@ -40,8 +51,31 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
         window.addEventListener("keyup", handleKeyUp);
 
     }, []);
+    const [hoveredSkill, setHoveredSkill] = useState(null);
+    const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+    const skillDescriptions = {
+        blue: "Gojo'nun BLUE yeteneği: Yüksek hızda enerji patlaması.",
+        red: "Gojo'nun RED yeteneği: Yüksek hasarlı saldırı.",
+        // Diğer skill açıklamaları buraya eklenebilir
+    };
 
+    const handleMouseEnter = (skill, event) => {
+        const rect = event.target.getBoundingClientRect(); // Skill butonunun pozisyonunu al
+        console.log(rect)
+        setHoveredSkill(skill);
+        // setTooltipPosition({
+        //     top: rect.top - 40, // Tooltip'in yukarıda görünmesi için ayarlama
+        //     left: rect.left + rect.width / 2 - 50, // Tooltip'i ortalamak için ayarlama
+        // });
+        setTooltipPosition({
+            top: 500, // Tooltip'in yukarıda görünmesi için ayarlama
+            left: rect.left + rect.width / 2 - 50, // Tooltip'i ortalamak için ayarlama
+        });
+    };
 
+    const handleMouseLeave = () => {
+        setHoveredSkill(null); // Hover bittiğinde skill bilgisini sıfırla
+    };
     return (
         <div>
             <div className="top-interface">
@@ -118,6 +152,14 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
             </div>
 
             <div>
+                {/* Eğer hover edilen bir skill varsa Tooltip göster */}
+                {/* {hoveredSkill && (
+                    <Tooltip
+                        text={skillDescriptions[hoveredSkill]}
+                        position={tooltipPosition}
+                    // position={{ top: "200px", left: "300px" }}
+                    />
+                )} */}
                 {/* PLAYER INTERFACE COMPONENT FOR SUKUNA */}
                 {playerCharacter.characterName === "sukuna" && (
 
@@ -127,94 +169,140 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
                             {/* Cleave Attack */}
                             <div className="skill">
-                                <CircularProgressBar skillCD={playerCharacter.cleaveCD} />
-                                <div className="image-dismantle" style={{
-                                    position: "absolute",
-                                    top: "-22px", left: "-17px", zIndex: 9,
-                                    width: "99px", height: "101px",
-                                    scale: ".4"
-                                }}></div>
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Dismantle:</p>
+                                {/* <CircularProgressBar skillCD={sukuna.cleaveCD} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.cleaveCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="image-dismantle" style={{
+                                        position: "absolute",
+                                        top: "-22px", left: "-17px", zIndex: 9,
+                                        width: "99px", height: "101px",
+                                        scale: ".4"
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: sukuna.cleaveCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{sukuna.cleaveCD.isReady ? "" : sukuna.cleaveCD.remainingTime}</div>
+                                </div>
+                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Dismantle:</p>
                                 <p style={{ marginTop: "-10px" }}>
-                                    {playerCharacter.cleaveCD.isReady ? "Ready - J" :
-                                        (playerCharacter.cleaveCD.remainingTime + "sec")}</p>
+                                    {sukuna.cleaveCD.isReady ? "Ready - J" :
+                                        (sukuna.cleaveCD.remainingTime + "sec")}</p> */}
                             </div>
 
                             {/* Dismantle Attack */}
                             <div className="skill" >
-                                <CircularProgressBar skillCD={playerCharacter.dismantleCD} />
-                                <div className="image-cleave" style={{
-                                    position: "absolute",
-                                    top: "-25px", left: "-25px", zIndex: 9,
-                                    width: "99px", height: "101px",
-                                    scale: ".4"
-                                }}></div>
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Cleave:</p>
+                                {/* <CircularProgressBar skillCD={sukuna.dismantleCD} /> */}
+
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.dismantleCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="image-cleave" style={{
+                                        position: "absolute",
+                                        top: "-25px", left: "-25px", zIndex: 9,
+                                        width: "99px", height: "101px",
+                                        scale: ".4"
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: sukuna.dismantleCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{sukuna.dismantleCD.isReady ? "" : sukuna.dismantleCD.remainingTime}</div>
+                                </div>
+                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Cleave:</p>
                                 <p style={{ marginTop: "-10px" }}>
-                                    {playerCharacter.dismantleCD.isReady ?
-                                        (playerCharacter.closeRange ? "Ready - K" : "Get Closer") :
-                                        (playerCharacter.dismantleCD.remainingTime + "sec")}</p>
+                                    {sukuna.dismantleCD.isReady ?
+                                        (sukuna.closeRange ? "Ready - K" : "Get Closer") :
+                                        (sukuna.dismantleCD.remainingTime + "sec")}</p> */}
                                 {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
                             </div>
 
                             {/* Domain Attack */}
-                            <div className="skill">
-                                <CircularProgressBar skillCD={playerCharacter.domainCD} />
-                                <img src={require("../Assets/malevolent_shrine.png")} alt="" />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Domain:</p>
-                                <p style={{ marginTop: "-10px" }}>{playerCharacter.domainCD.isReady ?
-                                    (playerCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - L" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/200") :
-                                    (playerCharacter.domainCD.remainingTime + "sec")}</p>
+                            <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(sukunaSlice.actions.setDomainState(
+                                { ...sukuna.domainStatus, forceExpand: true }))}>
+                                {/* <CircularProgressBar skillCD={rivalCharacter.domainCD} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.domainCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <img src={require("../Assets/malevolent_shrine.png")} alt="" style={{}} />
+
+                                    <div className="cooldown-fade" style={{ display: sukuna.domainCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{sukuna.domainCD.isReady ? "" : sukuna.domainCD.remainingTime}</div>
+                                </div>
+                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Domain:</p> */}
+                                {/* <p style={{ marginTop: "-10px" }}>{rivalCharacter.domainCD.isReady ?
+                                    (rivalCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - L" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/200") :
+                                    (rivalCharacter.domainCD.remainingTime + "sec")}</p> */}
                             </div>
                             {/* Rapid Slash */}
                             <div className="skill">
-                                <div className="image-rapid" style={{
-                                    position: "absolute",
-                                    top: "-25px", left: "-25px", zIndex: 9,
-                                    width: "99px", height: "101px",
-                                    scale: ".4"
-                                }}></div>
-                                <CircularProgressbar
-                                    value={playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}
-                                    text={`${playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100}%`}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="image-rapid" style={{
+                                        position: "absolute",
+                                        top: "-25px", left: "-25px", zIndex: 9,
+                                        width: "99px", height: "101px",
+                                        scale: ".4"
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "none" : "block" }}></div>
+                                    {/* <div className="cd-timer" style={{ zIndex: 999, color: "lightblue" }}>{sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "" :
+                                        sukuna.rapidAttackCounter.currentCount + "/" + sukuna.rapidAttackCounter.maxCount}
+                                    </div> */}
+                                </div>
+
+                                {/* <CircularProgressbar
+                                    value={sukuna.rapidAttackCounter.currentCount / sukuna.rapidAttackCounter.maxCount * 100}
+                                    text={`${sukuna.rapidAttackCounter.currentCount / sukuna.rapidAttackCounter.maxCount * 100}%`}
                                     className="circular-skill-progress-bar"
                                     styles={buildStyles({
                                         // Text size
                                         textSize: '16px',
                                         // Colors
-                                        pathColor: (playerCharacter.rapidAttackCounter.currentCount / playerCharacter.rapidAttackCounter.maxCount * 100) >= 100 ? "green" : `rgba(62, 152, 199)`,
+                                        pathColor: (sukuna.rapidAttackCounter.currentCount / sukuna.rapidAttackCounter.maxCount * 100) >= 100 ? "green" : `rgba(62, 152, 199)`,
                                         textColor: 'transparent',
                                         trailColor: '#d6d6d6',
                                         backgroundColor: '#3e98c7',
                                     })}
-                                />
-                                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
-                                <p style={{ marginTop: "-10px" }}> {playerCharacter.rapidAttackCounter.currentCount >= playerCharacter.rapidAttackCounter.maxCount ? "Ready - J" : playerCharacter.rapidAttackCounter.currentCount + "/" + playerCharacter.rapidAttackCounter.maxCount} </p>
+                                /> */}
+                                <p style={{ marginTop: "5px", lineBreak: "loose" }}>Rapid attack:</p>
+                                <p style={{ marginTop: "-10px" }}> {sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "Ready - J" : sukuna.rapidAttackCounter.currentCount + "/" + sukuna.rapidAttackCounter.maxCount} </p>
                             </div>
                             {/* FURNITURE */}
                             <div className="skill">
-                                <div className="image-fuga" style={{
-                                    position: "absolute",
-                                    top: "-142px", left: "-114px", zIndex: 9,
-                                    width: "277px", height: "333px",
-                                    scale: ".10"
-                                }}></div>
-                                <CircularProgressbar
-                                    value={playerCharacter.fugaCounter.currentCount / playerCharacter.fugaCounter.maxCount * 100}
-                                    text={`${playerCharacter.fugaCounter.currentCount / playerCharacter.fugaCounter.maxCount * 100}%`}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="image-fuga" style={{
+                                        position: "absolute",
+                                        top: "-142px", left: "-114px", zIndex: 9,
+                                        width: "277px", height: "333px",
+                                        scale: ".10"
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount ? "none" : "block" }}></div>
+                                </div>
+
+                                {/* <CircularProgressbar
+                                    value={sukuna.fugaCounter.currentCount / sukuna.fugaCounter.maxCount * 100}
+                                    text={`${sukuna.fugaCounter.currentCount / sukuna.fugaCounter.maxCount * 100}%`}
                                     className="circular-skill-progress-bar"
                                     styles={buildStyles({
                                         // Text size
                                         textSize: '16px',
                                         // Colors
-                                        pathColor: (playerCharacter.fugaCounter.currentCount / playerCharacter.fugaCounter.maxCount * 100) >= 100 ? "red" : `rgba(62, 152, 199)`,
+                                        pathColor: (sukuna.fugaCounter.currentCount / sukuna.fugaCounter.maxCount * 100) >= 100 ? "red" : `rgba(62, 152, 199)`,
                                         textColor: 'transparent',
                                         trailColor: '#d6d6d6',
                                         backgroundColor: '#3e98c7',
                                     })}
-                                />
-                                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Fuga:</p>
-                                <p style={{ marginTop: "-10px" }}> {playerCharacter.fugaCounter.currentCount >= playerCharacter.fugaCounter.maxCount ? "Ready - F" : playerCharacter.fugaCounter.currentCount + "/" + playerCharacter.fugaCounter.maxCount} </p>
+                                /> */}
+                                <p style={{ marginTop: "5px", lineBreak: "loose" }}>Fuga:</p>
+                                <p style={{ marginTop: "-10px" }}> {sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount ? "Ready - F" : sukuna.fugaCounter.currentCount + "/" + sukuna.fugaCounter.maxCount} </p>
                             </div>
                         </div>
 
@@ -287,7 +375,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                     </div>
                 )}
 
-                {/* PLAYER INTERFACE COMPONENT FOR GOJO */}
+                {/* PLAYER INTERFACE COMPONENT FOR GOJO*/}
                 {playerCharacter.characterName === "gojo" && (
 
                     <div className="player-interface">
@@ -295,28 +383,49 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                         <div className="skills-container">
 
                             {/* Blue Attack */}
-                            <div className="skill" >
-                                <CircularProgressBar skillCD={playerCharacter.blueCD} />
-                                <img src={require('../Assets/blue.png')} alt="" style={{ scale: "0.6" }} />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>
+                            <div className="skill" onMouseEnter={(e) => handleMouseEnter("blue", e)}
+                                onMouseLeave={handleMouseLeave}>
+                                {/* <CircularProgressBar skillCD={playerCharacter.blueCD} /> */}
+                                {/* <img src={require('../Assets/blue.png')} alt="" style={{ scale: "0.6" }} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        filter: gojo.blueCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="gojo-blue-skill" style={{
+                                        scale: "0.4",
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: gojo.blueCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{gojo.blueCD.isReady ? "" : gojo.blueCD.remainingTime}</div>
+                                </div>
+                                {/*<p style={{ marginTop: "10px", lineBreak: "loose" }}>
                                     {keysPressed.current.shift ? "Charged BLUE" : "BLUE "}
                                 </p>
-                                <p style={{ marginTop: "-10px" }}>
+                                 <p style={{ marginTop: "-10px" }}>
                                     {playerCharacter.blueCD.isReady ?
                                         (playerCharacter.cursedEnergy.currentCursedEnergy >=
                                             (keysPressed.current.shift ? 100 : 50) ?
                                             (keysPressed.current.shift ? "Ready - SHIFT + E" : "Ready - E") :
                                             "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy +
                                             (keysPressed.current.shift ? "/100" : "/50")) :
-                                        (playerCharacter.blueCD.remainingTime + "sec")}</p>
+                                        (playerCharacter.blueCD.remainingTime + "sec")}</p> */}
                                 {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
                             </div>
 
-                            {/* Red Nue */}
+                            {/* Red  */}
                             <div className="skill">
-                                <CircularProgressBar skillCD={playerCharacter.redCD} />
-                                <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>
+                                {/* <CircularProgressBar skillCD={playerCharacter.redCD} /> */}
+                                {/* <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: gojo.redCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="gojo-red-skill" style={{ scale: "0.4" }}></div>
+                                    <div className="cooldown-fade" style={{ display: gojo.redCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{gojo.redCD.isReady ? "" : gojo.redCD.remainingTime}</div>
+                                </div>
+
+                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>
                                     {keysPressed.current.shift ? "Charged RED:" : "RED:"}</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {playerCharacter.redCD.isReady ?
@@ -325,29 +434,52 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                             (keysPressed.current.shift ? "Ready - SHIFT + R" : "Ready - R") :
                                             "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy +
                                             (keysPressed.current.shift ? "/150" : "/100")) :
-                                        (playerCharacter.redCD.remainingTime + "sec")}</p>
+                                        (playerCharacter.redCD.remainingTime + "sec")}</p> */}
                             </div>
 
 
                             {/* Purple Attack */}
                             <div className="skill">
-                                <CircularProgressBar skillCD={playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
-                                    playerCharacter.redCD : playerCharacter.blueCD} />
-                                <img src={require("../Assets/purple.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
+                                {/* <CircularProgressBar skillCD={playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
+                                    playerCharacter.redCD : playerCharacter.blueCD} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#4d00b5",
+                                        filter: gojo.redCD.isReady && gojo.blueCD.isReady ? "blur(1px)" : "blur(15px)",
+                                    }}></div>
+                                    <img src={require("../Assets/purple.png")} alt="" style={{ scale: "1.06", marginTop: "0px" }} />
+
+                                    <div className="cooldown-fade" style={{ display: gojo.redCD.isReady && gojo.blueCD.isReady ? "none" : "block" }}></div>
+                                    {/* <div className="cd-timer">{gojo.redCD.isReady && gojo.blueCD.isReady ? "" : gojo.redCD.remainingTime}</div> */}
+                                </div>
+                                {/*                                 
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>PURPLE:</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {playerCharacter.redCD.isReady && playerCharacter.blueCD.isReady ?
                                         (playerCharacter.cursedEnergy.currentCursedEnergy >= -purpleCost ? "Ready - E+R" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/" + (-purpleCost)) :
                                         (playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
-                                            (playerCharacter.redCD.remainingTime + "sec") : (playerCharacter.blueCD.remainingTime + "sec"))}</p>
+                                            (playerCharacter.redCD.remainingTime + "sec") : (playerCharacter.blueCD.remainingTime + "sec"))}</p> */}
                             </div>
 
                             {/* Domain Attack */}
                             <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(gojoSlice.actions.setDomainState(
                                 { ...gojo.domainStatus, forceExpand: true }))}>
-                                <CircularProgressBar skillCD={playerCharacter.domainCD} />
-                                <img src={require("../Assets/domain-hand.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
-                                <p>coming soon...</p>
+                                {/* <CircularProgressBar skillCD={playerCharacter.domainCD} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "black",
+                                        filter: gojo.redCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <img src={require("../Assets/domain-hand.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
+
+                                    <div className="cooldown-fade" style={{ display: gojo.domainCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{gojo.domainCD.isReady ? "" : gojo.domainCD.remainingTime}</div>
+                                </div>
+                                {/* <p style={{ marginTop: "10px", width: "65px", textAlign: "left" }}>INFINITE VOID:</p>
+                                <p style={{ marginTop: "-10px" }}>
+                                    {playerCharacter.domainCD.isReady ?
+                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - E+R" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/" + 200) :
+                                        playerCharacter.domainCD.remainingTime + "sec"}</p> */}
                             </div>
                         </div>
 
@@ -363,55 +495,92 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
                             {/* Cleave Attack */}
                             <div className="skill">
-                                <CircularProgressBar skillCD={sukuna.cleaveCD} />
-                                <div className="image-dismantle" style={{
-                                    position: "absolute",
-                                    top: "-22px", left: "-17px", zIndex: 9,
-                                    width: "99px", height: "101px",
-                                    scale: ".4"
-                                }}></div>
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Dismantle:</p>
+                                {/* <CircularProgressBar skillCD={sukuna.cleaveCD} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.cleaveCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="image-dismantle" style={{
+                                        position: "absolute",
+                                        top: "-22px", left: "-17px", zIndex: 9,
+                                        width: "99px", height: "101px",
+                                        scale: ".4"
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: sukuna.cleaveCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{sukuna.cleaveCD.isReady ? "" : sukuna.cleaveCD.remainingTime}</div>
+                                </div>
+                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Dismantle:</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {sukuna.cleaveCD.isReady ? "Ready - J" :
-                                        (sukuna.cleaveCD.remainingTime + "sec")}</p>
+                                        (sukuna.cleaveCD.remainingTime + "sec")}</p> */}
                             </div>
 
                             {/* Dismantle Attack */}
                             <div className="skill" >
-                                <CircularProgressBar skillCD={sukuna.dismantleCD} />
-                                <div className="image-cleave" style={{
-                                    position: "absolute",
-                                    top: "-25px", left: "-25px", zIndex: 9,
-                                    width: "99px", height: "101px",
-                                    scale: ".4"
-                                }}></div>
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Cleave:</p>
+                                {/* <CircularProgressBar skillCD={sukuna.dismantleCD} /> */}
+
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.dismantleCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="image-cleave" style={{
+                                        position: "absolute",
+                                        top: "-25px", left: "-25px", zIndex: 9,
+                                        width: "99px", height: "101px",
+                                        scale: ".4"
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: sukuna.dismantleCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{sukuna.dismantleCD.isReady ? "" : sukuna.dismantleCD.remainingTime}</div>
+                                </div>
+                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Cleave:</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {sukuna.dismantleCD.isReady ?
                                         (sukuna.closeRange ? "Ready - K" : "Get Closer") :
-                                        (sukuna.dismantleCD.remainingTime + "sec")}</p>
+                                        (sukuna.dismantleCD.remainingTime + "sec")}</p> */}
                                 {/* <p style={{ color: "black" }}>{playerCharacter.closeRange ? "close range" : "far range"}</p> */}
                             </div>
 
                             {/* Domain Attack */}
                             <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(sukunaSlice.actions.setDomainState(
                                 { ...sukuna.domainStatus, forceExpand: true }))}>
-                                <CircularProgressBar skillCD={rivalCharacter.domainCD} />
-                                <img src={require("../Assets/malevolent_shrine.png")} alt="" style={{}} />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Domain:</p>
-                                <p style={{ marginTop: "-10px" }}>{rivalCharacter.domainCD.isReady ?
+                                {/* <CircularProgressBar skillCD={rivalCharacter.domainCD} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.domainCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <img src={require("../Assets/malevolent_shrine.png")} alt="" style={{}} />
+
+                                    <div className="cooldown-fade" style={{ display: sukuna.domainCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{sukuna.domainCD.isReady ? "" : sukuna.domainCD.remainingTime}</div>
+                                </div>
+                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Domain:</p> */}
+                                {/* <p style={{ marginTop: "-10px" }}>{rivalCharacter.domainCD.isReady ?
                                     (rivalCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - L" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/200") :
-                                    (rivalCharacter.domainCD.remainingTime + "sec")}</p>
+                                    (rivalCharacter.domainCD.remainingTime + "sec")}</p> */}
                             </div>
                             {/* Rapid Slash */}
                             <div className="skill">
-                                <div className="image-rapid" style={{
-                                    position: "absolute",
-                                    top: "-25px", left: "-25px", zIndex: 9,
-                                    width: "99px", height: "101px",
-                                    scale: ".4"
-                                }}></div>
-                                <CircularProgressbar
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="image-rapid" style={{
+                                        position: "absolute",
+                                        top: "-25px", left: "-25px", zIndex: 9,
+                                        width: "99px", height: "101px",
+                                        scale: ".4"
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "none" : "block" }}></div>
+                                    {/* <div className="cd-timer" style={{ zIndex: 999, color: "lightblue" }}>{sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "" :
+                                        sukuna.rapidAttackCounter.currentCount + "/" + sukuna.rapidAttackCounter.maxCount}
+                                    </div> */}
+                                </div>
+
+                                {/* <CircularProgressbar
                                     value={sukuna.rapidAttackCounter.currentCount / sukuna.rapidAttackCounter.maxCount * 100}
                                     text={`${sukuna.rapidAttackCounter.currentCount / sukuna.rapidAttackCounter.maxCount * 100}%`}
                                     className="circular-skill-progress-bar"
@@ -424,19 +593,27 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                         trailColor: '#d6d6d6',
                                         backgroundColor: '#3e98c7',
                                     })}
-                                />
-                                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
+                                /> */}
+                                <p style={{ marginTop: "5px", lineBreak: "loose" }}>Rapid attack:</p>
                                 <p style={{ marginTop: "-10px" }}> {sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "Ready - J" : sukuna.rapidAttackCounter.currentCount + "/" + sukuna.rapidAttackCounter.maxCount} </p>
                             </div>
                             {/* FURNITURE */}
                             <div className="skill">
-                                <div className="image-fuga" style={{
-                                    position: "absolute",
-                                    top: "-142px", left: "-114px", zIndex: 9,
-                                    width: "277px", height: "333px",
-                                    scale: ".10"
-                                }}></div>
-                                <CircularProgressbar
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="image-fuga" style={{
+                                        position: "absolute",
+                                        top: "-142px", left: "-114px", zIndex: 9,
+                                        width: "277px", height: "333px",
+                                        scale: ".10"
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount ? "none" : "block" }}></div>
+                                </div>
+
+                                {/* <CircularProgressbar
                                     value={sukuna.fugaCounter.currentCount / sukuna.fugaCounter.maxCount * 100}
                                     text={`${sukuna.fugaCounter.currentCount / sukuna.fugaCounter.maxCount * 100}%`}
                                     className="circular-skill-progress-bar"
@@ -449,8 +626,8 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                         trailColor: '#d6d6d6',
                                         backgroundColor: '#3e98c7',
                                     })}
-                                />
-                                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Fuga:</p>
+                                /> */}
+                                <p style={{ marginTop: "5px", lineBreak: "loose" }}>Fuga:</p>
                                 <p style={{ marginTop: "-10px" }}> {sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount ? "Ready - F" : sukuna.fugaCounter.currentCount + "/" + sukuna.fugaCounter.maxCount} </p>
                             </div>
                         </div>
@@ -513,77 +690,89 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
                             {/* Blue Attack */}
                             <div className="skill" >
-                                <CircularProgressBar skillCD={rivalCharacter.blueCD} />
-                                <img src={require('../Assets/blue.png')} alt="" style={{ scale: "0.6" }} />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>Blue Attack:</p>
-                                <p style={{ marginTop: "-10px" }}>
-                                    {rivalCharacter.blueCD.isReady ?
-                                        "Ready - J" :
-                                        (rivalCharacter.blueCD.remainingTime + "sec")}</p>
-                                {/* <p style={{ color: "black" }}>{rivalCharacter.closeRange ? "close range" : "far range"}</p> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        filter: gojo.blueCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="gojo-blue-skill" style={{
+                                        scale: "0.4",
+                                    }}></div>
+                                    <div className="cooldown-fade" style={{ display: gojo.blueCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{gojo.blueCD.isReady ? "" : gojo.blueCD.remainingTime}</div>
+                                </div>
                             </div>
 
-                            {/* Red Nue */}
+                            {/* Red  */}
                             <div className="skill">
-                                <CircularProgressBar skillCD={rivalCharacter.redCD} />
-                                <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} />
-                                <p style={{ marginTop: "10px", lineBreak: "loose" }}>
-                                    Red Attack:</p>
+                                {/* <CircularProgressBar skillCD={playerCharacter.redCD} /> */}
+                                {/* <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#ac000e",
+                                        filter: gojo.redCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <div className="gojo-red-skill" style={{ scale: "0.4" }}></div>
+                                    <div className="cooldown-fade" style={{ display: gojo.redCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{gojo.redCD.isReady ? "" : gojo.redCD.remainingTime}</div>
+                                </div>
+
+                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>
+                                    {keysPressed.current.shift ? "Charged RED:" : "RED:"}</p>
                                 <p style={{ marginTop: "-10px" }}>
-                                    {rivalCharacter.redCD.isReady ?
-                                        (rivalCharacter.cursedEnergy.currentCursedEnergy >= 100 ? "Ready - K" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/100") :
-                                        (rivalCharacter.redCD.remainingTime + "sec")}</p>
+                                    {playerCharacter.redCD.isReady ?
+                                        (playerCharacter.cursedEnergy.currentCursedEnergy >=
+                                            (keysPressed.current.shift ? 150 : 100) ?
+                                            (keysPressed.current.shift ? "Ready - SHIFT + R" : "Ready - R") :
+                                            "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy +
+                                            (keysPressed.current.shift ? "/150" : "/100")) :
+                                        (playerCharacter.redCD.remainingTime + "sec")}</p> */}
                             </div>
 
 
                             {/* Purple Attack */}
                             <div className="skill">
-                                <CircularProgressBar skillCD={rivalCharacter.redCD.remainingTime > rivalCharacter.blueCD.remainingTime ?
-                                    rivalCharacter.redCD : rivalCharacter.blueCD} />
-                                <img src={require("../Assets/purple.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
+                                {/* <CircularProgressBar skillCD={playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
+                                    playerCharacter.redCD : playerCharacter.blueCD} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "#4d00b5",
+                                        filter: gojo.redCD.isReady && gojo.blueCD.isReady ? "blur(1px)" : "blur(15px)",
+                                    }}></div>
+                                    <img src={require("../Assets/purple.png")} alt="" style={{ scale: "1.06", marginTop: "0px" }} />
+
+                                    <div className="cooldown-fade" style={{ display: gojo.redCD.isReady && gojo.blueCD.isReady ? "none" : "block" }}></div>
+                                    {/* <div className="cd-timer">{gojo.redCD.isReady && gojo.blueCD.isReady ? "" : gojo.redCD.remainingTime}</div> */}
+                                </div>
+                                {/*                                 
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>PURPLE:</p>
                                 <p style={{ marginTop: "-10px" }}>
-                                    {rivalCharacter.redCD.isReady && rivalCharacter.blueCD.isReady ?
-                                        (rivalCharacter.cursedEnergy.currentCursedEnergy >= -purpleCost ? "Ready - E+R" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/" + (-purpleCost)) :
-                                        (rivalCharacter.redCD.remainingTime > rivalCharacter.blueCD.remainingTime ?
-                                            (rivalCharacter.redCD.remainingTime + "sec") : (rivalCharacter.blueCD.remainingTime + "sec"))}</p>
+                                    {playerCharacter.redCD.isReady && playerCharacter.blueCD.isReady ?
+                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= -purpleCost ? "Ready - E+R" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/" + (-purpleCost)) :
+                                        (playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
+                                            (playerCharacter.redCD.remainingTime + "sec") : (playerCharacter.blueCD.remainingTime + "sec"))}</p> */}
                             </div>
 
                             {/* Domain Attack */}
-                            <div className="skill">
-                                <CircularProgressBar skillCD={rivalCharacter.domainCD} />
-                                <img src={require("../Assets/domain-hand.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
-                                <p>coming soon...</p>
-                                {/* <p style={{ marginTop: "10px", lineBreak: "loose" }}>Infinite Void:</p>
+                            <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(gojoSlice.actions.setDomainState(
+                                { ...gojo.domainStatus, forceExpand: true }))}>
+                                {/* <CircularProgressBar skillCD={playerCharacter.domainCD} /> */}
+                                <div className="skill2-container">
+                                    <div className="color-effect" style={{
+                                        backgroundColor: "black",
+                                        filter: gojo.redCD.isReady ? "blur(5px)" : "blur(15px)",
+                                    }}></div>
+                                    <img src={require("../Assets/domain-hand.png")} alt="" style={{ scale: "0.8", marginTop: "0px" }} />
 
-                  <p style={{ marginTop: "-10px" }}>
-                    {rivalCharacter.purpleCD.isReady ?
-                      (rivalCharacter.purpleCD.isReady ? "Ready - L" : "CursedEnergy: " + rivalCharacter.cursedEnergy.currentCursedEnergy + "/200") :
-                      (rivalCharacter.purpleCD.remainingTime + "sec")}</p> */}
+                                    <div className="cooldown-fade" style={{ display: gojo.domainCD.isReady ? "none" : "block" }}></div>
+                                    <div className="cd-timer">{gojo.domainCD.isReady ? "" : gojo.domainCD.remainingTime}</div>
+                                </div>
+                                {/* <p style={{ marginTop: "10px", width: "65px", textAlign: "left" }}>INFINITE VOID:</p>
+                                <p style={{ marginTop: "-10px" }}>
+                                    {playerCharacter.domainCD.isReady ?
+                                        (playerCharacter.cursedEnergy.currentCursedEnergy >= 200 ? "Ready - E+R" : "CursedEnergy: " + playerCharacter.cursedEnergy.currentCursedEnergy + "/" + 200) :
+                                        playerCharacter.domainCD.remainingTime + "sec"}</p> */}
                             </div>
-
                         </div>
-                        {/* Rapid Slash
-              <div className="skill">
-                <img src={require("../Assets/slash.png")} alt="" />
-                <CircularProgressbar
-                  value={rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}
-                  text={`${rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100}%`}
-                  className="circular-skill-progress-bar"
-                  styles={buildStyles({
-                    // Text size
-                    textSize: '16px',
-                    // Colors
-                    pathColor: (rivalCharacter.rapidAttackCounter.currentCount / rivalCharacter.rapidAttackCounter.maxCount * 100) === 100 ? "green" : `rgba(62, 152, 199)`,
-                    textColor: 'transparent',
-                    trailColor: '#d6d6d6',
-                    backgroundColor: '#3e98c7',
-                  })}
-                />
-                <p style={{ marginTop: "60px", lineBreak: "loose" }}>Rapid attack:</p>
-                <p style={{ marginTop: "-10px" }}> {rivalCharacter.rapidAttackCounter.currentCount >= rivalCharacter.rapidAttackCounter.maxCount ? "Ready - J" : rivalCharacter.rapidAttackCounter.currentCount + "/" + rivalCharacter.rapidAttackCounter.maxCount} </p>
-              </div> */}
-
                     </div>
                 )}
             </div >

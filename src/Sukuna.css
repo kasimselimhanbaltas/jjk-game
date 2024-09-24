@@ -1,9 +1,10 @@
-.sukuna-container{
+.sukuna-container {
     position: absolute;
     align-items: center;
     justify-content: center;
     transition: all .2s ease;
 }
+
 .sukunaCC {
     position: absolute;
     z-index: 99;
@@ -15,6 +16,7 @@
     translate: 0px -20px;
     transition: all .2s ease, transform 0s;
 }
+
 .cleave {
     position: absolute;
     top: 50%;
@@ -24,6 +26,7 @@
     background: url(./Assets/sukuna-sprite.png);
     scale: 1;
 }
+
 .dismantle {
     position: absolute;
     width: 60px;
@@ -34,6 +37,7 @@
     transition: left .2s;
 
 }
+
 .rapid {
     position: absolute;
     transform: translate(-60%, -70%);
@@ -44,7 +48,8 @@
     height: 99px;
     animation: rapid 1.5s steps(1) infinite;
 }
-.domain-slash{
+
+.domain-slash {
     position: absolute;
     transform: translate(-60%, -70%);
     z-index: 99;
@@ -54,6 +59,7 @@
     animation: domain-slash 1s steps(1) infinite;
     transform-origin: 32px 50px !important;
 }
+
 @keyframes domain-slash {
     0% {
         background-position: -871px -1681px;
@@ -78,6 +84,7 @@
         width: 106px;
         height: 99px;
     }
+
     36% {
         background-position: -977px -1683px;
         width: 64px;
@@ -96,6 +103,7 @@
         width: 106px;
         height: 99px;
     }
+
     63% {
         background-position: -977px -1683px;
         width: 64px;
@@ -114,11 +122,13 @@
         width: 106px;
         height: 99px;
     }
+
     90% {
         background-position: -1357px -1702px;
         width: 79px;
         height: 93px;
     }
+
     100% {
         background-position: -1357px -1702px;
         width: 79px;
@@ -126,6 +136,7 @@
         transform: translate(-60%, -70%) scaleX(1);
     }
 }
+
 /* .divineDogBlack {
     position: absolute;
     top: 50%;
@@ -135,7 +146,7 @@
     padding: 5px;
     background: url(./Assets/sukuna-sprite.png);
     /* animation: walk-sukuna steps(1) 1s infinite; */
-    /* scale: 2; 
+/* scale: 2; 
 } */
 @keyframes entry-sukuna {
     0% {
@@ -164,28 +175,30 @@
         width: 33px;
         height: 52px;
         translate: 3px -20px;
-        }
+    }
+
     40% {
         background-position: -463px -269px;
         width: 83px;
         height: 51px;
         translate: -27px -20px;
     }
-            
+
     50% {
         background-position: -560px -268px;
         width: 85px;
         height: 55px;
         translate: -23px -16px;
     }
+
     60% {
         background-position: -652px -269px;
         width: 83px;
         height: 58px;
         translate: -18px -12px;
     }
-        
-     70% {
+
+    70% {
         background-position: -744px -274px;
         width: 98px;
         height: 55px;
@@ -198,19 +211,22 @@
         height: 55px;
         translate: -27px -14px;
     }
+
     90% {
         background-position: -965px -280px;
         width: 73px;
         height: 55px;
         translate: -15px -14px;
-    } 
+    }
+
     100% {
         background-position: -965px -280px;
         width: 73px;
         height: 55px;
-        translate: -15px -14px; 
+        translate: -15px -14px;
     }
 }
+
 @keyframes stance-sukuna {
     0% {
         background-position: -497px -190px;
@@ -248,31 +264,7 @@
         height: 52px;
     } */
 }
-@keyframes walk-sukuna {
-    0% {
-        background-position: -245px -367px;
-        width: 20px;
-        height: 51px;
-    }
 
-    25% {
-        background-position: -280px -366px;
-        width: 21px;
-        height: 52px;
-    }
-
-    50% {
-        background-position: -245px -367px;
-        width: 20px;
-        height: 51px;
-    }
-
-    75% {
-        background-position: -210px -367px;
-        width: 21px;
-        height: 51px;
-    }
-}
 @keyframes sukuna-walk {
     0% {
         background-position: -126px -188px;
@@ -326,6 +318,7 @@
         height: 51px;
     }
 }
+
 @keyframes sukuna-walk-left {
     0% {
         background-position: -126px -188px;
@@ -376,6 +369,7 @@
         translate: -3px -20px;
     }
 }
+
 @keyframes jump-sukuna {
     0% {
         background-position: -618px -384px;
@@ -400,12 +394,14 @@
         width: 40px;
         height: 34px;
     }
+
     100% {
         background-position: -764px -399px;
         width: 40px;
         height: 34px;
     }
 }
+
 @keyframes land-sukuna {
     0% {
         background-position: -723px -366px;
@@ -418,12 +414,14 @@
         width: 40px;
         height: 34px;
     }
+
     100% {
         background-position: -764px -399px;
         width: 40px;
         height: 34px;
     }
 }
+
 @keyframes backflip-sukuna {
     0% {
         background-position: -95px -999px;
@@ -473,6 +471,7 @@
         height: 38px;
     }
 }
+
 @keyframes dash-sukuna {
     0% {
         background-position: -749px -1036px;
@@ -492,6 +491,7 @@
         height: 36px;
     }
 }
+
 @keyframes sukuna-launch-knee {
     0% {
         background-position: -450px -498px;
@@ -540,6 +540,7 @@
         translate: 55px -10px;
     }
 }
+
 /* @keyframes sukuna-cleave-right {
     0% {
         background-position: -744px -1687px;
@@ -623,14 +624,16 @@
         height: 126px;
         translate: 33px 16px;
     }
+
     100% {
         background-position: -497px -1666px;
         width: 128px;
         height: 126px;
     }
 }
+
 @keyframes sukuna-cleave-left {
-0% {
+    0% {
         background-position: -76px -1698px;
         width: 35px;
         height: 41px;
@@ -678,6 +681,7 @@
         height: 126px;
     }
 }
+
 @keyframes sukuna-rapid-right {
     0% {
         background-position: -744px -1687px;
@@ -699,6 +703,7 @@
         translate: 7px -20px;
     }
 }
+
 @keyframes sukuna-rapid-left {
     0% {
         background-position: -744px -1687px;
@@ -721,6 +726,7 @@
         translate: -22px -20px;
     }
 }
+
 @keyframes sukuna-dismantle-right {
     0% {
         background-position: -83px -469px;
@@ -763,12 +769,14 @@
         translate: 0px -20px;
     }
 }
+
 @keyframes sukuna-dismantle-left {
     0% {
         background-position: -83px -469px;
         width: 21px;
         height: 51px;
     }
+
     15% {
         background-position: -133px -471px;
         width: 23px;
@@ -804,6 +812,7 @@
         translate: 0px -20px;
     }
 }
+
 @keyframes sukuna-domain-pose {
     0% {
         background-position: -815px -2005px;
@@ -835,6 +844,7 @@
         height: 51px;
         animation-fill-mode: forwards;
     }
+
     100% {
         background-position: -998px -2009px;
         width: 22px;
@@ -842,6 +852,7 @@
         animation-fill-mode: forwards;
     }
 }
+
 @keyframes rapid {
     0% {
         background-position: -871px -1681px;
@@ -866,6 +877,7 @@
         width: 106px;
         height: 99px;
     }
+
     36% {
         background-position: -977px -1683px;
         width: 64px;
@@ -884,6 +896,7 @@
         width: 106px;
         height: 99px;
     }
+
     63% {
         background-position: -977px -1683px;
         width: 64px;
@@ -902,17 +915,20 @@
         width: 106px;
         height: 99px;
     }
+
     90% {
         background-position: -1357px -1702px;
         width: 79px;
         height: 93px;
     }
+
     100% {
         background-position: -1357px -1702px;
         width: 79px;
         height: 93px;
     }
 }
+
 @keyframes sukuna-kick {
     0% {
         background-position: -142px -1195px;
@@ -986,12 +1002,14 @@
         width: 36px;
         height: 33px;
     }
+
     100% {
         background-position: -935px -1216px;
         width: 36px;
         height: 33px;
     }
 }
+
 @keyframes sukuna-failed-kick {
     0% {
         background-position: -142px -1195px;
@@ -999,34 +1017,40 @@
         height: 44px;
         scale: 2;
     }
+
     50% {
         background-position: -205px -1193px;
         width: 33px;
         height: 43px;
     }
+
     100% {
         background-position: -205px -1193px;
         width: 33px;
         height: 43px;
     }
 }
+
 @keyframes sukuna-take-damage {
     0% {
         background-position: -621px -2010px;
         width: 34px;
         height: 37px;
     }
+
     20% {
         background-position: -668px -2012px;
         width: 38px;
         height: 27px;
     }
+
     80% {
         background-position: -764px -399px;
         width: 40px;
         height: 34px;
         translate: 0px -15px;
     }
+
     100% {
         background-position: -764px -399px;
         width: 40px;
@@ -1034,6 +1058,7 @@
         translate: 0px -15px;
     }
 }
+
 .sukuna-bam-effect {
     position: absolute;
     width: 142px;
@@ -1042,6 +1067,7 @@
     display: none;
     /* animation: sukuna-bam-effect steps(1) 1s infinite; */
 }
+
 @keyframes sukuna-bam-effect {
     0% {
         background-position: -302px -1496px;
@@ -1061,7 +1087,6 @@
         width: 197px;
         height: 84px;
         translate: -30px
-        
     }
 
     75% {
@@ -1071,6 +1096,7 @@
         translate: -25px
     }
 }
+
 @keyframes sukuna-bam {
     0% {
         background-position: -80px -1351px;
@@ -1138,49 +1164,57 @@
         height: 38px;
     }
 }
+
 @keyframes sukuna-fuga-before-scene {
-    0% {  /* 4x0*/
+    0% {
+        /* 4x0*/
         background-position: -88px -2121px;
         width: 23px;
         height: 50px;
     }
 
-    5% { /* 4x0*/
+    5% {
+        /* 4x0*/
         background-position: -128px -2120px;
         width: 23px;
         height: 50px;
         translate: 0px -20px;
     }
 
-    10% {/* 8x0*/
+    10% {
+        /* 8x0*/
         background-position: -176px -2120px;
         width: 25px;
         height: 50px;
         translate: -2px -20px;
     }
 
-    15% {/* 12x0*/
+    15% {
+        /* 12x0*/
         background-position: -229px -2122px;
         width: 27px;
         height: 50px;
         translate: -5px -20px;
     }
 
-    20% {/* 13x0*/
+    20% {
+        /* 13x0*/
         background-position: -271px -2121px;
         width: 28px;
         height: 50px;
         translate: -6px -20px;
     }
 
-    25% {/* 8x0*/
+    25% {
+        /* 8x0*/
         background-position: -317px -2122px;
         width: 26px;
         height: 50px;
         translate: -2px -20px;
     }
 
-    30% { /*4x0*/
+    30% {
+        /*4x0*/
         background-position: -360px -2123px;
         width: 24px;
         height: 50px;
@@ -1197,21 +1231,25 @@
         translate: 0px -18px;
 
     }
+
     72% {
         background-position: -400px -2124px;
         translate: 0px -20px;
     }
+
     80% {
         background-position: -360px -2124px;
     }
+
     88% {
         background-position: -400px -2124px;
     }
 
     96% {
         background-position: -360px -2124px;
-    }  
+    }
 }
+
 @keyframes sukuna-fuga-before-scene-left {
     0% {
         background-position: -88px -2121px;
@@ -1265,11 +1303,13 @@
         width: 24px;
         height: 50px;
     }
+
     64% {
         background-position: -360px -2124px;
         width: 24px;
         height: 50px;
     }
+
     72% {
         background-position: -400px -2124px;
         width: 24px;
@@ -1294,6 +1334,7 @@
         height: 50px;
     }
 }
+
 @keyframes sukuna-fuga-after-scene {
     0% {
         background-position: -80px -2616px;
@@ -1350,6 +1391,7 @@
         height: 59px;
     }
 }
+
 @keyframes sukuna-fuga-after-scene-left {
     0% {
         background-position: -80px -2616px;
@@ -1406,6 +1448,7 @@
         height: 59px;
     }
 }
+
 @keyframes fire-arrow {
     0% {
         background-position: -780px -2629px;
@@ -1431,6 +1474,7 @@
         height: 43px;
     }
 }
+
 @keyframes fuga-explosion {
     0% {
         background-position: -79px -2851px;
@@ -1474,6 +1518,7 @@
         height: 360px;
     }
 }
+
 @keyframes fuga-scene {
     0% {
         background-position: -4px -4px;
@@ -1597,17 +1642,23 @@
 
     100% {}
 }
-.image-cleave{
+
+.image-cleave {
     background: url(./Assets/sukuna-sprite.png) -1071px -1689px;
 }
+
 .image-dismantle {
     background: url(./Assets/sukuna-sprite.png) -871px -1681px;
-}.image-rapid {
+}
+
+.image-rapid {
     background: url(./Assets/sukuna-sprite.png) -1201px -1691px;
 }
+
 .image-fuga {
     background: url(./Assets/sukuna-sprite.png) -104px -3193px;
 }
+
 .fuga-scene {
     position: absolute;
     z-index: 5;
@@ -1616,13 +1667,15 @@
     scale: .7;
     background: url(./Assets/texture.png);
 }
-.fire-arrow{
+
+.fire-arrow {
     position: absolute;
     width: 143px;
     height: 35px;
-    transition: all .5s, transform 0s, opacity 0s; 
+    transition: all .5s, transform 0s, opacity 0s;
     background: url(./Assets/sukuna-sprite.png);
 }
+
 .fuga-explosion {
     position: absolute;
     z-index: 5;
@@ -1635,6 +1688,7 @@
     /* opacity: 1 !important;
     animation: fuga-explosion 1s steps(1) infinite; */
 }
+
 .sukuna-domain-amplification {
     width: 90px;
     height: 120px;

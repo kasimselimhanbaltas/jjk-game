@@ -692,7 +692,7 @@ const GameArea = () => {
       photoInterval = setInterval(() => {
         console.log("taking a photo")
         takePhoto()
-      }, 300);
+      }, 1000);
     }
     return () => {
       clearInterval(photoInterval);

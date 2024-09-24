@@ -508,7 +508,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             }
             if (keysPressed.current.c) {
                 // if DA already active, end it 
-                console.log("gojo SD: ", gojo.simpleDomain.isActive)
+                // console.log("gojo SD: ", gojo.simpleDomain.isActive)
                 // if (gojo.simpleDomain.isActive) {
                 //     dispatch(gojoSlice.actions.setSimpleDomain({ ...gojo.simpleDomain, isActive: false }))
                 // }
