@@ -5,11 +5,11 @@ import React, { useEffect, useState } from "react";
 import sukunaSlice from "../redux/character-slices/SukunaSlice";
 import gojoSlice from "../redux/character-slices/GojoSlice";
 
-const Tooltip = ({ text, position }) => {
+const Tooltip = ({ skill }) => {
     return (
-        <div className="tooltip" style={{ top: position.top, left: position.left }}>
-            <p style={{ color: "white", lineBreak: "anywhere" }}>
-                {text}
+        <div className="tooltip" style={{ top: "480px", left: 100 + skill.index * 43 }}>
+            <p style={{ color: "white", whiteSpace: "pre-wrap" }}>
+                {skill.text}
             </p>
         </div>
     );
@@ -52,25 +52,21 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
     }, []);
     const [hoveredSkill, setHoveredSkill] = useState(null);
-    const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
     const skillDescriptions = {
-        blue: "Gojo'nun BLUE yeteneği: Yüksek hızda enerji patlaması.",
-        red: "Gojo'nun RED yeteneği: Yüksek hasarlı saldırı.",
+        blue: { index: 0, text: "Cursed Technique Lapse: Blue \n Use infinity's gravitional power to damage and pull your enemies." },
+        red: { index: 1, text: "Cursed Technique Reversal: Red\n Use infinity's explosive power to damage and knock back your enemies. " },
+        purple: { index: 2, text: "Hollow Technique: Purple\n Collide the Lapse and Reversal of the Limitless, resulting in an imaginary mass that is launched at the target to deal destructive damage." },
+        domain: { index: 3, text: "Domain Expansion: Unlimited Void\n Expand your domain to deal massive damage and stun all enemies." },
         // Diğer skill açıklamaları buraya eklenebilir
     };
 
     const handleMouseEnter = (skill, event) => {
-        const rect = event.target.getBoundingClientRect(); // Skill butonunun pozisyonunu al
-        console.log(rect)
         setHoveredSkill(skill);
+        console.log(skillDescriptions[skill])
         // setTooltipPosition({
         //     top: rect.top - 40, // Tooltip'in yukarıda görünmesi için ayarlama
         //     left: rect.left + rect.width / 2 - 50, // Tooltip'i ortalamak için ayarlama
         // });
-        setTooltipPosition({
-            top: 500, // Tooltip'in yukarıda görünmesi için ayarlama
-            left: rect.left + rect.width / 2 - 50, // Tooltip'i ortalamak için ayarlama
-        });
     };
 
     const handleMouseLeave = () => {
@@ -153,13 +149,12 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
             <div>
                 {/* Eğer hover edilen bir skill varsa Tooltip göster */}
-                {/* {hoveredSkill && (
+                {hoveredSkill && (
                     <Tooltip
-                        text={skillDescriptions[hoveredSkill]}
-                        position={tooltipPosition}
+                        skill={skillDescriptions[hoveredSkill]}
                     // position={{ top: "200px", left: "300px" }}
                     />
-                )} */}
+                )}
                 {/* PLAYER INTERFACE COMPONENT FOR SUKUNA */}
                 {playerCharacter.characterName === "sukuna" && (
 
@@ -412,7 +407,8 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Red  */}
-                            <div className="skill">
+                            <div className="skill" onMouseEnter={(e) => handleMouseEnter("red", e)}
+                                onMouseLeave={handleMouseLeave}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.redCD} /> */}
                                 {/* <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} /> */}
                                 <div className="skill2-container">
@@ -439,7 +435,8 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
 
                             {/* Purple Attack */}
-                            <div className="skill">
+                            <div className="skill" onMouseEnter={(e) => handleMouseEnter("purple", e)}
+                                onMouseLeave={handleMouseLeave}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
                                     playerCharacter.redCD : playerCharacter.blueCD} /> */}
                                 <div className="skill2-container">
@@ -462,8 +459,9 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Domain Attack */}
-                            <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(gojoSlice.actions.setDomainState(
-                                { ...gojo.domainStatus, forceExpand: true }))}>
+                            <div className="skill" onMouseEnter={(e) => handleMouseEnter("domain", e)}
+                                onMouseLeave={handleMouseLeave} style={{ cursor: "pointer" }} onClick={() => dispatch(gojoSlice.actions.setDomainState(
+                                    { ...gojo.domainStatus, forceExpand: true }))}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.domainCD} /> */}
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
