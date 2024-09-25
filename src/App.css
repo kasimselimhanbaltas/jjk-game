@@ -205,10 +205,61 @@
   z-index: 1000;
   pointer-events: none;
   transform: translate(-50%, -100%);
-  transition: opacity 0.3s ease;
+  transition: all .2s ease, opacity 0.3s ease;
   max-width: 200px;
-  z-index: 999;
 }
+
+.skill::before,
+.skill::after {
+  --scale: 0;
+  --arrow-size: 20px;
+  --tooltip-color: rgba(0, 0, 0, 0.75);
+
+  position: absolute;
+  top: -.25rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+  transition: 150ms transform;
+  transform-origin: bottom center;
+}
+
+.skill::before {
+  --translate-y: calc(-100% - var(--arrow-size));
+
+  content: attr(data-tooltip);
+  color: white;
+  padding: .5rem;
+  border-radius: .3rem;
+  text-align: center;
+  width: max-content;
+  max-width: 200px;
+  background: var(--tooltip-color);
+  font-size: 18px;
+}
+
+.stylecontrolleft::before {
+  margin-left: 50px !important;
+}
+
+.stylecontrolright::before {
+  margin-left: -50px !important;
+}
+
+
+.skill:hover::before,
+.skill:hover::after {
+  --scale: 1;
+}
+
+.skill::after {
+  --translate-y: calc(-1 * var(--arrow-size));
+
+  content: '';
+  border: var(--arrow-size) solid transparent;
+  border-top-color: var(--tooltip-color);
+  transform-origin: top center;
+}
+
 
 .character-menu {
   display: flex;
@@ -940,7 +991,8 @@ body {
   outline: none;
   border: none;
   cursor: pointer;
-  scale: .5
+  scale: .5;
+  transition: all .2s ease;
 }
 
 .open-camera {
@@ -957,7 +1009,13 @@ body {
   outline: none;
   border: none;
   cursor: pointer;
-  scale: .5
+  scale: .5;
+  transition: all .2s ease;
+}
+
+.open-camera:hover,
+.return-to-mainmenu:hover {
+  scale: .6;
 }
 
 .gojo-menu {

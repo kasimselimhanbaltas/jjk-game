@@ -53,10 +53,16 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
     }, []);
     const [hoveredSkill, setHoveredSkill] = useState(null);
     const skillDescriptions = {
-        blue: { index: 0, text: "Cursed Technique Lapse: Blue \n Use infinity's gravitional power to damage and pull your enemies." },
-        red: { index: 1, text: "Cursed Technique Reversal: Red\n Use infinity's explosive power to damage and knock back your enemies. " },
-        purple: { index: 2, text: "Hollow Technique: Purple\n Collide the Lapse and Reversal of the Limitless, resulting in an imaginary mass that is launched at the target to deal destructive damage." },
-        domain: { index: 3, text: "Domain Expansion: Unlimited Void\n Expand your domain to deal massive damage and stun all enemies." },
+        blue: "Cursed Technique Lapse: Blue \n Use infinity's gravitional power to damage and pull your enemies.",
+        red: "Cursed Technique Reversal: Red\n Use infinity's explosive power to damage and knock back your enemies. ",
+        purple: "Hollow Technique: Purple\n Collide the Lapse and Reversal of the Limitless, resulting in an imaginary mass that is launched at the target to deal destructive damage.",
+        domain: "Domain Expansion: Unlimited Void\n Expand your domain to deal massive damage and stun all enemies.",
+        dismantle: "Sukuna's default ranged slashing attack that can be used against cursed spirits and sorcerers to great effectiveness.",
+        cleave: "A slashing attack that adjusts itself depending on the target's toughness and cursed energy level to cut them down in one fell swoop.",
+        shrine: "Everything within the domain is relentlessly slashed with either Dismantle or Cleave, depending on its cursed energy level. ",
+        rapidSlash: "Sukuna makes a rapid slashing attack to single target",
+        fuga: "Sukuna can create and manipulate fire for long-range attack by chanting (Fūga) and forming an arrow. "
+
         // Diğer skill açıklamaları buraya eklenebilir
     };
 
@@ -162,8 +168,8 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
                         <div className="skills-container">
 
-                            {/* Cleave Attack */}
-                            <div className="skill">
+                            {/* Dismantle Attack */}
+                            <div className="skill stylecontrolleft" data-tooltip={skillDescriptions.dismantle}>
                                 {/* <CircularProgressBar skillCD={sukuna.cleaveCD} /> */}
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
@@ -185,8 +191,8 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                         (sukuna.cleaveCD.remainingTime + "sec")}</p> */}
                             </div>
 
-                            {/* Dismantle Attack */}
-                            <div className="skill" >
+                            {/* Cleave Attack */}
+                            <div className="skill" data-tooltip={skillDescriptions.cleave}>
                                 {/* <CircularProgressBar skillCD={sukuna.dismantleCD} /> */}
 
                                 <div className="skill2-container">
@@ -212,8 +218,9 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Domain Attack */}
-                            <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(sukunaSlice.actions.setDomainState(
-                                { ...sukuna.domainStatus, forceExpand: true }))}>
+                            <div className="skill" data-tooltip={skillDescriptions.shrine}
+                                style={{ cursor: "pointer" }} onClick={() => dispatch(sukunaSlice.actions.setDomainState(
+                                    { ...sukuna.domainStatus, forceExpand: true }))}>
                                 {/* <CircularProgressBar skillCD={rivalCharacter.domainCD} /> */}
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
@@ -231,7 +238,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                     (rivalCharacter.domainCD.remainingTime + "sec")}</p> */}
                             </div>
                             {/* Rapid Slash */}
-                            <div className="skill">
+                            <div className="skill" data-tooltip={skillDescriptions.rapidSlash}>
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
                                         backgroundColor: "#ac000e",
@@ -267,7 +274,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 <p style={{ marginTop: "-10px" }}> {sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "Ready - J" : sukuna.rapidAttackCounter.currentCount + "/" + sukuna.rapidAttackCounter.maxCount} </p>
                             </div>
                             {/* FURNITURE */}
-                            <div className="skill">
+                            <div className="skill" data-tooltip={skillDescriptions.fuga}>
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
                                         backgroundColor: "#ac000e",
@@ -378,8 +385,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                         <div className="skills-container">
 
                             {/* Blue Attack */}
-                            <div className="skill" onMouseEnter={(e) => handleMouseEnter("blue", e)}
-                                onMouseLeave={handleMouseLeave}>
+                            <div className="skill stylecontrolleft" data-tooltip={skillDescriptions.blue}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.blueCD} /> */}
                                 {/* <img src={require('../Assets/blue.png')} alt="" style={{ scale: "0.6" }} /> */}
                                 <div className="skill2-container">
@@ -407,8 +413,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Red  */}
-                            <div className="skill" onMouseEnter={(e) => handleMouseEnter("red", e)}
-                                onMouseLeave={handleMouseLeave}>
+                            <div className="skill" data-tooltip={skillDescriptions.red}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.redCD} /> */}
                                 {/* <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} /> */}
                                 <div className="skill2-container">
@@ -435,8 +440,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
 
                             {/* Purple Attack */}
-                            <div className="skill" onMouseEnter={(e) => handleMouseEnter("purple", e)}
-                                onMouseLeave={handleMouseLeave}>
+                            <div className="skill" data-tooltip={skillDescriptions.purple}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
                                     playerCharacter.redCD : playerCharacter.blueCD} /> */}
                                 <div className="skill2-container">
@@ -459,8 +463,8 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Domain Attack */}
-                            <div className="skill" onMouseEnter={(e) => handleMouseEnter("domain", e)}
-                                onMouseLeave={handleMouseLeave} style={{ cursor: "pointer" }} onClick={() => dispatch(gojoSlice.actions.setDomainState(
+                            <div className="skill" data-tooltip={skillDescriptions.domain}
+                                style={{ cursor: "pointer" }} onClick={() => dispatch(gojoSlice.actions.setDomainState(
                                     { ...gojo.domainStatus, forceExpand: true }))}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.domainCD} /> */}
                                 <div className="skill2-container">
@@ -492,7 +496,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                         <div className="skills-container" style={{ marginLeft: "200px" }}>
 
                             {/* Cleave Attack */}
-                            <div className="skill">
+                            <div className="skill" data-tooltip={skillDescriptions.dismantle}>
                                 {/* <CircularProgressBar skillCD={sukuna.cleaveCD} /> */}
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
@@ -515,7 +519,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Dismantle Attack */}
-                            <div className="skill" >
+                            <div className="skill" data-tooltip={skillDescriptions.cleave}>
                                 {/* <CircularProgressBar skillCD={sukuna.dismantleCD} /> */}
 
                                 <div className="skill2-container">
@@ -541,8 +545,9 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Domain Attack */}
-                            <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(sukunaSlice.actions.setDomainState(
-                                { ...sukuna.domainStatus, forceExpand: true }))}>
+                            <div className="skill" data-tooltip={skillDescriptions.shrine}
+                                style={{ cursor: "pointer" }} onClick={() => dispatch(sukunaSlice.actions.setDomainState(
+                                    { ...sukuna.domainStatus, forceExpand: true }))}>
                                 {/* <CircularProgressBar skillCD={rivalCharacter.domainCD} /> */}
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
@@ -560,7 +565,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                     (rivalCharacter.domainCD.remainingTime + "sec")}</p> */}
                             </div>
                             {/* Rapid Slash */}
-                            <div className="skill">
+                            <div className="skill" data-tooltip={skillDescriptions.rapidSlash}>
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
                                         backgroundColor: "#ac000e",
@@ -596,7 +601,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                                 <p style={{ marginTop: "-10px" }}> {sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount ? "Ready - J" : sukuna.rapidAttackCounter.currentCount + "/" + sukuna.rapidAttackCounter.maxCount} </p>
                             </div>
                             {/* FURNITURE */}
-                            <div className="skill">
+                            <div className="skill stylecontrolright" data-tooltip={skillDescriptions.fuga}>
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
                                         backgroundColor: "#ac000e",
@@ -687,7 +692,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                         <div className="skills-container" style={{ marginLeft: "300px" }}>
 
                             {/* Blue Attack */}
-                            <div className="skill" >
+                            <div className="skill" data-tooltip={skillDescriptions.blue}>
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
                                         filter: gojo.blueCD.isReady ? "blur(5px)" : "blur(15px)",
@@ -701,7 +706,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Red  */}
-                            <div className="skill">
+                            <div className="skill" data-tooltip={skillDescriptions.red}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.redCD} /> */}
                                 {/* <img src={require("../Assets/red.png")} alt="" style={{ scale: "0.6", marginTop: "0px" }} /> */}
                                 <div className="skill2-container">
@@ -728,7 +733,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
 
 
                             {/* Purple Attack */}
-                            <div className="skill">
+                            <div className="skill" data-tooltip={skillDescriptions.purple}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.redCD.remainingTime > playerCharacter.blueCD.remainingTime ?
                                     playerCharacter.redCD : playerCharacter.blueCD} /> */}
                                 <div className="skill2-container">
@@ -751,8 +756,9 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             </div>
 
                             {/* Domain Attack */}
-                            <div className="skill" style={{ cursor: "pointer" }} onClick={() => dispatch(gojoSlice.actions.setDomainState(
-                                { ...gojo.domainStatus, forceExpand: true }))}>
+                            <div className="skill stylecontrolright" data-tooltip={skillDescriptions.domain}
+                                style={{ cursor: "pointer" }} onClick={() => dispatch(gojoSlice.actions.setDomainState(
+                                    { ...gojo.domainStatus, forceExpand: true }))}>
                                 {/* <CircularProgressBar skillCD={playerCharacter.domainCD} /> */}
                                 <div className="skill2-container">
                                     <div className="color-effect" style={{
