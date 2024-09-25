@@ -72,6 +72,15 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
     setShowTutorialMenu(false)
     dispatch(gameSettingsSlice.actions.setTutorial(false));
   };
+  const swapCharacters = () => {
+    if (gameSettings.selectedCharacter === "sukuna") {
+      dispatch(gameSettingsSlice.actions.selectRivalCharacter("sukuna"));
+      dispatch(gameSettingsSlice.actions.selectCharacter("gojo"));
+    } else {
+      dispatch(gameSettingsSlice.actions.selectRivalCharacter("gojo"));
+      dispatch(gameSettingsSlice.actions.selectCharacter("sukuna"));
+    }
+  }
   return (
     <div className="main-screen">
       {localStorage.getItem('username') && showMainMenu && (
@@ -134,9 +143,13 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
               ></div>
             </button>
 
-            <button className="small-button long-button" onClick={() => { setShowCharacterMenu(true); setShowMainMenu(false) }}
+            <button className="small-button long-button" onClick={() => {
+              // setShowCharacterMenu(true); setShowMainMenu(false) 
+              swapCharacters()
+            }}
             // style={{ marginTop: "30px" }}
-            >Select Character</button>
+            >
+              {gameSettings.selectedCharacter === "gojo" ? "Play as Sukuna" : "Play as Gojo"}</button>
             <button className="small-button" onClick={tutorialMenu}>Tutorial</button>
             <button className="small-button">Options</button>
             <button className="small-button" onClick={onShowControls}>Controls</button>
