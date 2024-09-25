@@ -333,7 +333,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             {/* Call Nue */}
                             <div className="skill">
                                 <CircularProgressBar skillCD={playerCharacter.callNueCD} />
-                                <img src={require("../Assets/nue.png")} alt="" style={{ scale: "0.8", marginTop: "5px" }} />
+                                {/* <img src={require("../Assets/nue.png")} alt="" style={{ scale: "0.8", marginTop: "5px" }} /> */}
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>
                                     {nue.isActive ? "Cancel Nue:" : "Call Nue:"}</p>
                                 <p style={{ marginTop: "-10px" }}>
@@ -661,7 +661,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             {/* Call Nue */}
                             <div className="skill">
                                 <CircularProgressBar skillCD={rivalCharacter.callNueCD} />
-                                <img src={require("../Assets/nue.png")} alt="" style={{ scale: "0.8", marginTop: "5px" }} />
+                                {/* <img src={require("../Assets/nue.png")} alt="" style={{ scale: "0.8", marginTop: "5px" }} /> */}
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>
                                     {nue.isActive ? "Cancel Nue:" : "Call Nue:"}</p>
                                 <p style={{ marginTop: "-10px" }}>
@@ -673,7 +673,7 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
                             {/* Domain Attack */}
                             <div className="skill">
                                 <CircularProgressBar skillCD={rivalCharacter.divineDogsCD} />
-                                <img src={require("../Assets/white-wolf.png")} alt="" style={{ scale: "0.8", marginTop: "10px" }} />
+                                {/* <img src={require("../Assets/white-wolf.png")} alt="" style={{ scale: "0.8", marginTop: "10px" }} /> */}
                                 <p style={{ marginTop: "10px", lineBreak: "loose" }}>Wolf Attack:</p>
                                 <p style={{ marginTop: "-10px" }}>
                                     {rivalCharacter.divineDogsCD.isReady ?

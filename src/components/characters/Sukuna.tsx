@@ -1292,12 +1292,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 {/* <img src={sukunaImage.src} alt="" style={{ transition: "transform 1s", height: characterHeight, transform: "scale(" + sukunaImage.scale + ")" }} /> */}
                 <img src={require('../../Assets/electricity.png')} alt="" style={{ position: "absolute", top: "-55px", left: "-20px", display: electricityEffect ? "block" : "none", height: "60px", width: "50px", opacity: 0.8, scale: "1.2", zIndex: 999 }} />
                 <img src={require('../../Assets/claw-mark.png')} alt="" style={{ position: "absolute", top: "-75px", left: "-20px", display: divineDogs.isAttacking ? "block" : "none", height: "80px", width: "70px", opacity: 0.8, scale: "1.2" }} />
-                {/* <img src={require(`../../Assets/guard.png`)} alt="" style={{
-                    display: sukuna.isBlocking ? "block" : "none",
-                    position: "absolute", top: -110, left: -15,
-                    height: 120, width: 120, opacity: 0.8, scale: "1",
-                    transform: "translate(-30%,0)"
-                }} /> */}
+
                 <div className="sukuna-domain-amplification" style={{
                     display: sukuna.isBlocking ? "block" : "none",
                     position: "absolute", top: -110, left: -13,

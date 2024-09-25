@@ -58,7 +58,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
     dispatch(gameSettingsSlice.actions.setTutorial(true));
     setShowMainMenu(false);
     setShowTutorialMenu(true);
-    // onTutorialSelected();
+    onTutorialSelected();
     // onStartGame();
   }
   const tutorial = () => {
@@ -97,12 +97,12 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
         <div className="main-menu-container">
           <div className="main-menu">
 
-            <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
             <button className="small-button" onClick={tutorial}>Free Play</button>
 
             {tutorialState.characters.gojo.map((tutorial, index) => (
               <button key={index} className="small-button">{tutorial.title}</button>
             ))}
+            <button className="small-button" onClick={handleReturnToMainMenu}>Main Menu</button>
           </div>
         </div>
       )}
@@ -174,7 +174,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
             <h2 style={{}}>Satoru Gojo</h2>
           </button>
           <button className="character-button" onClick={() => saveCharacter('sukuna')}>
-            <img src={require("../Assets/sukuna.png")} alt="" />
+            <div className='sukuna-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
             <h2>Ryomen Sukuna</h2>
           </button>
         </div>
@@ -201,7 +201,8 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
           {gameSettings.selectedCharacter !== "sukuna" && (
             <div>
               <button className="character-button" onClick={() => saveRivalCharacter('sukuna')}>
-                <img src={require("../Assets/sukuna.png")} alt="" />
+                <div className='sukuna-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
+
                 <h2>Ryomen Sukuna</h2>
               </button>
             </div>

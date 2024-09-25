@@ -1502,12 +1502,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 {/* <div className="blue" style={{ top: 0, left: gojo.direction === "left" ? -200 : 200, }}> */}
                 <img src={require('../../Assets/electricity.png')} alt="" style={{ display: electricityEffect ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1", zIndex: 11 }} />
                 <img src={require('../../Assets/claw-mark.png')} alt="" style={{ display: divineDogs.isAttacking ? "block" : "none", height: characterHeight, width: "120px", opacity: 0.8, scale: "1.2" }} />
-                {/* <img src={require(`../../Assets/guard.png`)} alt="" style={{
-                    display: gojo.isBlocking ? "block" : "none",
-                    position: "absolute", top: -110, left: -15,
-                    height: 120, width: 120, opacity: 0.8, scale: "1",
-                    transform: "translate(-10%,0)"
-                }} /> */}
+
                 <div className="gojo-domain-amplification" style={{
                     display: gojo.isBlocking ? "block" : "none",
                     position: "absolute", top: -110, left: -13,

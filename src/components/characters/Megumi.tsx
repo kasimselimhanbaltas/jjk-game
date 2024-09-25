@@ -330,12 +330,7 @@ const Megumi = ({ rivalState, rivalSlice }) => {
 
                 {/* <img src={require('../../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-85px", left: "-55px", display: displaySlash, height: "120px", width: "120px", ...slashRotation, transform: "scale(0.7)" }} /> */}
                 {/* <img src={require('../../Assets/slash.png')} alt="" style={{ position: "absolute", top: "-85px", left: "-55px", display: displaySlash2, height: "120px", width: "120px", ...slashRotation2, transform: "scale(0.7)" }} /> */}
-                <img src={require(`../../Assets/guard.png`)} alt="" style={{
-                    display: megumi.isBlocking ? "block" : "none",
-                    position: "absolute", top: -65, left: -15,
-                    height: 75, width: 75, opacity: 0.8, scale: "1",
-                    transform: "translate(-10%,0)"
-                }} />
+
                 {/* <img src="slash.png" alt="" style={{ top: "-25px", left: "-10px", display: sukuna.isAttacking ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "270deg", transform: "scaleY(-1)" }} /> */}
                 {/* <img src={require('../../Assets/dismantle.png')} alt="" style={{ top: "-15px", left: "-30px", display: sukuna.isAttacking && Math.abs(sukuna.x - megumi.x) < 200 ? "block" : "none", height: characterHeight, width: "200px", opacity: 0.8, rotate: "45deg", transform: "scale(0.1)" }} /> */}
                 {/* DISMANTLE */}

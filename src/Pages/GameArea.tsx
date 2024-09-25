@@ -536,7 +536,7 @@ const GameArea = () => {
   // const [showMenu, setShowMenu] = React.useState(false); // Menü durumunu tutan state ##
   const [showMenu, setShowMenu] = React.useState(true); // Menü durumunu tutan state ##
   const [showFinishMenu, setShowFinishMenu] = React.useState(false); // Menü durumunu tutan state
-  const [showTutorialMenu, setShowTutorialMenu] = useState(false); // Tutorial menu
+  const [showReturnToMainMenuButton, setShowReturnToMainMenuButton] = useState(false); // Tutorial menu
 
   useEffect(() => {
     console.log("effect tutorial: ", gameSettings.tutorial)
@@ -558,6 +558,7 @@ const GameArea = () => {
     setShowFinishMenu(false)
     setShowMenu(false); // Start Game butonuna tıklandığında menüyü gizle
     dispatch(setEntry(true));
+    setShowReturnToMainMenuButton(true)
   };
 
   const handleRestart = () => {
@@ -565,16 +566,18 @@ const GameArea = () => {
     dispatch(rivalSlice.actions.resetState())
     setShowFinishMenu(false);
     dispatch(setEntry(true));
+    setShowReturnToMainMenuButton(true)
   };
   const handleReturnToMainMenu = () => {
     setShowMenu(true)
     setShowFinishMenu(false)
-    setShowTutorialMenu(false)
+    setShowReturnToMainMenuButton(false)
   };
   const handleTutorialSelected = () => {
-    setShowMenu(false)
-    setShowFinishMenu(false)
-    setShowTutorialMenu(true)
+    // setShowMenu(false)
+    // setShowFinishMenu(false)
+    setReRender(reRender + 1)
+    console.log("tutorial selected", showReturnToMainMenuButton)
   };
 
   // useEffect(() => {
@@ -718,9 +721,9 @@ const GameArea = () => {
 
     axios({
       method: "POST",
-      url: "https://detect.roboflow.com/jujutsu-kaisen-hand-signs/1",
+      url: "https://detect.roboflow.com/jjk2/1",
       params: {
-        api_key: "pzI8nWkXC1JV60NAyxAY"
+        api_key: "a9Ry4tLXIymXh1Lvmzk7"
       },
       // data: formData,
       // data: imageData,
@@ -815,7 +818,9 @@ const GameArea = () => {
         {/* <h1>{showMenu ? "Main Menu" : showFinishMenu ? "Finish Menu" : "Game Area"}</h1> */}
         {!showMenu && !showFinishMenu && (
           <>
-            <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
+            {showReturnToMainMenuButton && (
+              <button className="return-to-mainmenu" onClick={handleReturnToMainMenu}></button>
+            )}
             <button className="open-camera" style={{ marginLeft: "-50px" }} onClick={() => captureLoop ? stopCamera() : handleStartCamera()}></button>
 
             {gameSettings.tutorial && (
