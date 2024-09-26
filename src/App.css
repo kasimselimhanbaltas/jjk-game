@@ -1118,3 +1118,18 @@ body {
       height: 52px;
   } */
 }
+
+.quest-container {
+  position: absolute;
+  top: 40%;
+  right: 0;
+  translate: 0% -50%;
+  z-index: 5;
+  width: 300px;
+  max-height: 500px;
+  /* display: flex; */
+  justify-content: center;
+  background-color: #282c34;
+  font-size: 15px;
+  z-index: 500;
+}

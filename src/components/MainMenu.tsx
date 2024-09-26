@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import gameSettingsSlice, { selectCharacter, selectRivalCharacter } from '../redux/GameSettingsSlice';
+import tutorialSlice from '../redux/TutorialSlice';
 const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // onStartGame prop'unu al
 
   const dispatch = useDispatch();
@@ -61,8 +62,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
     onTutorialSelected();
     // onStartGame();
   }
-  const tutorial = () => {
-    dispatch(gameSettingsSlice.actions.setTutorial(true));
+  const freePlay = () => {
     dispatch(gameSettingsSlice.actions.setTutorial(true));
     onStartGame();
   }
@@ -80,6 +80,11 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
       dispatch(gameSettingsSlice.actions.selectRivalCharacter("gojo"));
       dispatch(gameSettingsSlice.actions.selectCharacter("sukuna"));
     }
+  }
+  const tutorialSelected = (index) => {
+    // onTutorialSelected(index);
+    dispatch(tutorialSlice.actions.setTutorialMode({ tutorialMode: true, tutorialIndex: index }))
+    freePlay();
   }
   return (
     <div className="main-screen">
@@ -106,10 +111,13 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
         <div className="main-menu-container">
           <div className="main-menu">
 
-            <button className="small-button" onClick={tutorial}>Free Play</button>
+            <button className="small-button" onClick={freePlay}>Free Play</button>
 
-            {tutorialState.characters.gojo.map((tutorial, index) => (
-              <button key={index} className="small-button">{tutorial.title}</button>
+            {tutorialState.characters.gojo.map((gojoTutorial, index) => (
+              <button key={index} className="small-button" onClick={() => {
+                console.log("handler in tutorial menu:", gameSettings.selectCharacter, index);
+                tutorialSelected(index)
+              }}>{index}:  {gojoTutorial.title}</button>
             ))}
             <button className="small-button" onClick={handleReturnToMainMenu}>Main Menu</button>
           </div>

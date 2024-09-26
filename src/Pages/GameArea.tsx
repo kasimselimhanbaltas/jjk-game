@@ -20,6 +20,7 @@ import MegumiSlice from "../redux/character-slices/MegumiSlice";
 import CharacterInterface from "../components/CharacterInterface";
 import ControlsPage from "./ControlsPage";
 import axios from "axios";
+import tutorialSlice from "../redux/TutorialSlice";
 
 const characterHeight = 50;
 
@@ -35,6 +36,7 @@ const purpleDamage = -500;
 const GameArea = () => {
 
   const dispatch = useDispatch()
+  const tutorialState = useSelector((state: any) => state.TutorialState);
   const gameSettings = useSelector((state: any) => state.GameSettingsState);
   const sukuna = useSelector((state: any) => state.SukunaState);
   const megumi = useSelector((state: any) => state.MegumiState);
@@ -573,12 +575,7 @@ const GameArea = () => {
     setShowFinishMenu(false)
     setShowReturnToMainMenuButton(false)
   };
-  const handleTutorialSelected = () => {
-    // setShowMenu(false)
-    // setShowFinishMenu(false)
-    setReRender(reRender + 1)
-    console.log("tutorial selected", showReturnToMainMenuButton)
-  };
+
 
   // useEffect(() => {
   //   if (xDistance < 0 && sukuna.rivalDirection !== "left") {
@@ -791,12 +788,97 @@ const GameArea = () => {
   };
 
 
+  // TUTORIAL
+
+  const [fetchedTutorial, setFetchedTutorial] = useState(null);
+  const handleTutorialSelected = (tutorialIndex) => { // ###
+    // setShowMenu(false)
+    // setShowFinishMenu(false)
+    console.log("input handler in gamearea: ", gameSettings.selectedCharacter, tutorialIndex)
+    if (tutorialIndex === undefined) return;
+    console.log("input handler in gamearea2: ", gameSettings.selectedCharacter, tutorialIndex)
+
+    setFetchedTutorial(tutorialState.characters[gameSettings.selectedCharacter][tutorialIndex])
+    // setFetchedTutorialIndex(parseInt(tutorialIndex)) // tutorialIndex);
+    setReRender(reRender + 1)
+    console.log("tutorial selected", showReturnToMainMenuButton)
+  };
+  useEffect(() => {
+    if (fetchedTutorial === null)
+      setFetchedTutorial(tutorialState.characters[gameSettings.selectedCharacter][0])
+  })
+  useEffect(() => {
+    const handleKeyDown2 = (event) => {
+      // console.log(tutorialState.characters[gameSettings.selectedCharacter][fetchedTutorialIndex])
+      console.log("keys checking for:", fetchedTutorial.title)
+      let key = event.key.toLowerCase();
+      for (let i = 0; i < fetchedTutorial.tasks.length; i++) {
+        if (fetchedTutorial.tasks[i].isPressed === false) {
+          if (key === fetchedTutorial.tasks[i].key) {
+            console.log("SUCCESFULL!!!!", key)
+            dispatch(tutorialSlice.actions.completeOneTaskInTutorial({
+              tutorialIndex: tutorialState.currentTaskIndex, taskIndex: i, character: gameSettings.selectedCharacter
+            }));
+
+          }
+        }
+      }
+    };
+
+    // check if all mini tasks are completed
+    if (fetchedTutorial === null) return
+    console.log(tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].isComplete ? "quest is complete" : "quest is not completed yet")
+    let isAllComplete = true;
+    for (let i = 0; i < fetchedTutorial.tasks.length; i++) {
+      if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].tasks[i].isPressed === false) {
+        console.log("quest: NOT ALL TASKS COMPLETED: ", fetchedTutorial.tasks[i].key)
+        isAllComplete = false;
+        break;
+      }
+    }
+    if (isAllComplete) {
+      console.log("ALL COMPLETED", fetchedTutorial.title)
+      dispatch(tutorialSlice.actions.allTasksFinished({ tutorialIndex: tutorialState.currentTaskIndex, character: gameSettings.selectedCharacter }));
+    }
+
+
+
+    window.addEventListener("keydown", handleKeyDown2);
+
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener("keydown", handleKeyDown2);
+    };
+  }, [tutorialState.characters[gameSettings.selectedCharacter], fetchedTutorial, tutorialState.currentTaskIndex]);
   return (
     <>
       <div className="game-area">
         {/* <h1> {x * 16} x {x * 9}</h1> */}
         <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
         {/* <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio> */}
+
+        {tutorialState.currentTaskIndex !== null && (
+
+          <div className="quest-container" style={{ display: tutorialState.tutorialMode ? "block" : "none" }}>
+            {/* <div className="quest-title">{fetchedTutorial.title}</div> */}
+            <div className="quest-title">{tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].title}</div>
+            <br />
+            <div className="tasks">
+              {tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].tasks.map((task, index) => (
+                <div className="task" key={index}>
+                  <div style={{ backgroundColor: task.isPressed ? "green" : "transparent" }}>{task.text} </div>
+                  {/* <div className="key-view">{task.key}</div> */}
+                </div>
+              ))}
+
+            </div>
+            <div style={{ display: tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].isComplete ? "block" : "none" }}>
+              <button>Tutorial Menu</button>
+              <button>Next Tutorial</button>
+            </div>
+          </div>
+        )}
+
 
         <div style={{
           position: "absolute",
