@@ -3,27 +3,47 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   tutorialMode: false,
   currentTaskIndex: 0,
+  goToTutorialMenu: false,
   characters: {
     gojo: [
       {
         title: "Movement Controls", // TASK 1
         isComplete: false,
         tasks: [
-          { text: "Jump: W", key: "w", isPressed: false },
-          { text: "Move right: D", key: "d", isPressed: false },
-          { text: "Move left: A", key: "a", isPressed: false },
+          { text: "Jump: W", keys: ["w"], isPressed: false },
+          { text: "Move right: D", keys: ["d"], isPressed: false },
+          { text: "Move left: A", keys: ["a"], isPressed: false },
         ],
       },
       {
         title: "Skill: Blue", // TASK 2
         isComplete: false,
-        tasks: [{ text: "Use your BLUE skill: E", key: "e", isPressed: false }],
+        tasks: [{ text: "Use your BLUE skill: E", keys: ["e"], isPressed: false }],
       },
       {
         title: "Skill: Red", // TASK 3
         isComplete: false,
-        tasks: [{ text: "Use your RED skill: R", key: "r", isPressed: false }],
+        tasks: [{ text: "Use your RED skill: R", keys: ["r"], isPressed: false }],
       },
+      {
+        title: "Skill: Hollow Purple", // TASK 4
+        isComplete: false,
+        tasks: [{ text: "Use your HOLLOW PURPLE skill: E+R", keys: ["e", "r"], isPressed: false }],
+      },
+      {
+        title: "Mixing Colors", // TASK 5
+        isComplete: false,
+        tasks: [
+          { text: "Make a charged blue", keys: ["shift", "e"], isPressed: false },
+          { text: "Make a charged red", keys: ["shift", "r"], isPressed: false }
+        ],
+      },
+      {
+        title: "Domain Expansion: Infinite Void", // TASK 6
+        isComplete: false,
+        tasks: [{ text: "Expand your domain: L", keys: ["l"], isPressed: false }],
+      },
+
     ],
   },
   // sukuna: {
@@ -67,7 +87,13 @@ const tutorialSlice = createSlice({
       if (character === "gojo") {
         state.characters.gojo[tutorialIndex].isComplete = true;
       }
-    }
+    },
+    setGoToTutorialMenu: (state, action) => {
+      state.goToTutorialMenu = action.payload;
+    },
+    setTutorialIndex: (state, action) => {
+      state.currentTaskIndex = action.payload;
+    },
 
   },
 });
@@ -76,6 +102,8 @@ export default tutorialSlice;
 export const {
   setTutorialMode,
   completeOneTaskInTutorial,
-  allTasksFinished
+  allTasksFinished,
+  setGoToTutorialMenu,
+  setTutorialIndex
 }
   = tutorialSlice.actions;;

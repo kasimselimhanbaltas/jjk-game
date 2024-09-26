@@ -1125,11 +1125,107 @@ body {
   right: 0;
   translate: 0% -50%;
   z-index: 5;
-  width: 300px;
+  width: 250px;
   max-height: 500px;
   /* display: flex; */
   justify-content: center;
-  background-color: #282c34;
+  /* background-color: #282c34; */
+  font-size: 18px;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 25px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  z-index: 1000;
+  transition: all .2s ease, opacity 0.3s ease;
+
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  margin-right: 10px;
+  position: relative;
+}
+
+.checkbox.checked::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 6px;
+  height: 12px;
+  border: solid green;
+  border-width: 0 4px 4px 0;
+  transform: rotate(45deg);
+  animation: checkmark-shrink 0.5s ease forwards;
+}
+
+@keyframes checkmark-shrink {
+  0% {
+    transform: scale(2) rotate(45deg);
+    /* Başlangıçta küçücük */
+  }
+
+  100% {
+    transform: scale(1) rotate(45deg);
+    /* Sonunda normal boyutta */
+  }
+}
+
+.task-text {
   font-size: 15px;
-  z-index: 500;
+}
+
+.quest-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.keyboard-button {
+  scale: .7;
+  box-sizing: border-box;
+  text-align: left;
+  position: relative;
+  display: inline-block;
+  font-size: 25px;
+  width: 80px;
+  height: 80px;
+  padding: 8px 15px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #282828, #202020);
+  box-shadow: inset -8px 0 8px rgba(0, 0, 0, 0.15),
+    0 0 0 2px rgba(0, 0, 0, 0.75),
+    10px 20px 25px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.keyboard-button::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  bottom: 14px;
+  right: 12px;
+  background: linear-gradient(90deg, #232323, #4a4a4a);
+  border-radius: 10px;
+  box-shadow: -10px -10px 10px 2px rgba(255, 255, 255, 0.25),
+    10px 5px 10px rgba(0, 0, 0, 0.15);
+  border-left: 1px solid #0004;
+  border-bottom: 1px solid #0004;
+  border-top: 1px solid #0009;
+}
+
+.keyboard-button i {
+  position: relative;
+  color: #fff;
+  font-style: normal;
+  text-transform: uppercase;
 }

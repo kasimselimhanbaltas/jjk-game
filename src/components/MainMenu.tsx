@@ -23,7 +23,10 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
     }
     if (storedUsername) {
       setSavedUsername(storedUsername);
-      setShowMainMenu(true)
+      if (!showTutorialMenu) {
+        setShowMainMenu(true)
+      }
+      console.log("*/1")
     } else {
       setShowMainMenu(false)
     }
@@ -42,6 +45,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
     if (characterName === gameSettings.selectedRivalCharacter) {
       setShowRivalCharacterMenu(true);
     } else {
+      console.log("*/2")
       setShowMainMenu(true);
     }
     setShowCharacterMenu(false);
@@ -49,6 +53,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
   const saveRivalCharacter = (characterName) => {
     dispatch(selectRivalCharacter(characterName));
     setShowRivalCharacterMenu(false);
+    console.log("*/3")
     setShowMainMenu(true);
   };
   const handleStartGame = () => {
@@ -68,6 +73,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
   }
 
   const handleReturnToMainMenu = () => {
+    console.log("*/4")
     setShowMainMenu(true)
     setShowTutorialMenu(false)
     dispatch(gameSettingsSlice.actions.setTutorial(false));
@@ -86,6 +92,14 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
     dispatch(tutorialSlice.actions.setTutorialMode({ tutorialMode: true, tutorialIndex: index }))
     freePlay();
   }
+  useEffect(() => {
+    if (tutorialState.goToTutorialMenu) {
+      console.log("*********************")
+      tutorialMenu();
+      setShowMainMenu(false);
+      dispatch(tutorialSlice.actions.setGoToTutorialMenu(false));
+    }
+  }, [tutorialState.goToTutorialMenu])
   return (
     <div className="main-screen">
       {localStorage.getItem('username') && showMainMenu && (
