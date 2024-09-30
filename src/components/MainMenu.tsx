@@ -134,19 +134,24 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
             <div className="tutorial-menu">
 
               {tutorialState.characters[gameSettings.selectedCharacter].map((gojoTutorial, index) => (
-                <button key={index} className="tutorial-button"
-                  style={{ background: tutorialState.characters[gameSettings.selectedCharacter][index].isComplete ? "linear-gradient(90deg, #80f098, #00d354)" : "" }}
+                <button key={index} className={"tutorial-button tutorial-button-" + gameSettings.selectedCharacter}
                   onClick={() => {
                     console.log("handler in tutorial menu:", gameSettings.selectCharacter, index);
                     tutorialSelected(index)
-                  }}>{gojoTutorial.title}</button>
+                  }}>
+                  <span>{gojoTutorial.title}</span>
+                  { }
+                  <div style={{ display: tutorialState.characters[gameSettings.selectedCharacter][index].isComplete ? "block" : "none" }} className='tutorial-checked'></div>
+                </button>
               ))}
             </div>
           </div>
         </>
 
-      )}
-      {showMainMenu &&
+      )
+      }
+      {
+        showMainMenu &&
         <div className="main-menu-container">
           {gameSettings.selectedCharacter === "gojo" &&
             <div className='gojo-menu' style={{ right: undefined, left: "250px" }}></div>
@@ -187,46 +192,51 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
           </div>
         </div>
       }
-      {!localStorage.getItem('username') && (
-        <div style={{ position: "absolute", top: "0%", left: "50%", translate: "-50% 0" }}>
-          <h1>Enter Your Username</h1>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="username">Username:</label>
-            <br />
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-            <br />
-            <button type="submit" style={{ margin: "5px" }}>Save</button>
-          </form>
+      {
+        !localStorage.getItem('username') && (
+          <div style={{ position: "absolute", top: "0%", left: "50%", translate: "-50% 0" }}>
+            <h1>Enter Your Username</h1>
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="username">Username:</label>
+              <br />
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+              <br />
+              <button type="submit" style={{ margin: "5px" }}>Save</button>
+            </form>
 
-        </div>
-      )}
+          </div>
+        )
+      }
 
-      {showCharacterMenu && (
-        <div className="character-menu">
-          {/* <button className="character-button" onClick={() => saveCharacter('megumi')}>
+      {
+        showCharacterMenu && (
+          <div className="character-menu">
+            {/* <button className="character-button" onClick={() => saveCharacter('megumi')}>
             <img src={require("../Assets/megumi.png")} alt="" />
             <h2 style={{}}>Fushiguro Megumi</h2>
           </button> */}
-          <button className="character-button" onClick={() => saveCharacter('gojo')}>
-            <img src={require("../Assets/kitkat.png")} alt="" />
-            <h2 style={{}}>Satoru Gojo</h2>
-          </button>
-          <button className="character-button" onClick={() => saveCharacter('sukuna')}>
-            <div className='sukuna-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
-            <h2>Ryomen Sukuna</h2>
-          </button>
-        </div>
-      )}
-      {showRivalCharacterMenu && (
-        <div className="character-menu">
-          <h1 style={{ position: "absolute", top: "10%", left: "50%", transform: "translate(-50%, -50%)" }}>Select Your Rival</h1>
-          {/* {gameSettings.selectedCharacter !== "megumi" && (
+            <button className="character-button" onClick={() => saveCharacter('gojo')}>
+              <img src={require("../Assets/kitkat.png")} alt="" />
+              <h2 style={{}}>Satoru Gojo</h2>
+            </button>
+            <button className="character-button" onClick={() => saveCharacter('sukuna')}>
+              <div className='sukuna-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
+              <h2>Ryomen Sukuna</h2>
+            </button>
+          </div>
+        )
+      }
+      {
+        showRivalCharacterMenu && (
+          <div className="character-menu">
+            <h1 style={{ position: "absolute", top: "10%", left: "50%", transform: "translate(-50%, -50%)" }}>Select Your Rival</h1>
+            {/* {gameSettings.selectedCharacter !== "megumi" && (
             <div>
               <button className="character-button" onClick={() => saveRivalCharacter('megumi')}>
                 <img src={require("../Assets/megumi.png")} alt="" />
@@ -234,27 +244,28 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
               </button>
             </div>
           )} */}
-          {gameSettings.selectedCharacter !== "gojo" && (
-            <div>
-              <button className="character-button" onClick={() => saveRivalCharacter('gojo')}>
-                <img src={require("../Assets/kitkat.png")} alt="" />
-                <h2 style={{}}>Satoru Gojo</h2>
-              </button>
-            </div>
-          )}
-          {gameSettings.selectedCharacter !== "sukuna" && (
-            <div>
-              <button className="character-button" onClick={() => saveRivalCharacter('sukuna')}>
-                <div className='sukuna-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
+            {gameSettings.selectedCharacter !== "gojo" && (
+              <div>
+                <button className="character-button" onClick={() => saveRivalCharacter('gojo')}>
+                  <img src={require("../Assets/kitkat.png")} alt="" />
+                  <h2 style={{}}>Satoru Gojo</h2>
+                </button>
+              </div>
+            )}
+            {gameSettings.selectedCharacter !== "sukuna" && (
+              <div>
+                <button className="character-button" onClick={() => saveRivalCharacter('sukuna')}>
+                  <div className='sukuna-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
 
-                <h2>Ryomen Sukuna</h2>
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+                  <h2>Ryomen Sukuna</h2>
+                </button>
+              </div>
+            )}
+          </div>
+        )
+      }
 
-    </div>
+    </div >
   );
 };
 

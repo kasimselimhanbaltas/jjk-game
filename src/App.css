@@ -1256,19 +1256,19 @@ body {
 }
 
 .tutorial-button {
+  position: relative;
   border-radius: 0px !important;
   outline: none;
   box-sizing: border-box;
   padding: 15px 20px;
   margin-left: 0 !important;
   font-size: 18px;
-  background: linear-gradient(90deg, #cdffd8, #94b9ff);
-  color: black;
+  /* background: linear-gradient(90deg, #cdffd8, #94b9ff); */
   font-family: "Press Start 2P", system-ui !important;
   cursor: pointer;
 
   /* Example button color */
-  color: black;
+  color: white;
   text-align: center;
   border: 1px transparent;
   border-radius: 5px !important;
@@ -1276,16 +1276,76 @@ body {
   width: 100%;
   line-height: 1.5rem;
   /* Make sure buttons take full width in each grid column */
+  opacity: 1 !important;
+  background-color: transparent;
+  z-index: 6;
+
+}
+
+.tutorial-button span {
+  z-index: 5 !important;
+  position: relative;
+}
+
+.tutorial-button-gojo::before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: url(./Assets/gojoicon.jpg);
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
+  opacity: 0.6;
+  border-radius: 5px;
+  z-index: 4 !important;
+}
+
+.tutorial-button-sukuna::before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: url(./Assets/sukuna-button.png);
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
+  opacity: .6;
+  border-radius: 5px;
+  z-index: 4 !important;
 }
 
 .tutorial-button:hover {
   scale: 1.1;
-  background: linear-gradient(90deg, #94b9ff, #cdffd8);
 
+}
+
+.tutorial-button:hover::before {
+  opacity: 1;
 }
 
 
 .tutorial-button:hover {
   background-color: #2980b9;
   /* Button hover effect */
+}
+
+.tutorial-checked {
+  position: absolute;
+  top: 2px;
+  left: 10px;
+  width: 6px;
+  height: 12px;
+  border: solid black;
+  z-index: 99;
+  scale: 1.5;
+  border-width: 0 4px 4px 0;
+  transform: rotate(45deg);
+  animation: checkmark-shrink 0.5s ease forwards;
 }
