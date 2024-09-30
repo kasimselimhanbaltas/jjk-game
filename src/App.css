@@ -1235,3 +1235,57 @@ body {
   font-style: normal;
   text-transform: uppercase;
 }
+
+.tutorial-menu-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.tutorial-menu {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* Creates 5 equal-width columns */
+  gap: 30px;
+  /* Space between buttons */
+  width: 100%;
+  margin-left: 100px;
+  max-width: 1200px;
+  /* You can adjust this based on your design */
+}
+
+.tutorial-button {
+  border-radius: 0px !important;
+  outline: none;
+  box-sizing: border-box;
+  padding: 15px 20px;
+  margin-left: 0 !important;
+  font-size: 18px;
+  background: linear-gradient(90deg, #cdffd8, #94b9ff);
+  color: black;
+  font-family: "Press Start 2P", system-ui !important;
+  cursor: pointer;
+
+  /* Example button color */
+  color: black;
+  text-align: center;
+  border: 1px transparent;
+  border-radius: 5px !important;
+  transition: all .2s ease;
+  width: 100%;
+  line-height: 1.5rem;
+  /* Make sure buttons take full width in each grid column */
+}
+
+.tutorial-button:hover {
+  scale: 1.1;
+  background: linear-gradient(90deg, #94b9ff, #cdffd8);
+
+}
+
+
+.tutorial-button:hover {
+  background-color: #2980b9;
+  /* Button hover effect */
+}

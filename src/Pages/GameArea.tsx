@@ -572,6 +572,7 @@ const GameArea = () => {
     setShowReturnToMainMenuButton(true)
   };
   const handleReturnToMainMenu = () => {
+    dispatch(tutorialSlice.actions.setTutorialMode(false))
     setShowMenu(true)
     setShowFinishMenu(false)
     setShowReturnToMainMenuButton(false)

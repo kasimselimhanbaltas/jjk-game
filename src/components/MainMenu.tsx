@@ -73,10 +73,10 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
   }
 
   const handleReturnToMainMenu = () => {
-    console.log("*/4")
     setShowMainMenu(true)
     setShowTutorialMenu(false)
     dispatch(gameSettingsSlice.actions.setTutorial(false));
+    dispatch(tutorialSlice.actions.setTutorialMode(false));
   };
   const swapCharacters = () => {
     if (gameSettings.selectedCharacter === "sukuna") {
@@ -122,20 +122,29 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
         </div>
       )}
       {showTutorialMenu && (
-        <div className="main-menu-container">
-          <div className="main-menu">
+        <>
+          <div className='tutorial-menu' style={{ paddingBottom: "50px", marginTop: "-50px" }}>
 
-            <button className="small-button" onClick={freePlay}>Free Play</button>
-
-            {tutorialState.characters[gameSettings.selectedCharacter].map((gojoTutorial, index) => (
-              <button key={index} className="small-button" onClick={() => {
-                console.log("handler in tutorial menu:", gameSettings.selectCharacter, index);
-                tutorialSelected(index)
-              }}>{index}:  {gojoTutorial.title}</button>
-            ))}
-            <button className="small-button" onClick={handleReturnToMainMenu}>Main Menu</button>
+            <button className="small-button" style={{ marginLeft: "20px" }} onClick={handleReturnToMainMenu}>Main Menu</button>
+            <button className="small-button" style={{ marginLeft: "10px" }} onClick={freePlay}>Free Play</button>
           </div>
-        </div>
+
+          <div className="tutorial-menu-container">
+
+            <div className="tutorial-menu">
+
+              {tutorialState.characters[gameSettings.selectedCharacter].map((gojoTutorial, index) => (
+                <button key={index} className="tutorial-button"
+                  style={{ background: tutorialState.characters[gameSettings.selectedCharacter][index].isComplete ? "linear-gradient(90deg, #80f098, #00d354)" : "" }}
+                  onClick={() => {
+                    console.log("handler in tutorial menu:", gameSettings.selectCharacter, index);
+                    tutorialSelected(index)
+                  }}>{gojoTutorial.title}</button>
+              ))}
+            </div>
+          </div>
+        </>
+
       )}
       {showMainMenu &&
         <div className="main-menu-container">

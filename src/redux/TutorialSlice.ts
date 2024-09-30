@@ -8,7 +8,7 @@ const initialState = {
   characters: {
     "gojo": [
       {
-        title: "Movement Controls", // TASK 1
+        title: "Movements", // TASK 1
         isComplete: false,
         rivalTaskAction: "none",
         tasks: [
@@ -18,19 +18,19 @@ const initialState = {
         ],
       },
       {
-        title: "Skill: Blue", // TASK 2
+        title: "Blue", // TASK 2
         isComplete: false,
         rivalTaskAction: "none",
         tasks: [{ text: "Use your BLUE skill: E", keys: ["e"], isPressed: false }],
       },
       {
-        title: "Skill: Red", // TASK 3
+        title: "Red", // TASK 3
         isComplete: false,
         rivalTaskAction: "none",
         tasks: [{ text: "Use your RED skill: R", keys: ["r"], isPressed: false }],
       },
       {
-        title: "Skill: Hollow Purple", // TASK 4
+        title: "Hollow Purple", // TASK 4
         isComplete: false,
         rivalTaskAction: "none",
         tasks: [{ text: "Use your HOLLOW PURPLE skill: E+R", keys: ["e", "r"], isPressed: false }],
@@ -45,7 +45,7 @@ const initialState = {
         ],
       },
       {
-        title: "Domain Expansion: Infinite Void", // TASK 6
+        title: "Infinite Void", // TASK 6
         isComplete: false,
         rivalTaskAction: "none",
         tasks: [{ text: "Expand your domain: L", keys: ["l"], isPressed: false }],
@@ -67,7 +67,7 @@ const initialState = {
         ],
       },
       {
-        title: "Reversed Cursed Technique", // TASK 8
+        title: "Reverse Cursed Technique", // TASK 8
         isComplete: false,
         rivalTaskAction: { action: "useCleave", timeout: 2 },
         tasks: [
@@ -97,7 +97,7 @@ const initialState = {
     // SUKUNA TUTORIALS
     "sukuna": [
       {
-        title: "Movement Controls", // TASK 1
+        title: "Movements", // TASK 1
         isComplete: false,
         rivalTaskAction: "none",
         tasks: [
@@ -110,35 +110,35 @@ const initialState = {
         timeoutSec: 1
       },
       {
-        title: "Skill: Dismantle", // TASK 
+        title: "Dismantle", // TASK 
         rivalTaskAction: { action: "combat", timeout: 0 },
         isComplete: false,
         tasks: [{ text: "Use your DISMANTLE skill", keys: ["e"], isPressed: false, timeoutSec: 1 }],
         timeoutSec: 1
       },
       {
-        title: "Skill: Cleave", // TASK 
+        title: "Cleave", // TASK 
         rivalTaskAction: { action: "combat", timeout: 0 },
         isComplete: false,
         tasks: [{ text: "Use your CLEAVE skill", keys: ["r"], isPressed: false, timeoutSec: 1 }],
         timeoutSec: 1
       },
       {
-        title: "Domain Expansion: Malevolent Shrine", // TASK 
+        title: "Malevolent Shrine", // TASK 
         rivalTaskAction: "none",
         isComplete: false,
         tasks: [{ text: "Expand your domain!", keys: ["l"], isPressed: false, timeoutSec: 1 }],
         timeoutSec: 10
       },
       {
-        title: "Skill: Rapid Slashes", // TASK 
+        title: "Rapid Slashes", // TASK 
         rivalTaskAction: { action: "rapid", timeout: 0 },
         isComplete: false,
         tasks: [{ text: "Use your RAPID SLASHES skill!", keys: ["e"], isPressed: false, timeoutSec: 1 }],
         timeoutSec: 3
       },
       {
-        title: "Special Skill: FUGA", // TASK 
+        title: "FUGA: OPEN", // TASK 
         rivalTaskAction: { action: "combat", timeout: 0 },
         isComplete: false,
         tasks: [{ text: "It's a little cold in here isn't it? Open up the furnace!", keys: ["f"], isPressed: false, timeoutSec: 1 }],
@@ -160,7 +160,7 @@ const initialState = {
         ],
       },
       {
-        title: "Reversed Cursed Technique", // TASK 8
+        title: "Reverse Cursed Technique", // TASK 8
         isComplete: false,
         rivalTaskAction: { action: "useBlue", timeout: 3 },
         tasks: [
