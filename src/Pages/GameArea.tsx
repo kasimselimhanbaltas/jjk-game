@@ -906,16 +906,25 @@ const GameArea = () => {
             <div className="quest-title">{tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].title}</div>
             <br />
             <div className="tasks">
+              <div className="stylish-border"></div>
+
               {tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].tasks.map((task, index) => (
                 <div className="task" key={index}>
                   <div className="checkbox-container">
-                    <div className={`checkbox ${task.isPressed ? "checked" : ""}`}></div>
-                    <div className="task-text">{task.text}</div>
-                    {task.keys.map((key, i) => (
-                      <span className="keyboard-button wide-keyboard-button"
-                        style={{ width: key === "shift" ? "120px" : "80px" }}
-                      ><i>{key}</i></span>
-                    ))}
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <div className={`checkbox ${task.isPressed ? "checked" : ""}`}></div>
+                      <div className="task-text">{task.text}</div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
+
+                      {task.keys.map((key, i) => (
+                        <span className="scale-fixer">
+                          <span className="keyboard-button wide-keyboard-button"
+                            style={{ width: key === "shift" || key === "space" ? "120px" : "80px", marginLeft: key === "shift" || key === "space" ? "-40px" : "-15px" }}
+                          ><i>{key}</i></span>
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -924,10 +933,10 @@ const GameArea = () => {
             <div className="quest-buttons"
               style={{ display: !tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].isComplete ? "none" : "flex" }}
             >
-              <button onClick={() =>
+              <button className="quest-button" onClick={() =>
                 setGoBackToTutorialMenu()
               }>Tutorial Menu</button>
-              <button style={{ display: tutorialState.currentTaskIndex === tutorialState.characters[gameSettings.selectedCharacter].length - 1 ? "none" : "block" }}
+              <button className="quest-button" style={{ display: tutorialState.currentTaskIndex === tutorialState.characters[gameSettings.selectedCharacter].length - 1 ? "none" : "block" }}
                 onClick={goToNextTutorial}>Next</button>
             </div>
           </div>

@@ -21,19 +21,19 @@ const initialState = {
         title: "Blue", // TASK 2
         isComplete: false,
         rivalTaskAction: "none",
-        tasks: [{ text: "Use your BLUE skill: E", keys: ["e"], isPressed: false }],
+        tasks: [{ text: "Use your BLUE skill", keys: ["e"], isPressed: false }],
       },
       {
         title: "Red", // TASK 3
         isComplete: false,
         rivalTaskAction: "none",
-        tasks: [{ text: "Use your RED skill: R", keys: ["r"], isPressed: false }],
+        tasks: [{ text: "Use your RED skill", keys: ["r"], isPressed: false }],
       },
       {
         title: "Hollow Purple", // TASK 4
         isComplete: false,
         rivalTaskAction: "none",
-        tasks: [{ text: "Use your HOLLOW PURPLE skill: E+R", keys: ["e", "r"], isPressed: false }],
+        tasks: [{ text: "Use your HOLLOW PURPLE skill", keys: ["e", "r"], isPressed: false }],
       },
       {
         title: "Mixing Colors", // TASK 5
