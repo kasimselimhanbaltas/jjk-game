@@ -83,7 +83,7 @@ const GameArea = () => {
   // place characters
   useEffect(() => {
     dispatch(gameSettingsSlice.actions.setDomainClash(false))
-
+    const cd = tutorialState.tutorialMode ? 0 : 2000;
     // dispatch(rivalSlice.actions.setDevStun(true))
     if (gameSettings.entry) {
       if (gameSettings.selectedCharacter === "gojo" || gameSettings.selectedRivalCharacter === "gojo") {
@@ -104,7 +104,7 @@ const GameArea = () => {
       dispatch(playerSlice.actions.moveCharacterTo({ x: gameSettings.selectedCharacter === "sukuna" ? -1000 : 600, y: 560 }));
       dispatch(rivalSlice.actions.moveCharacterTo({ x: gameSettings.selectedRivalCharacter === "sukuna" ? -1000 : 800, y: 560 }));
       setTimeout(() => {
-      }, 2000);
+      }, cd);
       setTimeout(() => {
         dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 560 }));
         dispatch(rivalSlice.actions.setAnimationState("entry"))
@@ -113,8 +113,8 @@ const GameArea = () => {
           dispatch(playerSlice.actions.moveCharacterTo({ x: 600, y: 560 }));
           dispatch(playerSlice.actions.setAnimationState("entry"))
           dispatch(rivalSlice.actions.setDirection("left"));
-        }, 1000);
-      }, 2000);
+        }, cd / 2);
+      }, cd);
       setTimeout(() => {
         console.log("devstun false")
         dispatch(playerSlice.actions.setDevStun(false))
@@ -126,9 +126,9 @@ const GameArea = () => {
         dispatch(setEntry(false));
         dispatch(rivalSlice.actions.setDirection("left"));
         dispatch(sukunaSlice.actions.setTransition("all .2s, transform 0s"))
-      }, 4000);
+      }, cd);
     }
-  }, [gameSettings.entry, gameSettings.tutorial]);
+  }, [gameSettings.entry, gameSettings.tutorial, tutorialState.tutorialMode]);
 
   // hitboxes
   useEffect(() => {
@@ -192,7 +192,8 @@ const GameArea = () => {
               dispatch(playerSlice.actions.updateHealth(-150 / 8))
             }, 100)
             setTimeout(() => { // unstun rival
-              dispatch(rivalSlice.actions.setCanMove(true)) // ***
+              dispatch(rivalSlice.actions.setCanMove(true))
+              dispatch(playerSlice.actions.setCanMove(true)) // ***
               dispatch(sukunaSlice.actions.setGravity(5))
               clearInterval(damageInterval);
             }, 800);
@@ -797,7 +798,7 @@ const GameArea = () => {
     console.log("input handler in gamearea: ", gameSettings.selectedCharacter, tutorialIndex)
     if (tutorialIndex === undefined) return;
     console.log("input handler in gamearea2: ", gameSettings.selectedCharacter, tutorialIndex)
-
+    dispatch(tutorialSlice.actions.setRivalAction("domain"))
     setFetchedTutorial(tutorialState.characters[gameSettings.selectedCharacter][tutorialIndex])
     // setFetchedTutorialIndex(parseInt(tutorialIndex)) // tutorialIndex);
     setReRender(reRender + 1)
@@ -808,7 +809,10 @@ const GameArea = () => {
       setFetchedTutorial(tutorialState.characters[gameSettings.selectedCharacter][0])
   })
 
-  const keysPressed2 = useRef({ e: false, r: false, shift: false });
+  const keysPressed2 = useRef({
+    q: false, z: false, x: false, c: false, g: false, j: false, k: false, l: false,
+    e: false, r: false, shift: false, space: false
+  });
 
   useEffect(() => {
     if (!tutorialState.characters[gameSettings.selectedCharacter]) return;
@@ -817,6 +821,7 @@ const GameArea = () => {
 
     const handleKeyDown2 = (event) => {
       let key = event.key.toLowerCase();
+      if (key === " ") key = "space";
       keysPressed2.current[key] = true;
 
       for (let i = 0; i < localFetchedTutorial.tasks.length; i++) {
@@ -831,7 +836,8 @@ const GameArea = () => {
             }
           }
           else {
-            if (key === localFetchedTutorial.tasks[i].keys[0]) {
+
+            if (key === localFetchedTutorial.tasks[i].keys[0] && localFetchedTutorial.title !== "Domain Clash") {
               dispatch(tutorialSlice.actions.completeOneTaskInTutorial({
                 tutorialIndex: tutorialState.currentTaskIndex, taskIndex: i, character: gameSettings.selectedCharacter
               }));
@@ -872,7 +878,8 @@ const GameArea = () => {
       window.removeEventListener("keydown", handleKeyDown2);
       window.removeEventListener("keyup", handleKeyUp2);
     };
-  }, [tutorialState.characters[gameSettings.selectedCharacter], fetchedTutorial, tutorialState.currentTaskIndex]);
+  }, [tutorialState.characters[gameSettings.selectedCharacter], fetchedTutorial, tutorialState.currentTaskIndex
+    , gameSettings.selectedCharacter]);
 
   const setGoBackToTutorialMenu = () => {
     setShowMenu(true);
@@ -920,7 +927,7 @@ const GameArea = () => {
                 setGoBackToTutorialMenu()
               }>Tutorial Menu</button>
               <button style={{ display: tutorialState.currentTaskIndex === tutorialState.characters[gameSettings.selectedCharacter].length - 1 ? "none" : "block" }}
-                onClick={goToNextTutorial}>Next Tutorial</button>
+                onClick={goToNextTutorial}>Next</button>
             </div>
           </div>
         )}

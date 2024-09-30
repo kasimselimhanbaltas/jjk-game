@@ -127,7 +127,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
 
             <button className="small-button" onClick={freePlay}>Free Play</button>
 
-            {tutorialState.characters.gojo.map((gojoTutorial, index) => (
+            {tutorialState.characters[gameSettings.selectedCharacter].map((gojoTutorial, index) => (
               <button key={index} className="small-button" onClick={() => {
                 console.log("handler in tutorial menu:", gameSettings.selectCharacter, index);
                 tutorialSelected(index)

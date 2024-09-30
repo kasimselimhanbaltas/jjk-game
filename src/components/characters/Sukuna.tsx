@@ -16,10 +16,12 @@ import { divineDogsAttacking } from '../../redux/DivineDogsSlice';
 import { setAnimationBlocker } from '../../redux/NueSlice';
 import gojoSlice from '../../redux/character-slices/GojoSlice';
 import gameSettingsSlice from '../../redux/GameSettingsSlice';
+import tutorialSlice from '../../redux/TutorialSlice';
 
 const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     const dispatch = useDispatch();
+    const tutorialState = useSelector((state: any) => state.TutorialState);
     const sukuna = useSelector((state: any) => state.SukunaState);
     const megumi = useSelector((state: any) => state.MegumiState);
     const gameSettings = useSelector((state: any) => state.GameSettingsState);
@@ -236,13 +238,14 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         }, 500);
     }
     const localCleaveAttack = (stepDistance) => {
-        if (!sukuna.closeRange || sukuna.animationBlocker) return;
+        if (!tutorialState.tutorialMode)
+            if (!sukuna.closeRange || sukuna.animationBlocker) return;
         slashSoundEffectRef.current.volume = 0.1;
         let attackDirection = "";
         attackDirection = sukuna.x < rivalState.x ? "right" : "left";
         let infinity = rivalState.characterName === "gojo" && rivalState.infinity ? true : false;
 
-        if (!infinity) {
+        if (!infinity && !tutorialState.tutorialMode) {
             // dispatch(rivalSlice.actions.setCanMove(false))
             dispatch(rivalSlice.actions.setHardStun(true))
         }
@@ -310,7 +313,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             dispatch(rivalCleaveAttack(true));
             // dispatch(rivalSlice.actions.updateHealth(cleaveAttackDamage));
             dispatch(rivalSlice.actions.setTakeDamage({
-                isTakingDamage: true, damage: -cleaveAttackDamage, takeDamageAnimationCheck: false, knockback: 0, timeout: 300
+                isTakingDamage: true, damage: tutorialState.tutorialMode ? 1000 : -cleaveAttackDamage, takeDamageAnimationCheck: false, knockback: 0, timeout: 300
             }))
             setTimeout(() => { // cooldown
                 setCleaveReady({ ready: true, coolDown: 5 });
@@ -320,7 +323,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             }, 1000)
 
         }, 500);
-    }, [sukuna.x < rivalState.x]);
+    }, [sukuna.x < rivalState.x, rivalState.infinity]); // multi character bug
 
     // Sukuna attack interval - auto attack configuration
     const startAttackInterval = () => {
@@ -613,18 +616,29 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     // *** ULTRA DOMAIN HANDLER
     useEffect(() => {
+
         if (gameSettings.domainClash && sukuna.domainCD.isReady && sukuna.cursedEnergy.currentCursedEnergy >= 200) {
+            console.log("udh:sukuna 1")
             handleDomainAttack();
             dispatch(gameSettingsSlice.actions.setDomainClashReady(false));
             dispatch(gameSettingsSlice.actions.setDomainClash(false));
         }
         else if (sukuna.domainStatus.isInitiated === true) { // user pressed domain expansion key or bot initiated domain
+            console.log("udh: sukuna 2")
+
             dispatch(sukunaSlice.actions.setCanMove(false));
             dispatch(sukunaSlice.actions.setDomainState({ ...sukuna.domainStatus, isInitiated: false }))
             if (gameSettings.domainClashReady) { // rival already initiated domain
+                console.log("udh: sukuna 2-3, domain clash is setting to ready")
                 dispatch(gameSettingsSlice.actions.setDomainClash(true));
+                if (tutorialState.tutorialMode) {
+                    dispatch(tutorialSlice.actions.completeOneTaskInTutorial({
+                        tutorialIndex: tutorialState.currentTaskIndex, taskIndex: 0, character: gameSettings.selectedCharacter
+                    }));
+                }
             }
             else {
+                console.log("udh: sukuna 2-3, domain clash ready is setting to ready")
                 dispatch(gameSettingsSlice.actions.setDomainClashReady(true));
                 setTimeout(() => {
                     setDomainClashCDref(true);
@@ -633,11 +647,13 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             }
         }
         else if (sukuna.domainStatus.forceExpand) {
+            console.log("udh: sukuna 3")
             handleDomainAttack();
         }
         else {
+            console.log("udh: sukuna 4")
             if (domainBugFixer && domainClashCDref === true && sukuna.domainCD.isReady && sukuna.cursedEnergy.currentCursedEnergy >= 200) {
-                console.log("b")
+                console.log("udh: sukuna 5")
                 handleDomainAttack();
             }
         }
@@ -1207,6 +1223,43 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     // RAPID ATTACK
     const rapidSlashSoundEffectRef = React.useRef(null);
+    const actionTriggered = React.useRef(false);
+
+
+    // Tutorial Effect
+    useEffect(() => {
+        if (gameSettings.selectedCharacter === "sukuna") return;
+        console.log("rivalaction1")
+        if (tutorialState.tutorialMode && !actionTriggered.current) {
+            console.log("rivalaction2", tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalAction)
+            if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.action === "domain") {
+                actionTriggered.current = true;
+                setTimeout(() => {
+                    dispatch(sukunaSlice.actions.setDomainState({ ...sukuna.domainStatus, isInitiated: true }))
+                    setDomainBugFixer(true);
+                    actionTriggered.current = false;
+                }, (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.timeout) * 1000);
+            }
+            if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.action === "forceDomain") {
+                actionTriggered.current = true;
+                setTimeout(() => {
+                    dispatch(sukunaSlice.actions.setDomainState({ ...sukuna.domainStatus, forceExpand: true }))
+                    actionTriggered.current = false;
+                }, (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.timeout) * 1000);
+            }
+            if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.action === "useCleave") {
+                actionTriggered.current = true;
+                setTimeout(() => {
+                    dispatch(gojoSlice.actions.setInfinity(false))
+                    setTimeout(() => {
+                        dispatch(gojoSlice.actions.setInfinity(true))
+                    }, 1000);
+                    localDismantleAttack()
+                    actionTriggered.current = false;
+                }, (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.timeout) * 1000);
+            }
+        }
+    }, [tutorialState.currentTaskIndex])
 
     return (
         <div>

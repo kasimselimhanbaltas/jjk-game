@@ -1144,6 +1144,10 @@ body {
 .checkbox-container {
   display: flex;
   align-items: center;
+  padding: 0;
+  margin: 0;
+  height: 40px;
+
 }
 
 .checkbox {
@@ -1181,6 +1185,8 @@ body {
 
 .task-text {
   font-size: 15px;
+  max-width: 90px;
+  white-space: wrap;
 }
 
 .quest-buttons {
@@ -1190,7 +1196,7 @@ body {
 }
 
 .keyboard-button {
-  scale: .7;
+  scale: .4;
   box-sizing: border-box;
   text-align: left;
   position: relative;

@@ -7,6 +7,7 @@ import { setNueDirection } from "../../redux/NueSlice";
 import React from "react";
 import { AppDispatch } from "../../redux/GlobalStore";
 import "../../Gojo.css";
+import tutorialSlice from "../../redux/TutorialSlice";
 
 const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     // console.log("render GOJO")
@@ -15,6 +16,8 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     const gameSettings = useSelector((state: any) => state.GameSettingsState);
     const nue = useSelector((state: any) => state.NueState);
     const divineDogs = useSelector((state: any) => state.DivineDogsState);
+    const tutorialState = useSelector((state: any) => state.TutorialState);
+
 
     const dispatch = useDispatch();
     const dispatch2 = useDispatch<AppDispatch>();
@@ -228,29 +231,6 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                 dispatch(gojoSlice.actions.setAnimationState("gojo-stance"))
                 dispatch(gojoSlice.actions.setCanMove(true))
                 dispatch(gojoSlice.actions.setBlueAttackMoment(false))
-
-                // hitbox check in gamearea component
-                // dispatch(rivalSlice.actions.setCanMove(false))
-                // dispatch(rivalSlice.actions.setGravity(0))
-                // // move rival to blue
-                // dispatch(rivalSlice.actions.moveCharacterTo({ x: blueX + blueW, y: blueY + blueH / 2 + 30 }))
-                // setTimeout(() => {
-                //     const damageInterval = setInterval(() => { // give damage slowly
-                //         dispatch(rivalSlice.actions.updateHealth(blueDamage / 8))
-                //     }, 100)
-                //     setTimeout(() => { // unstun rival
-                //         // dispatch(rivalSlice.actions.setCanMove(true)) ***
-                //         dispatch(rivalSlice.actions.setGravity(5))
-                //         clearInterval(damageInterval);
-                //     }, 800);
-
-                //     // setTimeout(() => {
-                //     //     setBlueStyle({
-                //     //         x: gojo.x, y: gojo.y, visibility: "hidden", attacking: false,
-                //     //         transition: "all .2s ease, transform 4s, top 0s, left 0s", ...blueStyle,
-                //     //     })
-                //     // }, 400);
-                // }, 200);
             }, 300);
         }, 1900)
     }
@@ -557,18 +537,28 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
 
     // *** ULTRA DOMAIN HANDLER
     useEffect(() => {
+
         if (gameSettings.domainClash && gojo.domainCD.isReady && gojo.cursedEnergy.currentCursedEnergy >= 200) {
+            console.log("udh: satoru1", gameSettings.domainClash)
             handleDomainExpansion();
             dispatch(gameSettingsSlice.actions.setDomainClashReady(false));
             dispatch(gameSettingsSlice.actions.setDomainClash(false));
         }
         else if (gojo.domainStatus.isInitiated === true) { // user pressed domain expansion key or bot initiated domain
+            console.log("udh: satoru2")
             dispatch(gojoSlice.actions.setCanMove(false));
             dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: false }))
             if (gameSettings.domainClashReady) { // rival already initiated domain
+                console.log("udh: satoru21")
                 dispatch(gameSettingsSlice.actions.setDomainClash(true));
+                if (tutorialState.tutorialMode) {
+                    dispatch(tutorialSlice.actions.completeOneTaskInTutorial({
+                        tutorialIndex: tutorialState.currentTaskIndex, taskIndex: 0, character: gameSettings.selectedCharacter
+                    }));
+                }
             }
             else {
+                console.log("udh: satoru22")
                 dispatch(gameSettingsSlice.actions.setDomainClashReady(true));
                 setTimeout(() => {
                     setDomainClashCDref(true);
@@ -577,10 +567,13 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             }
         }
         else if (gojo.domainStatus.forceExpand) {
+            console.log("udh: satoru3")
             handleDomainExpansion();
         }
         else {
+            console.log("udh: satoru4")
             if (domainBugFixer && domainClashCDref && gojo.domainCD.isReady && gojo.cursedEnergy.currentCursedEnergy >= 200) {
+                console.log("udh: satoru5")
                 console.log("b")
                 handleDomainExpansion();
             }
@@ -1351,6 +1344,53 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     }, [gojo.animationState]);
 
     const gojoref = useRef<HTMLDivElement>(null);
+    const actionTriggered = React.useRef(false);
+
+    // Tutorial Effect
+    useEffect(() => {
+        if (gameSettings.selectedCharacter === "gojo") return;
+        if (tutorialState.tutorialMode && !actionTriggered.current) {
+            if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.action === "domain") {
+                actionTriggered.current = true;
+                setTimeout(() => {
+                    dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, isInitiated: true }))
+                    setDomainBugFixer(true);
+                    actionTriggered.current = false;
+                }, (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.timeout) * 1000);
+            }
+            if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.action === "forceDomain") {
+                actionTriggered.current = true;
+                setTimeout(() => {
+                    dispatch(gojoSlice.actions.setDomainState({ ...gojo.domainStatus, forceExpand: true }))
+                    actionTriggered.current = false;
+                }, (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.timeout) * 1000);
+            }
+            if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.action === "useBlue") {
+                actionTriggered.current = true;
+                setTimeout(() => {
+                    dispatch(gojoSlice.actions.setInfinity(false))
+                    setLocalBlueHelper(true)
+                    actionTriggered.current = false;
+                }, (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.timeout) * 1000);
+            }
+            if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.action === "combat") {
+                actionTriggered.current = true;
+                setTimeout(() => {
+                    dispatch(gojoSlice.actions.setInfinity(false))
+                    actionTriggered.current = false;
+                }, (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.timeout) * 1000);
+            }
+            if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.action === "rapid") {
+                actionTriggered.current = true;
+                setTimeout(() => {
+                    dispatch(gojoSlice.actions.setInfinity(false))
+                    dispatch(sukunaSlice.actions.setRapidAttackCounter(10))
+                }, (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.timeout) * 1000);
+            }
+        }
+    }, [tutorialState.currentTaskIndex])
+
+
 
     return (
         <>
