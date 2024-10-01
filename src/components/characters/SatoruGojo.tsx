@@ -9,6 +9,9 @@ import { AppDispatch } from "../../redux/GlobalStore";
 import "../../Gojo.css";
 import tutorialSlice from "../../redux/TutorialSlice";
 
+const SURFACE_Y = parseInt(process.env.REACT_APP_SURFACE_Y);
+
+
 const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     // console.log("render GOJO")
     const gojo = useSelector((state: any) => state.GojoState);
@@ -183,8 +186,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         let blueW = 100;
         let blueH = 200;
         let blueX = gojo.direction === "right" ?
-            gojoPosX + (isShiftPressed ? 350 : 150) - blueW : gojoPosX + (isShiftPressed ? -300 : -100) - blueW;
-        let blueY = (isShiftPressed ? 400 : 500) - blueH;
+            gojoPosX + (isShiftPressed ? 250 : 150) - blueW : gojoPosX + (isShiftPressed ? -300 : -100) - blueW;
+        let blueY = (isShiftPressed ? SURFACE_Y - 350 : SURFACE_Y - 275); // -160 / -260
+        console.log("calculated blue y position: ", (isShiftPressed ? SURFACE_Y - 160 : SURFACE_Y - 260))
         dispatch(gojoSlice.actions.setBluePosition({ x: blueX + blueW / 2, y: blueY + blueH / 2 + 30 }))
         setTimeout(() => {
             setBlueStyle(prevState => ({
@@ -247,7 +251,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             gojoPosX + (isShiftPressed ? 30 : 150) - redW :
             gojoPosX + (isShiftPressed ? 35 : -100) - redW;
         console.log("gojoPosX: ", gojoPosX, "redX", Math.abs(gojoPosX - redX))
-        let redY = 500 - redH;
+        let redY = (isShiftPressed ? SURFACE_Y - redH - 150 : SURFACE_Y - 70);
 
         setTimeout(() => { // animation not finished yet
 
@@ -262,7 +266,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                         animation: "red-itself .3s steps(1) infinite",
                         x: redX,
                         scale: "1",
-                        y: 200, attacking: true,
+                        y: redY, attacking: true,
                     }))
                     setMergeRedAndBlue(prevState => ({ ...prevState, red: true }))
 
@@ -288,7 +292,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                     visibility: "visible",
                     animation: "red-itself .3s steps(1) infinite",
                     x: redX,
-                    y: 400, attacking: true,
+                    y: redY, attacking: true,
                 }))
                 setTimeout(() => {
                     dispatch(gojoSlice.actions.setRedAttackMoment(true)) // handle skillshot damage in gamearea
@@ -731,7 +735,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             dispatch(rivalSlice.actions.setDevStun(true));
         }
         else {
-            dispatch(gojoSlice.actions.moveCharacterTo({ x: 250, y: 560 }));
+            dispatch(gojoSlice.actions.moveCharacterTo({ x: 250, y: SURFACE_Y }));
             dispatch(gojoSlice.actions.setDirection("right"));
             domainClashPanel();
         }

@@ -49,7 +49,7 @@ const initialState: Sukuna = {
   },
   fugaCounter: {
     maxCount: 50,
-    currentCount: 0,
+    currentCount: 50,
   },
   isBlocking: false,
   animationState: "stance",

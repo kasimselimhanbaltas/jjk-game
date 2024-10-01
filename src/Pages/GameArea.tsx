@@ -552,10 +552,7 @@ const GameArea = () => {
   }, [gameSettings.tutorial]);
   const handleStartGame = () => {
     // const storedUsername = localStorage.getItem('username');
-    // if (storedUsername === "ayso") {
-    //   aysoSoundEffectRef.current.volume = 1;
-    //   aysoSoundEffectRef.current.play();
-    // }
+
     dispatch(playerSlice.actions.resetState())
     dispatch(rivalSlice.actions.resetState())
     setShowFinishMenu(false)
@@ -632,7 +629,6 @@ const GameArea = () => {
   }
   // const x = 50;
 
-  // const aysoSoundEffectRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => { // tutorial health refill
     if (rivalCharacter.health.currentHealth <= 0 && gameSettings.tutorial) {
@@ -892,54 +888,93 @@ const GameArea = () => {
     dispatch(tutorialSlice.actions.setTutorialIndex(tutorialState.currentTaskIndex + 1));
     handleStartGame();
   }
+
+  const goldWords = ["cursed", "technique", "energy", "reverse", "simple", "technique"];
+  const redWords = ["sure", "hit", "effect"];
+  const blueWords = ["infinity"];
+  const highlightText = (text) => {
+    return text.split(' ').map((word, index) => {
+      if (redWords.includes(word.toLowerCase())) {
+        return <span key={index} className="highlight-text-red">{word} </span>;
+      } else if (goldWords.includes(word.toLowerCase())) {
+        return <span key={index} className="highlight-text-gold">{word} </span>;
+      } else if (blueWords.includes(word.toLowerCase())) {
+        return <span key={index} className="highlight-text-blue">{word} </span>;
+      } else {
+        return <span key={index}>{word} </span>;
+      }
+    });
+  };
+
   return (
     <>
       <div className="game-area">
         {/* <h1> {x * 16} x {x * 9}</h1> */}
         <audio src={require("../Assets/audios/yowaimo.mp3")} ref={yowaimoSoundEffectRef}></audio>
-        {/* <audio src={require("../Assets/audios/ayso.ogg")} ref={aysoSoundEffectRef}></audio> */}
 
         {tutorialState.tutorialMode && (
-
-          <div className="quest-container" style={{ display: tutorialState.tutorialMode ? "block" : "none" }}>
-            {/* <div className="quest-title">{fetchedTutorial.title}</div> */}
-            <div className="quest-title">{tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].title}</div>
-            <br />
-            <div className="tasks">
-              <div className="stylish-border"></div>
-
-              {tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].tasks.map((task, index) => (
-                <div className="task" key={index}>
-                  <div className="checkbox-container">
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <div className={`checkbox ${task.isPressed ? "checked" : ""}`}></div>
-                      <div className="task-text">{task.text}</div>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
-
-                      {task.keys.map((key, i) => (
-                        <span className="scale-fixer">
-                          <span className="keyboard-button wide-keyboard-button"
-                            style={{ width: key === "shift" || key === "space" ? "120px" : "80px", marginLeft: key === "shift" || key === "space" ? "-40px" : "-15px" }}
-                          ><i>{key}</i></span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+          <>
+            {/* TIPS POPUP */}
+            <div className="quest-container" style={{
+              display: tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].tips !== "" ? "block" : "none",
+              left: "10px"
+            }}>
+              {/* <div className="quest-title">{fetchedTutorial.title}</div> */}
+              <div className="quest-title">{tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].title}</div>
+              <br />
+              <div className="tasks">
+                <div className="stylish-border"></div>
+                <div className="task-text">
+                  {/* Call the highlightText function to render the tips with highlighted words */}
+                  {highlightText(tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].tips)}
                 </div>
-              ))}
+              </div>
             </div>
 
-            <div className="quest-buttons"
-              style={{ display: !tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].isComplete ? "none" : "flex" }}
-            >
-              <button className="quest-button" onClick={() =>
-                setGoBackToTutorialMenu()
-              }>Tutorial Menu</button>
-              <button className="quest-button" style={{ display: tutorialState.currentTaskIndex === tutorialState.characters[gameSettings.selectedCharacter].length - 1 ? "none" : "block" }}
-                onClick={goToNextTutorial}>Next</button>
+            {/* TUTORIAL TASKS POPUP */}
+            <div className="quest-container" style={{ display: tutorialState.tutorialMode ? "block" : "none" }}>
+              {/* <div className="quest-title">{fetchedTutorial.title}</div> */}
+              <div className="quest-title">{tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].title}</div>
+              <br />
+              <div className="tasks">
+                <div className="stylish-border"></div>
+
+                {tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].tasks.map((task, index) => (
+                  <>
+                    <div className="task" key={index}>
+                      <div className="checkbox-container">
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <div className={`checkbox ${task.isPressed ? "checked" : ""}`}></div>
+                          <div className="task-text">{task.text}</div>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
+
+                          {task.keys.map((key, i) => (
+                            <span className="scale-fixer">
+                              <span className="keyboard-button wide-keyboard-button"
+                                style={{ width: key === "shift" || key === "space" ? "120px" : "80px", marginLeft: key === "shift" || key === "space" ? "-40px" : "-15px" }}
+                              ><i>{key}</i></span>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ))}
+              </div>
+
+              <div className="quest-buttons"
+                style={{ display: !tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].isComplete ? "none" : "flex" }}
+              >
+                <button className="quest-button" onClick={() =>
+                  setGoBackToTutorialMenu()
+                }>Tutorial Menu</button>
+                <button className="quest-button" style={{ display: tutorialState.currentTaskIndex === tutorialState.characters[gameSettings.selectedCharacter].length - 1 ? "none" : "block" }}
+                  onClick={goToNextTutorial}>Next</button>
+              </div>
             </div>
-          </div>
+          </>
+
         )}
 
 

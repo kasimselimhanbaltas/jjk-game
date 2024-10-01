@@ -11,6 +11,7 @@ const initialState = {
         title: "Movements", // TASK 1
         isComplete: false,
         rivalTaskAction: "none",
+        tips: "",
         tasks: [
           { text: "Jump: ", keys: ["w"], isPressed: false },
           { text: "Move right: ", keys: ["d"], isPressed: false },
@@ -21,24 +22,28 @@ const initialState = {
         title: "Blue", // TASK 2
         isComplete: false,
         rivalTaskAction: "none",
+        tips: "",
         tasks: [{ text: "Use your BLUE skill", keys: ["e"], isPressed: false }],
       },
       {
         title: "Red", // TASK 3
         isComplete: false,
         rivalTaskAction: "none",
+        tips: "",
         tasks: [{ text: "Use your RED skill", keys: ["r"], isPressed: false }],
       },
       {
         title: "Hollow Purple", // TASK 4
         isComplete: false,
         rivalTaskAction: "none",
+        tips: "",
         tasks: [{ text: "Use your HOLLOW PURPLE skill", keys: ["e", "r"], isPressed: false }],
       },
       {
         title: "Mixing Colors", // TASK 5
         isComplete: false,
         rivalTaskAction: "none",
+        tips: "",
         tasks: [
           { text: "Make a charged blue", keys: ["shift", "e"], isPressed: false },
           { text: "Make a charged red", keys: ["shift", "r"], isPressed: false }
@@ -48,18 +53,22 @@ const initialState = {
         title: "Infinite Void", // TASK 6
         isComplete: false,
         rivalTaskAction: "none",
-        tasks: [{ text: "Expand your domain: L", keys: ["l"], isPressed: false }],
+        tips: "Expanding your domain will make you unable to use your Cursed Technique right after your expansion is finished.",
+        tasks: [{ text: "Expand your domain", keys: ["l"], isPressed: false }],
       },
       {
         title: "Domain Clash", // TASK 7
         isComplete: false,
         rivalTaskAction: { action: "domain", timeout: 2 },
-        tasks: [{ text: "Expand your domain: L", keys: ["l"], isPressed: false }],
+        tips: "You must expand your domain with perfect timing in order to protect yourself from the enemy domain's Sure Hit Effect.\
+        Sure Hit Effect always bypasses infinity. Best way to counter Sure Hit Effect is to expand your own domain.",
+        tasks: [{ text: "Expand your domain", keys: ["l"], isPressed: false }],
       },
       {
         title: "Close Combat", // TASK 8
         isComplete: false,
         rivalTaskAction: "none",
+        tips: "While using your Cursed Energy, use your combat skills to maximize your damage.",
         tasks: [
           { text: "Punching Combo", keys: ["j"], isPressed: false },
           { text: "Black Flash Combo", keys: ["k"], isPressed: false },
@@ -70,6 +79,8 @@ const initialState = {
         title: "Reverse Cursed Technique", // TASK 8
         isComplete: false,
         rivalTaskAction: { action: "useCleave", timeout: 2 },
+        tips: "You can heal yourself or make yourself able to use your Cursed Technique sooner by manipulating the reverse cursed energy. \
+        Be careful, Reverse Cursed Energy and Cursed Energy cannot be used simultaneously, so you cannot use your Cursed Technique while RCT is active.",
         tasks: [
           { text: "Heal with RCT", keys: ["z"], isPressed: false },
           { text: "Use Blue Skill", keys: ["e"], isPressed: false },
@@ -80,6 +91,7 @@ const initialState = {
         title: "Simple Domain", // TASK 8
         isComplete: false,
         rivalTaskAction: { action: "forceDomain", timeout: 2 },
+        tips: "Simple domain buys you a litte time against a domain by cancelling the Sure Hit Effect for you.",
         tasks: [
           { text: "Use Simple Domain", keys: ["c"], isPressed: false },
         ],
@@ -88,6 +100,8 @@ const initialState = {
         title: "Falling Blossom Emotion", // TASK 8
         isComplete: false,
         rivalTaskAction: { action: "forceDomain", timeout: 2 },
+        tips: "This technique programs your cursed energy to counter the incoming attacks with the same amount of cursed energy.\
+        Effective against basic Cursed Techniques such as Malevolent Shrine's Dismantle and Cleave",
         tasks: [
           { text: "Use Falling Blossom Emotion", keys: ["g"], isPressed: false },
         ],
@@ -100,6 +114,7 @@ const initialState = {
         title: "Movements", // TASK 1
         isComplete: false,
         rivalTaskAction: "none",
+        tips: "",
         tasks: [
           { text: "Jump", keys: ["w"], isPressed: false, timeoutSec: 0 },
           { text: "Move right", keys: ["d"], isPressed: false, timeoutSec: 0 },
@@ -113,6 +128,7 @@ const initialState = {
         title: "Dismantle", // TASK 
         rivalTaskAction: { action: "combat", timeout: 0 },
         isComplete: false,
+        tips: "",
         tasks: [{ text: "Use your DISMANTLE skill", keys: ["e"], isPressed: false, timeoutSec: 1 }],
         timeoutSec: 1
       },
@@ -120,6 +136,7 @@ const initialState = {
         title: "Cleave", // TASK 
         rivalTaskAction: { action: "combat", timeout: 0 },
         isComplete: false,
+        tips: "",
         tasks: [{ text: "Use your CLEAVE skill", keys: ["r"], isPressed: false, timeoutSec: 1 }],
         timeoutSec: 1
       },
@@ -127,6 +144,7 @@ const initialState = {
         title: "Malevolent Shrine", // TASK 
         rivalTaskAction: "none",
         isComplete: false,
+        tips: "",
         tasks: [{ text: "Expand your domain!", keys: ["l"], isPressed: false, timeoutSec: 1 }],
         timeoutSec: 10
       },
@@ -134,6 +152,7 @@ const initialState = {
         title: "Rapid Slashes", // TASK 
         rivalTaskAction: { action: "rapid", timeout: 0 },
         isComplete: false,
+        tips: "",
         tasks: [{ text: "Use your RAPID SLASHES skill!", keys: ["e"], isPressed: false, timeoutSec: 1 }],
         timeoutSec: 3
       },
@@ -141,6 +160,7 @@ const initialState = {
         title: "FUGA: OPEN", // TASK 
         rivalTaskAction: { action: "combat", timeout: 0 },
         isComplete: false,
+        tips: "",
         tasks: [{ text: "It's a little cold in here isn't it? Open up the furnace!", keys: ["f"], isPressed: false, timeoutSec: 1 }],
         timeoutSec: 10
       },
@@ -148,12 +168,14 @@ const initialState = {
         title: "Domain Clash", // TASK 7
         isComplete: false,
         rivalTaskAction: { action: "domain", timeout: 3 },
+        tips: "",
         tasks: [{ text: "Expand your domain: L", keys: ["l"], isPressed: false }],
       },
       {
         title: "Close Combat", // TASK 8
         isComplete: false,
         rivalTaskAction: { action: "combat", timeout: 0 },
+        tips: "",
         tasks: [
           { text: "Launching Kick", keys: ["j"], isPressed: false },
           { text: "Bam Attack", keys: ["k"], isPressed: false },
@@ -163,6 +185,7 @@ const initialState = {
         title: "Reverse Cursed Technique", // TASK 8
         isComplete: false,
         rivalTaskAction: { action: "useBlue", timeout: 3 },
+        tips: "",
         tasks: [
           { text: "Heal with RCT", keys: ["z"], isPressed: false },
           { text: "Use Cleave", keys: ["r"], isPressed: false },
@@ -173,6 +196,7 @@ const initialState = {
         title: "Domain Amplification", // TASK 8
         isComplete: false,
         rivalTaskAction: "none",
+        tips: "",
         tasks: [
           { text: "Activate Domain Amplification", keys: ["q"], isPressed: false },
         ],

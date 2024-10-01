@@ -1436,3 +1436,18 @@ body {
   pointer-events: none;
   /* So the border doesn't interfere with interactions */
 }
+
+.highlight-text-red {
+  color: red !important;
+  font-weight: bold;
+}
+
+.highlight-text-gold {
+  color: gold !important;
+  font-weight: bold;
+}
+
+.highlight-text-blue {
+  color: lightblue !important;
+  font-weight: bold;
+}
