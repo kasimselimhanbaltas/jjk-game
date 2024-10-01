@@ -119,6 +119,7 @@ export interface Gojo {
     damage: number,
     timeout: number
     knockback: number,
+    animation: string,
   },
   devStun: boolean,
   domainStatus: {
@@ -203,6 +204,7 @@ export interface Sukuna {
     damage: number,
     timeout: number
     knockback: number,
+    animation: string,
   },
   devStun: boolean,
   domainStatus: {

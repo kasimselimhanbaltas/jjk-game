@@ -59,6 +59,7 @@ const initialState: Gojo = {
     takeDamageAnimationCheck: false,
     knockback: 0,
     timeout: 0,
+    animation: ""
   },
   devStun: false,
   domainStatus: {
@@ -323,6 +324,7 @@ const gojoSlice = createSlice({
         action.payload.takeDamageAnimationCheck;
       state.takeDamage.damage = action.payload.damage;
       state.takeDamage.timeout = action.payload.timeout;
+      state.takeDamage.animation = action.payload.animation;
       console.log(state.x, action.payload.knockback);
       if (
         state.direction === "left" &&

@@ -88,7 +88,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
     }, [sukuna.hardStun, sukuna.devStun, sukuna.closeRange, sukuna.canMove, sukuna.rapidAttackCounter >= 10,
     sukuna.health.currentHealth <= 0, sukuna.cleaveCD.isReady, sukuna.dismantleCD.isReady, sukuna.domainCD.isReady,
-    rivalState.health.currentHealth <= 0, sukuna.animationBlocker, xDistance > 0, sukuna.direction]
+    rivalState.health.currentHealth <= 0, sukuna.animationBlocker, xDistance > 0,
+    sukuna.direction, Math.abs(sukuna.x - rivalState.x) > 150, rivalState.infinity]
     );
 
 
@@ -124,7 +125,8 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             domainDamageInterval = setInterval(() => {
                 // dispatch(rivalSlice.actions.updateHealth(slashDamage)); // domain slash damage
                 dispatch(rivalSlice.actions.setTakeDamage({
-                    isTakingDamage: true, damage: -slashDamage, takeDamageAnimationCheck: false, knockback: 0, timeout: 0
+                    isTakingDamage: true, damage: -slashDamage, takeDamageAnimationCheck: false,
+                    knockback: 0, timeout: 0, animation: ""
                 }))
                 dispatch(sukunaSlice.actions.increaseFugaCounter(1))
 
@@ -217,7 +219,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     // dispatch(rivalSlice.actions.moveCharacterWD({ x: stepDistance, y: 0 }));
                     // dmgtmp
                     dispatch(rivalSlice.actions.setTakeDamage({
-                        isTakingDamage: true, damage: 10, takeDamageAnimationCheck: false, knockback: attackDirection === "left" ? -10 : 10, timeout: 300
+                        isTakingDamage: true, damage: 10, takeDamageAnimationCheck: false, knockback: attackDirection === "left" ? -10 : 10, timeout: 300, animation: ""
                     }))
                 }, i * 100);
             }
@@ -277,7 +279,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
 
             dispatch(gojoSlice.actions.setTakeDamage({
                 isTakingDamage: true, damage: 100,
-                takeDamageAnimationCheck: infinity ? false : true, knockback: infinity ? 0 : stepDistance, timeout: 500
+                takeDamageAnimationCheck: infinity ? false : true, knockback: infinity ? 0 : stepDistance, timeout: 500, animation: ""
             }));
             setTimeout(() => {
                 dispatch(rivalSlice.actions.setHardStun(false)) // ****
@@ -313,7 +315,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             dispatch(rivalCleaveAttack(true));
             // dispatch(rivalSlice.actions.updateHealth(cleaveAttackDamage));
             dispatch(rivalSlice.actions.setTakeDamage({
-                isTakingDamage: true, damage: tutorialState.tutorialMode ? 1000 : -cleaveAttackDamage, takeDamageAnimationCheck: false, knockback: 0, timeout: 300
+                isTakingDamage: true, damage: tutorialState.tutorialMode ? 1000 : -cleaveAttackDamage, takeDamageAnimationCheck: false, knockback: 0, timeout: 300, animation: ""
             }))
             setTimeout(() => { // cooldown
                 setCleaveReady({ ready: true, coolDown: 5 });
@@ -328,40 +330,45 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
     // Sukuna attack interval - auto attack configuration
     const startAttackInterval = () => {
         const interval = 500; // 3-10 saniye arasında rastgele bir değer
-        // if (rivalState.infinity) {
-        //     dispatch(sukunaSlice.actions.setDomainAmplification({ isActive: true }));
-        //     dispatch(sukunaSlice.actions.setIsBlocking(true));
-
-        // }
+        if (rivalState.infinity) {
+            dispatch(sukunaSlice.actions.setDomainAmplification({ isActive: true }));
+            dispatch(sukunaSlice.actions.setIsBlocking(true));
+        }
+        else {
+            dispatch(sukunaSlice.actions.setDomainAmplification({ isActive: false }));
+            dispatch(sukunaSlice.actions.setIsBlocking(false));
+        }
         attackInterval.current = setInterval(() => {
             if (rivalState.health.currentHealth > 0 && sukuna.health.currentHealth > 0
                 && sukuna.canMove && sukuna.animationBlocker === false
             ) {
                 console.log("rival desicion: ")
-                if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady) {
+                if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady && false) {
                     console.log("domain attack")
                     // handleDomainAttack()
                     setDomainBugFixer(true);
                     dispatch(sukunaSlice.actions.setDomainState({ ...sukuna.domainStatus, isInitiated: true }))
                 }
-                else if (sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount) {
+                else if (sukuna.fugaCounter.currentCount >= sukuna.fugaCounter.maxCount && !rivalState.infinity) {
                     handleFugaAttack()
                 }
 
-                else if (sukuna.closeRange && sukuna.dismantleCD.isReady) {
+                else if (sukuna.closeRange && sukuna.dismantleCD.isReady && !rivalState.infinity) {
                     console.log("cleave attack")
                     handleCleaveAttack()
                 }
 
-                else if (sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount) {
+                else if (sukuna.rapidAttackCounter.currentCount >= sukuna.rapidAttackCounter.maxCount && !rivalState.infinity) {
                     console.log("rapid attack")
                     localRapidAttack();
                 }
-                else if (sukuna.cleaveCD.isReady) {
+                else if (sukuna.cleaveCD.isReady && !rivalState.infinity) {
                     console.log("dismanlte attack")
                     handleDismantleAttack()
-                } else {
-                    console.log("bam attack")
+                } else if (Math.abs(sukuna.x - rivalState.x) <= 150) {
+                    handleKickAttack();
+                }
+                else {
                     handleBamAttack();
                 }
 
@@ -720,7 +727,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     setFugaExplosionStyle({ animation: "fuga-explosion 1s steps(1)", display: "block" })
                     // dispatch(rivalSlice.actions.updateHealth(-500))
                     dispatch(rivalSlice.actions.setTakeDamage({
-                        isTakingDamage: true, damage: 500, takeDamageAnimationCheck: true, knockback: 50, timeout: 300
+                        isTakingDamage: true, damage: 500, takeDamageAnimationCheck: true, knockback: 50, timeout: 300, animation: ""
                     })) // check later
                     setTimeout(() => {
                         setFugaExplosionStyle({ animation: "", display: "none" })
@@ -845,7 +852,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
             if (i === 0) { // launch 
                 // dispatch(rivalSlice.actions.updateHealth(-20))
                 dispatch(gojoSlice.actions.setTakeDamage({
-                    isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+                    isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 0, timeout: 300, animation: ""
                 }));
             }
             if (i === 5) { // sukuna jump
@@ -867,7 +874,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     dispatch(rivalSlice.actions.setDirection(attackDirection))
                     dispatch(rivalSlice.actions.setGravity(100))
                     dispatch(gojoSlice.actions.setTakeDamage({
-                        isTakingDamage: true, damage: 30, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+                        isTakingDamage: true, damage: 30, takeDamageAnimationCheck: true, knockback: 0, timeout: 300, animation: ""
                     }));
                 }, 100);
             }
@@ -942,7 +949,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 // dispatch(rivalSlice.actions.updateHealth(-20))
                 // dispatch(rivalSlice.actions.setTransition("all .5s ease, transform 0s"))
                 dispatch(gojoSlice.actions.setTakeDamage({
-                    isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+                    isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 0, timeout: 300, animation: ""
                 }));
             }
             if (i === 5) { // sukuna jump
@@ -964,7 +971,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                     dispatch(rivalSlice.actions.setDirection(attackDirection))
                     dispatch(rivalSlice.actions.setGravity(100))
                     dispatch(gojoSlice.actions.setTakeDamage({
-                        isTakingDamage: true, damage: 30, takeDamageAnimationCheck: true, knockback: 0, timeout: 300
+                        isTakingDamage: true, damage: 30, takeDamageAnimationCheck: true, knockback: 0, timeout: 300, animation: ""
                     }));
                 }, 100);
             }
@@ -992,14 +999,15 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         }, 1000 / 12);
     }, [sukuna.x, rivalState.x, sukuna.domainAmplification.isActive])
 
-    const handleTakeDamage = useCallback((takeDamageAnimationCheck, timeout, damage, knockback) => {
+    const handleTakeDamage = useCallback((takeDamageAnimationCheck, timeout, damage, knockback, animation) => {
         dispatch(sukunaSlice.actions.updateHealth(-damage));
         console.log("takedamge: ", damage, knockback)
         if (knockback && knockback > 0)
             dispatch(sukunaSlice.actions.moveCharacterWD({ x: sukuna.direction === "left" ? knockback : -knockback, y: 0 }))
         if (takeDamageAnimationCheck) {
             dispatch(sukunaSlice.actions.setHardStun(true));
-            dispatch(sukunaSlice.actions.setAnimationState("take-damage"));
+            if (animation !== "") dispatch(sukunaSlice.actions.setAnimationState(animation));
+            else dispatch(sukunaSlice.actions.setAnimationState("take-damage"));
             dispatch(sukunaSlice.actions.setTransition("all .2s ease, transform 0s, left .8s ease-in-out"));
             dispatch(sukunaSlice.actions.setAnimationBlocker(true));
             setTimeout(() => {
@@ -1007,19 +1015,19 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 dispatch(sukunaSlice.actions.setHardStun(false)); // ****
                 dispatch(sukunaSlice.actions.setAnimationState("stance"));
                 dispatch(sukunaSlice.actions.setTransition("all .2s ease, transform 0s"));
-                dispatch(sukunaSlice.actions.setTakeDamage({ isTakingDamage: false, damage: 0, takeDamageAnimationCheck: false, knockback: 0, timeout: 0 }));
-            }, 500 + timeout);
+                dispatch(sukunaSlice.actions.setTakeDamage({ isTakingDamage: false, damage: 0, takeDamageAnimationCheck: false, knockback: 0, timeout: 0, animation: "" }));
+            }, animation !== "" ? 500 : 300 + timeout);
         }
         else {
             setTimeout(() => {
-                dispatch(sukunaSlice.actions.setTakeDamage({ isTakingDamage: false, damage: 0, takeDamageAnimationCheck: false, knockback: 0, timeout: 0 }));
+                dispatch(sukunaSlice.actions.setTakeDamage({ isTakingDamage: false, damage: 0, takeDamageAnimationCheck: false, knockback: 0, timeout: 0, animation: "" }));
             }, timeout);
         }
     }, [sukuna.direction]);
     useEffect(() => {
         const obj = sukuna.takeDamage;
         if (obj.isTakingDamage) {
-            handleTakeDamage(obj.takeDamageAnimationCheck, obj.timeout, obj.damage, obj.knockback);
+            handleTakeDamage(obj.takeDamageAnimationCheck, obj.timeout, obj.damage, obj.knockback, obj.animation);
         }
     }, [sukuna.takeDamage.isTakingDamage === true])
     const handleDismantleAttack = () => {
@@ -1206,6 +1214,11 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
         else if (sukuna.animationState === "take-damage") {
             setSukunaStyle({
                 animation: "sukuna-take-damage .5s steps(1) forwards"
+            })
+        }
+        else if (sukuna.animationState === "take-damage-short") {
+            setSukunaStyle({
+                animation: "sukuna-take-damage-short .3s steps(1) forwards"
             })
         }
         else if (sukuna.animationState === "land-sukuna") {

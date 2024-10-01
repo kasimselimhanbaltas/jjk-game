@@ -15,8 +15,9 @@
     transition: all .2s ease, transform 0s;
     z-index: 5;
 }
+
 @keyframes gojo-stance {
-0% {
+    0% {
         background-position: -321px -187px;
         width: 66px;
         height: 94px;
@@ -52,6 +53,7 @@
         height: 94px;
     }
 }
+
 @keyframes gojo-first-pose {
     0% {
         background-position: -34px -46px;
@@ -59,6 +61,7 @@
         height: 104px;
     }
 }
+
 @keyframes gojo-entry {
     0% {
         background-position: -34px -46px;
@@ -114,6 +117,7 @@
         height: 104px;
     }
 }
+
 @keyframes domain-pose {
     0% {
         background-position: -160px -2598px;
@@ -140,6 +144,7 @@
         height: 98px;
     }
 }
+
 @keyframes gojo-jump {
     0% {
         background-position: -52px -361px;
@@ -195,6 +200,7 @@
         height: 88px;
     } */
 }
+
 @keyframes gojo-running {
     0% {
         background-position: -808px -188px;
@@ -226,6 +232,7 @@
         height: 91px;
     }
 }
+
 @keyframes gojo-punch-combination {
     0% {
         background-position: -38px -493px;
@@ -338,6 +345,7 @@
         height: 88px;
     }
 }
+
 @keyframes gojo-blackflash-combination {
     0% {
         background-position: -31px -655px;
@@ -433,6 +441,7 @@
         translate: 0px 0px;
     }
 }
+
 @keyframes gojo-kick-combo {
     0% {
         background-position: -64px -811px;
@@ -606,11 +615,13 @@
         height: 104px;
     }
 }
-.blue{
+
+.blue {
     background: url(./Assets/gojo-noline.png) no-repeat;
 }
+
 @keyframes blueEffect {
-    0%{
+    0% {
         background-position: -1210px -1147px;
         width: 125px;
         height: 111px;
@@ -634,7 +645,9 @@
         height: 111px;
     }
 }
+
 @keyframes blue-itself {
+
     /* top:  80 62 84 */
     /* left: 74 62 76  */
     0% {
@@ -656,6 +669,7 @@
         height: 204px;
         translate: -2px -2px;
     }
+
     100% {
         background-position: -65px -1327px;
         width: 218px;
@@ -663,6 +677,7 @@
         translate: 0px 0px;
     }
 }
+
 @keyframes gojo-red-up {
     0% {
         background-position: -90px -1618px;
@@ -748,23 +763,28 @@
         height: 104px;
     }
 
-    84% { /* upside */
+    84% {
+        /* upside */
         background-position: -1316px -1618px;
         width: 44px;
         height: 104px;
     }
 
-    90% { /* upside */
+    90% {
+        /* upside */
         background-position: -1390px -1618px;
         width: 44px;
         height: 104px;
     }
-    100% { /* upside */
+
+    100% {
+        /* upside */
         background-position: -1390px -1618px;
         width: 44px;
         height: 104px;
     }
 }
+
 @keyframes gojo-red-horizontal {
     0% {
         background-position: -90px -1618px;
@@ -849,12 +869,14 @@
         width: 64px;
         height: 104px;
     }
+
     100% {
         background-position: -1240px -1618px;
         width: 64px;
         height: 104px;
     }
 }
+
 @keyframes gojo-red-vertical {
     0% {
         background-position: -90px -1618px;
@@ -939,50 +961,60 @@
         width: 64px;
         height: 104px;
     }
-    80%{
+
+    80% {
         background-position: -1240px -1618px;
         width: 64px;
         height: 104px;
     }
+
     85% {
         background-position: -1316px -1618px;
         width: 44px;
         height: 104px;
     }
+
     90% {
         background-position: -1390px -1508px;
         width: 55px;
         height: 214px;
     }
+
     100% {
         background-position: -1390px -1508px;
         width: 55px;
         height: 214px;
     }
 }
+
 @keyframes gojo-red-minieffect {
     0% {
         background-position: -1407px -1585px;
         width: 34px;
         height: 30px;
     }
-    33%{
+
+    33% {
         background-position: -1401px -1545px;
         width: 42px;
         height: 30px;
     }
+
     66% {
         background-position: -1397px -1508px;
         width: 48px;
         height: 30px;
     }
+
     100% {
         background-position: -1407px -1585px;
         width: 34px;
         height: 30px;
     }
 }
+
 @keyframes red-itself {
+
     /* 68x76 62x62 76x84 */
     0% {
         background-position: -78px -1743px;
@@ -997,6 +1029,7 @@
         translate: 6px 14px;
         /* translate: 3px 7px; */
     }
+
     66% {
         background-position: -552px -1755px;
         width: 216px;
@@ -1004,6 +1037,7 @@
         translate: -8px -5px;
         /* translate: -4px -2.5px; */
     }
+
     100% {
         background-position: -78px -1743px;
         width: 202px;
@@ -1011,6 +1045,7 @@
         translate: 0px 0px;
     }
 }
+
 @keyframes purple-itself {
 
     /* 96x84 117x120 98x116 */
@@ -1043,6 +1078,7 @@
         translate: 0px 0px;
     }
 }
+
 @keyframes gojo-makingPurple {
     0% {
         background-position: -117px -2017px;
@@ -1111,34 +1147,40 @@
         height: 104px;
         translate: -16px 0px;
     }
+
     70% {
         background-position: -337px -2145px;
         width: 84px;
         height: 104px;
     }
+
     77% {
         background-position: -446px -2155px;
         width: 171px;
         height: 115px;
         translate: 0px 20px;
     }
+
     84% {
         background-position: -637px -2163px;
         width: 170px;
         height: 88px;
         translate: 0px 1px;
     }
+
     91% {
         background-position: -827px -2163px;
         width: 170px;
         height: 88px;
     }
+
     100% {
         background-position: -827px -2163px;
         width: 170px;
         height: 88px;
     }
 }
+
 @keyframes gojo-makingPurple-left {
     0% {
         background-position: -117px -2017px;
@@ -1240,6 +1282,7 @@
         height: 88px;
     }
 }
+
 @keyframes purple-throwing {
     0% {
         background-position: -112px -2289px;
@@ -1265,45 +1308,53 @@
         height: 84px;
     }
 }
+
 @keyframes gojo-take-damage {
-    0%{
+    0% {
         background-position: -240px -1036px;
         width: 64px;
         height: 92px;
     }
-    20%{
+
+    20% {
         background-position: -308px -1030px;
         width: 74px;
         height: 98px;
     }
-    40%{
+
+    40% {
         background-position: -386px -1034px;
-            width: 74px;
-            height: 94px;
+        width: 74px;
+        height: 94px;
     }
-    60%{
+
+    60% {
         background-position: -149px -1040px;
         width: 58px;
         height: 88px;
     }
-    80%{
-        background-position:  -73px -1036px;
+
+    80% {
+        background-position: -73px -1036px;
         width: 54px;
         height: 92px;
     }
+
     100% {
         background-position: -73px -1036px;
         width: 54px;
         height: 92px;
     }
-    
+
 }
+
 @keyframes gojo-purple-pose {
-    0%{
+    0% {
         background-position: -773px -43px;
         width: 98px;
         height: 104px;
     }
+
     100% {
         background-position: -773px -43px;
         width: 98px;
@@ -1320,6 +1371,7 @@
     background: url(./Assets/gojo-noline.png);
     animation: purple-itself .4s steps(1) infinite;
 }
+
 .purple {
     position: absolute;
     transition: all .2s ease, transform 4s, top 0s ease, left 2s ease-in;
@@ -1329,6 +1381,7 @@
     background: url(./Assets/gojo-noline.png);
     animation: purple-throwing .5s steps(1) infinite;
 }
+
 .red {
     position: absolute;
     transition: all .2s ease, transform 4s, top 0s ease, left 0s ease;
@@ -1346,14 +1399,16 @@
     border-radius: 50%;
     z-index: 99;
 }
-.domain-starter{
-    width:10px;
-    height:10px;
+
+.domain-starter {
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background-color: black;
     position: absolute;
     z-index: 0;
     transition: all .2s, scale 5s;
+    scale: 0;
 }
 
 
@@ -1368,6 +1423,7 @@
     border-radius: 50%;
     z-index: 0;
 }
+
 /* @keyframes rct-heal {
     0% {
         background-position: 0px 0px;
@@ -1441,21 +1497,24 @@
         background-position: -1275px 0px;
     }
 } */
-.gojo-domain-amplification{
+.gojo-domain-amplification {
     width: 90px;
     height: 120px;
     background: url(./Assets/gojo-domain-amplification.png);
     animation: gojo-domain-amplification .8s steps(6) infinite;
 }
+
 @keyframes gojo-domain-amplification {
     0% {
         background-position: 0px 0px;
     }
+
     100% {
         background-position: -540px 0px;
     }
 }
+
 .stun-div {
     background: url(./Assets/stun.png);
-    background-size: contain; 
+    background-size: contain;
 }

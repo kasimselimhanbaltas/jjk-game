@@ -141,7 +141,7 @@ const GameArea = () => {
         if (distance === "close range") {
           dispatch(sukunaSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
           dispatch(sukunaSlice.actions.setTakeDamage({
-            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500
+            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: ""
           }));
         }
       } else {
@@ -152,7 +152,7 @@ const GameArea = () => {
         if (distance === "close range") {
           dispatch(sukunaSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
           dispatch(sukunaSlice.actions.setTakeDamage({ // *char
-            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500
+            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: ""
           }));
         }
       }
@@ -220,7 +220,7 @@ const GameArea = () => {
           setTimeout(() => {
             dispatch(rivalSlice.actions.setDirection(gojo.x < rivalCharacter.x ? "left" : "right"));
             dispatch(sukunaSlice.actions.setTakeDamage({
-              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
+              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500, animation: ""
             }));
           }, (Math.abs(gojo.x - sukuna.x) * 0.7)); // hitbox time fixer
         }
@@ -234,7 +234,7 @@ const GameArea = () => {
           setTimeout(() => {
             dispatch(playerSlice.actions.setDirection(gojo.x < playerCharacter.x ? "left" : "right"));
             dispatch(sukunaSlice.actions.setTakeDamage({
-              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500
+              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500, animation: ""
             }));
           }, (Math.abs(gojo.x - sukuna.x) * 0.7)); // hitbox time fixer
           // setTimeout(() => {
@@ -247,11 +247,11 @@ const GameArea = () => {
       if (gameSettings.selectedCharacter === "sukuna") { // is rival gonna take damage from sukuna smash attack(R)
         let hitOrMiss =
           Math.abs(rivalCharacter.x - sukuna.bamLandingPositionX) <= 100 ? "hit" : "miss"
-        if (rivalCharacter.characterName === "gojo" && gojo.infinity) {
-          if (!playerCharacter.domainAmplification.isActive) {
-            hitOrMiss = "miss";
-          }
-        }
+        // if (rivalCharacter.characterName === "gojo" && gojo.infinity) {
+        //   if (!playerCharacter.domainAmplification.isActive) {
+        //     hitOrMiss = "miss";
+        //   }
+        // }
         if (hitOrMiss === "hit") {
           let infinity = rivalCharacter.characterName === "gojo" && gojo.infinity ? true : false;
           setTimeout(() => {
@@ -261,7 +261,7 @@ const GameArea = () => {
 
             dispatch(rivalSlice.actions.jumpWS(15))
             dispatch(gojoSlice.actions.setTakeDamage({ // megfix
-              isTakingDamage: true, damage: 100, takeDamageAnimationCheck: infinity ? false : true, knockback: infinity ? 0 : 150, timeout: 300
+              isTakingDamage: true, damage: 100, takeDamageAnimationCheck: true, knockback: 150, timeout: 300, animation: ""
             }));
           }, 100);
         }
@@ -274,7 +274,7 @@ const GameArea = () => {
 
           dispatch(rivalSlice.actions.setDirection(sukuna.x > rivalCharacter.x ? "right" : "left"));
           dispatch(gojoSlice.actions.setTakeDamage({ // megfix
-            isTakingDamage: true, damage: 100, takeDamageAnimationCheck: infinity ? false : true, knockback: infinity ? 0 : 150, timeout: 300
+            isTakingDamage: true, damage: 100, takeDamageAnimationCheck: true, knockback: 150, timeout: 300, animation: ""
           }));
           // dispatch(gojoSlice.actions.setTakeDamage({ // playerSlice change
           //   isTakingDamage: true, damage: 100, takeDamageAnimationCheck: true, knockback: 150, timeout: 500
@@ -889,7 +889,7 @@ const GameArea = () => {
     handleStartGame();
   }
 
-  const goldWords = ["cursed", "technique", "energy", "reverse", "simple", "technique"];
+  const goldWords = ["cursed", "technique", "energy", "energy,", "reverse", "simple", "technique"];
   const redWords = ["sure", "hit", "effect"];
   const blueWords = ["infinity"];
   const highlightText = (text) => {

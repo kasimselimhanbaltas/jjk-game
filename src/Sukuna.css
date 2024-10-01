@@ -1059,6 +1059,27 @@
     }
 }
 
+@keyframes sukuna-take-damage-short {
+    0% {
+        background-position: -621px -2010px;
+        width: 34px;
+        height: 37px;
+    }
+
+    50% {
+        background-position: -668px -2012px;
+        width: 38px;
+        height: 27px;
+    }
+
+    100% {
+        background-position: -497px -190px;
+        width: 22px;
+        height: 52px;
+    }
+
+}
+
 .sukuna-bam-effect {
     position: absolute;
     width: 142px;
