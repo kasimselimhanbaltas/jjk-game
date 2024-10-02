@@ -1451,3 +1451,59 @@ body {
   color: lightblue !important;
   font-weight: bold;
 }
+
+.effect-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  z-index: 9999;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.center-dot {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  z-index: 999;
+}
+
+.light {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0px;
+  height: 10px;
+  filter: blur(5px);
+  background-color: white;
+  transform-origin: 50% 0;
+  /* Makes the lines grow from the center */
+  animation: move-out .8s linear infinite;
+  z-index: 999;
+
+}
+
+.light-container {
+  width: 0px;
+  height: 0px;
+  transform: rotate(0deg);
+  z-index: 9999;
+}
+
+@keyframes move-out {
+  0% {
+    translate: 0 0;
+    width: 150px;
+    /* opacity: 1; */
+  }
+
+  100% {
+    translate: 1500px 0;
+    /* Moves the lines outward */
+    /* opacity: 0; */
+  }
+}

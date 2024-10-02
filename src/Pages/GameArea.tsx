@@ -906,6 +906,8 @@ const GameArea = () => {
     });
   };
 
+  const lights = Array.from({ length: 200 });
+  const colors = ['purple', 'blue'];
   return (
     <>
       <div className="game-area">
@@ -1101,8 +1103,32 @@ const GameArea = () => {
         {/*
       <img src={require('../Assets/malevolent_shrine.png')} alt="" style={{ position: "absolute", display: sukuna.rivalDomainExpansion ? "block" : "none", left: megumi.x < sukuna.x ? sukuna.x + 120 : sukuna.x - 150, top: sukuna.y - 50, height: shrineHeight, opacity: 0.8, scale: "1.2" }} />
       */}
+        {/* <div className="effect-container">
+          <div className="center-dot">
+            {lights.map((_, index) => {
+              const angle = Math.random() * 360; // Random angle between 0 and 360
+              const animationDelay = Math.random() * 2 + 's'; // Random delay between 0 and 2 seconds
+              return (
+                <div className="light-container"
+                  key={index}
+                  style={{
+                    transform: `rotate(${angle}deg)`,
+                  }}>
+                  <div
+                    className="light"
+                    style={{
+                      animationDelay: animationDelay,
+                      backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+                    }}
+                  ></div>
+                </div>
+              );
+            })}
+          </div>
 
+        </div> */}
       </div>
+
     </>
   );
 };

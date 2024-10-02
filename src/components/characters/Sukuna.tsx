@@ -343,7 +343,7 @@ const Sukuna = ({ xDistance, rivalSlice, rivalState }) => {
                 && sukuna.canMove && sukuna.animationBlocker === false
             ) {
                 console.log("rival desicion: ")
-                if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady && false) {
+                if (sukuna.cursedEnergy.currentCursedEnergy >= 200 && sukuna.domainCD.isReady) {
                     console.log("domain attack")
                     // handleDomainAttack()
                     setDomainBugFixer(true);

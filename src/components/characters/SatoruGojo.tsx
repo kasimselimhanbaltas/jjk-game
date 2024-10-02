@@ -724,7 +724,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     }
 
 
-    const domainStarter = useRef(null)
+    const domainStarter = useRef(null);
+    const [domainStarterEffect, setDomainStarterEffect] = useState(false);
+
 
     const handleDomainExpansion = useCallback(() => {
         setDomainBugFixer(false);
@@ -750,6 +752,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             setTimeout(() => {
                 domainStarter.current.style.scale = 300;
                 setTimeout(() => {
+                    setDomainStarterEffect(true);
+                }, 1000);
+                setTimeout(() => {
 
                     if (!gameSettings.domainClash) {
                         setDomainHit(true);
@@ -765,6 +770,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                     dispatch(gojoSlice.actions.setInfinity(true));
                     domainStarter.current.style.transition = "all 0s";
                     domainStarter.current.style.scale = 0;
+                    setDomainStarterEffect(false);
 
                     dispatch(gojoSlice.actions.setHardStun(false));
                     setTimeout(() => {
@@ -1401,7 +1407,8 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         }
     }, [tutorialState.currentTaskIndex])
 
-
+    const lights = Array.from({ length: 100 });
+    const colors = ['#cc33ff', '#0099ff'];
 
     return (
         <>
@@ -1412,6 +1419,32 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
             <audio src={require("../../Assets/audios/hq-explosion-6288.mp3")} ref={purpleExplosionSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/punch.mp3")} ref={punchSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/gojo.mp3")} ref={domainSoundEffectRef}></audio>
+
+            <div className="center-dot" style={
+                { display: domainStarterEffect ? "block" : "none", left: gojo.x + 20, top: gojo.y - 50 }
+            }>
+                {lights.map((_, index) => {
+                    const angle = Math.random() * 360; // Random angle between 0 and 360
+                    const animationDelay = Math.random() * 2 + 's'; // Random delay between 0 and 2 seconds
+                    return (
+                        <div className="light-container"
+                            key={index}
+                            style={{
+                                transform: `rotate(${angle}deg)`,
+                            }}>
+                            <div
+                                className="light"
+                                style={{
+                                    animationDelay: animationDelay,
+                                    backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+                                }}
+                            ></div>
+                        </div>
+                    );
+                })}
+            </div>
+
+
 
             <div className="stun-div" style={{
                 display: gojo.domainStatus.isActive ? "block" : "none",
