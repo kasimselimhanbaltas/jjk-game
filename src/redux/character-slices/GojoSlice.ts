@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Gojo } from "../../App";
-import { AppThunk } from "../GlobalStore";
+import { AppThunk, CharacterState } from "../GlobalStore";
 
 const SURFACE_Y = parseInt(process.env.REACT_APP_SURFACE_Y);
 const gameAreaWidth = 1400;
@@ -22,7 +22,6 @@ const initialState: Gojo = {
   isAttacking: false,
   canMove: true,
   hardStun: true,
-  dashGauge: 0,
   rivalDirection: "stop",
   blueCD: {
     isReady: true,
@@ -103,6 +102,10 @@ const initialState: Gojo = {
     },
   },
   invulnerability: false,
+  state: CharacterState.IDLE,
+  animationLevel: 0,
+  currentAnimation: "",
+  stunTimer: 0,
 };
 
 const gojoSlice = createSlice({
@@ -225,9 +228,6 @@ const gojoSlice = createSlice({
     },
     setTransition(state, action) {
       state.transition = action.payload;
-    },
-    setDashGauge(state, action) {
-      state.dashGauge = action.payload;
     },
     setRivalDirection(state, action) {
       state.rivalDirection = action.payload;
@@ -365,7 +365,6 @@ export const {
   setCursedEnergy,
   moveCharacterTo,
   setTransition,
-  setDashGauge,
   setBlueCD,
   setRedCD,
   setDomainCD,

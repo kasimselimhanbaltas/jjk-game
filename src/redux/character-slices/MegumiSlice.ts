@@ -20,7 +20,6 @@ const initialState: Megumi = {
   isAttacking: false,
   canMove: true,
   hardStun: false,
-  dashGauge: 0,
   rivalDirection: "stop",
   callNueCD: {
     isReady: true,
@@ -147,7 +146,7 @@ const megumiSlice = createSlice({
     changeCursedEnergy(state, action) {
       if (
         state.cursedEnergy.currentCursedEnergy + action.payload <=
-          state.cursedEnergy.maxCursedEnergy &&
+        state.cursedEnergy.maxCursedEnergy &&
         state.cursedEnergy.currentCursedEnergy + action.payload >= 0
       )
         state.cursedEnergy.currentCursedEnergy += action.payload;
@@ -163,9 +162,6 @@ const megumiSlice = createSlice({
     },
     setHardStun(state, action) {
       state.hardStun = action.payload;
-    },
-    setDashGauge(state, action) {
-      state.dashGauge = action.payload;
     },
     setRivalDirection(state, action) {
       state.rivalDirection = action.payload;
@@ -251,7 +247,6 @@ export const {
   setHardStun,
   setCursedEnergy,
   moveCharacterTo,
-  setDashGauge,
   setCallNueCD,
   setNueAttackCD,
   setDivineDogsCD,

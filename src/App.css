@@ -395,7 +395,6 @@
   position: absolute;
   left: -1%;
   top: 2%;
-  z-index: 1;
   width: 700px;
   height: 100px;
   display: flex;
@@ -554,6 +553,7 @@
   width: 100%;
   height: 80px;
   position: absolute;
+  z-index: 6;
 }
 
 .top-interface-inner {
@@ -939,6 +939,17 @@ body {
   height: 20px;
   background-color: red;
   transition: all .2s;
+  animation: timer-bar 2s linear forwards;
+}
+
+@keyframes timer-bar {
+  0% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0%;
+  }
 }
 
 .controls-page {
@@ -1469,7 +1480,7 @@ body {
   position: absolute;
   width: 0px;
   height: 0px;
-  z-index: 999;
+  z-index: 5;
 }
 
 .light {
@@ -1477,33 +1488,37 @@ body {
   top: 50%;
   left: 50%;
   width: 0px;
-  height: 10px;
-  filter: blur(5px);
+  height: 30px;
+  filter: blur(10px);
   background-color: white;
   transform-origin: 50% 0;
   /* Makes the lines grow from the center */
   animation: move-out .8s linear infinite;
-  z-index: 999;
-
+  z-index: 5;
+  opacity: 0.1;
 }
 
 .light-container {
   width: 0px;
   height: 0px;
   transform: rotate(0deg);
-  z-index: 9999;
+  z-index: 0;
 }
 
 @keyframes move-out {
   0% {
-    translate: 0 0;
-    width: 150px;
+    translate: -50% 0;
+    width: 2500px;
     /* opacity: 1; */
   }
 
   100% {
-    translate: 1500px 0;
+    /* translate: 1500px 0; */
     /* Moves the lines outward */
     /* opacity: 0; */
   }
+}
+
+.interface-component {
+  z-index: 6;
 }

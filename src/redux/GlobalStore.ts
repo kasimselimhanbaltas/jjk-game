@@ -7,6 +7,16 @@ import gameSettingsSlice from "./GameSettingsSlice";
 import GojoSlice from "./character-slices/GojoSlice";
 import TutorialSlice from "./TutorialSlice";
 
+export const CharacterState = {
+  IDLE: 'idle',
+  ATTACKING: 'attacking',
+  BLOCKING: 'blocking',
+  TAKING_DAMAGE: 'taking_damage',
+  STUNNED: 'stunned',
+  // Add other states as needed
+};
+
+
 const store = configureStore({
   reducer: {
     MegumiState: MegumiSlice.reducer,

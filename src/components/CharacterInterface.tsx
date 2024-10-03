@@ -28,24 +28,16 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
     const [render, setRender] = React.useState(0);
     const keysPressed = React.useRef({ shift: false });
 
-    const purpleCost = -150;
 
     useEffect(() => {
         const handleKeyDown = (event) => {
             const key = event.key.toLowerCase();
             keysPressed.current[key] = true;
-            if (key === "shift") {
-                console.log("rerender")
-                setRender(render + 1)
-            }
         };
 
         const handleKeyUp = (event) => {
             const key = event.key.toLowerCase();
             keysPressed.current[key] = false;
-            if (key === "shift") {
-                setRender(render + 1)
-            }
         };
         window.addEventListener("keydown", handleKeyDown);
         window.addEventListener("keyup", handleKeyUp);
@@ -63,23 +55,10 @@ function CharacterInterface({ playerCharacter, rivalCharacter }) {
         rapidSlash: "Sukuna makes a rapid slashing attack to single target",
         fuga: "Sukuna can create and manipulate fire for long-range attack by chanting (Fūga) and forming an arrow. "
 
-        // Diğer skill açıklamaları buraya eklenebilir
     };
 
-    const handleMouseEnter = (skill, event) => {
-        setHoveredSkill(skill);
-        console.log(skillDescriptions[skill])
-        // setTooltipPosition({
-        //     top: rect.top - 40, // Tooltip'in yukarıda görünmesi için ayarlama
-        //     left: rect.left + rect.width / 2 - 50, // Tooltip'i ortalamak için ayarlama
-        // });
-    };
-
-    const handleMouseLeave = () => {
-        setHoveredSkill(null); // Hover bittiğinde skill bilgisini sıfırla
-    };
     return (
-        <div>
+        <div className="interface-component">
             <div className="top-interface">
                 <div className="top-interface-inner">
                     <div>

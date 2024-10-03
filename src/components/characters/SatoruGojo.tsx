@@ -2,8 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import gojoSlice, { toggleBlueCD, toggleDomainCD, toggleRedCD, toggleSimpleDomainCD } from "../../redux/character-slices/GojoSlice";
 import gameSettingsSlice from "../../redux/GameSettingsSlice";
-import sukunaSlice, { updateHealth } from "../../redux/character-slices/SukunaSlice";
-import { setNueDirection } from "../../redux/NueSlice";
+import sukunaSlice from "../../redux/character-slices/SukunaSlice";
 import React from "react";
 import { AppDispatch } from "../../redux/GlobalStore";
 import "../../Gojo.css";
@@ -13,7 +12,7 @@ const SURFACE_Y = parseInt(process.env.REACT_APP_SURFACE_Y);
 
 
 const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
-    // console.log("render GOJO")
+
     const gojo = useSelector((state: any) => state.GojoState);
     const sukuna = useSelector((state: any) => state.SukunaState);
     const gameSettings = useSelector((state: any) => state.GameSettingsState);
@@ -38,9 +37,6 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
     const redCost = -100;
     const chargedRedCost = -150;
     const purpleCost = -150;
-    const domainCost = -200;
-    const blueDamage = -150;
-    const domainDamage = -1000;
     // Sound effects
     const blueSoundEffectRef = React.useRef(null);
     const redSoundEffectRef = React.useRef(null);
@@ -903,10 +899,10 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         dispatch(gojoSlice.actions.setAnimationBlocker(true))
         if (!rivalState.isBlocking) {
             dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
-            dispatch(rivalSlice.actions.setCanMove(false));
-            dispatch(rivalSlice.actions.setAnimationBlocker(false))
-            dispatch(rivalSlice.actions.setAnimationState("stance"))
-            dispatch(rivalSlice.actions.setAnimationBlocker(true))
+            // dispatch(rivalSlice.actions.setCanMove(false)); // #ff
+            // dispatch(rivalSlice.actions.setAnimationBlocker(false)) // #ff
+            // dispatch(rivalSlice.actions.setAnimationState("stance")) // #ff
+            // dispatch(rivalSlice.actions.setAnimationBlocker(true)) // #ff
         }
         dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
         let punchCount = 0;
@@ -933,8 +929,8 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
                     isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 30, timeout: 500, animation: ""
                 }))
                 setTimeout(() => {
-                    dispatch(rivalSlice.actions.setCanMove(true)); //**********
-                    dispatch(rivalSlice.actions.setAnimationBlocker(false))
+                    // dispatch(rivalSlice.actions.setCanMove(true)); //********** // #ff
+                    // dispatch(rivalSlice.actions.setAnimationBlocker(false)) // #ff
                 }, 500);
                 // increase ce
                 dispatch(gojoSlice.actions.changeCursedEnergy(20))
@@ -958,13 +954,13 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         dispatch(gojoSlice.actions.setAnimationState("gojo-blackflash-combination"));
         dispatch(gojoSlice.actions.setCanMove(false));
         dispatch(gojoSlice.actions.setAnimationBlocker(true))
-        if (!rivalState.isBlocking) {
-            dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
-            dispatch(rivalSlice.actions.setHardStun(true));
-            dispatch(rivalSlice.actions.setAnimationBlocker(false))
-            dispatch(rivalSlice.actions.setAnimationState("stance"))
-            // dispatch(rivalSlice.actions.setAnimationBlocker(true))
-        }
+        // if (!rivalState.isBlocking) { // #ff
+        //     dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+        //     dispatch(rivalSlice.actions.setHardStun(true));
+        //     dispatch(rivalSlice.actions.setAnimationBlocker(false))
+        //     dispatch(rivalSlice.actions.setAnimationState("stance"))
+        //     // dispatch(rivalSlice.actions.setAnimationBlocker(true))
+        // }
         dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
         let punchCount = 0;
         const int = setInterval(() => {
@@ -998,12 +994,12 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         setTimeout(() => { // after animation
             dispatch(gojoSlice.actions.setCanMove(true));
             dispatch(gojoSlice.actions.setAnimationBlocker(false))
-            setTimeout(() => {
-                dispatch(rivalSlice.actions.setAnimationBlocker(false))
-                dispatch(rivalSlice.actions.setCanMove(true));// **********
-                dispatch(rivalSlice.actions.setHardStun(false));// **********
+            // setTimeout(() => { // #ff
+            //     dispatch(rivalSlice.actions.setAnimationBlocker(false))
+            //     dispatch(rivalSlice.actions.setCanMove(true));// **********
+            //     dispatch(rivalSlice.actions.setHardStun(false));// **********
 
-            }, 500);
+            // }, 500);
         }, 1500);
     }
     const kickCombo = () => {
@@ -1015,13 +1011,13 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         dispatch(gojoSlice.actions.setAnimationState("gojo-kick-combo"));
         dispatch(gojoSlice.actions.setCanMove(false));
         dispatch(gojoSlice.actions.setAnimationBlocker(true))
-        if (!rivalState.isBlocking) {
-            dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
-            dispatch(rivalSlice.actions.setCanMove(false));
-            dispatch(rivalSlice.actions.setAnimationBlocker(false))
-            dispatch(rivalSlice.actions.setAnimationState("stance"))
-            dispatch(rivalSlice.actions.setAnimationBlocker(true))
-        }
+        // if (!rivalState.isBlocking) { // #ff
+        //     dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+        //     dispatch(rivalSlice.actions.setCanMove(false));
+        //     dispatch(rivalSlice.actions.setAnimationBlocker(false))
+        //     dispatch(rivalSlice.actions.setAnimationState("stance"))
+        //     dispatch(rivalSlice.actions.setAnimationBlocker(true))
+        // }
         dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
         let punchCount = 0;
         const int = setInterval(() => {
@@ -1055,8 +1051,8 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         setTimeout(() => { // after animation
             dispatch(gojoSlice.actions.setCanMove(true));
             dispatch(gojoSlice.actions.setAnimationBlocker(false))
-            dispatch(rivalSlice.actions.setAnimationBlocker(false))
-            dispatch(rivalSlice.actions.setCanMove(true));// **********
+            // dispatch(rivalSlice.actions.setAnimationBlocker(false)) // #ff
+            // dispatch(rivalSlice.actions.setCanMove(true));// **********
             dispatch(gojoSlice.actions.setGravity(5)) //gravity
         }, 3000);
     }
@@ -1158,7 +1154,7 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         }
         if (knockback && knockback > 0 && !gojo.infinity)
             dispatch(gojoSlice.actions.moveCharacterWD({ x: gojo.direction === "left" ? knockback : -knockback, y: 0 }))
-        if (takeDamageAnimationCheck) {
+        if (takeDamageAnimationCheck && !gojo.animationBlocker) {
             dispatch(gojoSlice.actions.setHardStun(true));
             dispatch(gojoSlice.actions.setAnimationState("take-damage"));
             dispatch(gojoSlice.actions.setTransition("all .2s ease, transform 0s, left .8s ease-in-out"));
@@ -1407,8 +1403,9 @@ const Gojo = ({ xDistance, rivalState, rivalSlice }) => {
         }
     }, [tutorialState.currentTaskIndex])
 
-    const lights = Array.from({ length: 100 });
-    const colors = ['#cc33ff', '#0099ff'];
+    const lights = Array.from({ length: 200 });
+    // const colors = ['red', 'blue'];
+    const colors = ['#fa03eb', '#01dfff'];
 
     return (
         <>

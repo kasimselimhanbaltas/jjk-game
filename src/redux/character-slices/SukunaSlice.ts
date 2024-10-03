@@ -27,7 +27,6 @@ const initialState: Sukuna = {
   canMove: true,
   hardStun: true,
   rapidAttack: false,
-  dashGauge: 0,
   cleaveCD: {
     isReady: true,
     cooldown: 3,
@@ -235,9 +234,6 @@ const RivalSlice = createSlice({
     setTransition(state, action) {
       state.transition = action.payload;
     },
-    setDashGauge(state, action) {
-      state.dashGauge = action.payload;
-    },
     setCursedEnergy(state, action) {
       state.cursedEnergy.currentCursedEnergy = action.payload;
     },
@@ -386,7 +382,6 @@ export const {
   setHardStun,
   setRapidAttack,
   setTransition,
-  setDashGauge,
   moveCharacterTo,
   setCursedEnergy,
   changeCursedEnergy,

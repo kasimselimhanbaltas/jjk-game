@@ -14,6 +14,15 @@ import { useEffect, useRef, useState } from 'react';
 import Preloader from './Pages/Pre';
 import Playground from './Pages/Playground';
 
+export const CharacterState = {
+  IDLE: 'idle',
+  ATTACKING: 'attacking',
+  BLOCKING: 'blocking',
+  TAKING_DAMAGE: 'taking_damage',
+  STUNNED: 'stunned',
+  // Add other states as needed
+};
+
 
 export interface GameSettings {
   selectedCharacter: string,
@@ -48,7 +57,6 @@ export interface Megumi {
   rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
   isAttacking: boolean;
   canMove: boolean;
-  dashGauge: number,
   callNueCD: Skill,
   nueAttackCD: Skill,
   divineDogsCD: Skill,
@@ -95,7 +103,6 @@ export interface Gojo {
   rivalDirection: "L" | "R" | "U" | "D" | "UL" | "UR" | "DL" | "DR" | "stop";
   isAttacking: boolean;
   canMove: boolean;
-  dashGauge: number,
   blueCD: Skill,
   redCD: Skill,
   domainCD: Skill,
@@ -152,6 +159,11 @@ export interface Gojo {
   },
   invulnerability: boolean,
 
+  state: string,
+  animationLevel: number,
+  currentAnimation: string,
+  stunTimer: number,
+  // inputBuffer: [],
 }
 
 export interface Sukuna {
@@ -174,7 +186,6 @@ export interface Sukuna {
   closeRange: boolean;
   canMove: boolean;
   rapidAttack: boolean;
-  dashGauge: number;
   cleaveCD: Skill,
   dismantleCD: Skill,
   domainCD: Skill,
@@ -276,39 +287,16 @@ export interface DivineDogs {
 
 function App() {
   const [load, upadateLoad] = useState(true);
-  const customCursor = useRef<HTMLDivElement>(null);
-  const redCircle = document.querySelector(".red-circle");
-  const blueCircle = document.querySelector(".blue-circle");
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseMove = (e) => {
-    setCursorPosition({ x: e.clientX, y: e.clientY });
-  };
-  const [isClicked, setIsClicked] = useState(false);
-  const handleMouseDown = () => {
-    setIsClicked(true);
-  };
-
-  const handleMouseUp = () => {
-    setTimeout(() => {
-      setIsClicked(false);
-    }, 100);
-  };
+  // EFFECT HOOK FOR UPDATING LOADING STATE 
   useEffect(() => {
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
-
     const timer = setTimeout(() => {
       upadateLoad(false);
     }, 1200);
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
       clearTimeout(timer);
     }
-  }, [customCursor]);
+  });
 
   return (
     <Router>
@@ -330,12 +318,6 @@ function App() {
             width: "1459px", height: "659px", border: "1px solid black",
             position: "absolute"
           }}></div>
-          {/* <div
-            className={`custom-cursor ${isClicked ? 'clicked' : ''}`}
-            style={{ left: cursorPosition.x, top: cursorPosition.y }}>
-            <div className="red-circle"></div>
-            <div className="blue-circle"></div>
-          </div> */}
           <Preloader load={load} />
           <Routes>
             <Route path='/jjk-game' element={(
