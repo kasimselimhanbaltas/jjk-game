@@ -127,6 +127,7 @@ export interface Gojo {
     timeout: number
     knockback: number,
     animation: string,
+    animationPriority: number
   },
   devStun: boolean,
   domainStatus: {
@@ -163,6 +164,7 @@ export interface Gojo {
   animationLevel: number,
   currentAnimation: string,
   stunTimer: number,
+  autoMoveBlocker: boolean,
   // inputBuffer: [],
 }
 
@@ -216,6 +218,7 @@ export interface Sukuna {
     timeout: number
     knockback: number,
     animation: string,
+    animationPriority: number
   },
   devStun: boolean,
   domainStatus: {
@@ -246,7 +249,10 @@ export interface Sukuna {
     skill: Skill,
   },
   invulnerability: boolean,
-
+  animationLevel: number,
+  currentAnimation: string,
+  stunTimer: number,
+  autoMoveBlocker: boolean,
 }
 export interface Nue {
   isActive: boolean;

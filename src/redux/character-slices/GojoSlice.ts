@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Gojo } from "../../App";
-import { AppThunk, CharacterState } from "../GlobalStore";
+import { AppThunk } from "../GlobalStore";
 
 const SURFACE_Y = parseInt(process.env.REACT_APP_SURFACE_Y);
 const gameAreaWidth = 1400;
@@ -58,7 +58,8 @@ const initialState: Gojo = {
     takeDamageAnimationCheck: false,
     knockback: 0,
     timeout: 0,
-    animation: ""
+    animation: "",
+    animationPriority: 0
   },
   devStun: false,
   domainStatus: {
@@ -102,10 +103,11 @@ const initialState: Gojo = {
     },
   },
   invulnerability: false,
-  state: CharacterState.IDLE,
-  animationLevel: 0,
+  state: "normal",
+  animationLevel: 30,
   currentAnimation: "",
   stunTimer: 0,
+  autoMoveBlocker: false,
 };
 
 const gojoSlice = createSlice({
@@ -166,6 +168,27 @@ const gojoSlice = createSlice({
       } else {
         // console.log("limit reached in y direction");
       }
+    },
+    autoMoveCharacter(state, action) {
+      if (!state.autoMoveBlocker) return;
+      let inputX = action.payload.x;
+      let inputY = action.payload.y;
+      if (state.x + inputX > 0 && state.x + inputX < gameAreaWidth - 70) {
+        state.x += inputX;
+        if (inputX > 0) {
+          state.direction = "right";
+        } else if (inputX < 0) state.direction = "left";
+      } else {
+        // console.log("limit reached in x direction");
+      }
+      if (state.y + inputY >= 0 && state.y + inputY <= gameAreaHeight - 150) {
+        state.y += inputY;
+      } else {
+        // console.log("limit reached in y direction");
+      }
+    },
+    setAutoMoveBlocker(state, action) {
+      state.autoMoveBlocker = action.payload;
     },
     moveCharacterWD(state, action) {
       let inputX = action.payload.x;
@@ -270,13 +293,15 @@ const gojoSlice = createSlice({
       state.isBlocking = action.payload;
     },
     setAnimationState(state, action) {
-      // console.log(
-      //   "slice animation state: ",
-      //   action.payload,
-      //   "blocker: ",
-      //   state.animationBlocker
-      // );
-      if (!state.animationBlocker) state.animationState = action.payload;
+      console.log("**animation: ", action.payload.animation);
+      console.log("**animation priority: ", action.payload.animationPriority);
+      console.log("**current animation level: ", state.animationLevel);
+      if (action.payload.animationPriority >= state.animationLevel) {
+        state.animationLevel = action.payload.animationPriority;
+        state.animationState = action.payload.animation;
+        console.log("ANIMATIONUPDATE", action.payload);
+        if (action.payload.finishAnimation) state.animationLevel = 0;
+      }
     },
     applyGravity: (state) => {
       if (
@@ -297,6 +322,13 @@ const gojoSlice = createSlice({
         state.velocityY = state.jumpStrength;
         state.isJumping = true;
         state.animationState = "jump";
+        let animationPriority = 1;
+        let finishAnimation = false;
+        if (animationPriority >= state.animationLevel) {
+          state.animationLevel = animationPriority;
+          state.animationState = "jump";
+          if (finishAnimation) state.animationLevel = 0;
+        }
       }
     },
     jumpWS: (state, action) => {
@@ -320,12 +352,13 @@ const gojoSlice = createSlice({
     setTakeDamage(state, action) {
       // if (state.infinity) return;
       state.takeDamage.isTakingDamage = action.payload.isTakingDamage;
-      state.takeDamage.takeDamageAnimationCheck =
-        action.payload.takeDamageAnimationCheck;
+
       state.takeDamage.damage = action.payload.damage;
       state.takeDamage.timeout = action.payload.timeout;
       state.takeDamage.animation = action.payload.animation;
+      state.takeDamage.animationPriority = action.payload.animationPriority;
       console.log(state.x, action.payload.knockback);
+      // KNOCKBACK UPDATE BY DIRECTION
       if (
         state.direction === "left" &&
         state.x + action.payload.knockback >= 1400
@@ -339,6 +372,18 @@ const gojoSlice = createSlice({
       } else {
         state.takeDamage.knockback = action.payload.knockback;
       }
+      // ANIMATION PRIORITY CHECK
+      console.log("**ap: iasdas ", action.payload.animationPriority);
+      if (action.payload.animationPriority < state.animationLevel) {
+        state.takeDamage.knockback = 0;
+        state.takeDamage.takeDamageAnimationCheck = false;
+      }
+      else { // ANIMATION MUST BE SET TO THE TAKEDAMAGE BC OF THE PRIORITY - CANCEL CURRENT ANIMATION
+        state.takeDamage.takeDamageAnimationCheck =
+          action.payload.takeDamageAnimationCheck;
+        state.animationLevel = action.payload.animationPriority;
+      }
+
     },
     setDevStun(state, action) {
       state.devStun = action.payload;
@@ -388,6 +433,8 @@ export const {
   setSimpleDomain,
   setFallingBlossomEmotion,
   setInvulnerability,
+  autoMoveCharacter,
+  setAutoMoveBlocker,
 } = gojoSlice.actions;
 export default gojoSlice;
 

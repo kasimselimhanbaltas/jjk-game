@@ -18,6 +18,7 @@ import ControlsPage from "./ControlsPage";
 import axios from "axios";
 import tutorialSlice, { setGoToTutorialMenu } from "../redux/TutorialSlice";
 
+const SURFACE_Y = parseInt(process.env.REACT_APP_SURFACE_Y);
 const characterHeight = 50;
 
 const megumiWidth = 50;
@@ -100,17 +101,19 @@ const GameArea = () => {
         dispatch(rivalSlice.actions.setDirection("left"));
       dispatch(sukunaSlice.actions.setTransition("all .2s, transform 0s, left 0s"))
 
-      dispatch(playerSlice.actions.moveCharacterTo({ x: gameSettings.selectedCharacter === "sukuna" ? -1000 : 600, y: 560 }));
-      dispatch(rivalSlice.actions.moveCharacterTo({ x: gameSettings.selectedRivalCharacter === "sukuna" ? -1000 : 800, y: 560 }));
+      dispatch(playerSlice.actions.moveCharacterTo({ x: gameSettings.selectedCharacter === "sukuna" ? -1000 : 600, y: SURFACE_Y }));
+      dispatch(rivalSlice.actions.moveCharacterTo({ x: gameSettings.selectedRivalCharacter === "sukuna" ? -1000 : 800, y: SURFACE_Y }));
       setTimeout(() => {
       }, cd);
       setTimeout(() => {
-        dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 560 }));
-        dispatch(rivalSlice.actions.setAnimationState("entry"))
+        dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: SURFACE_Y }));
+        dispatch(rivalSlice.actions.setAnimationState({ animation: "entry", animationPriority: 31, finishAnimation: false }));
+        // dispatch(rivalSlice.actions.setAnimationState("entry"))
 
         setTimeout(() => {
-          dispatch(playerSlice.actions.moveCharacterTo({ x: 600, y: 560 }));
-          dispatch(playerSlice.actions.setAnimationState("entry"))
+          dispatch(playerSlice.actions.moveCharacterTo({ x: 600, y: SURFACE_Y }));
+          dispatch(playerSlice.actions.setAnimationState({ animation: "entry", animationPriority: 31, finishAnimation: false }));
+          // dispatch(playerSlice.actions.setAnimationState("entry"))
           dispatch(rivalSlice.actions.setDirection("left"));
         }, cd / 2);
       }, cd);
@@ -140,7 +143,7 @@ const GameArea = () => {
         if (distance === "close range") {
           dispatch(sukunaSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
           dispatch(sukunaSlice.actions.setTakeDamage({
-            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: ""
+            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: "", animationPriority: 6
           }));
         }
       } else {
@@ -151,7 +154,7 @@ const GameArea = () => {
         if (distance === "close range") {
           dispatch(sukunaSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
           dispatch(sukunaSlice.actions.setTakeDamage({ // *char
-            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: ""
+            isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: "", animationPriority: 6
           }));
         }
       }
@@ -219,7 +222,7 @@ const GameArea = () => {
           setTimeout(() => {
             dispatch(rivalSlice.actions.setDirection(gojo.x < rivalCharacter.x ? "left" : "right"));
             dispatch(sukunaSlice.actions.setTakeDamage({
-              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500, animation: ""
+              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500, animation: "", animationPriority: 11
             }));
           }, (Math.abs(gojo.x - sukuna.x) * 0.7)); // hitbox time fixer
         }
@@ -233,7 +236,7 @@ const GameArea = () => {
           setTimeout(() => {
             dispatch(playerSlice.actions.setDirection(gojo.x < playerCharacter.x ? "left" : "right"));
             dispatch(sukunaSlice.actions.setTakeDamage({
-              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500, animation: ""
+              isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500, animation: "", animationPriority: 11
             }));
           }, (Math.abs(gojo.x - sukuna.x) * 0.7)); // hitbox time fixer
           // setTimeout(() => {
@@ -368,7 +371,8 @@ const GameArea = () => {
       if (event.key === " ") key = "space";
       keysPressed.current[key] = false;
       if (key === "a" || key === "d") {
-        dispatch(playerSlice.actions.setAnimationState("stance"));
+        // dispatch(playerSlice.actions.setAnimationState("stance"));
+        dispatch(playerSlice.actions.setAnimationState({ animation: "stance", animationPriority: 0, finishAnimation: false }));
       }
     };
 
@@ -389,16 +393,17 @@ const GameArea = () => {
         if (keysPressed.current.w && !playerCharacter.isJumping && !playerCharacter.animationBlocker) {
           dispatch(playerSlice.actions.jump());
           // if (!playerCharacter.animationBlocker)
-          dispatch(playerSlice.actions.setAnimationBlocker(true))
-          setTimeout(() => {
-            dispatch(playerSlice.actions.setAnimationBlocker(false))
-          }, 1400); // jump bug
+          // dispatch(playerSlice.actions.setAnimationBlocker(true))
+          // setTimeout(() => {
+          //   dispatch(playerSlice.actions.setAnimationBlocker(false))
+          // }, 1400); // jump bug
         }
         if (keysPressed.current.a && playerCharacter.x > 0) {
           dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "sukuna" ? -5 : -megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("left"));
           if (!playerCharacter.isJumping && !playerCharacter.animationBlocker && playerCharacter.animationState !== "move")
-            dispatch(playerSlice.actions.setAnimationState("move"));
+            // dispatch(playerSlice.actions.setAnimationState("move"));
+            dispatch(playerSlice.actions.setAnimationState({ animation: "move", animationPriority: 0, finishAnimation: false }));
         }
         // if (keysPressed.current.s && playerCharacter.y < gameAreaHeight - megumiHeight) {
         //   dispatch(playerSlice.actions.moveCharacter({ x: 0, y: megumiSpeed }));
@@ -407,7 +412,9 @@ const GameArea = () => {
           dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "sukuna" ? 5 : megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("right"));
           if (!playerCharacter.isJumping && !playerCharacter.animationBlocker && playerCharacter.animationState !== "move")
-            dispatch(playerSlice.actions.setAnimationState("move"));
+            // dispatch(playerSlice.actions.setAnimationState("move"));
+            dispatch(playerSlice.actions.setAnimationState({ animation: "move", animationPriority: 0, finishAnimation: false }));
+
         }
         if (keysPressed.current.q && !domainAmplificationKeyCD) {
           // dispatch(playerSlice.actions.setIsBlocking(true));
@@ -462,11 +469,13 @@ const GameArea = () => {
         let stepX = 0;
         if (rivalCharacter.rivalDirection === "stop") {
           if (rivalCharacter.animationState !== "stance")
-            dispatch(rivalSlice.actions.setAnimationState("stance"));
+            dispatch(rivalSlice.actions.setAnimationState({ animation: "stance", animationPriority: 10, finishAnimation: true }));
+          // dispatch(rivalSlice.actions.setAnimationState("stance"));
           stepX = 0;
         }
         else {
-          dispatch(rivalSlice.actions.setAnimationState("move"));
+          // dispatch(rivalSlice.actions.setAnimationState("move"));
+          dispatch(rivalSlice.actions.setAnimationState({ animation: "move", animationPriority: 2, finishAnimation: false }));
           if (rivalCharacter.rivalDirection === "R") stepX = rivalCharacter.characterName === "sukuna" ? 5 : 30;
           else if (rivalCharacter.rivalDirection === "L") stepX = rivalCharacter.characterName === "sukuna" ? -5 : -30;
         }
@@ -474,7 +483,8 @@ const GameArea = () => {
         dispatch(rivalSlice.actions.moveCharacter({ x: stepX, y: 0 }));
       } else
         if (rivalCharacter.animationState !== "stance" && !gameSettings.entry)
-          dispatch(rivalSlice.actions.setAnimationState("stance"));
+          // dispatch(rivalSlice.actions.setAnimationState("stance"));
+          dispatch(rivalSlice.actions.setAnimationState({ animation: "stance", animationPriority: 5, finishAnimation: true }));
     }, 100); // Update interval
 
     return () => {
@@ -581,14 +591,16 @@ const GameArea = () => {
     if (rivalCharacter.health.currentHealth <= 0 && gameSettings.tutorial) {
       setTimeout(() => {
         dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: 560 }));
-        dispatch(rivalSlice.actions.setAnimationState("entry"))
+        // dispatch(rivalSlice.actions.setAnimationState("entry"))
+        dispatch(rivalSlice.actions.setAnimationState({ animation: "entry", animationPriority: 10, finishAnimation: true }));
         dispatch(rivalSlice.actions.setHealth(rivalCharacter.health.maxHealth));
       }, 1000);
     }
     if (playerCharacter.health.currentHealth <= 0 && gameSettings.tutorial) {
       setTimeout(() => {
         dispatch(playerSlice.actions.moveCharacterTo({ x: 600, y: 560 }));
-        dispatch(playerSlice.actions.setAnimationState("entry"))
+        // dispatch(playerSlice.actions.setAnimationState("entry"))
+        dispatch(playerSlice.actions.setAnimationState({ animation: "entry", animationPriority: 5, finishAnimation: true }));
         dispatch(playerSlice.actions.setHealth(playerCharacter.health.maxHealth));
       }, 1000);
     }
