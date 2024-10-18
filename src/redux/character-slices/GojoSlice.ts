@@ -357,7 +357,7 @@ const gojoSlice = createSlice({
       state.takeDamage.timeout = action.payload.timeout;
       state.takeDamage.animation = action.payload.animation;
       state.takeDamage.animationPriority = action.payload.animationPriority;
-      console.log(state.x, action.payload.knockback);
+      console.log("slice kb: ", action.payload.damage, action.payload.knockback);
       // KNOCKBACK UPDATE BY DIRECTION
       if (
         state.direction === "left" &&

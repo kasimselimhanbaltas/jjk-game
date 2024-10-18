@@ -1040,6 +1040,19 @@ body {
   bottom: 250px;
 }
 
+.meguna-menu {
+  position: absolute;
+  width: 66px;
+  height: 94px;
+  background: url(./Assets/meguna.png);
+  animation: meguna-stance steps(4) 1s infinite;
+  scale: 4;
+  transition: all .2s ease, transform 0s;
+  z-index: 5;
+  bottom: 250px;
+}
+
+
 .sukuna-menu {
   position: absolute;
   z-index: 99;

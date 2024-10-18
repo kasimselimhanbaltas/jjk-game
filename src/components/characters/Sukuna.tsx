@@ -7,7 +7,6 @@ import { AppDispatch, RootState } from '../../redux/GlobalStore';
 import "../../Sukuna.css";
 import { divineDogsAttacking } from '../../redux/DivineDogsSlice';
 import { setAnimationBlocker } from '../../redux/NueSlice';
-import gojoSlice from '../../redux/character-slices/GojoSlice';
 import gameSettingsSlice from '../../redux/GameSettingsSlice';
 import tutorialSlice from '../../redux/TutorialSlice';
 
@@ -285,7 +284,7 @@ const Sukuna: React.FC<SukunaProps> = memo(({ xDistance, rivalState, rivalSlice 
         dispatch(sukunaSlice.actions.rivalDismantleAttack(true));
         setTimeout(() => {
 
-            dispatch(gojoSlice.actions.setTakeDamage({
+            dispatch(rivalSlice.actions.setTakeDamage({
                 isTakingDamage: true, damage: 100,
                 takeDamageAnimationCheck: infinity ? false : true, knockback: infinity ? 0 : stepDistance, timeout: 500, animation: ""
             }));
@@ -878,7 +877,7 @@ const Sukuna: React.FC<SukunaProps> = memo(({ xDistance, rivalState, rivalSlice 
             if (i === 0) { // launch
                 // dispatch(rivalSlice.actions.updateHealth(-20))
                 // dispatch(rivalSlice.actions.setTransition("all .5s ease, transform 0s"))
-                dispatch(gojoSlice.actions.setTakeDamage({
+                dispatch(rivalSlice.actions.setTakeDamage({
                     isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 0, timeout: 300, animation: ""
                 }));
             }
@@ -900,7 +899,7 @@ const Sukuna: React.FC<SukunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                     punchSoundEffectRef.current.play();
                     dispatch(rivalSlice.actions.setDirection(attackDirection))
                     dispatch(rivalSlice.actions.setGravity(100))
-                    dispatch(gojoSlice.actions.setTakeDamage({
+                    dispatch(rivalSlice.actions.setTakeDamage({
                         isTakingDamage: true, damage: 30, takeDamageAnimationCheck: true, knockback: 0, timeout: 300, animation: ""
                     }));
                 }, 100);
@@ -1201,9 +1200,9 @@ const Sukuna: React.FC<SukunaProps> = memo(({ xDistance, rivalState, rivalSlice 
             if (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.action === "useCleave") {
                 actionTriggered.current = true;
                 setTimeout(() => {
-                    dispatch(gojoSlice.actions.setInfinity(false))
+                    dispatch(rivalSlice.actions.setInfinity(false))
                     setTimeout(() => {
-                        dispatch(gojoSlice.actions.setInfinity(true))
+                        dispatch(rivalSlice.actions.setInfinity(true))
                     }, 1000);
                     localDismantleAttack()
                     actionTriggered.current = false;

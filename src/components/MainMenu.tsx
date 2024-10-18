@@ -159,11 +159,17 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
           {gameSettings.selectedCharacter === "sukuna" &&
             <div className='sukuna-menu' style={{ right: undefined, left: "250px" }}></div>
           }
+          {gameSettings.selectedCharacter === "meguna" &&
+            <div className='meguna-menu' style={{ right: undefined, left: "250px" }}></div>
+          }
           {gameSettings.selectedRivalCharacter === "gojo" &&
             <div className='gojo-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
           }
           {gameSettings.selectedRivalCharacter === "sukuna" &&
             <div className='sukuna-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
+          }
+          {gameSettings.selectedRivalCharacter === "meguna" &&
+            <div className='meguna-menu' style={{ left: undefined, right: "250px" }}></div>
           }
           <div className="main-menu myfont">
             <button className="start-button" onClick={handleStartGame} style={{ position: "relative" }}>

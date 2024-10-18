@@ -6,6 +6,7 @@ import divineDogsSlice from "./DivineDogsSlice";
 import gameSettingsSlice from "./GameSettingsSlice";
 import GojoSlice from "./character-slices/GojoSlice";
 import TutorialSlice from "./TutorialSlice";
+import MegunaSlice from "./character-slices/MegunaSlice";
 
 export const CharacterState = {
   IDLE: 'idle',
@@ -21,6 +22,7 @@ const store = configureStore({
   reducer: {
     MegumiState: MegumiSlice.reducer,
     SukunaState: SukunaSlice.reducer,
+    MegunaState: MegunaSlice.reducer,
     GojoState: GojoSlice.reducer,
     NueState: NueSlice.reducer,
     DivineDogsState: divineDogsSlice.reducer,

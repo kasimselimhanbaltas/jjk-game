@@ -17,6 +17,8 @@ import CharacterInterface from "../components/CharacterInterface";
 import ControlsPage from "./ControlsPage";
 import axios from "axios";
 import tutorialSlice, { setGoToTutorialMenu } from "../redux/TutorialSlice";
+import megunaSlice from "../redux/character-slices/MegunaSlice";
+import Meguna from "../components/characters/Meguna";
 
 const SURFACE_Y = parseInt(process.env.REACT_APP_SURFACE_Y);
 const characterHeight = 50;
@@ -59,6 +61,8 @@ const GameArea = () => {
       return { playerState: state.MegumiState, playerSlice: megumiSlice };
     } else if (gameSettings.selectedCharacter === "gojo") {
       return { playerState: state.GojoState, playerSlice: gojoSlice };
+    } else if (gameSettings.selectedCharacter === "meguna") {
+      return { playerState: state.MegunaState, playerSlice: megunaSlice };
     }
   });
   const selectedRival = useSelector((state: any) => {
@@ -68,6 +72,8 @@ const GameArea = () => {
       return { rivalState: state.MegumiState, rivalSlice: megumiSlice };
     } else if (gameSettings.selectedRivalCharacter === "gojo") {
       return { rivalState: state.GojoState, rivalSlice: gojoSlice };
+    } else if (gameSettings.selectedRivalCharacter === "meguna") {
+      return { rivalState: state.MegunaState, rivalSlice: megunaSlice };
     }
   });
   // for reducer methods
@@ -997,6 +1003,17 @@ const GameArea = () => {
             {gameSettings.selectedRivalCharacter === "sukuna" && (
               <>
                 <Sukuna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
+              </>
+            )}
+            {gameSettings.selectedCharacter === "meguna" && (
+              <>
+                {/* <SatoruGojo rivalSlice={playerSlice} rivalState={playerCharacter} /> */}
+                <Meguna xDistance={xDistance} rivalSlice={rivalSlice} rivalState={rivalCharacter} />
+              </>
+            )}
+            {gameSettings.selectedRivalCharacter === "meguna" && (
+              <>
+                <Meguna xDistance={xDistance} rivalSlice={playerSlice} rivalState={playerCharacter} />
               </>
             )}
             {gameSettings.selectedCharacter === "megumi" && (

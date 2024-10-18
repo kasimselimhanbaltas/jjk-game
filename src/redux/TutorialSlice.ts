@@ -107,6 +107,107 @@ const initialState = {
         ],
       },
     ],
+    "meguna": [
+      {
+        title: "Movements", // TASK 1
+        isComplete: false,
+        rivalTaskAction: "none",
+        tips: "",
+        tasks: [
+          { text: "Jump: ", keys: ["w"], isPressed: false },
+          { text: "Move right: ", keys: ["d"], isPressed: false },
+          { text: "Move left: ", keys: ["a"], isPressed: false },
+        ],
+      },
+      {
+        title: "Blue", // TASK 2
+        isComplete: false,
+        rivalTaskAction: "none",
+        tips: "",
+        tasks: [{ text: "Use your BLUE skill", keys: ["e"], isPressed: false }],
+      },
+      {
+        title: "Red", // TASK 3
+        isComplete: false,
+        rivalTaskAction: "none",
+        tips: "",
+        tasks: [{ text: "Use your RED skill", keys: ["r"], isPressed: false }],
+      },
+      {
+        title: "Hollow Purple", // TASK 4
+        isComplete: false,
+        rivalTaskAction: "none",
+        tips: "",
+        tasks: [{ text: "Use your HOLLOW PURPLE skill", keys: ["e", "r"], isPressed: false }],
+      },
+      {
+        title: "Mixing Colors", // TASK 5
+        isComplete: false,
+        rivalTaskAction: "none",
+        tips: "",
+        tasks: [
+          { text: "Make a charged blue", keys: ["shift", "e"], isPressed: false },
+          { text: "Make a charged red", keys: ["shift", "r"], isPressed: false }
+        ],
+      },
+      {
+        title: "Infinite Void", // TASK 6
+        isComplete: false,
+        rivalTaskAction: "none",
+        tips: "Expanding your domain will make you unable to use your Cursed Technique right after your expansion is finished.",
+        tasks: [{ text: "Expand your domain", keys: ["l"], isPressed: false }],
+      },
+      {
+        title: "Domain Clash", // TASK 7
+        isComplete: false,
+        rivalTaskAction: { action: "domain", timeout: 2 },
+        tips: "You must expand your domain with perfect timing in order to protect yourself from the enemy domain's Sure Hit Effect.\
+        Sure Hit Effect always bypasses infinity. Best way to counter Sure Hit Effect is to expand your own domain.",
+        tasks: [{ text: "Expand your domain", keys: ["l"], isPressed: false }],
+      },
+      {
+        title: "Close Combat", // TASK 8
+        isComplete: false,
+        rivalTaskAction: "none",
+        tips: "While using your Cursed Energy, use your combat skills to maximize your damage.",
+        tasks: [
+          { text: "Punching Combo", keys: ["j"], isPressed: false },
+          { text: "Black Flash Combo", keys: ["k"], isPressed: false },
+          { text: "Kick Combo", keys: ["s", "j"], isPressed: false },
+        ],
+      },
+      {
+        title: "Reverse Cursed Technique", // TASK 8
+        isComplete: false,
+        rivalTaskAction: { action: "useCleave", timeout: 2 },
+        tips: "You can heal yourself or make yourself able to use your Cursed Technique sooner by manipulating the reverse cursed energy. \
+        Be careful, Reverse Cursed Energy and Cursed Energy cannot be used simultaneously, so you cannot use your Cursed Technique while RCT is active.",
+        tasks: [
+          { text: "Heal with RCT", keys: ["z"], isPressed: false },
+          { text: "Use Blue Skill", keys: ["e"], isPressed: false },
+          { text: "Heal burnt out CT with RCT", keys: ["x"], isPressed: false },
+        ],
+      },
+      {
+        title: "Simple Domain", // TASK 8
+        isComplete: false,
+        rivalTaskAction: { action: "forceDomain", timeout: 2 },
+        tips: "Simple domain buys you a litte time against a domain by cancelling the Sure Hit Effect for you.",
+        tasks: [
+          { text: "Use Simple Domain", keys: ["c"], isPressed: false },
+        ],
+      },
+      {
+        title: "Falling Blossom Emotion", // TASK 8
+        isComplete: false,
+        rivalTaskAction: { action: "forceDomain", timeout: 2 },
+        tips: "This technique programs your cursed energy to counter the incoming attacks with the same amount of cursed energy.\
+        Effective against basic Cursed Techniques such as Malevolent Shrine's Dismantle and Cleave",
+        tasks: [
+          { text: "Use Falling Blossom Emotion", keys: ["g"], isPressed: false },
+        ],
+      },
+    ],
 
     // SUKUNA TUTORIALS
     "sukuna": [

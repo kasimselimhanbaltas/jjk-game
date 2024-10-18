@@ -1,69 +1,74 @@
-.gojo-container {
+.meguna-container {
     position: absolute;
     align-items: center;
     justify-content: center;
     transition: all .2s ease;
 }
 
-.gojoCC {
+.megunaCC {
     position: absolute;
-    width: 66px;
-    height: 94px;
-    background: url(./Assets/gojo-noline.png);
-    /* animation: gojo-stance steps(1) 1s infinite; */
+    width: 69px;
+    height: 101px;
+    background: url(./Assets/meguna.png);
+    /* animation: meguna-stance steps(1) 1s infinite; */
     scale: 1;
     transition: all .2s ease, transform 0s;
     z-index: 5;
-    translate: -50% 0;
+    translate: -50% 0px;
 }
 
-@keyframes gojo-stance {
+.malevolent-shrine {
+    position: absolute;
+    width: 270px;
+    height: 240px;
+    background: url(./Assets/meguna/malevolent-shrine.png);
+    translate: -50% 20px;
+    bottom: 130px;
+    left: 50%;
+}
+
+@keyframes meguna-stance {
     0% {
-        background-position: -321px -187px;
-        width: 66px;
-        height: 94px;
-    }
-
-    20% {
-        background-position: -403px -189px;
-        width: 66px;
-        height: 92px;
-    }
-
-    40% {
-        background-position: -493px -187px;
-        width: 66px;
-        height: 94px;
-    }
-
-    60% {
-        background-position: -570px -187px;
-        width: 66px;
-        height: 94px;
-    }
-
-    80% {
-        background-position: -656px -187px;
-        width: 66px;
-        height: 94px;
+        background: url(./Assets/meguna/stance.png) 0px 0px;
+        width: 86px;
+        height: 106px;
     }
 
     100% {
-        background-position: -321px -187px;
-        width: 66px;
-        height: 94px;
+        background: url(./Assets/meguna/stance.png) -344px 0px;
+        width: 86px;
+        height: 106px;
     }
+
 }
 
-@keyframes gojo-first-pose {
+@keyframes meguna-first-pose {
     0% {
-        background-position: -34px -46px;
-        width: 50px;
-        height: 104px;
+        background-position: -38px -49px;
+        width: 45px;
+        height: 107px;
+    }
+
+    33% {
+        background-position: -101px -51px;
+        width: 46px;
+        height: 105px;
+    }
+
+    66% {
+        background-position: -165px -47px;
+        width: 46px;
+        height: 109px;
+    }
+
+    100% {
+        background-position: -38px -49px;
+        width: 45px;
+        height: 107px;
     }
 }
 
-@keyframes gojo-entry {
+@keyframes meguna-entry {
     0% {
         background-position: -34px -46px;
         width: 50px;
@@ -119,71 +124,36 @@
     }
 }
 
-@keyframes domain-pose {
+@keyframes meguna-domain-pose {
     0% {
-        background-position: -160px -2598px;
-        width: 44px;
-        height: 104px;
-    }
-
-    33.33% {
-        background-position: -234px -2604px;
-        width: 66px;
-        height: 98px;
-    }
-
-    66.66% {
-        background-position: -337px -2604px;
-        width: 72px;
-        height: 98px;
+        background: url(./Assets/meguna/domain-pose-2.png) 0px 0px;
+        width: 80px;
+        height: 115px;
     }
 
     100% {
-        background-position: -337px -2604px;
-        /* Son karede animasyonu sabitlemek için */
-        width: 72px;
-        height: 98px;
+        background: url(./Assets/meguna/domain-pose-2.png) -400px 0px;
+        width: 80px;
+        height: 115px;
     }
 }
 
-@keyframes gojo-jump {
+@keyframes meguna-jump {
     0% {
-        background-position: -52px -361px;
-        width: 64px;
-        height: 78px;
-    }
-
-    5% {
-        background-position: -138px -306px;
-        width: 58px;
-        height: 108px;
-    }
-
-    20% {
-        background-position: -222px -303px;
-        width: 58px;
-        height: 80px;
-    }
-
-    60% {
-        background-position: -319px -308px;
-        width: 44px;
-        height: 106px;
-    }
-
-    80% {
-        background-position: -373px -361px;
-        width: 64px;
-        height: 78px;
+        background: url(./Assets/meguna/jump.png) 0px 0px;
+        width: 96px;
+        height: 160px;
     }
 
     100% {
-        background-position: -52px -361px;
-        width: 64px;
-        height: 78px;
+        background: url(./Assets/meguna/jump.png) -482px 0px;
+        width: 96px;
+        height: 160px;
     }
+}
 
-    /* 62.5% {
+
+/* 62.5% {
         background-position: -484px -350px;
         width: 68px;
         height: 90px;
@@ -200,9 +170,9 @@
         width: 78px;
         height: 88px;
     } */
-}
 
-@keyframes gojo-running {
+
+@keyframes meguna-running {
     0% {
         background-position: -808px -188px;
         width: 79px;
@@ -234,120 +204,23 @@
     }
 }
 
-@keyframes gojo-punch-combination {
+@keyframes meguna-punch-combination {
     0% {
-        background-position: -38px -493px;
-        width: 68px;
-        height: 88px;
-    }
-
-    5.88% {
-        background-position: -118px -495px;
-        width: 86px;
-        height: 86px;
-    }
-
-    11.76% {
-        background-position: -223px -494px;
-        width: 86px;
-        height: 86px;
-    }
-
-    17.64% {
-        background-position: -328px -493px;
-        width: 68px;
-        height: 88px;
-    }
-
-    23.52% {
-        background-position: -413px -495px;
-        width: 84px;
-        height: 86px;
-    }
-
-    29.40% {
-        background-position: -509px -495px;
-        width: 84px;
-        height: 86px;
-    }
-
-    35.28% {
-        background-position: -611px -503px;
-        width: 74px;
-        height: 78px;
-    }
-
-    41.16% {
-        background-position: -704px -503px;
+        background: url(./Assets/meguna/combo-1.png) 0px 0px;
         width: 98px;
-        height: 78px;
-    }
-
-    47.04% {
-        background-position: -815px -503px;
-        width: 86px;
-        height: 78px;
-    }
-
-    52.92% {
-        background-position: -920px -497px;
-        width: 72px;
-        height: 84px;
-    }
-
-    58.80% {
-        background-position: -1012px -499px;
-        width: 78px;
-        height: 82px;
-    }
-
-    64.68% {
-        background-position: -1104px -499px;
-        width: 76px;
-        height: 82px;
-    }
-
-    70.56% {
-        background-position: -1195px -493px;
-        width: 78px;
-        height: 88px;
-    }
-
-    76.44% {
-        background-position: -1285px -491px;
-        width: 86px;
-        height: 90px;
-    }
-
-    82.32% {
-        background-position: -1387px -455px;
-        width: 90px;
-        height: 134px;
-        translate: 0px 8px;
-    }
-
-    88.20% {
-        background-position: -1513px -443px;
-        width: 88px;
-        height: 160px;
-        translate: 0px 22px;
-    }
-
-    94.08% {
-        background-position: -1627px -491px;
-        width: 76px;
-        height: 90px;
-        translate: 0px 0px;
+        height: 166px;
+        translate: -50% 22px;
     }
 
     100% {
-        background-position: -38px -493px;
-        width: 68px;
-        height: 88px;
+        background: url(./Assets/meguna/combo-1.png) -1666px 0px;
+        width: 98px;
+        height: 166px;
+        translate: -50% 22px;
     }
 }
 
-@keyframes gojo-blackflash-combination {
+@keyframes meguna-blackflash-combination {
     0% {
         background-position: -31px -655px;
         width: 108px;
@@ -443,7 +316,7 @@
     }
 }
 
-@keyframes gojo-kick-combo {
+@keyframes meguna-kick-combo {
     0% {
         background-position: -64px -811px;
         width: 70px;
@@ -549,7 +422,7 @@
     /* Son karede animasyonu sabitlemek için */
 }
 
-@keyframes gojo-blue {
+@keyframes meguna-blue {
     0% {
         background-position: -77px -1197px;
         width: 44px;
@@ -618,7 +491,7 @@
 }
 
 .blue {
-    background: url(./Assets/gojo-noline.png) no-repeat;
+    background: url(./Assets/meguna.png) no-repeat;
 }
 
 @keyframes blueEffect {
@@ -679,7 +552,7 @@
     }
 }
 
-@keyframes gojo-red-up {
+@keyframes meguna-red-up {
     0% {
         background-position: -90px -1618px;
         width: 43px;
@@ -786,7 +659,7 @@
     }
 }
 
-@keyframes gojo-red-horizontal {
+@keyframes meguna-red-horizontal {
     0% {
         background-position: -90px -1618px;
         width: 43px;
@@ -878,7 +751,7 @@
     }
 }
 
-@keyframes gojo-red-vertical {
+@keyframes meguna-red-vertical {
     0% {
         background-position: -90px -1618px;
         width: 43px;
@@ -988,7 +861,7 @@
     }
 }
 
-@keyframes gojo-red-minieffect {
+@keyframes meguna-red-minieffect {
     0% {
         background-position: -1407px -1585px;
         width: 34px;
@@ -1080,7 +953,7 @@
     }
 }
 
-@keyframes gojo-makingPurple {
+@keyframes meguna-makingPurple {
     0% {
         background-position: -117px -2017px;
         width: 44px;
@@ -1182,7 +1055,7 @@
     }
 }
 
-@keyframes gojo-makingPurple-left {
+@keyframes meguna-makingPurple-left {
     0% {
         background-position: -117px -2017px;
         width: 44px;
@@ -1284,122 +1157,100 @@
     }
 }
 
-@keyframes purple-throwing {
+@keyframes meguna-dash {
     0% {
-        background-position: -112px -2289px;
-        width: 266px;
-        height: 84px;
+        background-position: -636px -264px;
+        width: 67px;
+        height: 81px;
     }
 
-    33% {
-        background-position: -112px -2385px;
-        width: 266px;
-        height: 84px;
-    }
-
-    66% {
-        background-position: -112px -2483px;
-        width: 266px;
-        height: 84px;
+    5% {
+        background-position: -720px -254px;
+        width: 79px;
+        height: 91px;
     }
 
     100% {
-        background-position: -112px -2289px;
-        width: 266px;
-        height: 84px;
+        background-position: -720px -254px;
+        width: 79px;
+        height: 91px;
     }
 }
 
-@keyframes gojo-take-damage {
+@keyframes meguna-take-damage {
     0% {
-        background-position: -240px -1036px;
-        width: 64px;
-        height: 92px;
+        background-position: -207px -942px;
+        width: 67px;
+        height: 95px;
     }
 
     20% {
-        background-position: -308px -1030px;
-        width: 74px;
-        height: 98px;
+        background-position: -275px -936px;
+        width: 77px;
+        height: 101px;
     }
 
     40% {
-        background-position: -386px -1034px;
-        width: 74px;
-        height: 94px;
+        background-position: -355px -940px;
+        width: 77px;
+        height: 97px;
     }
 
     60% {
-        background-position: -149px -1040px;
-        width: 58px;
-        height: 88px;
+        background-position: -95px -946px;
+        width: 60px;
+        height: 91px;
     }
 
     80% {
-        background-position: -73px -1036px;
-        width: 54px;
-        height: 92px;
+        background-position: -14px -942px;
+        width: 57px;
+        height: 95px;
     }
 
     100% {
-        background-position: -73px -1036px;
-        width: 54px;
-        height: 92px;
+        background-position: -14px -942px;
+        width: 57px;
+        height: 95px;
     }
-
 }
 
-@keyframes gojo-purple-pose {
+
+@keyframes meguna-dismantle-pose {
     0% {
-        background-position: -773px -43px;
-        width: 98px;
-        height: 104px;
+        background: url(./Assets/meguna/dismantle-pose-1.png) 0px 0px;
+        width: 108px;
+        height: 120px;
     }
 
     100% {
-        background-position: -773px -43px;
-        width: 98px;
-        height: 104px;
+        background: url(./Assets/meguna/dismantle-pose-1.png) -432px 0px;
+        width: 108px;
+        height: 120px;
     }
 }
 
-.purple-itself {
+.dismantle {
     position: absolute;
-    transition: all .2s ease, transform 4s, top 0s ease, left 0s ease-in;
-    width: 258px;
-    height: 218px;
-    z-index: 9;
-    background: url(./Assets/gojo-noline.png);
-    animation: purple-itself .4s steps(1) infinite;
-}
-
-.purple {
-    position: absolute;
-    transition: all .2s ease, transform 4s, top 0s ease, left 2s ease-in;
-    width: 200px;
-    height: 200px;
-    z-index: 9;
-    background: url(./Assets/gojo-noline.png);
-    animation: purple-throwing .5s steps(1) infinite;
-}
-
-.red {
-    position: absolute;
-    transition: all .2s ease, transform 4s, top 0s ease, left 0s ease;
-    width: 150px;
-    height: 150px;
-    z-index: 9;
-    background: url(./Assets/gojo-noline.png);
-}
-
-.hole {
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    background-color: #282c34;
-    border-radius: 50%;
+    width: 160px;
+    height: 160px;
+    transform: translate(-50%, -50%);
     z-index: 99;
+    background: url(./Assets/meguna/dismantle-1.png);
+    transition: left .2s;
+    animation: meguna-dismantle-effect .4s steps(6);
 }
+
+@keyframes meguna-dismantle-effect {
+    0% {
+        background-position: 0px 0px;
+    }
+
+    100% {
+        background-position: -960px 0px;
+    }
+}
+
 
 .domain-starter {
     width: 10px;
@@ -1498,14 +1349,14 @@
         background-position: -1275px 0px;
     }
 } */
-.gojo-domain-amplification {
+.meguna-domain-amplification {
     width: 90px;
     height: 120px;
     background: url(./Assets/gojo-domain-amplification.png);
-    animation: gojo-domain-amplification .8s steps(6) infinite;
+    animation: meguna-domain-amplification .8s steps(6) infinite;
 }
 
-@keyframes gojo-domain-amplification {
+@keyframes meguna-domain-amplification {
     0% {
         background-position: 0px 0px;
     }

@@ -2,7 +2,6 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import gojoSlice, { toggleBlueCD, toggleDomainCD, toggleRedCD, toggleSimpleDomainCD } from "../../redux/character-slices/GojoSlice";
 import gameSettingsSlice from "../../redux/GameSettingsSlice";
-import sukunaSlice from "../../redux/character-slices/SukunaSlice";
 import React from "react";
 import { AppDispatch } from "../../redux/GlobalStore";
 import "../../Gojo.css";
@@ -392,11 +391,23 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
     );
     const [rctCD, setRctCD] = useState(false);
 
+
+    const [inputBuffer, setInputBuffer] = useState<string[]>([]);
+
+    // Function to add inputs to buffer with a limit (e.g., 4 inputs)
+    const addInputToBuffer = (input: string) => {
+        setInputBuffer((prev) => {
+            const newBuffer = [...prev, input];
+            return newBuffer.slice(-4); // Limit buffer to last 4 inputs
+        });
+    };
+
     // GOJO KEYBOARD CONTROL
     useEffect(() => {
         const handleKeyDown = (event) => {
             const key = event.key.toLowerCase();
             keysPressed.current[key] = true;
+            addInputToBuffer(key);
         };
 
         const handleKeyUp = (event) => {
@@ -911,16 +922,10 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
         punchSoundEffectRef.current.volume = 0.5;
         const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
         dispatch(gojoSlice.actions.setDirection(attackDirection))
-        // dispatch(gojoSlice.actions.setAnimationState("gojo-punch-combination"));
         dispatch(gojoSlice.actions.setAnimationState({ animation: "gojo-punch-combination", animationPriority: 3, finishAnimation: false }));
         dispatch(gojoSlice.actions.setCanMove(false));
-        // dispatch(gojoSlice.actions.setAnimationBlocker(true))
         if (!rivalState.isBlocking) {
             dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
-            // dispatch(rivalSlice.actions.setCanMove(false)); // #ff
-            // dispatch(rivalSlice.actions.setAnimationBlocker(false)) // #ff
-            // dispatch(rivalSlice.actions.setAnimationState("stance")) // #ff
-            // dispatch(rivalSlice.actions.setAnimationBlocker(true)) // #ff
         }
         dispatch(gojoSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: gojo.y }))
         let punchCount = 0;
@@ -930,7 +935,6 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 dispatch(rivalSlice.actions.setTakeDamage({
                     isTakingDamage: true, damage: 10, takeDamageAnimationCheck: false, knockback: 0, timeout: 50, animation: "", animationPriority: 3
                 }))
-                // dispatch(rivalSlice.actions.updateHealth(-10));
                 punchSoundEffectRef.current.play();
                 setTimeout(() => {
                     punchSoundEffectRef.current.pause();
@@ -939,17 +943,9 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             }
 
             else if (punchCount === 14) { // last hit
-                // dispatch(rivalSlice.actions.updateHealth(-20));
-                // dispatch(rivalSlice.actions.moveCharacterWD(
-                //     { x: attackDirection === "right" ? 30 : -30, y: 0 }
-                // ));
                 dispatch(rivalSlice.actions.setTakeDamage({
                     isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: "", animationPriority: 3
                 }))
-                setTimeout(() => {
-                    // dispatch(rivalSlice.actions.setCanMove(true)); //********** // #ff
-                    // dispatch(rivalSlice.actions.setAnimationBlocker(false)) // #ff
-                }, 500);
                 // increase ce
                 dispatch(gojoSlice.actions.changeCursedEnergy(20))
                 clearInterval(int)
@@ -958,9 +954,6 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
         }, 1000 / 16)
         setTimeout(() => { // after animation
             dispatch(gojoSlice.actions.setCanMove(true));
-            // dispatch(gojoSlice.actions.setAnimationBlocker(false))
-            // dispatch(rivalSlice.actions.setCanMove(true)); //**********
-            // dispatch(rivalSlice.actions.setAnimationBlocker(false))
         }, 1000);
     }
 
@@ -1004,7 +997,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 clearInterval(int)
             }
             if (punchCount === 10) {
-                dispatch(sukunaSlice.actions.setTakeDamage({
+                dispatch(rivalSlice.actions.setTakeDamage({
                     isTakingDamage: true, damage: 10, takeDamageAnimationCheck: true, knockback: 250, timeout: 500, animation: "", animationPriority: 11
                 }));
             }
@@ -1081,7 +1074,6 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
     const startAttackInterval = () => {
         // if (gameSettings.selectedCharacter === "sukuna") return;
         const attackDirection = gojo.x - rivalState.x >= 0 ? "left" : "right";
-        const stepDistance = attackDirection === "left" ? -100 : 100;
         dispatch(gojoSlice.actions.setDirection(attackDirection))
         const randomInterval = 1000; // 3-10 saniye arasında rastgele bir değer
         // const randomInterval = Math.floor(Math.random() * 8000) + 3000; // 3-10 saniye arasında rastgele bir değer
@@ -1152,6 +1144,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
 
     const handleTakeDamage = useCallback((takeDamageAnimationCheck, timeout, damage, knockback, animation, animationPriority) => {
         console.log("handling take damage")
+        const rivalDA = rivalState.domainAmplification.isActive;
         // Damage negation
         // if (gojo.domainAmplification.isActive) {
         //     damage = damage * 0.5;
@@ -1169,23 +1162,26 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
         }
         // check infinity and sure hit effect
         if (!gojo.infinity || (rivalState.domainStatus.isActive && rivalState.domainStatus.sureHitStatus
-            || rivalState.domainAmplification.isActive || animation !== "")) {
+            || rivalDA || animation !== "")) {
             console.log("***** damage: ", damage)
             dispatch(gojoSlice.actions.updateHealth(-damage));
         }
-        if (knockback && knockback > 0 && !gojo.infinity)
-            dispatch(gojoSlice.actions.moveCharacterWD({ x: gojo.direction === "left" ? knockback : -knockback, y: 0 }))
-        if (takeDamageAnimationCheck && !gojo.animationBlocker) {
+        console.log("gojo kb: ", knockback)
+        if (knockback && knockback > 0) {
+            if (!gojo.infinity) {
+                dispatch(gojoSlice.actions.moveCharacterWD({ x: gojo.direction === "left" ? knockback : -knockback, y: 0 }))
+            }
+            else { // infity active
+                if (rivalDA)
+                    dispatch(gojoSlice.actions.moveCharacterWD({ x: gojo.direction === "left" ? knockback : -knockback, y: 0 }))
+            }
+        }
+        if (takeDamageAnimationCheck && !gojo.animationBlocker && !(gojo.infinity && !rivalDA)) {
             dispatch(gojoSlice.actions.setHardStun(true));
-            // dispatch(gojoSlice.actions.setAnimationState("take-damage"));
             dispatch(gojoSlice.actions.setAnimationState({ animation: "take-damage", animationPriority: animationPriority, finishAnimation: false }));
             dispatch(gojoSlice.actions.setTransition("all .2s ease, transform 0s, left .8s ease-in-out"));
-            // dispatch(gojoSlice.actions.setAnimationBlocker(true));
             setTimeout(() => {
-                // dispatch(gojoSlice.actions.setAnimationBlocker(false));
                 dispatch(gojoSlice.actions.setHardStun(false)); // ****
-                // dispatch(gojoSlice.actions.setAnimationState("stance"));
-                console.log("** animation finish", animationPriority)
                 dispatch(gojoSlice.actions.setAnimationState({ animation: "stance", animationPriority: animationPriority, finishAnimation: true }));
                 dispatch(gojoSlice.actions.setTransition("all .2s ease, transform 0s"));
                 dispatch(gojoSlice.actions.setTakeDamage({ isTakingDamage: false, damage: 0, takeDamageAnimationCheck: false, knockback: 0, timeout: 50, animation: "", animationPriority: 0 }));
@@ -1429,7 +1425,8 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 actionTriggered.current = true;
                 setTimeout(() => {
                     dispatch(gojoSlice.actions.setInfinity(false))
-                    dispatch(sukunaSlice.actions.setRapidAttackCounter(10))
+                    if (rivalState.characterName === "sukuna")
+                        dispatch(rivalSlice.actions.setRapidAttackCounter(10))
                 }, (tutorialState.characters[gameSettings.selectedCharacter][tutorialState.currentTaskIndex].rivalTaskAction.timeout) * 1000);
             }
         }
@@ -1448,7 +1445,10 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             <audio src={require("../../Assets/audios/hq-explosion-6288.mp3")} ref={purpleExplosionSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/punch.mp3")} ref={punchSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/gojo.mp3")} ref={domainSoundEffectRef}></audio>
-
+            {/* <div className='dotot' style={{
+                width: "10px", height: "100px", backgroundColor: "black",
+                position: "absolute", bottom: gameAreaHeight - gojo.y, left: gojo.x, zIndex: 99, transition: ".2s all"
+            }}></div> */}
             <div className="center-dot" style={
                 { display: domainStarterEffect ? "block" : "none", left: gojo.x + 20, top: gojo.y - 50 }
             }>
