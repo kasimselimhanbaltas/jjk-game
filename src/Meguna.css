@@ -220,6 +220,70 @@
     }
 }
 
+@keyframes meguna-punch-1 {
+    0% {
+        background: url(./Assets/meguna/combo-1.png) 0px 0px;
+        width: 98px;
+        height: 166px;
+        translate: -50% 22px;
+    }
+
+    100% {
+        background: url(./Assets/meguna/combo-1.png) calc(-98px*3) 0px;
+        width: 98px;
+        height: 166px;
+        translate: -50% 22px;
+    }
+}
+
+@keyframes meguna-punch-2 {
+    0% {
+        background: url(./Assets/meguna/combo-1.png) calc(-98px*3) 0px;
+        width: 98px;
+        height: 166px;
+        translate: -50% 22px;
+    }
+
+    100% {
+        background: url(./Assets/meguna/combo-1.png) calc(-98px*6) 0px;
+        width: 98px;
+        height: 166px;
+        translate: -50% 22px;
+    }
+}
+
+@keyframes meguna-punch-3 {
+    0% {
+        background: url(./Assets/meguna/combo-1.png) calc(-98px*6) 0px;
+        width: 98px;
+        height: 166px;
+        translate: -50% 22px;
+    }
+
+    100% {
+        background: url(./Assets/meguna/combo-1.png) calc(-98px*11) 0px;
+        width: 98px;
+        height: 166px;
+        translate: -50% 22px;
+    }
+}
+
+@keyframes meguna-punch-4 {
+    0% {
+        background: url(./Assets/meguna/combo-1.png) calc(-98px*11) 0px;
+        width: 98px;
+        height: 166px;
+        translate: -50% 22px;
+    }
+
+    100% {
+        background: url(./Assets/meguna/combo-1.png) calc(-98px*14) 0px;
+        width: 98px;
+        height: 166px;
+        translate: -50% 22px;
+    }
+}
+
 @keyframes meguna-blackflash-combination {
     0% {
         background-position: -31px -655px;

@@ -436,6 +436,8 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
         }
     }
 
+    const [isPunchingComboInitiated, setIsPunchingComboInitiated] = useState(false);
+
     // Meguna keyboard control
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -456,6 +458,9 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                     // dispatch(megunaSlice.actions.setAnimationState("dash"));
                     dispatch(megunaSlice.actions.setAnimationState({ animation: "dash", animationPriority: 1, finishAnimation: false }));
                     dispatch(megunaSlice.actions.setAnimationBlocker(true));
+                }
+                if (key === "j" || key === "e") {
+                    addToInputBuffer(key);
                 }
             }
         };
@@ -511,7 +516,7 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                     }
                 }
                 if (keysPressed.current.j) {
-                    handlePunchingCombo()
+                    setIsPunchingComboInitiated(true);
                 }
                 if (keysPressed.current.k) {
                     handleBamAttack()
@@ -585,6 +590,47 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
         }, 500);
     }, [rctCD]);
 
+    // COMBOMOMBO
+    const [inputBuffer, setInputBuffer] = useState([]);
+    const comboTimeout = useRef(null);
+
+    const addToInputBuffer = (key) => {
+        setInputBuffer((prev) => [...prev, key]);
+        clearTimeout(comboTimeout.current);
+        comboTimeout.current = setTimeout(() => {
+            setInputBuffer([]);
+            setIsPunchingComboInitiated(false);
+            setPunchingComboStage(0);
+        }, 500); // Clear buffer after 500ms of inactivity
+    };
+    const [punchingComboStage, setPunchingComboStage] = useState(0);
+
+    useEffect(() => { // after pressing j
+        if (isPunchingComboInitiated) {
+            console.log("punch: start");
+            handlePunchingCombo1();
+        }
+    }, [isPunchingComboInitiated])
+
+    useEffect(() => { // first stage completed
+        if (punchingComboStage === 1 && inputBuffer.length > 1 && inputBuffer[1] === 'j') {
+            console.log("combo inputbuffer", inputBuffer)
+            handlePunchingCombo2();
+        }
+        else if (punchingComboStage === 2 && inputBuffer.length > 2 && inputBuffer[2] === 'j') {
+            console.log("combo inputbuffer", inputBuffer)
+            handlePunchingCombo3();
+        }
+        else if (punchingComboStage === 3 && inputBuffer.length > 3 && inputBuffer[3] === 'j') {
+            console.log("combo inputbuffer", inputBuffer)
+            handlePunchingCombo4();
+        }
+        else {
+            setIsPunchingComboInitiated(false);
+            setPunchingComboStage(0);
+        }
+    }, [punchingComboStage])
+
     useEffect(() => {
         let int = null;
         let bodyHealCost = -7;
@@ -638,18 +684,15 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
     useEffect(() => {
 
         if (gameSettings.domainClash && meguna.domainCD.isReady && meguna.cursedEnergy.currentCursedEnergy >= 200) {
-            console.log("udh:meguna 1")
             handleDomainAttack();
             dispatch(gameSettingsSlice.actions.setDomainClashReady(false));
             dispatch(gameSettingsSlice.actions.setDomainClash(false));
         }
         else if (meguna.domainStatus.isInitiated === true) { // user pressed domain expansion key or bot initiated domain
-            console.log("udh: meguna 2")
 
             dispatch(megunaSlice.actions.setCanMove(false));
             dispatch(megunaSlice.actions.setDomainState({ ...meguna.domainStatus, isInitiated: false }))
             if (gameSettings.domainClashReady) { // rival already initiated domain
-                console.log("udh: meguna 2-3, domain clash is setting to ready")
                 dispatch(gameSettingsSlice.actions.setDomainClash(true));
                 if (tutorialState.tutorialMode) {
                     dispatch(tutorialSlice.actions.completeOneTaskInTutorial({
@@ -658,7 +701,6 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                 }
             }
             else {
-                console.log("udh: meguna 2-3, domain clash ready is setting to ready")
                 dispatch(gameSettingsSlice.actions.setDomainClashReady(true));
                 setTimeout(() => {
                     setDomainClashCDref(true);
@@ -667,13 +709,10 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
             }
         }
         else if (meguna.domainStatus.forceExpand) {
-            console.log("udh: meguna 3")
             handleDomainAttack();
         }
         else {
-            console.log("udh: meguna 4")
             if (domainBugFixer && domainClashCDref === true && meguna.domainCD.isReady && meguna.cursedEnergy.currentCursedEnergy >= 200) {
-                console.log("udh: meguna 5")
                 handleDomainAttack();
             }
         }
@@ -825,6 +864,97 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
         }
     }, [meguna.x, rivalState.x])
     const [chaseForCloseCombat, setChaseForCloseCombat] = useState(false);
+
+    const handlePunchingCombo1 = () => {
+        if (Math.abs(xDistance) > 150) return;
+        punchSoundEffectRef.current.volume = 0.5;
+        const attackDirection = meguna.x - rivalState.x >= 0 ? "left" : "right";
+        dispatch(megunaSlice.actions.setDirection(attackDirection))
+        dispatch(megunaSlice.actions.setAnimationState({ animation: "meguna-punch-1", animationPriority: 3, finishAnimation: false }));
+        if (!rivalState.isBlocking) {
+            dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+        }
+        dispatch(megunaSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 50 : rivalState.x + 50, y: meguna.y }))
+        let punchCount = 0;
+        const int = setInterval(() => {
+            if (punchCount === 1) {
+                setChaseForCloseCombat(true)
+                dispatch(rivalSlice.actions.setTakeDamage({
+                    isTakingDamage: true, damage: 10, takeDamageAnimationCheck: false, knockback: 0, timeout: 50, animation: "", animationPriority: 3
+                }))
+                punchSoundEffectRef.current.play();
+                setTimeout(() => {
+                    punchSoundEffectRef.current.pause();
+                    punchSoundEffectRef.current.currentTime = 0;
+                }, 80);
+            }
+            else if (punchCount === 3) {
+                clearInterval(int)
+                setPunchingComboStage(1); // prepare for checking next stage
+            }
+            punchCount++;
+        }, 200 / 3);
+    }
+    const handlePunchingCombo2 = () => {
+
+        dispatch(megunaSlice.actions.setAnimationState({ animation: "meguna-punch-2", animationPriority: 4, finishAnimation: false }));
+        let punchCount = 0;
+        const int = setInterval(() => {
+            if (punchCount === 2) {
+                setChaseForCloseCombat(true)
+                dispatch(rivalSlice.actions.setTakeDamage({
+                    isTakingDamage: true, damage: 10, takeDamageAnimationCheck: false, knockback: 0, timeout: 50, animation: "", animationPriority: 3
+                }))
+                punchSoundEffectRef.current.play();
+                setTimeout(() => {
+                    punchSoundEffectRef.current.pause();
+                    punchSoundEffectRef.current.currentTime = 0;
+                }, 80);
+            }
+            else if (punchCount === 3) {
+                clearInterval(int)
+                setPunchingComboStage(2); // prepare for checking next stage
+            }
+            punchCount++;
+        }, 200 / 3);
+    }
+
+    const handlePunchingCombo3 = () => {
+
+        dispatch(megunaSlice.actions.setAnimationState({ animation: "meguna-punch-3", animationPriority: 5, finishAnimation: false }));
+        let punchCount = 0;
+        const int = setInterval(() => {
+            if (punchCount === 2) {
+                dispatch(rivalSlice.actions.setTakeDamage({
+                    isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 300, timeout: 200, animation: "", animationPriority: 7
+                }))
+                dispatch(rivalSlice.actions.jumpWS(30))
+                punchSoundEffectRef.current.play();
+                // increase ce
+                dispatch(megunaSlice.actions.changeCursedEnergy(20))
+            }
+            else if (punchCount === 4) {
+                clearInterval(int)
+                setPunchingComboStage(3); // prepare for checking next stage
+            }
+            punchCount++;
+        }, 200 / 4);
+    }
+    const handlePunchingCombo4 = () => {
+
+        dispatch(megunaSlice.actions.setAnimationState({ animation: "meguna-punch-4", animationPriority: 6, finishAnimation: false }));
+        let punchCount = 0;
+        const int = setInterval(() => {
+            if (punchCount === 2) {
+                localDismantleAttack(false, 100);
+            }
+            else if (punchCount === 3) {
+                clearInterval(int)
+                setPunchingComboStage(3); // prepare for checking next stage
+            }
+            punchCount++;
+        }, 200 / 3);
+    }
 
     const handlePunchingCombo = useCallback(() => {
         if (Math.abs(xDistance) > 150) return;
@@ -1008,6 +1138,38 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
             setTimeout(() => {
                 dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 3, finishAnimation: true }));
             }, punch_combo_duration);
+        }
+        else if (meguna.animationState === "meguna-punch-1") { // requires reverse positioning
+            setMegunaStyle({
+                animation: `meguna-punch-1 200ms steps(3)`,
+            })
+            setTimeout(() => {
+                dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 3, finishAnimation: true }));
+            }, 200);
+        }
+        else if (meguna.animationState === "meguna-punch-2") { // requires reverse positioning
+            setMegunaStyle({
+                animation: `meguna-punch-2 200ms steps(3)`,
+            })
+            setTimeout(() => {
+                dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 4, finishAnimation: true }));
+            }, 200);
+        }
+        else if (meguna.animationState === "meguna-punch-3") { // requires reverse positioning
+            setMegunaStyle({
+                animation: `meguna-punch-3 200ms steps(5)`,
+            })
+            setTimeout(() => {
+                dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 5, finishAnimation: true }));
+            }, 200);
+        }
+        else if (meguna.animationState === "meguna-punch-4") { // requires reverse positioning
+            setMegunaStyle({
+                animation: `meguna-punch-4 200ms steps(3)`,
+            })
+            setTimeout(() => {
+                dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 6, finishAnimation: true }));
+            }, 200);
         }
         else if (meguna.animationState === "meguna-blackflash-combination") { // requires reverse positioning
             if (meguna.direction === "left")
