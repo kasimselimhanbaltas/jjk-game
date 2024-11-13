@@ -1298,8 +1298,6 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
             }, 3000);
         }
         else if (meguna.animationState === "domain-pose") {
-            if (meguna.direction === "left")
-                dispatch(megunaSlice.actions.setPositioningSide("right"))
             setMegunaStyle({
                 animation: "meguna-domain-pose 1s steps(5) forwards",
             })
