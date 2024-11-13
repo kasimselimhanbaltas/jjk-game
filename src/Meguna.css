@@ -146,7 +146,7 @@
     }
 
     100% {
-        background: url(./Assets/meguna/jump.png) -482px 0px;
+        background: url(./Assets/meguna/jump.png) calc(-5*96px) 0px;
         width: 96px;
         height: 160px;
     }
@@ -1241,41 +1241,31 @@
     }
 }
 
-@keyframes meguna-take-damage {
+@keyframes example {
     0% {
-        background-position: -207px -942px;
-        width: 67px;
-        height: 95px;
-    }
-
-    20% {
-        background-position: -275px -936px;
-        width: 77px;
-        height: 101px;
-    }
-
-    40% {
-        background-position: -355px -940px;
-        width: 77px;
-        height: 97px;
-    }
-
-    60% {
-        background-position: -95px -946px;
-        width: 60px;
-        height: 91px;
-    }
-
-    80% {
-        background-position: -14px -942px;
-        width: 57px;
-        height: 95px;
+        background: url(./Assets/meguna/jump.png) 0px 0px;
+        width: 96px;
+        height: 160px;
     }
 
     100% {
-        background-position: -14px -942px;
-        width: 57px;
-        height: 95px;
+        background: url(./Assets/meguna/jump.png) calc(-5*96px) 0px;
+        width: 96px;
+        height: 160px;
+    }
+}
+
+@keyframes meguna-take-damage {
+    0% {
+        background: url(./Assets/meguna/take-damage.png) 0px 0px;
+        width: 126px;
+        height: 108px;
+    }
+
+    100% {
+        background: url(./Assets/meguna/take-damage.png) calc(-2*126px) 0px;
+        width: 126px;
+        height: 108px;
     }
 }
 
