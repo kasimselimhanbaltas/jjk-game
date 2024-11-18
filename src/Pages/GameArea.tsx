@@ -89,7 +89,7 @@ const GameArea = () => {
   // place characters
   useEffect(() => {
     dispatch(gameSettingsSlice.actions.setDomainClash(false))
-    const cd = tutorialState.tutorialMode ? 0 : 2000;
+    const cd = tutorialState.tutorialMode ? 0 : 1000;
     // dispatch(rivalSlice.actions.setDevStun(true))
     if (gameSettings.entry) {
       if (gameSettings.selectedCharacter === "gojo" || gameSettings.selectedRivalCharacter === "gojo") {
@@ -109,8 +109,6 @@ const GameArea = () => {
 
       dispatch(playerSlice.actions.moveCharacterTo({ x: gameSettings.selectedCharacter === "sukuna" ? -1000 : 600, y: SURFACE_Y }));
       dispatch(rivalSlice.actions.moveCharacterTo({ x: gameSettings.selectedRivalCharacter === "sukuna" ? -1000 : 800, y: SURFACE_Y }));
-      setTimeout(() => {
-      }, cd);
       setTimeout(() => {
         dispatch(rivalSlice.actions.moveCharacterTo({ x: 800, y: SURFACE_Y }));
         dispatch(rivalSlice.actions.setAnimationState({ animation: "entry", animationPriority: 31, finishAnimation: false }));
@@ -134,7 +132,7 @@ const GameArea = () => {
         dispatch(gameSettingsSlice.actions.setEntry(false));
         dispatch(rivalSlice.actions.setDirection("left"));
         dispatch(sukunaSlice.actions.setTransition("all .2s, transform 0s"))
-      }, cd);
+      }, cd + 2000);
     }
   }, [gameSettings.entry, gameSettings.tutorial, tutorialState.tutorialMode]);
 

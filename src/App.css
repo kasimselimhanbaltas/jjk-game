@@ -1032,8 +1032,8 @@ body {
   position: absolute;
   width: 66px;
   height: 94px;
-  background: url(./Assets/gojo-noline.png);
-  animation: gojo-stance steps(1) 1s infinite;
+  background: url(./Assets/gojo/stance.png);
+  animation: gojo-stance steps(4) 1s infinite;
   scale: 4;
   transition: all .2s ease, transform 0s;
   z-index: 5;
@@ -1066,7 +1066,15 @@ body {
   bottom: 250px;
 
 }
-
+.todo-video {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  z-index: 999;
+  scale: .7;
+  border-radius: 10px;
+}
 @keyframes gojo-stance {
   0% {
     background-position: -321px -187px;

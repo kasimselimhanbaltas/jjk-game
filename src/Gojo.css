@@ -19,39 +19,16 @@
 
 @keyframes gojo-stance {
     0% {
-        background-position: -321px -187px;
-        width: 66px;
-        height: 94px;
+        background: url("./Assets/gojo/stance.png") 0px 0px;
+        width: 111px;
+        height: 99px;
+        translate: -50% 3px;
     }
-
-    20% {
-        background-position: -403px -189px;
-        width: 66px;
-        height: 92px;
-    }
-
-    40% {
-        background-position: -493px -187px;
-        width: 66px;
-        height: 94px;
-    }
-
-    60% {
-        background-position: -570px -187px;
-        width: 66px;
-        height: 94px;
-    }
-
-    80% {
-        background-position: -656px -187px;
-        width: 66px;
-        height: 94px;
-    }
-
     100% {
-        background-position: -321px -187px;
-        width: 66px;
-        height: 94px;
+        background: url("./Assets/gojo/stance.png") -444px 0px;
+        width: 111px;
+        height: 99px;
+        translate: -50% 3px;
     }
 }
 
@@ -64,60 +41,20 @@
 }
 
 @keyframes gojo-entry {
-    0% {
-        background-position: -34px -46px;
-        width: 50px;
-        height: 104px;
-    }
+        0% {
+            background: url("./Assets/gojo/gojo-entry.png") 0px 0px;
+            width: 199px;
+            height: 123px;
+            translate: -50% 0px;
+        }
 
-    12.5% {
-        background-position: -94px -46px;
-        width: 52px;
-        height: 104px;
+        100% {
+            background: url("./Assets/gojo/gojo-entry.png") -1592px 0px;
+            width: 199px;
+            height: 123px;
+            translate: -50% 0px;
+        }
     }
-
-    25% {
-        background-position: -158px -46px;
-        width: 48px;
-        height: 104px;
-    }
-
-    37.5% {
-        background-position: -212px -46px;
-        width: 112px;
-        height: 104px;
-    }
-
-    50% {
-        background-position: -328px -46px;
-        width: 112px;
-        height: 104px;
-    }
-
-    62.5% {
-        background-position: -446px -46px;
-        width: 70px;
-        height: 104px;
-    }
-
-    75% {
-        background-position: -529px -46px;
-        width: 62px;
-        height: 104px;
-    }
-
-    87.5% {
-        background-position: -617px -46px;
-        width: 44px;
-        height: 104px;
-    }
-
-    100% {
-        background-position: -34px -46px;
-        width: 50px;
-        height: 104px;
-    }
-}
 
 @keyframes domain-pose {
     0% {
@@ -146,60 +83,74 @@
     }
 }
 
-@keyframes gojo-jump {
+@keyframes template {
     0% {
-        background-position: -52px -361px;
-        width: 64px;
-        height: 78px;
-    }
-
-    5% {
-        background-position: -138px -306px;
-        width: 58px;
-        height: 108px;
-    }
-
-    20% {
-        background-position: -222px -303px;
-        width: 58px;
-        height: 80px;
-    }
-
-    60% {
-        background-position: -319px -308px;
-        width: 44px;
-        height: 106px;
-    }
-
-    80% {
-        background-position: -373px -361px;
-        width: 64px;
-        height: 78px;
+        background: url("./Assets/gojo/stance.png") 0px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
     }
 
     100% {
-        background-position: -52px -361px;
-        width: 64px;
-        height: 78px;
+        background: url("./Assets/gojo/stance.png") -px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
+    }
+}
+@keyframes gojo-dash {
+    0% {
+        background: url("./Assets/gojo/jump.png") -847px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
     }
 
-    /* 62.5% {
-        background-position: -484px -350px;
-        width: 68px;
-        height: 90px;
+    100% {
+        background: url("./Assets/gojo/jump.png") -847px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
     }
+}
 
-    75% {
-        background-position: -571px -362px;
-        width: 64px;
-        height: 78px;
+@keyframes gojo-jump {
+    0% {
+        background: url("./Assets/gojo/jump.png") 0px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
     }
-
-    87.5% {
-        background-position: -647px -352px;
-        width: 78px;
-        height: 88px;
-    } */
+    10% {
+        background: url("./Assets/gojo/jump.png") -121px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
+    }
+    15% {
+        background: url("./Assets/gojo/jump.png") -242px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
+    }
+    55% {
+        background: url("./Assets/gojo/jump.png") -363px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
+    }
+    80% {
+        background: url("./Assets/gojo/jump.png") -484px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
+    }
+    100% {
+        background: url("./Assets/gojo/jump.png") -605px 0px;
+        width: 121px;
+        height: 143px;
+        translate: -50% 0px;
+    }
 }
 
 @keyframes gojo-running {
@@ -236,210 +187,32 @@
 
 @keyframes gojo-punch-combination {
     0% {
-        background-position: -38px -493px;
-        width: 68px;
-        height: 88px;
-    }
-
-    5.88% {
-        background-position: -118px -495px;
-        width: 86px;
-        height: 86px;
-    }
-
-    11.76% {
-        background-position: -223px -494px;
-        width: 86px;
-        height: 86px;
-    }
-
-    17.64% {
-        background-position: -328px -493px;
-        width: 68px;
-        height: 88px;
-    }
-
-    23.52% {
-        background-position: -413px -495px;
-        width: 84px;
-        height: 86px;
-    }
-
-    29.40% {
-        background-position: -509px -495px;
-        width: 84px;
-        height: 86px;
-    }
-
-    35.28% {
-        background-position: -611px -503px;
-        width: 74px;
-        height: 78px;
-    }
-
-    41.16% {
-        background-position: -704px -503px;
-        width: 98px;
-        height: 78px;
-    }
-
-    47.04% {
-        background-position: -815px -503px;
-        width: 86px;
-        height: 78px;
-    }
-
-    52.92% {
-        background-position: -920px -497px;
-        width: 72px;
-        height: 84px;
-    }
-
-    58.80% {
-        background-position: -1012px -499px;
-        width: 78px;
-        height: 82px;
-    }
-
-    64.68% {
-        background-position: -1104px -499px;
-        width: 76px;
-        height: 82px;
-    }
-
-    70.56% {
-        background-position: -1195px -493px;
-        width: 78px;
-        height: 88px;
-    }
-
-    76.44% {
-        background-position: -1285px -491px;
-        width: 86px;
-        height: 90px;
-    }
-
-    82.32% {
-        background-position: -1387px -455px;
-        width: 90px;
-        height: 134px;
-        translate: 0px 8px;
-    }
-
-    88.20% {
-        background-position: -1513px -443px;
-        width: 88px;
-        height: 160px;
-        translate: 0px 22px;
-    }
-
-    94.08% {
-        background-position: -1627px -491px;
-        width: 76px;
-        height: 90px;
-        translate: 0px 0px;
+        background: url("./Assets/gojo/combo-1.png") 0px 0px;
+        width: 171px;
+        height: 161px;
+        translate: -50% 20px;
     }
 
     100% {
-        background-position: -38px -493px;
-        width: 68px;
-        height: 88px;
+        background: url("./Assets/gojo/combo-1.png") -2736px 0px;
+        width: 171px;
+        height: 161px;
+        translate: -50% 20px;
     }
 }
-
 @keyframes gojo-blackflash-combination {
     0% {
-        background-position: -31px -655px;
-        width: 108px;
-        height: 86px;
-    }
-
-    7.14% {
-        background-position: -160px -655px;
-        width: 83px;
-        height: 86px;
-    }
-
-    14.28% {
-        background-position: -286px -657px;
-        width: 58px;
-        height: 84px;
-    }
-
-    21.42% {
-        background-position: -366px -649px;
-        width: 78px;
-        height: 92px;
-    }
-
-    28.56% {
-        background-position: -463px -649px;
-        width: 78px;
-        height: 92px;
-    }
-
-    35.70% {
-        background-position: -559px -653px;
-        width: 68px;
-        height: 88px;
-    }
-
-    42.84% {
-        background-position: -653px -647px;
-        width: 72px;
-        height: 94px;
-    }
-
-    49.98% {
-        background-position: -745px -647px;
-        width: 72px;
-        height: 94px;
-    }
-
-    57.12% {
-        background-position: -833px -653px;
-        width: 78px;
-        height: 88px;
-    }
-
-    64.26% {
-        background-position: -929px -655px;
-        width: 88px;
-        height: 86px;
-    }
-
-    71.40% {
-        background-position: -1026px -635px;
-        width: 138px;
-        height: 110px;
-        translate: 0px 4px;
-    }
-
-    78.54% {
-        background-position: -1196px -655px;
-        width: 94px;
-        height: 86px;
-        translate: 0px 0px;
-    }
-
-    85.68% {
-        background-position: -1306px -655px;
-        width: 100px;
-        height: 86px;
-    }
-
-    92.82% {
-        background-position: -1424px -641px;
-        width: 118px;
-        height: 104px;
-        translate: 0px 4px;
+        background: url("./Assets/gojo/black-flash-combo.png") 0px 0px;
+        width: 209px;
+        height: 121px;
+        translate: -50% 10px;
     }
 
     100% {
-        background-position: -1563px -655px;
-        width: 82px;
-        height: 86px;
-        translate: 0px 0px;
+        background: url("./Assets/gojo/black-flash-combo.png") -2926px 0px;
+        width: 209px;
+        height: 121px;
+        translate: -50% 10px;
     }
 }
 

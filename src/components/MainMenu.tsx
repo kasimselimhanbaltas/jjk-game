@@ -78,14 +78,24 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
     dispatch(gameSettingsSlice.actions.setTutorial(false));
     dispatch(tutorialSlice.actions.setTutorialMode(false));
   };
+  const todoVideoRef = React.createRef<HTMLVideoElement>();
+  const [showTodoVideo, setShowTodoVideo] = useState(false);
   const swapCharacters = () => {
-    if (gameSettings.selectedCharacter === "meguna") {
-      dispatch(gameSettingsSlice.actions.selectRivalCharacter("meguna"));
-      dispatch(gameSettingsSlice.actions.selectCharacter("gojo"));
-    } else {
-      dispatch(gameSettingsSlice.actions.selectRivalCharacter("gojo"));
-      dispatch(gameSettingsSlice.actions.selectCharacter("meguna"));
-    }
+    todoVideoRef.current.play();
+    setShowTodoVideo(true);
+    setTimeout(() => {
+      if (gameSettings.selectedCharacter === "meguna") {
+        dispatch(gameSettingsSlice.actions.selectRivalCharacter("meguna"));
+        dispatch(gameSettingsSlice.actions.selectCharacter("gojo"));
+      } else {
+        dispatch(gameSettingsSlice.actions.selectRivalCharacter("gojo"));
+        dispatch(gameSettingsSlice.actions.selectCharacter("meguna"));
+      }
+      setTimeout(() => {
+        setShowTodoVideo(false);
+      }, 100);
+    }, 800);
+
   }
   const tutorialSelected = (index) => {
     // onTutorialSelected(index);
@@ -100,6 +110,8 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
       dispatch(tutorialSlice.actions.setGoToTutorialMenu(false));
     }
   }, [tutorialState.goToTutorialMenu])
+
+
   return (
     <div className="main-screen">
       {localStorage.getItem('username') && showMainMenu && (
@@ -153,6 +165,12 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
       {
         showMainMenu &&
         <div className="main-menu-container">
+          <video
+            ref={todoVideoRef}
+            className='todo-video'
+            src={require("../Assets/todo-clap-jujutsu-kaisen.mp4")}
+            style={{ display: showTodoVideo ? "block" : "none" }} // Video stilini ayarlar
+          />
           {gameSettings.selectedCharacter === "gojo" &&
             <div className='gojo-menu' style={{ right: undefined, left: "250px" }}></div>
           }
@@ -169,7 +187,7 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
             <div className='sukuna-menu' style={{ left: undefined, right: "200px", transform: "scaleX(-1)" }}></div>
           }
           {gameSettings.selectedRivalCharacter === "meguna" &&
-            <div className='meguna-menu' style={{ left: undefined, right: "250px" }}></div>
+            <div className='meguna-menu' style={{ left: undefined, right: "250px", transform: "scaleX(-1)" }}></div>
           }
           <div className="main-menu myfont">
             <button className="start-button" onClick={handleStartGame} style={{ position: "relative" }}>
