@@ -79,12 +79,12 @@ const MainMenu = ({ onStartGame, onShowControls, onTutorialSelected }) => { // o
     dispatch(tutorialSlice.actions.setTutorialMode(false));
   };
   const swapCharacters = () => {
-    if (gameSettings.selectedCharacter === "sukuna") {
-      dispatch(gameSettingsSlice.actions.selectRivalCharacter("sukuna"));
+    if (gameSettings.selectedCharacter === "meguna") {
+      dispatch(gameSettingsSlice.actions.selectRivalCharacter("meguna"));
       dispatch(gameSettingsSlice.actions.selectCharacter("gojo"));
     } else {
       dispatch(gameSettingsSlice.actions.selectRivalCharacter("gojo"));
-      dispatch(gameSettingsSlice.actions.selectCharacter("sukuna"));
+      dispatch(gameSettingsSlice.actions.selectCharacter("meguna"));
     }
   }
   const tutorialSelected = (index) => {
