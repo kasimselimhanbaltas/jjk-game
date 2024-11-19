@@ -218,109 +218,20 @@
 
 @keyframes gojo-kick-combo {
     0% {
-        background-position: -64px -811px;
-        width: 70px;
-        height: 88px;
-    }
-
-    6.25% {
-        background-position: -162px -811px;
-        width: 80px;
-        height: 88px;
-    }
-
-    12.5% {
-        background-position: -255px -810px;
-        width: 76px;
-        height: 88px;
-    }
-
-    18.75% {
-        background-position: -347px -803px;
-        width: 62px;
-        height: 96px;
-    }
-
-    25% {
-        background-position: -421px -811px;
-        width: 78px;
-        height: 88px;
-    }
-
-    31.25% {
-        background-position: -519px -811px;
-        width: 78px;
-        height: 88px;
-    }
-
-    37.5% {
-        background-position: -621px -811px;
-        width: 78px;
-        height: 88px;
-    }
-
-    43.75% {
-        background-position: -715px -805px;
-        width: 56px;
-        height: 94px;
-    }
-
-    50% {
-        background-position: -793px -807px;
-        width: 78px;
-        height: 94px;
-    }
-
-    56.25% {
-        background-position: -897px -808px;
-        width: 64px;
-        height: 92px;
-    }
-
-    62.5% {
-        background-position: -998px -805px;
-        width: 42px;
-        height: 76px;
-    }
-
-    68.75% {
-        background-position: -1066px -802px;
-        width: 112px;
-        height: 84px;
-    }
-
-    75% {
-        background-position: -1196px -799px;
-        width: 102px;
-        height: 84px;
-    }
-
-    81.25% {
-        background-position: -1321px -799px;
-        width: 62px;
-        height: 82px;
-    }
-
-    87.5% {
-        background-position: -1414px -805px;
-        width: 100px;
-        height: 78px;
-    }
-
-    93.75% {
-        background-position: -1534px -807px;
-        width: 94px;
-        height: 78px;
+        background: url("./Assets/gojo/kick-combo.png") 0px 0px;
+        width: 177px;
+        height: 128px;
+        translate: -50% 0px;
     }
 
     100% {
-        background-position: -1534px -807px;
-        width: 94px;
-        height: 78px;
+        background: url("./Assets/gojo/kick-combo.png") -2655px 0px;
+        width: 177px;
+        height: 128px;
+        translate: -50% 0px;
     }
-
-    /* Son karede animasyonu sabitlemek için */
 }
+
 
 @keyframes gojo-blue {
     0% {
@@ -1085,41 +996,18 @@
 
 @keyframes gojo-take-damage {
     0% {
-        background-position: -240px -1036px;
-        width: 64px;
-        height: 92px;
-    }
-
-    20% {
-        background-position: -308px -1030px;
-        width: 74px;
-        height: 98px;
-    }
-
-    40% {
-        background-position: -386px -1034px;
-        width: 74px;
-        height: 94px;
-    }
-
-    60% {
-        background-position: -149px -1040px;
-        width: 58px;
-        height: 88px;
-    }
-
-    80% {
-        background-position: -73px -1036px;
-        width: 54px;
-        height: 92px;
+        background: url("./Assets/gojo/take-damage.png") 0px 0px;
+        width: 135px;
+        height: 119px;
+        translate: -50% 0px;
     }
 
     100% {
-        background-position: -73px -1036px;
-        width: 54px;
-        height: 92px;
+        background: url("./Assets/gojo/take-damage.png") -270px 0px;
+        width: 135px;
+        height: 119px;
+        translate: -50% 0px;
     }
-
 }
 
 @keyframes gojo-purple-pose {

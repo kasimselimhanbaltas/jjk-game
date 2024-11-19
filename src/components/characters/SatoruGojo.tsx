@@ -1081,14 +1081,14 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             }
             console.log(punchCount)
             punchCount++;
-        }, 3000 / 16)
+        }, 2000 / 16)
         setTimeout(() => { // after animation
             dispatch(gojoSlice.actions.setCanMove(true));
             // dispatch(gojoSlice.actions.setAnimationBlocker(false))
             // dispatch(rivalSlice.actions.setAnimationBlocker(false)) // #ff
             // dispatch(rivalSlice.actions.setCanMove(true));// **********
             dispatch(gojoSlice.actions.setGravity(5)) //gravity
-        }, 3000);
+        }, 2000);
     }
 
     const startAttackInterval = () => {
@@ -1283,11 +1283,11 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
         else if (gojo.animationState === "gojo-kick-combo") { // requires reverse positioning
 
             setGojoStyle({
-                animation: "gojo-kick-combo 3s steps(1)",
+                animation: "gojo-kick-combo 2s steps(15)",
             })
             setTimeout(() => {
                 dispatch(gojoSlice.actions.setAnimationState({ animation: "stance", animationPriority: 3, finishAnimation: true }));
-            }, 3000);
+            }, 2000);
         }
         else if (gojo.animationState === "gojo-blue") { // requires reverse positioning
             setGojoStyle({
@@ -1335,7 +1335,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
         }
         else if (gojo.animationState === "take-damage") { // requires reverse positioning
             setGojoStyle({
-                animation: "gojo-take-damage .5s steps(1) forwards",
+                animation: "gojo-take-damage .5s steps(2) forwards",
             })
         }
         else {
