@@ -155,7 +155,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
 
     const [blueStyle, setBlueStyle] = useState({
         x: 0, y: 0, scale: 0.3, visibility: "hidden", attacking: false,
-        transition: "all .2s ease, transform 4s, top 0s ease, left 0s ease",
+        transition: "all .2s ease, transform 4s",
         animation: "",
     });
     const [redStyle, setRedStyle] = useState({
@@ -182,69 +182,85 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
     function updateRivalDirection(direction) {
         rivalSlice.actions.setDirection(direction);
     }
+    const [blueInGojosHands, setBlueInGojosHands] = useState(true)
     const blueAttack = (isShiftPressed, gojoPosX) => {
         blueSoundEffectRef.current.volume = 0.5;
         blueSoundEffectRef.current.play();
 
-        // dispatch(gojoSlice.actions.setAnimationState("gojo-blue"))
         dispatch(gojoSlice.actions.setAnimationState({ animation: "gojo-blue", animationPriority: 10, finishAnimation: false }));
         dispatch(gojoSlice.actions.setCanMove(false))
-        // dispatch(gojoSlice.actions.setAnimationBlocker(true))
-        let blueW = 100;
-        let blueH = 200;
+        dispatch(gojoSlice.actions.setGravity(0))
+        dispatch(gojoSlice.actions.setTransition("all 0.2s ease 0s, transform 0s ease 0s, top 1s ease, bottom 1s ease"))
+        dispatch(gojoSlice.actions.moveCharacter({ x: 0, y: -50 }))
+        let blueW = 155;
         let blueX = gojo.direction === "right" ?
-            gojoPosX + (isShiftPressed ? 250 : 150) - blueW : gojoPosX + (isShiftPressed ? -300 : -100) - blueW;
-        let blueY = (isShiftPressed ? SURFACE_Y - 350 : SURFACE_Y - 275); // -160 / -260
+            gojoPosX + (isShiftPressed ? 550 : 450) - blueW : gojoPosX + (isShiftPressed ? -300 : -100) - blueW;
+        let blueY = (isShiftPressed ? SURFACE_Y - 250 : SURFACE_Y - 200); // -160 / -260
         console.log("calculated blue y position: ", (isShiftPressed ? SURFACE_Y - 160 : SURFACE_Y - 260))
-        dispatch(gojoSlice.actions.setBluePosition({ x: blueX + blueW / 2, y: blueY + blueH / 2 + 30 }))
-        setTimeout(() => {
-            setBlueStyle(prevState => ({
-                ...prevState, x: blueX + blueW / 2, y: blueY + 50,
-                visibility: "visible",
-                animation: "blueEffect .4s steps(1)"
-            }))
-            dispatch(gojoSlice.actions.setBlueAttackMoment(true))
-        }, 1500);
-        setTimeout(() => { // throw blue now
-            setBlueStyle(prevState => ({
+        // dispatch(gojoSlice.actions.setBluePosition({ x: blueX + blueW / 2, y: blueY + blueH / 2 + 30 }))
+        setBlueStyle(prevState => ({
+            ...prevState,
+            visibility: "visible",
+            animation: "preparing-blue 1.5s steps(5)",
+            transition: "all 1s ease"
+        }))
+        setBlueInGojosHands(true);
+        setTimeout(() => { // start to move blue
+            // in this moment, gojo changes his animation to gojo-blue from gojo-blue-first-pose
+            setBlueInGojosHands(false); // blue is leaving gojo's hands
+            setBlueStyle(prevState => ({ // move blue to destination in 1 second
                 ...prevState, x: blueX, y: blueY,
-                visibility: "visible",
-                animation: "blue-itself .3s steps(1) infinite"
+                animation: "moving-blue .75s steps(5)"
             }))
-            if (isShiftPressed) { // charge blue and make it stay longer
-                setMergeRedAndBlue(prevState => ({ ...prevState, blue: true }))
-                setTimeout(() => {
-                    setMergeRedAndBlue(prevState => ({ ...prevState, blue: false }))
-                    setBlueStyle(prevState => ({
-                        ...prevState, visibility: "hidden",
-                    }))
+            setTimeout(() => { //start to loop blue
+                setBlueStyle(prevState => ({
+                    ...prevState,
+                    animation: "looping-blue .5s steps(3) infinite"
+                }))
+                if (isShiftPressed) { // charge blue and make it stay longer
+                    setMergeRedAndBlue(prevState => ({ ...prevState, blue: true }))
+                    setTimeout(() => {
+                        setMergeRedAndBlue(prevState => ({ ...prevState, blue: false }))
+                        setBlueStyle(prevState => ({
+                            ...prevState, visibility: "hidden",
+                        }))
+                        setTimeout(() => {
+                            setBlueStyle(prevState => ({
+                                ...prevState, animation: "",
+                            }))
+                        }, 500);
+                    }, 15000); // 15 seconds of stay
+                } else {
                     setTimeout(() => {
                         setBlueStyle(prevState => ({
-                            ...prevState, animation: "",
+                            ...prevState, animation: "exploding-blue .3s steps(3)",
                         }))
-                    }, 500);
-                }, 15000); // 15 seconds of stay
-            } else {
-                setTimeout(() => {
-                    setBlueStyle(prevState => ({
-                        ...prevState, visibility: "hidden",
-                    }))
-                    setTimeout(() => {
                         setBlueStyle(prevState => ({
-                            ...prevState, animation: "",
+                            ...prevState, visibility: "hidden",
                         }))
-                    }, 500);
-                }, 2000);
-            }
+                        setTimeout(() => {
+                            setBlueStyle(prevState => ({
+                                ...prevState, visibility: "hidden",
+                            }))
+                            setBlueStyle(prevState => ({
+                                ...prevState, animation: "",
+                            }))
+                            setTimeout(() => {
+                                setBlueInGojosHands(true);
+                            }, 200);
+                        }, 100);
+                    }, 2000);
+                }
 
-            setTimeout(() => { // gojo animation finished
+                // gojo animation finished
                 // dispatch(gojoSlice.actions.setAnimationBlocker(false))
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-stance"))
-                dispatch(gojoSlice.actions.setAnimationState({ animation: "gojo-stance", animationPriority: 10, finishAnimation: true }));
                 dispatch(gojoSlice.actions.setCanMove(true))
                 dispatch(gojoSlice.actions.setBlueAttackMoment(false))
-            }, 300);
-        }, 1900)
+                dispatch(gojoSlice.actions.setGravity(5))
+                dispatch(gojoSlice.actions.setTransition("all 0.2s ease 0s, transform 0s ease 0s"))
+            }, 750);
+        }, 1500)
     }
 
     const redAttack = (isShiftPressed, gojoPosX) => {
@@ -1291,11 +1307,16 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
         }
         else if (gojo.animationState === "gojo-blue") { // requires reverse positioning
             setGojoStyle({
-                animation: "gojo-blue 2.2s steps(1)",
+                animation: "gojo-blue-first-pose 1.2s steps(1)",
             })
             setTimeout(() => {
-                dispatch(gojoSlice.actions.setAnimationState({ animation: "stance", animationPriority: 5, finishAnimation: true }));
-            }, 2200);
+                setGojoStyle({
+                    animation: "gojo-blue-pose 0.4s steps(3) forwards",
+                })
+                setTimeout(() => {
+                    dispatch(gojoSlice.actions.setAnimationState({ animation: "stance", animationPriority: 10, finishAnimation: true }));
+                }, 1200);
+            }, 1200);
         }
         else if (gojo.animationState === "gojo-red-horizontal") { // requires reverse positioning
             setGojoStyle({
@@ -1522,8 +1543,9 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             </div>
             <div className="blue" style={{
                 visibility: blueStyle.visibility as "visible" | "hidden",
-                top: blueStyle.y,
-                left: blueStyle.x,
+                // visibility: "visible",
+                top: blueInGojosHands ? gojo.y - 44 : blueStyle.y,
+                left: gojo.direction === "right" ? (blueInGojosHands ? gojo.x - 25 : blueStyle.x) : (blueInGojosHands ? gojo.x + 25 : blueStyle.x),
                 // transform: "scale(" + blueStyle.scale + ")",
                 transition: blueStyle.transition,
                 animation: blueStyle.animation

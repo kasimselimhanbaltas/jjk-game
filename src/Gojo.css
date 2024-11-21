@@ -232,77 +232,88 @@
     }
 }
 
-
-@keyframes gojo-blue {
+@keyframes gojo-blue-first-pose {
     0% {
-        background-position: -77px -1197px;
-        width: 44px;
-        height: 104px;
+        background: url("./Assets/gojo/blue-pose.png") 0px 0px;
+        width: 121px;
+        height: 141px;
+        translate: -50% 0px;
     }
-
-    10% {
-        background-position: -150px -1217px;
-        width: 72px;
-        height: 84px;
-    }
-
-    20% {
-        background-position: -239px -1217px;
-        width: 58px;
-        height: 84px;
-    }
-
-    30% {
-        background-position: -317px -1217px;
-        width: 58px;
-        height: 84px;
-    }
-
-    40% {
-        background-position: -392px -1217px;
-        width: 76px;
-        height: 84px;
-    }
-
-    50% {
-        background-position: -477px -1217px;
-        width: 84px;
-        height: 84px;
-    }
-
-    60% {
-        background-position: -565px -1217px;
-        width: 90px;
-        height: 84px;
-    }
-
-    70% {
-        background-position: -667px -1213px;
-        width: 92px;
-        height: 88px;
-    }
-
-    80% {
-        background-position: -790px -1209px;
-        width: 78px;
-        height: 92px;
-    }
-
-    90% {
-        background-position: -892px -1209px;
-        width: 78px;
-        height: 92px;
+}
+@keyframes gojo-blue-pose {
+    0% {
+        background: url("./Assets/gojo/blue-pose.png") 0px 0px;
+        width: 121px;
+        height: 141px;
+        translate: -50% 0px;
     }
 
     100% {
-        background-position: -77px -1197px;
-        width: 44px;
-        height: 104px;
+        background: url("./Assets/gojo/blue-pose.png") -363px 0px;
+        width: 121px;
+        height: 141px;
+        translate: -50% 0px;
+    }
+}
+@keyframes preparing-blue { /* 4 */
+    0% {
+        background: url("./Assets/gojo/blue.png") 0px 0px;
+        width: 155px;
+        height: 131px;
+    }
+
+    100% {
+        background: url("./Assets/gojo/blue.png") -775px 0px;
+        width: 155px;
+        height: 131px;
+    }
+}
+@keyframes moving-blue { /* 4 */
+    0% {
+        background: url("./Assets/gojo/blue.png") -775px 0px;
+        width: 155px;
+        height: 131px;
+    }
+
+    100% {
+        background: url("./Assets/gojo/blue.png") -1550px 0px;
+        width: 155px;
+        height: 131px;
+    }
+}
+@keyframes looping-blue {
+    /* 2 */
+    0% {
+        background: url("./Assets/gojo/blue.png") -1550px 0px;
+        width: 155px;
+        height: 131px;
+    }
+
+    100% {
+        background: url("./Assets/gojo/blue.png") -2015px 0px;
+        width: 155px;
+        height: 131px;
+    }
+}
+@keyframes exploding-blue {
+    /* 2 */
+    0% {
+        background: url("./Assets/gojo/blue.png") -2015px 0px;
+        width: 155px;
+        height: 131px;
+    }
+
+    100% {
+        background: url("./Assets/gojo/blue.png") -2480px 0px;
+        width: 155px;
+        height: 131px;
     }
 }
 
 .blue {
-    background: url(./Assets/gojo-noline.png) no-repeat;
+    background: url(./Assets/gojo/blue.png) no-repeat;
+    translate: -50% -50%;
+    transition: all .2s ease;
 }
 
 @keyframes blueEffect {
