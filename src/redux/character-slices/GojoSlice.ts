@@ -281,6 +281,7 @@ const gojoSlice = createSlice({
       state.redAttackMoment = action.payload;
     },
     setBlueAttackMoment(state, action) {
+      console.log("bat: ", action.payload)
       state.blueAttackMoment = action.payload;
     },
     setBluePosition(state, action) {

@@ -154,7 +154,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
 
 
     const [blueStyle, setBlueStyle] = useState({
-        x: 0, y: 0, scale: 0.3, visibility: "hidden", attacking: false,
+        x: 0, y: 0, scale: 0.3, display: "none", attacking: false,
         transition: "all .2s ease, transform 4s",
         animation: "",
     });
@@ -197,10 +197,10 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             gojoPosX + (isShiftPressed ? 550 : 450) - blueW : gojoPosX + (isShiftPressed ? -300 : -100) - blueW;
         let blueY = (isShiftPressed ? SURFACE_Y - 250 : SURFACE_Y - 200); // -160 / -260
         console.log("calculated blue y position: ", (isShiftPressed ? SURFACE_Y - 160 : SURFACE_Y - 260))
-        // dispatch(gojoSlice.actions.setBluePosition({ x: blueX + blueW / 2, y: blueY + blueH / 2 + 30 }))
+        dispatch(gojoSlice.actions.setBluePosition({ x: blueX, y: blueY }))
         setBlueStyle(prevState => ({
             ...prevState,
-            visibility: "visible",
+            display: "block",
             animation: "preparing-blue 1.5s steps(5)",
             transition: "all 1s ease"
         }))
@@ -213,6 +213,8 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 animation: "moving-blue .75s steps(5)"
             }))
             setTimeout(() => { //start to loop blue
+                console.log("bat")
+                dispatch(gojoSlice.actions.setBlueAttackMoment(true))
                 setBlueStyle(prevState => ({
                     ...prevState,
                     animation: "looping-blue .5s steps(3) infinite"
@@ -222,33 +224,39 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                     setTimeout(() => {
                         setMergeRedAndBlue(prevState => ({ ...prevState, blue: false }))
                         setBlueStyle(prevState => ({
-                            ...prevState, visibility: "hidden",
+                            ...prevState, animation: "exploding-blue .3s steps(3)",
                         }))
                         setTimeout(() => {
+
                             setBlueStyle(prevState => ({
-                                ...prevState, animation: "",
+                                ...prevState, display: "none",
                             }))
-                        }, 500);
+                            setTimeout(() => {
+                                setBlueStyle(prevState => ({
+                                    ...prevState, animation: "",
+                                }))
+                                dispatch(gojoSlice.actions.setBlueAttackMoment(false))
+                                setBlueInGojosHands(true);
+                            }, 100);
+                        }, 300);
                     }, 15000); // 15 seconds of stay
                 } else {
                     setTimeout(() => {
                         setBlueStyle(prevState => ({
                             ...prevState, animation: "exploding-blue .3s steps(3)",
                         }))
-                        setBlueStyle(prevState => ({
-                            ...prevState, visibility: "hidden",
-                        }))
                         setTimeout(() => {
                             setBlueStyle(prevState => ({
-                                ...prevState, visibility: "hidden",
-                            }))
-                            setBlueStyle(prevState => ({
-                                ...prevState, animation: "",
+                                ...prevState, display: "none",
                             }))
                             setTimeout(() => {
+                                setBlueStyle(prevState => ({
+                                    ...prevState, animation: "",
+                                }))
                                 setBlueInGojosHands(true);
-                            }, 200);
-                        }, 100);
+                                dispatch(gojoSlice.actions.setBlueAttackMoment(false))
+                            }, 100);
+                        }, 300);
                     }, 2000);
                 }
 
@@ -256,7 +264,6 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 // dispatch(gojoSlice.actions.setAnimationBlocker(false))
                 // dispatch(gojoSlice.actions.setAnimationState("gojo-stance"))
                 dispatch(gojoSlice.actions.setCanMove(true))
-                dispatch(gojoSlice.actions.setBlueAttackMoment(false))
                 dispatch(gojoSlice.actions.setGravity(5))
                 dispatch(gojoSlice.actions.setTransition("all 0.2s ease 0s, transform 0s ease 0s"))
             }, 750);
@@ -1542,7 +1549,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
 
             </div>
             <div className="blue" style={{
-                visibility: blueStyle.visibility as "visible" | "hidden",
+                display: blueStyle.display as "block" | "none",
                 // visibility: "visible",
                 top: blueInGojosHands ? gojo.y - 44 : blueStyle.y,
                 left: gojo.direction === "right" ? (blueInGojosHands ? gojo.x - 25 : blueStyle.x) : (blueInGojosHands ? gojo.x + 25 : blueStyle.x),

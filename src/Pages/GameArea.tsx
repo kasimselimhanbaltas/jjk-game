@@ -167,19 +167,19 @@ const GameArea = () => {
       if (gameSettings.selectedCharacter === "gojo") { // is rival gonna take damage from gojo blue
         let distance =
           (Math.abs(gojo.bluePosition.x - rivalCharacter.x) <= 300 ? "close range" : "far")
-        console.log(distance)
+        console.log("bat calc: ", gojo.bluePosition.x - rivalCharacter.x, distance)
         if (distance === "close range") {
           dispatch(rivalSlice.actions.setCanMove(false))
-          dispatch(sukunaSlice.actions.setGravity(0))
+          dispatch(rivalSlice.actions.setGravity(0))
           // move rival to blue
           setTimeout(() => {
-            dispatch(rivalSlice.actions.moveCharacterTo({ x: gojo.bluePosition.x + 50, y: gojo.bluePosition.y + 30 }))
+            dispatch(rivalSlice.actions.moveCharacterTo({ x: gojo.bluePosition.x, y: gojo.bluePosition.y + 50 }))
             const damageInterval = setInterval(() => { // give damage slowly
               dispatch(rivalSlice.actions.updateHealth(-150 / 8))
             }, 100)
             setTimeout(() => { // unstun rival
               dispatch(rivalSlice.actions.setCanMove(true)) // ***
-              dispatch(sukunaSlice.actions.setGravity(5))
+              dispatch(rivalSlice.actions.setGravity(5))
               clearInterval(damageInterval);
             }, 800);
           }, 500);

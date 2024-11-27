@@ -194,6 +194,9 @@ const megumiSlice = createSlice({
     setAnimationState(state, action) {
       if (!state.animationBlocker) state.animationState = action.payload;
     },
+    setGravity(state, action) {
+      state.gravity = action.payload;
+    },
     applyGravity: (state) => {
       if (
         state.y + state.velocityY < 560 ||
@@ -263,6 +266,8 @@ export const {
   setDevStun,
   setFallingBlossomEmotion,
   setInvulnerability,
+  setGravity,
+
 } = megumiSlice.actions;
 export default megumiSlice;
 
