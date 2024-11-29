@@ -336,6 +336,22 @@
     z-index: 4;
 }
 
+@keyframes selim-red {
+    0% {
+        background: url("./Assets/gojo/selim-red.png") 0px 0px;
+        width: 150px;
+        height: 200px;
+        translate: -50% 5px;
+    }
+
+    100% {
+        background: url("./Assets/gojo/selim-red.png") -1800px 0px;
+        width: 150px;
+        height: 200px;  
+        translate: -50% 5px;
+    }
+}
+
 @keyframes blueEffect {
     0% {
         background-position: -1210px -1147px;
