@@ -73,6 +73,20 @@ const initialState: Megumi = {
     },
   },
   invulnerability: false,
+  animationLevel: 30,
+  state: "normal",
+  currentAnimation: "",
+  stunTimer: 0,
+  autoMoveBlocker: false,
+  takeDamage: {
+    isTakingDamage: false,
+    damage: 0,
+    takeDamageAnimationCheck: false,
+    knockback: 0,
+    timeout: 0,
+    animation: "",
+    animationPriority: 0
+  },
 };
 
 const megumiSlice = createSlice({
@@ -236,7 +250,42 @@ const megumiSlice = createSlice({
     setDevStun(state, action) {
       state.devStun = action.payload;
     },
-    // Diğer action'lar (yumrukAt, nue çağırma, domain açma vb.)
+    setTakeDamage(state, action) {
+      // if (state.infinity) return;
+      state.takeDamage.isTakingDamage = action.payload.isTakingDamage;
+
+      state.takeDamage.damage = action.payload.damage;
+      state.takeDamage.timeout = action.payload.timeout;
+      state.takeDamage.animation = action.payload.animation;
+      state.takeDamage.animationPriority = action.payload.animationPriority;
+      console.log("slice kb: ", action.payload.damage, action.payload.knockback);
+      // KNOCKBACK UPDATE BY DIRECTION
+      if (
+        state.direction === "left" &&
+        state.x + action.payload.knockback >= 1400
+      ) {
+        state.takeDamage.knockback = 1300 - state.x;
+      } else if (
+        state.direction === "right" &&
+        state.x - action.payload.knockback <= 0
+      ) {
+        state.takeDamage.knockback = Math.abs(70 - state.x);
+      } else {
+        state.takeDamage.knockback = action.payload.knockback;
+      }
+      // ANIMATION PRIORITY CHECK
+      console.log("**ap: iasdas ", action.payload.animationPriority);
+      if (action.payload.animationPriority < state.animationLevel) {
+        state.takeDamage.knockback = 0;
+        state.takeDamage.takeDamageAnimationCheck = false;
+      }
+      else { // ANIMATION MUST BE SET TO THE TAKEDAMAGE BC OF THE PRIORITY - CANCEL CURRENT ANIMATION
+        state.takeDamage.takeDamageAnimationCheck =
+          action.payload.takeDamageAnimationCheck;
+        state.animationLevel = action.payload.animationPriority;
+      }
+
+    },
   },
 });
 

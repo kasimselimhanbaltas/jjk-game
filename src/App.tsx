@@ -86,6 +86,20 @@ export interface Megumi {
     skill: Skill,
   },
   invulnerability: boolean,
+  state: string,
+  animationLevel: number,
+  currentAnimation: string,
+  stunTimer: number,
+  autoMoveBlocker: boolean,
+  takeDamage: {
+    isTakingDamage: boolean,
+    takeDamageAnimationCheck: boolean,
+    damage: number,
+    timeout: number
+    knockback: number,
+    animation: string,
+    animationPriority: number
+  },
 }
 export interface Gojo {
   characterName: string,

@@ -212,9 +212,11 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 ...prevState, x: blueX, y: blueY,
                 animation: "moving-blue .75s steps(5)"
             }))
+            dispatch(gojoSlice.actions.setBlueAttackMoment(true))
             setTimeout(() => { //start to loop blue
+                dispatch(gojoSlice.actions.setBlueAttackMoment(false))
                 console.log("bat")
-                dispatch(gojoSlice.actions.setBlueAttackMoment(true))
+                // dispatch(gojoSlice.actions.setBlueAttackMoment(true)) // old pos
                 setBlueStyle(prevState => ({
                     ...prevState,
                     animation: "looping-blue .5s steps(3) infinite"
@@ -235,7 +237,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                                 setBlueStyle(prevState => ({
                                     ...prevState, animation: "",
                                 }))
-                                dispatch(gojoSlice.actions.setBlueAttackMoment(false))
+                                // dispatch(gojoSlice.actions.setBlueAttackMoment(false))
                                 setBlueInGojosHands(true);
                             }, 100);
                         }, 300);
@@ -319,31 +321,22 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 }, 800);
             }
             else {
-                setRedStyle(prevState => ({
-                    ...prevState,
-                    visibility: "visible",
-                    animation: "red-itself .3s steps(1) infinite",
-                    x: redX,
-                    y: redY, attacking: true,
-                }))
                 setTimeout(() => {
                     dispatch(gojoSlice.actions.setRedAttackMoment(true)) // handle skillshot damage in gamearea
-                    setRedStyle(prevState => ({
-                        ...prevState, visibility: "hidden"
-                    }))
+
                     setTimeout(() => {
-                        setRedStyle(prevState => ({
-                            ...prevState, x: gojoPosX, attacking: false,
-                            transition: "all .2s ease, transform 4s, top 0s, left 0s",
-                            animation: ""
-                        }))
+                        // setRedStyle(prevState => ({
+                        //     ...prevState, x: gojoPosX, attacking: false,
+                        //     transition: "all .2s ease, transform 4s, top 0s, left 0s",
+                        //     animation: ""
+                        // }))
                         dispatch(gojoSlice.actions.setRedAttackMoment(false))
                         dispatch(gojoSlice.actions.setCanMove(true))
                         // dispatch(gojoSlice.actions.setAnimationBlocker(false))
                     }, 300);
-                }, 200);
+                }, 100);
             }
-        }, 2000)
+        }, 1500)
     }
 
     const purpleAttack = () => {

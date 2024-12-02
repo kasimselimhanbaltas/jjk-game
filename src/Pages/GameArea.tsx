@@ -145,8 +145,8 @@ const GameArea = () => {
             (Math.abs(gojo.x - 200 - rivalCharacter.x) <= 200 ? "close range" : "far")
         console.log("gamearea red: ", distance)
         if (distance === "close range") {
-          dispatch(sukunaSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
-          dispatch(sukunaSlice.actions.setTakeDamage({
+          dispatch(rivalSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
+          dispatch(rivalSlice.actions.setTakeDamage({
             isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: "", animationPriority: 6
           }));
         }
@@ -156,8 +156,8 @@ const GameArea = () => {
             (Math.abs(gojo.x - 200 - playerCharacter.x) <= 200 ? "close range" : "far")
         console.log("gamearea red: ", distance)
         if (distance === "close range") {
-          dispatch(sukunaSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
-          dispatch(sukunaSlice.actions.setTakeDamage({ // *char
+          dispatch(rivalSlice.actions.setDirection(gojo.direction === "left" ? "right" : "left"))
+          dispatch(rivalSlice.actions.setTakeDamage({ // *char
             isTakingDamage: true, damage: -redDamage, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: "", animationPriority: 6
           }));
         }
@@ -190,7 +190,7 @@ const GameArea = () => {
           (Math.abs(gojo.bluePosition.x - playerCharacter.x) <= 300 ? "close range" : "far")
         if (distance === "close range") {
           dispatch(playerSlice.actions.setCanMove(false))
-          dispatch(sukunaSlice.actions.setGravity(0))
+          dispatch(rivalSlice.actions.setGravity(0))
           // move rival to blue
           setTimeout(() => {
             dispatch(playerSlice.actions.moveCharacterTo({ x: gojo.bluePosition.x + 50, y: gojo.bluePosition.y + 30 }))
@@ -200,7 +200,7 @@ const GameArea = () => {
             setTimeout(() => { // unstun rival
               dispatch(rivalSlice.actions.setCanMove(true))
               dispatch(playerSlice.actions.setCanMove(true)) // ***
-              dispatch(sukunaSlice.actions.setGravity(5))
+              dispatch(rivalSlice.actions.setGravity(5))
               clearInterval(damageInterval);
             }, 800);
 
@@ -225,7 +225,7 @@ const GameArea = () => {
         if (distance === "hit") {
           setTimeout(() => {
             dispatch(rivalSlice.actions.setDirection(gojo.x < rivalCharacter.x ? "left" : "right"));
-            dispatch(sukunaSlice.actions.setTakeDamage({
+            dispatch(rivalSlice.actions.setTakeDamage({
               isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500, animation: "", animationPriority: 11
             }));
           }, (Math.abs(gojo.x - sukuna.x) * 0.7)); // hitbox time fixer
@@ -239,7 +239,7 @@ const GameArea = () => {
         if (distance === "hit") {
           setTimeout(() => {
             dispatch(playerSlice.actions.setDirection(gojo.x < playerCharacter.x ? "left" : "right"));
-            dispatch(sukunaSlice.actions.setTakeDamage({
+            dispatch(rivalSlice.actions.setTakeDamage({
               isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500, animation: "", animationPriority: 11
             }));
           }, (Math.abs(gojo.x - sukuna.x) * 0.7)); // hitbox time fixer
