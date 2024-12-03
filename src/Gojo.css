@@ -412,108 +412,17 @@
 
 @keyframes gojo-red-up {
     0% {
-        background-position: -90px -1618px;
-        width: 43px;
-        height: 104px;
-    }
-
-    6% {
-        background-position: -162px -1638px;
-        width: 72px;
-        height: 84px;
-    }
-
-    12% {
-        background-position: -252px -1624px;
-        width: 66px;
-        height: 98px;
-    }
-
-    18% {
-        background-position: -335px -1624px;
-        width: 60px;
-        height: 98px;
-    }
-
-    24% {
-        background-position: -426px -1622px;
-        width: 62px;
-        height: 100px;
-    }
-
-    30% {
-        background-position: -515px -1620px;
-        width: 64px;
-        height: 102px;
-    }
-
-    36% {
-        background-position: -608px -1624px;
-        width: 66px;
-        height: 98px;
-    }
-
-    42% {
-        background-position: -695px -1624px;
-        width: 62px;
-        height: 98px;
-    }
-
-    48% {
-        background-position: -770px -1624px;
-        width: 62px;
-        height: 98px;
-    }
-
-    54% {
-        background-position: -851px -1624px;
-        width: 74px;
-        height: 98px;
-    }
-
-    60% {
-        background-position: -939px -1624px;
-        width: 74px;
-        height: 98px;
-    }
-
-    66% {
-        background-position: -1025px -1624px;
-        width: 80px;
-        height: 98px;
-    }
-
-    72% {
-        background-position: -1115px -1624px;
-        width: 78px;
-        height: 98px;
-    }
-
-    78% {
-        background-position: -1240px -1618px;
-        width: 64px;
-        height: 104px;
-    }
-
-    84% {
-        /* upside */
-        background-position: -1316px -1618px;
-        width: 44px;
-        height: 104px;
-    }
-
-    90% {
-        /* upside */
-        background-position: -1390px -1618px;
-        width: 44px;
-        height: 104px;
+        background: url("./Assets/gojo/red-up-final.png") 0px 0px;
+        width: 117px;
+        height: 130px;
+        translate: -50% 2px;
     }
 
     100% {
-        /* upside */
-        background-position: -1390px -1618px;
-        width: 44px;
-        height: 104px;
+        background: url("./Assets/gojo/red-up-final.png") -1989px 0px;
+        width: 117px;
+        height: 130px;
+        translate: -50% 2px;
     }
 }
 

@@ -275,7 +275,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
     const redAttack = (isShiftPressed, gojoPosX) => {
         redSoundEffectRef.current.volume = 0.5;
         redSoundEffectRef.current.play();
-        dispatch(gojoSlice.actions.setAnimationState({ animation: isShiftPressed ? "gojo-red-vertical" : "selim-red", animationPriority: 5, finishAnimation: false }));
+        dispatch(gojoSlice.actions.setAnimationState({ animation: isShiftPressed ? "gojo-red-up" : "selim-red", animationPriority: 5, finishAnimation: false }));
         // dispatch(gojoSlice.actions.setAnimationState(isShiftPressed ? "gojo-red-vertical" : "gojo-red-horizontal"))
         dispatch(gojoSlice.actions.setCanMove(false))
         // dispatch(gojoSlice.actions.setAnimationBlocker(true))
@@ -1326,9 +1326,9 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 dispatch(gojoSlice.actions.setAnimationState({ animation: "stance", animationPriority: 5, finishAnimation: true }));
             }, 1800);
         }
-        else if (gojo.animationState === "gojo-red-vertical") { // requires reverse positioning
+        else if (gojo.animationState === "gojo-red-up") { // requires reverse positioning
             setGojoStyle({
-                animation: "gojo-red-vertical 3s steps(1)",
+                animation: "gojo-red-up 3s steps(17)",
             })
             setTimeout(() => {
                 dispatch(gojoSlice.actions.setAnimationState({ animation: "stance", animationPriority: 5, finishAnimation: true }));
