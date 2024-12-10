@@ -553,7 +553,8 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                     }));
                 }
                 if (keysPressed.current.j) {
-                    setIsPunchingComboInitiated(true);
+                    punchCombo()
+                    // setIsPunchingComboInitiated(true);
                 }
                 if (keysPressed.current.k) {
                     handleBamAttack()
@@ -626,6 +627,47 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
             setRctCD(false);
         }, 500);
     }, [rctCD]);
+
+    const punchCombo = () => {
+        if (Math.abs(xDistance) > 150) return;
+        punchSoundEffectRef.current.volume = 0.5;
+        const attackDirection = meguna.x - rivalState.x >= 0 ? "left" : "right";
+        dispatch(megunaSlice.actions.setDirection(attackDirection))
+        dispatch(megunaSlice.actions.setAnimationState({ animation: "meguna-punch-combination", animationPriority: 3, finishAnimation: false }));
+        dispatch(megunaSlice.actions.setCanMove(false));
+        if (!rivalState.isBlocking) {
+            dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+        }
+        dispatch(megunaSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 35, y: meguna.y }))
+        let punchCount = 0;
+        const int = setInterval(() => {
+            if (punchCount === 1 || punchCount === 4 || punchCount === 7 || punchCount === 10 || punchCount === 13) {
+                setChaseForCloseCombat(true)
+                dispatch(rivalSlice.actions.setTakeDamage({
+                    isTakingDamage: true, damage: 10, takeDamageAnimationCheck: false, knockback: 0, timeout: 50, animation: "", animationPriority: 3
+                }))
+                punchSoundEffectRef.current.play();
+                setTimeout(() => {
+                    punchSoundEffectRef.current.pause();
+                    punchSoundEffectRef.current.currentTime = 0;
+                }, 100);
+            }
+
+            else if (punchCount === 14) { // last hit
+                dispatch(rivalSlice.actions.setTakeDamage({
+                    isTakingDamage: true, damage: 20, takeDamageAnimationCheck: true, knockback: 50, timeout: 500, animation: "", animationPriority: 3
+                }))
+                // increase ce
+                dispatch(megunaSlice.actions.changeCursedEnergy(20))
+                clearInterval(int)
+            }
+            punchCount++;
+        }, 1000 / 16)
+        setTimeout(() => { // after animation
+            dispatch(megunaSlice.actions.setCanMove(true));
+        }, 1000);
+    }
+
 
     // COMBOMOMBO
     const [inputBuffer, setInputBuffer] = useState([]);
@@ -1165,13 +1207,21 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                 dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 2, finishAnimation: true }));
             }, 1500);
         }
+        // else if (meguna.animationState === "meguna-punch-combination") { // requires reverse positioning
+        //     setMegunaStyle({
+        //         animation: `meguna-punch-combination ${punch_combo_duration}ms steps(${punch_combo_frames})`,
+        //     })
+        //     setTimeout(() => {
+        //         dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 3, finishAnimation: true }));
+        //     }, punch_combo_duration);
+        // }
         else if (meguna.animationState === "meguna-punch-combination") { // requires reverse positioning
             setMegunaStyle({
-                animation: `meguna-punch-combination ${punch_combo_duration}ms steps(${punch_combo_frames})`,
+                animation: `meguna-punch-combination 1s steps(17)`,
             })
             setTimeout(() => {
                 dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 3, finishAnimation: true }));
-            }, punch_combo_duration);
+            }, 1000);
         }
         else if (meguna.animationState === "meguna-punch-1") { // requires reverse positioning
             setMegunaStyle({
