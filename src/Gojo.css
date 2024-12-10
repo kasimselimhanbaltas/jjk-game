@@ -351,6 +351,99 @@
         translate: -50% 5px;
     }
 }
+@keyframes charged-blue {
+    0% {
+        background: url("./Assets/gojo/charged-blue.png") 0px 0px;
+        width: 80px;
+        height: 80px;
+        translate: -50% -50%;
+    }
+    100% {
+        background: url("./Assets/gojo/charged-blue.png") -240px 0px;
+        width: 80px;
+        height: 80px;
+        translate: -50% -50%;
+    }
+}
+@keyframes charged-red {
+    0% {
+        background: url("./Assets/gojo/charged-red.png") 0px 0px;
+        width: 80px;
+        height: 80px;
+        translate: -50% -50%;
+    }
+
+    100% {
+        background: url("./Assets/gojo/charged-red.png") -240px 0px;
+        width: 80px;
+        height: 80px;
+        translate: -50% -50%;
+    }
+}
+@keyframes purple-merge {
+    0% {
+        background: url("./Assets/gojo/purple-merge.png") 0px 0px;
+        width: 342px;
+        height: 354px;
+        translate: -50% -50%;
+    }
+
+    100% {
+        background: url("./Assets/gojo/purple-merge.png") -5814px 0px;
+        width: 342px;
+        height: 354px;
+        translate: -50% -50%;
+    }
+}
+
+.incantation {
+    position: absolute;
+    transition: all .2s ease, left 0s, top 0s;
+    width: 160px;
+    height: 130px;
+    translate: -50% -50%;
+    z-index: 4;
+}.incantation-1 {
+    background: url("./Assets/gojo/incantations.png") 0px 0px;
+}.incantation-2 {
+    background: url("./Assets/gojo/incantations.png") -160px 0px;
+}.incantation-3 {
+    background: url("./Assets/gojo/incantations.png") -320px 0px;
+}.incantation-4 {
+    background: url("./Assets/gojo/incantations.png") -480px 0px;
+}
+
+@keyframes gojo-making-purple {
+    0% {
+        background: url("./Assets/gojo/hollow-purple.png") 0px 0px;
+        width: 320px;
+        height: 110px;
+        translate: -50% 5px;
+    }
+
+    100% {
+        background: url("./Assets/gojo/hollow-purple.png") -11520px 0px;
+        width: 320px;
+        height: 110px;
+        translate: -50% 5px;
+    }
+}
+@keyframes fire-purple-pose {
+    0% {
+        background: url("./Assets/gojo/gojo-fire-purplepose.png") 0px 0px;
+        width: 100px;
+        height: 100px;
+        translate: -50% 5px;
+    }
+
+    100% {
+        background: url("./Assets/gojo/gojo-fire-purplepose.png") 0px 0px;
+        width: 100px;
+        height: 100px;
+        translate: -50% 5px;
+    }
+}
+
 
 @keyframes blueEffect {
     0% {
@@ -687,39 +780,6 @@
     }
 }
 
-@keyframes purple-itself {
-
-    /* 96x84 117x120 98x116 */
-    0% {
-        background-position: -854px -2356px;
-        width: 258px;
-        height: 218px;
-    }
-
-    33% {
-        background-position: -1114px -2336px;
-        width: 278px;
-        height: 272px;
-        translate: -22px -36px;
-        /* translate: 3px 7px; */
-    }
-
-    66% {
-        background-position: -1450px -2334px;
-        width: 254px;
-        height: 290px;
-        translate: -2px -34px;
-        /* translate: -4px -2.5px; */
-    }
-
-    100% {
-        background-position: -854px -2356px;
-        width: 258px;
-        height: 218px;
-        translate: 0px 0px;
-    }
-}
-
 @keyframes gojo-makingPurple {
     0% {
         background-position: -117px -2017px;
@@ -979,25 +1039,53 @@
         height: 104px;
     }
 }
+@keyframes gojo-merge-pose {
+    0% {
+        background: url("./Assets/gojo/merge-pose.png") 0px 0px;
+        width: 114px;
+        height: 130px;
+        translate: -50% 14px;
+    }
 
+    100% {
+        background: url("./Assets/gojo/merge-pose.png") -342px 0px;
+        width: 114px;
+        height: 130px;
+        translate: -50% 14px;
+    }
+}
 .purple-itself {
     position: absolute;
     transition: all .2s ease, transform 4s, top 0s ease, left 0s ease-in;
     width: 258px;
     height: 218px;
-    z-index: 9;
-    background: url(./Assets/gojo-noline.png);
-    animation: purple-itself .4s steps(1) infinite;
+    z-index: 4;
+    background: url(./Assets/gojo/purple-merge.png);
 }
 
+@keyframes fired-purple {
+    0% {
+        background: url("./Assets/gojo/fired-hollow-purple.png") 0px 0px;
+        width: 460px;
+        height: 120px;
+        translate: -50% -27px;
+    }
+
+    100% {
+        background: url("./Assets/gojo/fired-hollow-purple.png") -3680px 0px;
+        width: 460px;
+        height: 120px;
+        translate: -50% -27px;
+    }
+}
 .purple {
     position: absolute;
     transition: all .2s ease, transform 4s, top 0s ease, left 2s ease-in;
     width: 200px;
     height: 200px;
-    z-index: 9;
+    z-index: 4;
     background: url(./Assets/gojo-noline.png);
-    animation: purple-throwing .5s steps(1) infinite;
+    animation: fired-purple .5s steps(8) infinite;
 }
 
 .red {

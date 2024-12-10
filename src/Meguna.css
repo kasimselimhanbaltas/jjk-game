@@ -1155,6 +1155,19 @@
         height: 120px;
     }
 }
+@keyframes meguna-walk {
+    0% {
+        background: url(./Assets/meguna/meguna-walk.png) 0px 0px;
+        width: 106px;
+        height: 106px;
+    }
+
+    100% {
+        background: url(./Assets/meguna/meguna-walk.png) -848px 0px;
+        width: 106px;
+        height: 106px;
+    }
+}
 
 .dismantle {
     position: absolute;

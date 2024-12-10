@@ -222,13 +222,16 @@ const GameArea = () => {
           gojo.y - rivalCharacter.y >= -150 && gojo.y - rivalCharacter.y <= 100 ?
             gojo.direction === "right" ? (gojo.x - rivalCharacter.x <= 0 ? "hit" : "miss") :
               (gojo.x - rivalCharacter.x > 0 ? "hit" : "miss") : "miss"
+        const gojoandrivaldistance = Math.abs(gojo.x - rivalCharacter.x)
         if (distance === "hit") {
+          console.log("*/*", gojoandrivaldistance)
+          console.log("*/*", gojoandrivaldistance * 0.7)
           setTimeout(() => {
             dispatch(rivalSlice.actions.setDirection(gojo.x < rivalCharacter.x ? "left" : "right"));
             dispatch(rivalSlice.actions.setTakeDamage({
               isTakingDamage: true, damage: -purpleDamage, takeDamageAnimationCheck: true, knockback: 200, timeout: 500, animation: "", animationPriority: 11
             }));
-          }, (Math.abs(gojo.x - sukuna.x) * 0.7)); // hitbox time fixer
+          }, (gojoandrivaldistance < 800 ? gojoandrivaldistance - 100 : 875)); // hitbox time fixer
         }
       } else { // for other characters
         let distance =
@@ -376,7 +379,7 @@ const GameArea = () => {
       keysPressed.current[key] = false;
       if (key === "a" || key === "d") {
         // dispatch(playerSlice.actions.setAnimationState("stance"));
-        dispatch(playerSlice.actions.setAnimationState({ animation: "stance", animationPriority: 0, finishAnimation: false }));
+        dispatch(playerSlice.actions.setAnimationState({ animation: "stance", animationPriority: 2, finishAnimation: false }));
       }
     };
 
@@ -403,21 +406,21 @@ const GameArea = () => {
           // }, 1400); // jump bug
         }
         if (keysPressed.current.a && playerCharacter.x > 0) {
-          dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "sukuna" ? -5 : -megumiSpeed, y: 0 }));
+          dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "meguna" ? -5 : -megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("left"));
-          if (!playerCharacter.isJumping && !playerCharacter.animationBlocker && playerCharacter.animationState !== "move")
+          if (!playerCharacter.isJumping && playerCharacter.animationState !== "move")
             // dispatch(playerSlice.actions.setAnimationState("move"));
-            dispatch(playerSlice.actions.setAnimationState({ animation: "move", animationPriority: 0, finishAnimation: false }));
+            dispatch(playerSlice.actions.setAnimationState({ animation: "move", animationPriority: 2, finishAnimation: false }));
         }
         // if (keysPressed.current.s && playerCharacter.y < gameAreaHeight - megumiHeight) {
         //   dispatch(playerSlice.actions.moveCharacter({ x: 0, y: megumiSpeed }));
         // }
         if (keysPressed.current.d && playerCharacter.x < gameAreaWidth - megumiWidth) {
-          dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "sukuna" ? 5 : megumiSpeed, y: 0 }));
+          dispatch(playerSlice.actions.moveCharacter({ x: playerCharacter.characterName === "meguna" ? 5 : megumiSpeed, y: 0 }));
           dispatch(playerSlice.actions.setDirection("right"));
           if (!playerCharacter.isJumping && !playerCharacter.animationBlocker && playerCharacter.animationState !== "move")
             // dispatch(playerSlice.actions.setAnimationState("move"));
-            dispatch(playerSlice.actions.setAnimationState({ animation: "move", animationPriority: 0, finishAnimation: false }));
+            dispatch(playerSlice.actions.setAnimationState({ animation: "move", animationPriority: 2, finishAnimation: false }));
 
         }
         if (keysPressed.current.q && !domainAmplificationKeyCD) {

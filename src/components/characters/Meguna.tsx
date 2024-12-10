@@ -480,10 +480,10 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                 if (key === "s" && backflipInterval.current === null && meguna.isJumping === false &&
                     meguna.animationState !== "backflip" && !meguna.animationBlocker && meguna.canMove) {
                     // dispatch(megunaSlice.actions.setAnimationState("backflip"));
-                    dispatch(megunaSlice.actions.setAnimationState({ animation: "backflip", animationPriority: 1, finishAnimation: false }));
+                    dispatch(megunaSlice.actions.setAnimationState({ animation: "move", animationPriority: 4, finishAnimation: false }));
                     dispatch(megunaSlice.actions.setAnimationBlocker(true));
                     backflipInterval.current = setInterval(() => {
-                        dispatch(megunaSlice.actions.moveCharacterWD({ x: meguna.direction === "right" ? -15 : 15, y: 0 }));
+                        dispatch(megunaSlice.actions.moveCharacterWD({ x: meguna.direction === "right" ? -5 : 5, y: 0 }));
                     }, 50)
                 }
                 if (key === " " && meguna.animationState !== "dash") {
@@ -505,7 +505,7 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                 if (key === "s") {
                     dispatch(megunaSlice.actions.setAnimationBlocker(false));
                     // dispatch(megunaSlice.actions.setAnimationState("stance"));
-                    dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 1, finishAnimation: true }));
+                    dispatch(megunaSlice.actions.setAnimationState({ animation: "stance", animationPriority: 4, finishAnimation: true }));
                     clearInterval(backflipInterval.current);
                     backflipInterval.current = null;
                 }
@@ -765,7 +765,6 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
     //     }
 
     // }, [domainClashCDref, meguna.domainStatus.isInitiated === true, gameSettings.domainClash])
-
 
     const dispatch2 = useDispatch<AppDispatch>();
     const [fugaSceneStyle, setFugaSceneStyle] = useState({
@@ -1145,17 +1144,8 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
         }
         else if (meguna.animationState === "move") {
             setMegunaStyle({
-                animation: "meguna-stance 1s steps(1) infinite",
+                animation: "meguna-walk 1.3s steps(8) infinite",
             })
-            // if (meguna.direction === "left")
-            //     dispatch(megunaSlice.actions.setPositioningSide("right"))
-            // setMegunaStyle({
-            //     animation: "meguna-running .4s steps(1) infinite",
-            // })
-            // setTimeout(() => {
-            //     if (meguna.direction === "left") dispatch(megunaSlice.actions.setPositioningSide("left"))
-            //     dispatch(megunaSlice.actions.setAnimationState("stance"))
-            // }, 1000);
         }
         else if (meguna.animationState === "entry") { // requires reverse positioning
             setMegunaStyle({
@@ -1313,13 +1303,7 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
             setMegunaStyle({
                 animation: "meguna-take-damage .5s steps(2) forwards",
             })
-            // setTimeout(() => {
-            //     if (meguna.direction === "left")
-            //         dispatch(megunaSlice.actions.setPositioningSide("left"))
-            //     dispatch(megunaSlice.actions.setAnimationState("stance"))
-            // }, 1000);
         }
-
         else {
             console.log("Unknown animation: ", meguna.animationState)
             setMegunaStyle({
