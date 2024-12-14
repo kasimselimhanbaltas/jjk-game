@@ -1065,14 +1065,14 @@
 
 @keyframes fired-purple {
     0% {
-        background: url("./Assets/gojo/fired-hollow-purple.png") 0px 0px;
+        background: url("Assets/gojo/fired-hollow-purple.png") 0px 0px;
         width: 460px;
         height: 120px;
         translate: -50% -27px;
     }
 
     100% {
-        background: url("./Assets/gojo/fired-hollow-purple.png") -3680px 0px;
+        background: url("Assets/gojo/fired-hollow-purple.png") -3680px 0px;
         width: 460px;
         height: 120px;
         translate: -50% -27px;

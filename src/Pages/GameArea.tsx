@@ -538,6 +538,7 @@ const GameArea = () => {
   }, [gameSettings.tutorial]);
   const handleStartGame = () => {
     // const storedUsername = localStorage.getItem('username');
+    // load resources
     dispatch(playerSlice.actions.resetState())
     dispatch(rivalSlice.actions.resetState())
     setShowFinishMenu(false)

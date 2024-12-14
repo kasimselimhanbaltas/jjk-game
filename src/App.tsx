@@ -14,6 +14,8 @@ import { useEffect, useRef, useState } from 'react';
 import Preloader from './Pages/Pre';
 import Playground from './Pages/Playground';
 
+import assets from './assets.json';
+
 export const CharacterState = {
   IDLE: 'idle',
   ATTACKING: 'attacking',
@@ -307,15 +309,37 @@ export interface DivineDogs {
 
 function App() {
   const [load, upadateLoad] = useState(true);
+  const preloadAssets = async (assets) => {
+    const promises = assets.map((asset) =>
+      fetch(asset)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${asset}: ${response.statusText}`);
+          }
+          return response.blob(); // Asset'i tarayıcıya indir
+        })
+        .then((blob) => {
+          const objectURL = URL.createObjectURL(blob); // Tarayıcı cache için URL oluştur
+          console.log(`Asset loaded: ${asset}`);
+          return objectURL;
+        })
+        .catch((error) => {
+          console.error(`Failed to preload asset: ${asset}`, error);
+          return null; // Hata durumunda fallback olarak null döndür
+        })
+    );
+
+    return Promise.all(promises);
+  };
+
+
 
   // EFFECT HOOK FOR UPDATING LOADING STATE 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (!load) return;
+    preloadAssets(assets).then(() => {
       upadateLoad(false);
-    }, 1200);
-    return () => {
-      clearTimeout(timer);
-    }
+    })
   });
 
   return (

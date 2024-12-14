@@ -61,6 +61,7 @@
   "devDependencies": {
     "concurrently": "^9.0.1",
     "electron": "^32.1.0",
+    "preload-webpack-plugin": "^2.3.0",
     "wait-on": "^8.0.1"
   }
 }
