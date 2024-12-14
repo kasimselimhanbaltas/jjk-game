@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/jjk-game/static/css/main.6362b513.css",
-    "main.js": "/jjk-game/static/js/main.73770cd5.js",
+    "main.js": "/jjk-game/static/js/main.30b1002d.js",
     "static/media/meguna.png": "/jjk-game/static/media/meguna.10851be0eec338cf2f50.png",
     "static/media/texture.png": "/jjk-game/static/media/texture.e231c9c13d1b192cfb2d.png",
     "static/media/gojopanel.png": "/jjk-game/static/media/gojopanel.e7a36609351ba7bf0c9b.png",
@@ -67,10 +67,10 @@
     "static/media/punch.mp3": "/jjk-game/static/media/punch.307ae82ee93e79118fc5.mp3",
     "index.html": "/jjk-game/index.html",
     "main.6362b513.css.map": "/jjk-game/static/css/main.6362b513.css.map",
-    "main.73770cd5.js.map": "/jjk-game/static/js/main.73770cd5.js.map"
+    "main.30b1002d.js.map": "/jjk-game/static/js/main.30b1002d.js.map"
   },
   "entrypoints": [
     "static/css/main.6362b513.css",
-    "static/js/main.73770cd5.js"
+    "static/js/main.30b1002d.js"
   ]
 }
