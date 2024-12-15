@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/jjk-game/static/css/main.6362b513.css",
-    "main.js": "/jjk-game/static/js/main.1980cf8f.js",
+    "main.js": "/jjk-game/static/js/main.25ec1b3b.js",
     "static/media/fuga-scene.png": "/jjk-game/static/media/fuga-scene.2a8eb941a10db0e7bf86.png",
     "static/media/meguna.png": "/jjk-game/static/media/meguna.10851be0eec338cf2f50.png",
     "static/media/texture.png": "/jjk-game/static/media/texture.e231c9c13d1b192cfb2d.png",
@@ -80,10 +80,10 @@
     "static/media/getListOfAssets.py": "/jjk-game/static/media/getListOfAssets.db392583ab2947cc1b40.py",
     "index.html": "/jjk-game/index.html",
     "main.6362b513.css.map": "/jjk-game/static/css/main.6362b513.css.map",
-    "main.1980cf8f.js.map": "/jjk-game/static/js/main.1980cf8f.js.map"
+    "main.25ec1b3b.js.map": "/jjk-game/static/js/main.25ec1b3b.js.map"
   },
   "entrypoints": [
     "static/css/main.6362b513.css",
-    "static/js/main.1980cf8f.js"
+    "static/js/main.25ec1b3b.js"
   ]
 }
