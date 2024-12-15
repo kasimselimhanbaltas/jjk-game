@@ -806,6 +806,7 @@ body {
   animation: simpleDomain 1s steps(5) infinite;
   background: url('./Assets/simple-domain.png');
   transition: all .2s;
+  translate: -50% 0;
 }
 
 @keyframes simpleDomain {
@@ -832,6 +833,7 @@ body {
     animation: rct-ct 1s steps(19) infinite; */
   scale: 1;
   z-index: 9;
+  translate: -50% -100%;
 }
 
 @keyframes rct-heal {

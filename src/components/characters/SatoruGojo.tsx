@@ -1537,7 +1537,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             }></div>
 
             <div className="center-dot" style={
-                { display: domainStarterEffect ? "block" : "none", left: gojo.x + 20, top: gojo.y - 50 }
+                { display: domainStarterEffect ? "block" : "none", left: gojo.x, top: gojo.y - 50 }
             }>
                 {lights.map((_, index) => {
                     const angle = Math.random() * 360; // Random angle between 0 and 360
@@ -1597,7 +1597,6 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             <div className="rct-body"
                 style={{
                     left: gojo.x, top: RCT.rctMode === "body" ? gojo.y + 15 : gojo.y,
-                    translate: gojo.direction === "right" ? "-10px -100%" : "0px -100%",
                     display: RCT.rctActive ? "block" : "none",
                     animation: RCT.rctMode === "body" ? "rct-heal 1s steps(17) infinite" : "rct-ct 1s steps(19) infinite"
                 }}
@@ -1606,7 +1605,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             ></div>
             <div className="simple-domain" style={{
                 display: gojo.simpleDomain.isActive ? "block" : "none",
-                left: gojo.x - 40, top: SURFACE_Y - 35
+                left: gojo.x, top: SURFACE_Y - 35
             }}>
             </div>
             <div className="falling-blossom-emotion" style={{
@@ -1618,7 +1617,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             </div>
 
             <div className="domain-starter" ref={domainStarter}
-                style={{ top: gojo.y - 50, left: gojo.x + 20 }}
+                style={{ top: gojo.y - 50, left: gojo.x }}
             ></div>
             <div className="hole" style={{
                 display: holeStyle.display,
@@ -1681,17 +1680,16 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 animation: gojoStyle.animation,
                 transition: gojo.transition,
             }}>
-                <div className="infinity" style={{
-                    top: 0,
-                    left: gojo.positioningSide === "left" ? -10 : undefined,
-                    right: gojo.positioningSide === "right" ? 20 : undefined,
-                    // translate: gojo.direction === "right" ? "-10px -100%" : "0px -100%",
-                    display: gojo.infinity ? "block" : "none",
-                    transition: gojo.transition,
-                }}
-                ></div>
             </div>
-
+            <div className="infinity" style={{
+                bottom: gameAreaHeight - gojo.y,
+                left: gojo.x,
+                // translate: gojo.direction === "right" ? "-10px -100%" : "0px -100%",
+                display: gojo.infinity ? "block" : "none",
+                transition: gojo.transition,
+                zIndex: 6
+            }}
+            ></div>
             <div
                 className="gojo-container"
                 style={{

@@ -16,6 +16,6 @@ def list_assets_to_json(folder_path, output_file):
 
 
 # Kullanım
-assets_folder = "src/assets"
-output_json = "src/assets.json"
+assets_folder = "src/Assets"
+output_json = "src/scripts/assets.json"
 list_assets_to_json(assets_folder, output_json)

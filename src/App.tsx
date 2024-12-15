@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import Preloader from './Pages/Pre';
 import Playground from './Pages/Playground';
 
-import assets from './assets.json';
+import assetsJsonList from './assets.json';
 
 export const CharacterState = {
   IDLE: 'idle',
@@ -305,46 +305,95 @@ export interface DivineDogs {
   isAttacking: boolean;
   wolfAuto: boolean;
 }
+const preloadAssets = async (assetsparam, setImageSrc) => {
+
+  const assetsLength = assetsparam.length;
+  console.log("preload asset start", assetsLength, assetsparam)
+  for (let i = 0; i < assetsLength; i++) {
+    setTimeout(() => {
+      setImageSrc(assetsparam[i]);
+      if (i === assetsLength - 1) {
+        return true;
+      }
+    }, 200 + i * 200);
+  }
+};
+
+function categorizeAssets(assetList) {
+  const images = [];
+  const videos = [];
+  const audios = [];
+
+  assetList.forEach((asset) => {
+    const extension = asset.split('.').pop().toLowerCase();
+
+    if (["png", "jpg", "jpeg"].includes(extension)) {
+      images.push(asset);
+    } else if (["mp4"].includes(extension)) {
+      videos.push(asset);
+    } else if (["mp3"].includes(extension)) {
+      audios.push(asset);
+    }
+  });
+
+  return { images, videos, audios };
+}
+
 
 
 function App() {
-  const [load, upadateLoad] = useState(true);
-  const preloadAssets = async (assets) => {
-    const promises = assets.map((asset) =>
-      fetch(asset)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Failed to fetch ${asset}: ${response.statusText}`);
-          }
-          return response.blob(); // Asset'i tarayıcıya indir
-        })
-        .then((blob) => {
-          const objectURL = URL.createObjectURL(blob); // Tarayıcı cache için URL oluştur
-          console.log(`Asset loaded: ${asset}`);
-          return objectURL;
-        })
-        .catch((error) => {
-          console.error(`Failed to preload asset: ${asset}`, error);
-          return null; // Hata durumunda fallback olarak null döndür
-        })
-    );
+  const [load, updateLoad] = useState(true);
 
-    return Promise.all(promises);
+  const [imageSrc, setImageSrc] = useState("./Assets/back-bf.png");
+  const loadInitialized = useRef(false);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const preloadAssets = async (assets, index = 0) => {
+    if (index >= assets.length) {
+      console.log("Tüm resimler yüklendi!");
+      updateLoad(false);
+      return;
+    }
+
+    setImageSrc(assets[index]);
+
+    // Resim yüklenmesini handleImageLoad ile takip edeceğiz.
   };
 
+  const handleImageLoad = () => {
+    console.log(`Resim yüklendi: ${imageSrc}`);
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+      preloadAssets(images, nextIndex); // Bir sonraki resmi yükle
+      return nextIndex;
+    });
+  };
+  const { images, videos, audios } = categorizeAssets(assetsJsonList);
 
-
-  // EFFECT HOOK FOR UPDATING LOADING STATE 
   useEffect(() => {
     if (!load) return;
-    preloadAssets(assets).then(() => {
-      upadateLoad(false);
-    })
-  });
+    if (loadInitialized.current) return;
+    loadInitialized.current = (true)
+    preloadAssets(images);
+  }, [load]);
+
+
+  // useEffect(() => {
+  //   if (!load) return;
+  //   if (loadInitialized.current) return;
+  //   loadInitialized.current = (true)
+  //   const { images, videos, audios } = categorizeAssets(assets);
+
+  //   preloadAssets(images, setImageSrc).then((response) => {
+  //     console.log("asset effect response: ", response)
+  //     upadateLoad(false);
+  //   })
+  // });
 
   return (
     <Router>
       <div className="App">
+        <img onLoad={handleImageLoad} style={{ display: "none" }} src={require(`${imageSrc ? imageSrc : "/Assets/back-bf.png"}`)} alt="" />
         <header className="App-header">
           <div style={{
             width: "1410px", height: "610px", border: "10px solid black",

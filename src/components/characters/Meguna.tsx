@@ -1441,7 +1441,6 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
             <div className="rct-body"
                 style={{
                     left: meguna.x, top: RCT.rctMode === "body" ? meguna.y + 15 : meguna.y,
-                    translate: meguna.direction === "right" ? "-27px -100%" : "-28px -100%",
                     display: RCT.rctActive ? "block" : "none",
                     animation: RCT.rctMode === "body" ? "rct-heal 1s steps(17) infinite" : "rct-ct 1s steps(19) infinite"
                 }}
