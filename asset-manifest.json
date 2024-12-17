@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/jjk-game/static/css/main.6362b513.css",
-    "main.js": "/jjk-game/static/js/main.25ec1b3b.js",
+    "main.css": "/jjk-game/static/css/main.8e7f76ce.css",
+    "main.js": "/jjk-game/static/js/main.e025f85d.js",
     "static/media/fuga-scene.png": "/jjk-game/static/media/fuga-scene.2a8eb941a10db0e7bf86.png",
     "static/media/meguna.png": "/jjk-game/static/media/meguna.10851be0eec338cf2f50.png",
     "static/media/texture.png": "/jjk-game/static/media/texture.e231c9c13d1b192cfb2d.png",
@@ -77,13 +77,13 @@
     "static/media/meguna-walk.png": "/jjk-game/static/media/meguna-walk.7bab5f2f5b8b28da4ebc.png",
     "static/media/red-up-final.png": "/jjk-game/static/media/red-up-final.88b6163a3cbe710510e4.png",
     "static/media/punch.mp3": "/jjk-game/static/media/punch.307ae82ee93e79118fc5.mp3",
-    "static/media/getListOfAssets.py": "/jjk-game/static/media/getListOfAssets.db392583ab2947cc1b40.py",
+    "static/media/getListOfAssets.py": "/jjk-game/static/media/getListOfAssets.cc85605864a23426ea56.py",
     "index.html": "/jjk-game/index.html",
-    "main.6362b513.css.map": "/jjk-game/static/css/main.6362b513.css.map",
-    "main.25ec1b3b.js.map": "/jjk-game/static/js/main.25ec1b3b.js.map"
+    "main.8e7f76ce.css.map": "/jjk-game/static/css/main.8e7f76ce.css.map",
+    "main.e025f85d.js.map": "/jjk-game/static/js/main.e025f85d.js.map"
   },
   "entrypoints": [
-    "static/css/main.6362b513.css",
-    "static/js/main.25ec1b3b.js"
+    "static/css/main.8e7f76ce.css",
+    "static/js/main.e025f85d.js"
   ]
 }
