@@ -342,10 +342,10 @@ function categorizeAssets(assetList) {
 
 
 function App() {
+  const STORAGE_KEY = "areAssetsCached";
   const [load, updateLoad] = useState(true);
 
   const [imageSrc, setImageSrc] = useState("./Assets/back-bf.png");
-  const loadInitialized = useRef(false);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const preloadAssets = async (assets, index = 0) => {
@@ -372,23 +372,16 @@ function App() {
 
   useEffect(() => {
     if (!load) return;
-    if (loadInitialized.current) return;
-    loadInitialized.current = (true)
-    preloadAssets(images);
+    const savedValue = localStorage.getItem(STORAGE_KEY);
+    if (savedValue === null) {
+      // Eğer mevcut değilse, bir başlangıç değeri kaydet
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(true));
+      preloadAssets(images);
+    } else {
+      updateLoad(false);
+    }
   }, [load]);
 
-
-  // useEffect(() => {
-  //   if (!load) return;
-  //   if (loadInitialized.current) return;
-  //   loadInitialized.current = (true)
-  //   const { images, videos, audios } = categorizeAssets(assets);
-
-  //   preloadAssets(images, setImageSrc).then((response) => {
-  //     console.log("asset effect response: ", response)
-  //     upadateLoad(false);
-  //   })
-  // });
 
   return (
     <Router>

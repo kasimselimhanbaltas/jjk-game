@@ -76,6 +76,7 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
     const fugaSoundEffectRef = React.useRef(null);
     const punchSoundEffectRef = React.useRef(null);
     const slashSoundEffectRef = React.useRef(null);
+    const blackFlashEffectRef = React.useRef(null);
 
     const keysPressed = useRef({
         a: false, s: false, d: false, w: false,
@@ -386,14 +387,13 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                 && meguna.canMove && meguna.animationBlocker === false
             ) {
                 console.log("rival desicion: ")
-                // if (meguna.cursedEnergy.currentCursedEnergy >= 200 && meguna.domainCD.isReady) {
-                //     console.log("domain attack")
-                //     // handleDomainAttack()
-                //     setDomainBugFixer(true);
-                //     dispatch(megunaSlice.actions.setDomainState({ ...meguna.domainStatus, isInitiated: true }))
-                // }
-                // else
-                if (meguna.fugaCounter.currentCount >= meguna.fugaCounter.maxCount && !rivalState.infinity) {
+                if (meguna.cursedEnergy.currentCursedEnergy >= 200 && meguna.domainCD.isReady) {
+                    console.log("domain attack")
+                    // handleDomainAttack()
+                    setDomainBugFixer(true);
+                    dispatch(megunaSlice.actions.setDomainState({ ...meguna.domainStatus, isInitiated: true }))
+                }
+                else if (meguna.fugaCounter.currentCount >= meguna.fugaCounter.maxCount && !rivalState.infinity) {
                     handleFugaAttack()
                 }
 
@@ -413,7 +413,7 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                     handlePunchingCombo();
                 }
                 else {
-                    handleBamAttack();
+                    blackFlashCombo();
                 }
 
 
@@ -556,8 +556,8 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
                     punchCombo()
                     // setIsPunchingComboInitiated(true);
                 }
-                if (keysPressed.current.k) {
-                    handleBamAttack()
+                if (keysPressed.current.k && meguna.canMove && !meguna.isJumping) {
+                    blackFlashCombo()
                 }
                 if (keysPressed.current.f && !meguna.domainAmplifi1cation.isActive) {
                     handleFugaAttack()
@@ -798,15 +798,74 @@ const Meguna: React.FC<MegunaProps> = memo(({ xDistance, rivalState, rivalSlice 
     }, [meguna.domainStatus.isInitiated, meguna.domainStatus.forceExpand, gameSettings.domainClashReady, gameSettings.domainClash,
         domainClashCDref, meguna.domainCD.isReady, domainBugFixer])
 
-    // useEffect(() => {
-    //     console.log("aa", domainClashCDref)
-    //     if (meguna.domainStatus.isInitiated === true) {
-    //         console.log("bb")
+    const [blackFlashAnimation, setBlackFlashAnimation] = useState(false);
+    const [blackFlashPosition, setBlackFlashPosition] = useState({ x: 0, y: 0, direction: "left" });
+    const [getBFpositionBool, setGetBFpositionBool] = useState(false);
+    useEffect(() => {
+        if (getBFpositionBool) {
+            setBlackFlashPosition({ x: meguna.direction === "right" ? meguna.x - 220 : meguna.x - 280, y: gameAreaHeight - meguna.y, direction: meguna.direction });
+            setGetBFpositionBool(false);
+        }
+    }, [getBFpositionBool])
 
+    const blackFlashCombo = () => {
+        if (Math.abs(xDistance) > 200) return;
+        punchSoundEffectRef.current.volume = 0.5;
+        const attackDirection = meguna.x - rivalState.x >= 0 ? "left" : "right";
+        dispatch(megunaSlice.actions.setDirection(attackDirection))
+        // dispatch(megunaSlice.actions.setAnimationState("meguna-blackflash-combination"));
+        dispatch(megunaSlice.actions.setAnimationState({ animation: "meguna-blackflash-combination", animationPriority: 4, finishAnimation: false }));
+        dispatch(megunaSlice.actions.setCanMove(false));
+        dispatch(rivalSlice.actions.setDirection(attackDirection === "left" ? "right" : "left"))
+        // dispatch(megunaSlice.actions.setAnimationBlocker(true))
+        // if (!rivalState.isBlocking) { // #ff
+        //     dispatch(rivalSlice.actions.setHardStun(true));
+        //     dispatch(rivalSlice.actions.setAnimationBlocker(false))
+        //     dispatch(rivalSlice.actions.setAnimationState("stance"))
+        //     // dispatch(rivalSlice.actions.setAnimationBlocker(true))
+        // }
+        dispatch(megunaSlice.actions.moveCharacterTo({ x: attackDirection === "right" ? rivalState.x - 75 : rivalState.x + 80, y: meguna.y }))
+        let punchCount = 0;
+        const int = setInterval(() => {
+            if (punchCount === 0 || punchCount === 4 || punchCount === 7 || punchCount === 10) {
+                if (punchCount === 0 || punchCount === 4 || punchCount === 7)
+                    setChaseForCloseCombat(true)
 
-    //     }
+                if (punchCount === 10)
+                    dispatch(rivalSlice.actions.updateHealth(-50));
+                else
+                    dispatch(rivalSlice.actions.updateHealth(-10));
+                punchSoundEffectRef.current.play();
+                setTimeout(() => {
+                    punchSoundEffectRef.current.pause();
+                    punchSoundEffectRef.current.currentTime = 0;
+                }, 150);
 
-    // }, [domainClashCDref, meguna.domainStatus.isInitiated === true, gameSettings.domainClash])
+            }
+            else if (punchCount === 16) { // last hit
+                // increase ce
+                dispatch(megunaSlice.actions.changeCursedEnergy(30))
+                clearInterval(int)
+            }
+            if (punchCount === 10) {
+                // left: meguna.direction === "right" ? meguna.x - 220 : meguna.x - 280, bottom: gameAreaHeight - meguna.y
+                setGetBFpositionBool(true);
+                setBlackFlashAnimation(true);
+                blackFlashEffectRef.current.play();
+                setTimeout(() => {
+                    dispatch(rivalSlice.actions.setTakeDamage({
+                        isTakingDamage: true, damage: 10, takeDamageAnimationCheck: true, knockback: 250, timeout: 500, animation: "", animationPriority: 11
+                    }));
+                }, 1000);
+                setTimeout(() => {
+                    setBlackFlashAnimation(false);
+                    dispatch(megunaSlice.actions.setCanMove(true));
+                }, 1500);
+            }
+            punchCount++;
+        }, 1500 / 16)
+
+    }
 
     const dispatch2 = useDispatch<AppDispatch>();
     const [fugaSceneStyle, setFugaSceneStyle] = useState({
