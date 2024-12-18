@@ -2,13 +2,10 @@ import './App.css';
 import Megumi from './components/characters/Megumi';
 import Sukuna from './components/characters/Sukuna';
 import GameArea from './Pages/GameArea';
-import Controls from './components/Controls';
-import ControlsPage from './Pages/ControlsPage';
 import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Navigate,
 } from "react-router-dom";
 import { useEffect, useRef, useState } from 'react';
 import Preloader from './Pages/Pre';
@@ -24,8 +21,6 @@ export const CharacterState = {
   STUNNED: 'stunned',
   // Add other states as needed
 };
-
-
 export interface GameSettings {
   selectedCharacter: string,
   selectedRivalCharacter: string,
@@ -183,7 +178,6 @@ export interface Gojo {
   autoMoveBlocker: boolean,
   // inputBuffer: [],
 }
-
 export interface Sukuna {
   characterName: string,
   x: number;
@@ -305,21 +299,9 @@ export interface DivineDogs {
   isAttacking: boolean;
   wolfAuto: boolean;
 }
-const preloadAssets = async (assetsparam, setImageSrc) => {
-
-  const assetsLength = assetsparam.length;
-  console.log("preload asset start", assetsLength, assetsparam)
-  for (let i = 0; i < assetsLength; i++) {
-    setTimeout(() => {
-      setImageSrc(assetsparam[i]);
-      if (i === assetsLength - 1) {
-        return true;
-      }
-    }, 200 + i * 200);
-  }
-};
 
 function categorizeAssets(assetList) {
+  console.log("assets, categorize");
   const images = [];
   const videos = [];
   const audios = [];
@@ -339,8 +321,6 @@ function categorizeAssets(assetList) {
   return { images, videos, audios };
 }
 
-
-
 function App() {
   const STORAGE_KEY = "areAssetsCached";
   const [load, updateLoad] = useState(true);
@@ -348,6 +328,8 @@ function App() {
   const [imageSrc, setImageSrc] = useState("./Assets/back-bf.png");
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const imagesLength = useRef(0);
   const preloadAssets = async (assets, index = 0) => {
     if (index >= assets.length) {
       console.log("Tüm resimler yüklendi!");
@@ -374,6 +356,7 @@ function App() {
     if (!load) return;
     const savedValue = localStorage.getItem(STORAGE_KEY);
     if (savedValue === null) {
+      console.log("assets not cached");
       // Eğer mevcut değilse, bir başlangıç değeri kaydet
       localStorage.setItem(STORAGE_KEY, JSON.stringify(true));
       preloadAssets(images);
@@ -386,7 +369,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <img onLoad={handleImageLoad} style={{ display: "none" }} src={require(`${imageSrc ? imageSrc : "/Assets/back-bf.png"}`)} alt="" />
+        <img onLoad={imageSrc == "./Assets/back-bf.png" ? () => { } : handleImageLoad} style={{ display: "none" }} src={require(`${imageSrc ? imageSrc : "/Assets/back-bf.png"}`)} alt="" />
         <header className="App-header">
           <div style={{
             width: "1410px", height: "610px", border: "10px solid black",

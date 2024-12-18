@@ -49,7 +49,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
     const purpleExplosionSoundEffectRef = React.useRef(null);
     const punchSoundEffectRef = React.useRef(null);
     const domainSoundEffectRef = React.useRef(null);
-    const blackFlashEffectRef = React.useRef(null);
+    const blackFlashSoundEffectRef = React.useRef(null);
 
 
     const [comboPicker, setComboPicker] = useState(0);
@@ -1102,7 +1102,8 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
                 // left: gojo.direction === "right" ? gojo.x - 220 : gojo.x - 280, bottom: gameAreaHeight - gojo.y
                 setGetBFpositionBool(true);
                 setBlackFlashAnimation(true);
-                blackFlashEffectRef.current.play();
+                blackFlashSoundEffectRef.current.volume = 0.5;
+                blackFlashSoundEffectRef.current.play();
                 setTimeout(() => {
                     dispatch(rivalSlice.actions.setTakeDamage({
                         isTakingDamage: true, damage: 10, takeDamageAnimationCheck: true, knockback: 250, timeout: 500, animation: "", animationPriority: 11
@@ -1501,7 +1502,7 @@ const Gojo: React.FC<GojoProps> = memo(({ xDistance, rivalState, rivalSlice }) =
             <audio src={require("../../Assets/audios/hq-explosion-6288.mp3")} ref={purpleExplosionSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/punch.mp3")} ref={punchSoundEffectRef}></audio>
             <audio src={require("../../Assets/audios/gojo.mp3")} ref={domainSoundEffectRef}></audio>
-            <audio src={require("../../Assets/audios/black-flash.mp3")} ref={blackFlashEffectRef}></audio>
+            <audio src={require("../../Assets/audios/black-flash.mp3")} ref={blackFlashSoundEffectRef}></audio>
             {/* <div className='dotot' style={{
                 width: "10px", height: "100px", backgroundColor: "black",
                 position: "absolute", bottom: gameAreaHeight - gojo.y, left: gojo.x, zIndex: 99, transition: ".2s all"
